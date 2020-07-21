@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Route, Switch } from "react-router-dom";
-import Loader from "../../components/Loader/Loader";
+import Loader from "../../components/Loader";
 import ModalComponent from "../Modal/component";
 import { connect } from "react-redux";
 // todo zrobić sidebar
