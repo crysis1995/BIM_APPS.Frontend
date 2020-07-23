@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Loader from "./components/Loader";
 
 // Containers
-const Layout = React.lazy(() => import("./components"));
+const Layout = React.lazy(() => import("./Layout"));
 
 function App() {
       return (

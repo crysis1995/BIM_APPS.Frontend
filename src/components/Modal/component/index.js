@@ -20,8 +20,8 @@ function ModalComponent(props) {
     );
 }
 
-const mapStateToProps = ({ ModalReducer }) => ({
-    ...ModalReducer,
+const mapStateToProps = ({ Modal }) => ({
+    ...Modal,
 });
 
 const mapDispatchToProps = {

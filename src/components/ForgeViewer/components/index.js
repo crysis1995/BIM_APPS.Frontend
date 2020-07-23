@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 // import ShowRoomsExtension from "./extenstions/TestExtension";
 import { connect } from "react-redux";
-import { startViewer, setViewerRooms } from "../redux/actions";
-import { setSelectedRoom } from "../../odbiory/redux/actions";
+import { startViewer, setViewerRooms, setSheets } from "../redux/actions";
+import { setSelectedRoom } from "../../../sites/odbiory/redux/rooms/actions";
+import { initialiseModal } from "../../Modal/redux/actions";
 
 const Autodesk = window.Autodesk;
 class Viewer extends Component {
@@ -10,7 +11,6 @@ class Viewer extends Component {
 
     viewer = null;
     componentDidMount() {
-        console.log(this.props.model_urn)
         this.launchViewer(this.props.model_urn);
     }
 
@@ -26,14 +26,19 @@ class Viewer extends Component {
 
         Autodesk.Viewing.Initializer(options, () => {
             const onDocumentLoadSuccess = (doc) => {
-                // console.log(doc);
-                // this.props.handleViewer(this.state.viewer);
-
-                // var viewables = doc.getRoot().getNamedViews();
-                var viewables = doc.getRoot().search({ type: "geometry" });
-                this.viewer.loadDocumentNode(doc, viewables[3]).then((i) => {
-                    this.props.startViewer(this.viewer);
-                });
+                var viewables = doc
+                    .getRoot()
+                    .search({ type: "geometry" })
+                    .filter((e) => e.is2D());
+                const elements = viewables.map((e) => ({
+                    index: e.guid(),
+                    name: e.name(),
+                    element: e,
+                }));
+                this.props.setSheets(elements);
+                // this.viewer.loadDocumentNode(doc, viewables[0]).then((i) => {
+                this.props.startViewer(this.viewer, doc);
+                // });
             };
 
             const onDocumentLoadFailure = (viewerErrorCode) => {
@@ -92,7 +97,7 @@ class Viewer extends Component {
                                     /^.+\[(.+)\]$/
                                 )[1];
                                 if (selectedElement) {
-                                    const selectedRoom = this.props.rooms.filter(
+                                    const selectedRoom = this.props.Odbiory.Rooms.rooms.filter(
                                         (room) =>
                                             room.revit_id === selectedElement
                                     )[0];
@@ -100,25 +105,18 @@ class Viewer extends Component {
                                         this.props.setSelectedRoom(
                                             selectedRoom.id
                                         );
+                                    } else {
+                                        this.viewer.clearSelection();
+                                        this.props.initialiseModal(
+                                            "Uwaga!",
+                                            "Nie przewidziano robót dla danego pomieszczenia."
+                                        );
                                     }
                                 }
                             } else {
                                 this.props.setSelectedRoom("");
+                                this.viewer.clearSelection();
                             }
-
-                            // const selectedElement = data.properties.filter(
-                            //     (e) => e.displayName === "Number"
-                            // )[0];
-                            // if (selectedElement) {
-                            //     const selectedRoom = this.props.rooms.filter(
-                            //         (room) =>
-                            //             room.room_number ===
-                            //             selectedElement.displayValue
-                            //     )[0];
-                            //     if (selectedRoom) {
-                            //         this.props.setSelectedRoom(selectedRoom.id);
-                            //     }
-                            // }
                         },
                         () => {}
                     );
@@ -132,17 +130,15 @@ class Viewer extends Component {
     }
 }
 
-const mapStateToProps = ({
-    ForgeViewerReducer,
-    AutodeskLogin,
-    RoomsReducer,
-}) => ({
+const mapStateToProps = ({ ForgeViewer, AutodeskLogin, Odbiory }) => ({
     ...AutodeskLogin,
-    ...ForgeViewerReducer,
-    ...RoomsReducer,
+    ...ForgeViewer,
+    Odbiory,
 });
 
 const mapDispatchToProps = {
+    initialiseModal,
+    setSheets,
     startViewer,
     setViewerRooms,
     setSelectedRoom,

@@ -2,7 +2,6 @@ import { config } from "../../../config";
 import AutodeskApi from "../../../utils/AutodeskApi";
 import { AutodeskLoginActions } from "./index";
 import { AutodeskBIM360Actions } from "../../../components/AutodeskBIM360/redux";
-import { fetchAllProjects } from "../../AutodeskBIM360/redux/operations";
 
 export const fetchAccessToken = (code) => (dispatch) => {
     fetch(`${config.api_url}/Forge/threeLegged/setCode/${code}`)
