@@ -8,7 +8,7 @@ function ProjectListComponent() {
             <div className="project-list px-3 pt-3">
                   <ProjectSelector />
                   <FolderView />
-            </div>
+          </div>
       );
 }
 
