@@ -10,8 +10,8 @@ const INITIAL_STATE = {
         refresh_token: null,
         expires_in: null,
     },
-    isLogin:false,
-    user: null,
+    isLogin: false,
+    project: null,
 };
 
 const AutodeskLoginReducer = (state = INITIAL_STATE, action) => {
@@ -31,19 +31,19 @@ const AutodeskLoginReducer = (state = INITIAL_STATE, action) => {
                     refresh_token: action.refresh_token,
                     expires_in: action.expires_in,
                 },
-                isLogin: true
+                isLogin: true,
             };
         case types.LOGOUT_3_LEGGED:
             return {
                 ...state,
                 login_3_legged: INITIAL_STATE.login_3_legged,
                 user: INITIAL_STATE.user,
-                isLogin: false
+                isLogin: false,
             };
-        case types.FETCH_USER_DETAIL:
+        case types.FETCH_PROJECT_INFO:
             return {
                 ...state,
-                user: action.user,
+                project: action.project,
             };
 
         default:

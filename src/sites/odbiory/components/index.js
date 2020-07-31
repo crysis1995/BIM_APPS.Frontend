@@ -2,20 +2,12 @@ import React from "react";
 import { connect } from "react-redux";
 import { Nav } from "react-bootstrap";
 import { componentStarted } from "../redux/odbiory/actions";
-import { fetch_all_rooms, setSelectedRoom } from "../redux/rooms/actions";
-import {
-    setCurrentLevel,
-    selectElement,
-} from "../../../components/ForgeViewer/redux/actions";
+import { fetch_all_rooms } from "../redux/rooms/actions";
 import Loader from "../../../components/Loader";
 import LevelSelectorComponent from "./LevelSelectorComponent";
-import { NavLink, Route } from "react-router-dom";
 import OdbioryComponent from "./OdbioryComponent";
 import ResultsComponent from "./ResultsComponent";
-import {
-    setAwansowanieActive,
-    setResultsActive,
-} from "../redux/odbiory/actions";
+import { setAwansowanieActive, setResultsActive } from "../redux/odbiory/actions";
 
 class odbiory extends React.Component {
     componentDidMount() {
@@ -30,40 +22,22 @@ class odbiory extends React.Component {
             return (
                 <>
                     <LevelSelectorComponent />
-                    <Nav
-                        variant="tabs"
-                        className="mt-3"
-                        defaultActiveKey={this.props.match.url}
-                    >
+                    <Nav variant="tabs" className="mt-3" defaultActiveKey={this.props.match.url}>
                         <Nav.Item>
-                            <Nav.Link
-                                onSelect={(e) =>
-                                    this.props.setAwansowanieActive()
-                                }
-                                eventKey={this.props.match.url}
-                            >
-                                <NavLink to={this.props.match.url}>
-                                    Awansowanie robót
-                                </NavLink>
+                            <Nav.Link onSelect={(e) => this.props.setResultsActive()} eventKey={this.props.match.url}>
+                                Rezultaty
                             </Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link
-                                onSelect={(e) => this.props.setResultsActive()}
-                                eventKey={`${this.props.match.url}/results`}
+                                onSelect={(e) => this.props.setAwansowanieActive()}
+                                eventKey={`${this.props.match.url}/upgrade`}
                             >
-                                <NavLink to={`${this.props.match.url}/results`}>
-                                    Rezultaty
-                                </NavLink>
+                                Awansowanie robót
                             </Nav.Link>
                         </Nav.Item>
                     </Nav>
-                    <Route exact path={`${this.props.match.path}`}>
-                        <OdbioryComponent />
-                    </Route>
-                    <Route path={`${this.props.match.path}/results`}>
-                        <ResultsComponent />
-                    </Route>
+                    {this.props.OdbioryComponent.awansowanie.is_active ? <OdbioryComponent /> : <ResultsComponent />}
                 </>
             );
     }
@@ -77,11 +51,8 @@ const mapStateToProps = ({ Odbiory, ForgeViewer }) => ({
 const mapDispatchToProps = {
     setAwansowanieActive,
     setResultsActive,
-    selectElement,
     componentStarted,
-    setCurrentLevel,
     fetch_all_rooms,
-    setSelectedRoom,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(odbiory);

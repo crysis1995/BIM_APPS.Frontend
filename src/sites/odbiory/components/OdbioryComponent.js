@@ -1,8 +1,5 @@
 import React from "react";
-import {
-    selectElement,
-    setCurrentLevel,
-} from "../../../components/ForgeViewer/redux/actions";
+import { selectElement } from "../../../components/ForgeViewer/redux/actions";
 import { componentStarted } from "../redux/odbiory/actions";
 import { fetch_all_rooms, setSelectedRoom } from "../redux/rooms/actions";
 import { connect } from "react-redux";
@@ -78,7 +75,6 @@ const mapStateToProps = ({ Odbiory, ForgeViewer }) => ({
 const mapDispatchToProps = {
     selectElement,
     componentStarted,
-    setCurrentLevel,
     fetch_all_rooms,
     setSelectedRoom,
 };

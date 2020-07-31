@@ -19,10 +19,9 @@ const LOGOUT_3_LEGGED = () => ({
     type: types.LOGOUT_3_LEGGED,
 });
 
-const SET_USER = (user_detail) => ({
-    type: types.FETCH_USER_DETAIL,
-    user: { ...user_detail },
+const SET_PROJECT_INFO = (project) => ({
+    type: types.FETCH_PROJECT_INFO,
+    project,
 });
 
-
-export default { LOGIN_2_LEGGED, LOGOUT_3_LEGGED, LOGIN_3_LEGGED, SET_USER };
+export default { LOGIN_2_LEGGED, LOGOUT_3_LEGGED, LOGIN_3_LEGGED, SET_PROJECT_INFO };

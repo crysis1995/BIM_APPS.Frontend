@@ -8,10 +8,10 @@ import {
 const initialState = {
     started: false,
     awansowanie: {
-        is_active: true,
+        is_active: false,
     },
     results: {
-        is_active: false,
+        is_active: true,
     },
 };
 

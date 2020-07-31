@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 //components
 const Header = React.lazy(() => import("./Header"));
 const OdbioryLayout = React.lazy(() => import("./OdbioryLayout"));
+const Login = React.lazy(() => import("../components/CMSLogin/components/login"));
 
 function Layout(props) {
     return (
@@ -19,24 +20,13 @@ function Layout(props) {
             <Container fluid={"true"}>
                 <React.Suspense fallback={<Loader />}>
                     <Switch>
-                        {/*<Route exact={true} path="/">*/}
-                        {/*    <Row noGutters>*/}
-                        {/*        <Col xs={2}>*/}
-                        {/*            <ProjectList />*/}
-                        {/*        </Col>*/}
-                        {/*        <Col xs={6}>*/}
-                        {/*            <div>Forge Viewer</div>*/}
-                        {/*        </Col>*/}
-                        {/*        <Col xs={4} />*/}
-                        {/*    </Row>*/}
-                        {/*</Route>*/}
+                        <Route exact={true} path="/login">
+                            <Login />
+                        </Route>
                         <Route exact={true} path="/">
                             <Link to={"/odbiory"}>asd</Link>
                         </Route>
-                        <Route
-                            path="/odbiory"
-                            component={OdbioryLayout}
-                        />
+                        <Route path="/odbiory" component={OdbioryLayout} />
                     </Switch>
                 </React.Suspense>
             </Container>

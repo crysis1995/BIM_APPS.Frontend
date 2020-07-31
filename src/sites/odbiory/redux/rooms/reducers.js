@@ -1,13 +1,8 @@
-import {
-    ROOMS_LOADING_START,
-    ROOMS_LOADING_ERROR,
-    ROOMS_LOADING_END,
-    SELECT_ROOM_BY_ODBIORY,
-} from "./actions";
+import { ROOMS_LOADING_START, ROOMS_LOADING_ERROR, ROOMS_LOADING_END, SELECT_ROOM_BY_ODBIORY } from "./actions";
 
 const initialState = {
     rooms: [],
-    rooms_loading: false,
+    rooms_loading: true,
     rooms_error: {},
     selected_room: null,
 };
@@ -27,7 +22,7 @@ const RoomsReducer = (state = initialState, action) => {
         case ROOMS_LOADING_END:
             return {
                 ...state,
-                rooms: [...action.rooms],
+                rooms: action.rooms,
                 rooms_loading: false,
             };
         case SELECT_ROOM_BY_ODBIORY:

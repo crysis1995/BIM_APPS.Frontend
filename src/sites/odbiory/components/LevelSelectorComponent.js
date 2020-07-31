@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Col } from "react-bootstrap";
 import { connect } from "react-redux";
 import { v4 } from "uuid";
-import { setCurrentLevel } from "../../../components/ForgeViewer/redux/actions";
+import { setCurrentSheet } from "../../../components/ForgeViewer/redux/actions";
 
 function LevelSelectorComponent(props) {
     return (
@@ -11,7 +11,7 @@ function LevelSelectorComponent(props) {
                 <Form.Label>Kondygnacja</Form.Label>
                 <Form.Control
                     onChange={(event) => {
-                        props.setCurrentLevel(event.target.value);
+                        props.setCurrentSheet(event.target.value);
                     }}
                     disabled={props.objects_jobs_loading}
                     as="select"
@@ -37,7 +37,7 @@ const mapStateToProps = ({ Odbiory, ForgeViewer }) => ({
 });
 
 const mapDispatchToProps = {
-    setCurrentLevel,
+    setCurrentSheet,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LevelSelectorComponent);

@@ -35,7 +35,7 @@ function OdbioryLayout(props) {
                     }}
                     className="p-4"
                 >
-                    {props.isLogin ? <Odbiory {...props} /> : null}
+                    {/* {props.isLogin ? <Odbiory {...props} /> : null} */}
                 </Col>
             </Row>
         </React.Suspense>

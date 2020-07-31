@@ -1,12 +1,6 @@
 import { graphQLClient } from "../../../../services";
 import { gql } from "apollo-boost";
-import {
-    createObjectJob,
-    getAllObjectsJobs,
-    prepareDataForJobs,
-    prepareJobs,
-    updateObjectJob,
-} from "./utils";
+import { createObjectJob, getAllObjectsJobs, prepareDataForJobs, prepareJobs, updateObjectJob } from "./utils";
 
 export const JOBS_LOADING_START = "JOBS_LOADING_START";
 export const JOBS_LOADING_END = "JOBS_LOADING_END";
@@ -59,14 +53,7 @@ const objectJobFetchCompleted = () => ({
     type: OBJECT_JOB_FETCH_COMPLETED,
 });
 
-const setJobsData = ({
-    job_key,
-    area_summary,
-    areas,
-    object_ids,
-    value_percentage,
-    area_computed,
-}) => ({
+const setJobsData = ({ job_key, area_summary, areas, object_ids, value_percentage, area_computed }) => ({
     type: JOBS_SET_DATA,
     job_key,
     area_summary,
@@ -76,11 +63,7 @@ const setJobsData = ({
     area_computed,
 });
 
-const jobsChangePercentageValue = ({
-    job_key,
-    value_percentage,
-    area_computed,
-}) => ({
+const jobsChangePercentageValue = ({ job_key, value_percentage, area_computed }) => ({
     type: JOBS_CHANGE_PERCENTAGE_VALUE,
     job_key,
     value_percentage,
@@ -104,6 +87,7 @@ export const fetchAllJobs = () => async (dispatch) => {
         `,
     });
     if (data) {
+        console.log(prepareJobs(data.odbJobs));
         dispatch(jobsFetchEnd(prepareJobs(data.odbJobs)));
     }
     if (errors) {
@@ -124,11 +108,7 @@ export const jobsPrepare = (objects) => (dispatch, getState) => {
     dispatch(jobsLoadingEnd());
 };
 
-export const changeJobPercentageValue = (
-    job_key,
-    value,
-    precision = 2
-) => async (dispatch, getState) => {
+export const changeJobPercentageValue = (job_key, value, precision = 2) => async (dispatch, getState) => {
     const { jobs, objects_jobs_loading } = getState().Odbiory.Jobs;
     const job = jobs[job_key];
     const { objects } = getState().Odbiory.Objects;
@@ -140,9 +120,7 @@ export const changeJobPercentageValue = (
         getAllObjectsJobs(selected_room, job_key)
             .then(({ data, errors }) => {
                 if (errors) return;
-                return Promise.all(
-                    data.odbObjectsJobs.map((e) => updateObjectJob(e.id))
-                );
+                return Promise.all(data.odbObjectsJobs.map((e) => updateObjectJob(e.id)));
             })
             .then((a) => {
                 return Promise.all(
@@ -151,13 +129,7 @@ export const changeJobPercentageValue = (
                             room: selected_room,
                             odb_job: job_key,
                             value_percentage: value,
-                            value_area:
-                                Math.floor(
-                                    objects[obj_id].area *
-                                        value *
-                                        10 ** precision
-                                ) /
-                                10 ** precision,
+                            value_area: Math.floor(objects[obj_id].area * value * 10 ** precision) / 10 ** precision,
                             type: objects[obj_id].type_relation.id,
                             user: user.userName,
                             object: obj_id,
@@ -171,10 +143,7 @@ export const changeJobPercentageValue = (
                         job_key,
                         value_percentage: value || 0,
                         area_computed: value
-                            ? Math.floor(
-                                  job.area_summary * value * 10 ** precision
-                              ) /
-                              10 ** precision
+                            ? Math.floor(job.area_summary * value * 10 ** precision) / 10 ** precision
                             : 0,
                     })
                 );
