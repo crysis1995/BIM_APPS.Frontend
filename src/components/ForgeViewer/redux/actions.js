@@ -3,7 +3,8 @@ import { initialiseModal } from "../../Modal/redux/actions";
 
 export const INITIALIZE_VIEWER = "INITIALIZE_VIEWER";
 export const SET_MODEL_ROOMS = "SET_MODEL_ROOMS";
-export const SET_SHEETS = "SET_SHEETS";
+export const SET_SHEETS_SUCCESS = "SET_SHEETS_SUCCESS";
+export const SET_SHEETS_ERROR = "SET_SHEETS_ERROR";
 export const SET_CURRENT_SHEET = "SET_CURRENT_SHEET";
 
 export const initializeViewer = () => ({
@@ -11,9 +12,14 @@ export const initializeViewer = () => ({
     viewer_isInitialized: true,
 });
 
-export const setSheets = (sheets) => ({
-    type: SET_SHEETS,
+export const setSheetsSuccess = (sheets) => ({
+    type: SET_SHEETS_SUCCESS,
     sheets,
+});
+
+export const setSheetsError = (error) => ({
+    type: SET_SHEETS_ERROR,
+    error,
 });
 
 export const setCurrentSheet = (current_sheet) => ({

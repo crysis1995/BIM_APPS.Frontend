@@ -1,4 +1,4 @@
-import { INITIALIZE_VIEWER, SET_MODEL_ROOMS, SET_CURRENT_SHEET, SET_SHEETS } from "./actions";
+import { INITIALIZE_VIEWER, SET_MODEL_ROOMS, SET_CURRENT_SHEET, SET_SHEETS_ERROR, SET_SHEETS_SUCCESS } from "./actions";
 
 const initialState = {
     model_urn: "dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLlpFREFIemFoUl9XaEFYcVg0ZVlhQXc_dmVyc2lvbj0x",
@@ -8,6 +8,7 @@ const initialState = {
     viewer: null,
     sheets: [],
     sheets_loaded: false,
+    sheets_error: false,
     current_sheet: null,
     viewer_isInitialized: false,
     model_rooms: null,
@@ -25,11 +26,17 @@ const ForgeViewerReducer = (state = initialState, action) => {
                 ...state,
                 current_sheet: action.current_sheet,
             };
-        case SET_SHEETS:
+        case SET_SHEETS_SUCCESS:
             return {
                 ...state,
                 sheets: action.sheets,
                 sheets_loaded: true,
+            };
+        case SET_SHEETS_ERROR:
+            return {
+                ...state,
+                sheets_error: action.error,
+                sheets_loaded: false,
             };
         case SET_MODEL_ROOMS:
             return {

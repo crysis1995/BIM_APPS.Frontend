@@ -5,16 +5,16 @@ import AutodeskLogin from "../components/AutodeskLogin";
 
 function Header() {
     return (
-        <Navbar bg="light" expand="lg">
+        <Navbar bg="light" expand="lg" className="flex-shrink-0">
             <NavLink to="/">
                 <Navbar.Brand>BIM APPS</Navbar.Brand>
             </NavLink>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
-                          <NavLink className="nav-link " to="/odbiory">
-                               Odbiory
-                          </NavLink>
+                    <NavLink className="nav-link " to="/odbiory">
+                        Odbiory
+                    </NavLink>
                 </Nav>
 
                 <Nav className="align-right">

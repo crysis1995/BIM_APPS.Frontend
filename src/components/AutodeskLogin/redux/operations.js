@@ -24,17 +24,12 @@ const refetchAccessToken = (login_3_legged) => async (dispatch) => {
 const fetchProjectDetails = () => async (dispatch, getState) => {
     const api = new AutodeskApi(getState().AutodeskLogin.login_3_legged.access_token);
     const user_detail = await api.authorization.getUserDetails();
-    console.log(
-        getState().AutodeskLogin.login_3_legged.access_token,
-        getState().AutodeskBIM360.accountId,
-        user_detail.userId
-    );
-    const project_info = await fetchProjectInfo(
-        getState().AutodeskLogin.login_3_legged.access_token,
-        getState().AutodeskBIM360.accountId,
-        user_detail.userId
-    );
-    console.log(project_info);
+    // console.log(
+    //     getState().AutodeskLogin.login_3_legged.access_token,
+    //     getState().AutodeskBIM360.accountId,
+    //     user_detail.userId
+    // );
+    dispatch(AutodeskLoginActions.FETCH_USER_INFO(user_detail));
 };
 
 export const logout_bim360 = () => (dispatch) => {

@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Container } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import { Link, Route, Switch } from "react-router-dom";
 import Loader from "../components/Loader";
 import ModalComponent from "../components/Modal/component";
 import { connect } from "react-redux";
+
 // todo zrobić sidebar
 
 //components
@@ -15,22 +16,29 @@ function Layout(props) {
     return (
         <>
             <React.Suspense fallback={<Loader />}>
-                <Header {...props} />
+                <Container fluid style={{ minHeight: window.innerHeight, paddingLeft: 0, paddingRight: 0 }}>
+                    <Header {...props} />
+                    <Row noGutters style={{ minHeight: window.innerHeight - 56 }}>
+                        <Switch>
+                            <Route exact={true} path="/login">
+                                <Login />
+                            </Route>
+                            <Route exact path="/">
+                                <Col className="d-flex flex-column">
+                                    <div className="d-flex align-items-stretch" style={{ height: "100%" }}>
+                                        asdasddas
+                                    </div>
+                                </Col>
+                                <Col>asdasddas</Col>
+                                <Col>asdasddas</Col>
+                                <Col>asdasddas</Col>
+                            </Route>
+                            <Route path="/odbiory" component={OdbioryLayout} />
+                        </Switch>
+                    </Row>
+                </Container>
+                <ModalComponent />
             </React.Suspense>
-            <Container fluid={"true"}>
-                <React.Suspense fallback={<Loader />}>
-                    <Switch>
-                        <Route exact={true} path="/login">
-                            <Login />
-                        </Route>
-                        <Route exact={true} path="/">
-                            <Link to={"/odbiory"}>asd</Link>
-                        </Route>
-                        <Route path="/odbiory" component={OdbioryLayout} />
-                    </Switch>
-                </React.Suspense>
-            </Container>
-            <ModalComponent />
         </>
     );
 }

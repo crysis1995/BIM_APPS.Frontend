@@ -79,16 +79,16 @@ export const fetchAllJobs = () => async (dispatch) => {
     const { data, errors } = await graphQLClient.query({
         query: gql`
             query {
-                odbJobs {
-                    name
+                acceptanceJobs {
                     id
+                    name
                 }
             }
         `,
     });
     if (data) {
-        console.log(prepareJobs(data.odbJobs));
-        dispatch(jobsFetchEnd(prepareJobs(data.odbJobs)));
+        console.log(prepareJobs(data.acceptanceJobs));
+        dispatch(jobsFetchEnd(prepareJobs(data.acceptanceJobs)));
     }
     if (errors) {
         dispatch(jobsFetchError(errors));

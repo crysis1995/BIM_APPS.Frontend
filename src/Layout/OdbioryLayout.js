@@ -9,35 +9,31 @@ const Viewer = React.lazy(() => import("../components/ForgeViewer/components"));
 function OdbioryLayout(props) {
     return (
         <React.Suspense fallback={<Loader />}>
-            <Row noGutters>
-                <Col
-                    xs={6}
-                    style={{
-                        height: window.innerHeight - 56,
-                    }}
-                >
-                    {props.isLogin && props.started ? (
-                        <Viewer />
-                    ) : (
-                        <Row noGutters>
-                            <Col className="text-center p-5">
-                                <p>Aby włączyć viewer, zaloguj się do BIM360</p>
-                            </Col>
-                        </Row>
-                    )}
-                </Col>
-                <Col
-                    xs={6}
-                    style={{
-                        height: window.innerHeight - 56,
-                        maxHeight: window.innerHeight - 56,
-                        overflowY: "hidden",
-                    }}
-                    className="p-4"
-                >
-                    {/* {props.isLogin ? <Odbiory {...props} /> : null} */}
-                </Col>
-            </Row>
+            <Col
+                xs={6}
+                style={{
+                    height: window.innerHeight - 56,
+                }}
+            >
+                {props.isLogin && props.started ? (
+                    <Viewer />
+                ) : (
+                    <div className="text-center mt-5">
+                        <p>Aby włączyć viewer, zaloguj się do BIM360</p>
+                    </div>
+                )}
+            </Col>
+            <Col
+                xs={6}
+                style={{
+                    height: window.innerHeight - 56,
+                    maxHeight: window.innerHeight - 56,
+                    overflowY: "hidden",
+                }}
+                className="p-4"
+            >
+                {props.isLogin ? <Odbiory {...props} /> : null}
+            </Col>
         </React.Suspense>
     );
 }

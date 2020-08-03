@@ -9,15 +9,15 @@ import OdbioryComponent from "./OdbioryComponent";
 import ResultsComponent from "./ResultsComponent";
 import { setAwansowanieActive, setResultsActive } from "../redux/odbiory/actions";
 
-class odbiory extends React.Component {
+class Odbiory extends React.Component {
     componentDidMount() {
         const { fetch_all_rooms, componentStarted } = this.props;
         componentStarted();
-        fetch_all_rooms();
+        // fetch_all_rooms();
     }
 
     render() {
-        if (this.props.Rooms.rooms_loading) return <Loader />;
+        if (!this.props.ForgeViewer.sheets_loaded) return <Loader />;
         else
             return (
                 <>
@@ -55,4 +55,4 @@ const mapDispatchToProps = {
     fetch_all_rooms,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(odbiory);
+export default connect(mapStateToProps, mapDispatchToProps)(Odbiory);

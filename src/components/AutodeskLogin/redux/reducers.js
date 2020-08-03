@@ -11,7 +11,7 @@ const INITIAL_STATE = {
         expires_in: null,
     },
     isLogin: false,
-    project: null,
+    user: null,
 };
 
 const AutodeskLoginReducer = (state = INITIAL_STATE, action) => {
@@ -40,10 +40,10 @@ const AutodeskLoginReducer = (state = INITIAL_STATE, action) => {
                 user: INITIAL_STATE.user,
                 isLogin: false,
             };
-        case types.FETCH_PROJECT_INFO:
+        case types.FETCH_USER_INFO:
             return {
                 ...state,
-                project: action.project,
+                user: action.user,
             };
 
         default:

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 // import ShowRoomsExtension from "./extenstions/TestExtension";
 import { connect } from "react-redux";
-import { initializeViewer, setViewerRooms, setSheets } from "../redux/actions";
+import { initializeViewer, setViewerRooms, setSheetsError, setSheetsSuccess } from "../redux/actions";
 import { setSelectedRoom } from "../../../sites/odbiory/redux/rooms/actions";
 import { initialiseModal } from "../../Modal/redux/actions";
 
@@ -41,7 +41,7 @@ class Viewer extends Component {
                 const elements = viewables.map((e) => {
                     return { index: e.guid(), name: e.name() };
                 });
-                this.props.setSheets(elements);
+                this.props.setSheetsSuccess(elements);
                 // this.viewer.loadDocumentNode(doc, viewables[0]).then((i) => {
                 this.props.initializeViewer();
                 // });
@@ -124,7 +124,7 @@ const mapStateToProps = ({ ForgeViewer, AutodeskLogin, Odbiory }) => ({
 
 const mapDispatchToProps = {
     initialiseModal,
-    setSheets,
+    setSheetsSuccess,
     initializeViewer,
     setViewerRooms,
     setSelectedRoom,
