@@ -9,30 +9,21 @@ const Viewer = React.lazy(() => import("../components/ForgeViewer/components"));
 function OdbioryLayout(props) {
     return (
         <React.Suspense fallback={<Loader />}>
-            <Col
-                xs={6}
-                style={{
-                    height: window.innerHeight - 56,
-                }}
-            >
-                {props.isLogin && props.started ? (
-                    <Viewer />
-                ) : (
-                    <div className="text-center mt-5">
-                        <p>Aby włączyć viewer, zaloguj się do BIM360</p>
-                    </div>
-                )}
+            <Col>
+                <div className="d-flex align-items-stretch" style={{ height: "100%" }}>
+                    {props.isLogin && props.started ? (
+                        <Viewer />
+                    ) : (
+                        <div className="position-center mt-5">
+                            <p>Aby włączyć viewer, zaloguj się do BIM360</p>
+                        </div>
+                    )}
+                </div>
             </Col>
-            <Col
-                xs={6}
-                style={{
-                    height: window.innerHeight - 56,
-                    maxHeight: window.innerHeight - 56,
-                    overflowY: "hidden",
-                }}
-                className="p-4"
-            >
-                {props.isLogin ? <Odbiory {...props} /> : null}
+            <Col>
+                <div className="d-flex align-items-stretch" style={{ height: "100%" }}>
+                    {props.isLogin ? <Odbiory {...props} /> : null}
+                </div>
             </Col>
         </React.Suspense>
     );

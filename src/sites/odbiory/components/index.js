@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Nav } from "react-bootstrap";
+import { Nav, Row, Col } from "react-bootstrap";
 import { componentStarted } from "../redux/odbiory/actions";
 import { fetch_all_rooms } from "../redux/rooms/actions";
 import Loader from "../../../components/Loader";
@@ -21,23 +21,33 @@ class Odbiory extends React.Component {
         else
             return (
                 <>
-                    <LevelSelectorComponent />
-                    <Nav variant="tabs" className="mt-3" defaultActiveKey={this.props.match.url}>
-                        <Nav.Item>
-                            <Nav.Link onSelect={(e) => this.props.setResultsActive()} eventKey={this.props.match.url}>
-                                Rezultaty
-                            </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link
-                                onSelect={(e) => this.props.setAwansowanieActive()}
-                                eventKey={`${this.props.match.url}/upgrade`}
-                            >
-                                Awansowanie robót
-                            </Nav.Link>
-                        </Nav.Item>
-                    </Nav>
-                    {this.props.OdbioryComponent.awansowanie.is_active ? <OdbioryComponent /> : <ResultsComponent />}
+                    <div className="d-flex flex-column p-3 w-100">
+                        <LevelSelectorComponent />
+                        <Nav variant="tabs" className="mt-3" defaultActiveKey={this.props.match.url}>
+                            <Nav.Item>
+                                <Nav.Link
+                                    onSelect={(e) => this.props.setResultsActive()}
+                                    eventKey={this.props.match.url}
+                                >
+                                    Rezultaty
+                                </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link
+                                    onSelect={(e) => this.props.setAwansowanieActive()}
+                                    eventKey={`${this.props.match.url}/upgrade`}
+                                >
+                                    Awansowanie robót
+                                </Nav.Link>
+                            </Nav.Item>
+                        </Nav>
+
+                        {this.props.OdbioryComponent.awansowanie.is_active ? (
+                            <OdbioryComponent />
+                        ) : (
+                            <ResultsComponent />
+                        )}
+                    </div>
                 </>
             );
     }

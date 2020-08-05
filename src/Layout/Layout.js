@@ -24,8 +24,8 @@ function Layout(props) {
                                 <Login />
                             </Route>
                             <Route exact path="/">
-                                <Col className="d-flex flex-column">
-                                    <div className="d-flex align-items-stretch" style={{ height: "100%" }}>
+                                <Col>
+                                    <div className="d-flex align-items-stretch bg-primary" style={{ height: "100%" }}>
                                         asdasddas
                                     </div>
                                 </Col>

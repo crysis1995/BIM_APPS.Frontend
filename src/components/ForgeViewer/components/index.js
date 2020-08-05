@@ -18,9 +18,13 @@ class Viewer extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.current_sheet !== this.props.current_sheet && !!this.props.current_sheet) {
+        if (
+            prevProps.current_sheet !== this.props.current_sheet &&
+            !!this.props.current_sheet &&
+            !!this.doc &&
+            !!this.viewer
+        ) {
             this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.current_sheet));
-            console.log(this.props.current_sheet);
         }
     }
 

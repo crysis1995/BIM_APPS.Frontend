@@ -13,22 +13,29 @@ function ResultComponent({ Jobs, ForgeViewer }) {
         );
     else
         return (
-            <Row className="mt-3">
-                <Col className={"d-flex flex-column"} style={{ overflowY: "scroll" }}>
-                    <ListGroup variant="flush">
-                        {Object.keys(Jobs.jobs).map((job_key) => (
-                            <ListGroup.Item action key={job_key} onClick={() => console.log(job_key)}>
-                                {Jobs.jobs[job_key].name}
-                                <ProgressBar
-                                    className="mt-3"
-                                    now={Jobs.jobs[job_key].percentage || 0}
-                                    label={`${Jobs.jobs[job_key].percentage || 0}%`}
-                                />
-                            </ListGroup.Item>
-                        ))}
-                    </ListGroup>
-                </Col>
-            </Row>
+            <Col className={"d-flex flex-column"} style={{ overflowY: "scroll" }}>
+                <ListGroup variant="flush">
+                    {Object.keys(Jobs.jobs).map((job_key) => (
+                        <ListGroup.Item action key={job_key} onClick={() => console.log(job_key)}>
+                            <div className="d-flex justify-content-between">
+                                <span>{Jobs.jobs[job_key].name}</span>
+                                <span>#suma metrów kwadratowych roboty na pietro</span>
+                            </div>
+
+                            <div class="progress" style={{ height: "5px" }}>
+                                <div
+                                    classNAme="progress-bar"
+                                    role="progressbar"
+                                    style={{ width: "25%" }}
+                                    aria-valuenow="25"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                ></div>
+                            </div>
+                        </ListGroup.Item>
+                    ))}
+                </ListGroup>
+            </Col>
         );
 }
 const mapStateToProps = ({ Odbiory, ForgeViewer }) => ({

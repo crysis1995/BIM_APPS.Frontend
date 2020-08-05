@@ -21,10 +21,7 @@ import thunk from "redux-thunk";
 // });
 
 export default () => {
-    // let store = createStore(
-    //     persistedReducer,
-    //     composeWithDevTools(applyMiddleware(thunk))
-    // );
+    // let store = createStore(persistedReducer, composeWithDevTools(applyMiddleware(thunk)));
     let store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
     // let persistor = persistStore(store);
     // return { store, persistor };
