@@ -12,6 +12,7 @@ const initialState = {
     current_sheet: null,
     viewer_isInitialized: false,
     model_rooms: null,
+    model_rooms_loading: false,
 };
 
 const ForgeViewerReducer = (state = initialState, action) => {
@@ -20,6 +21,7 @@ const ForgeViewerReducer = (state = initialState, action) => {
             return {
                 ...state,
                 viewer_isInitialized: action.viewer_isInitialized,
+                model_rooms_loading: true,
             };
         case SET_CURRENT_SHEET:
             return {
@@ -42,6 +44,7 @@ const ForgeViewerReducer = (state = initialState, action) => {
             return {
                 ...state,
                 model_rooms: action.model_rooms,
+                model_rooms_loading: false,
             };
         default:
             return state;

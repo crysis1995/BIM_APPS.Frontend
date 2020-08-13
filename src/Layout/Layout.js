@@ -1,9 +1,10 @@
 import * as React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { Link, Route, Switch } from "react-router-dom";
+import { Link, Route, Switch, Redirect } from "react-router-dom";
 import Loader from "../components/Loader";
 import ModalComponent from "../components/Modal/component";
 import { connect } from "react-redux";
+import { logUserIfValid } from "../components/CMSLogin/redux/actions";
 
 // todo zrobić sidebar
 
@@ -12,35 +13,51 @@ const Header = React.lazy(() => import("./Header"));
 const OdbioryLayout = React.lazy(() => import("./OdbioryLayout"));
 const Login = React.lazy(() => import("../components/CMSLogin/components/login"));
 
-function Layout(props) {
-    return (
-        <>
-            <React.Suspense fallback={<Loader />}>
-                <Container fluid style={{ minHeight: window.innerHeight, paddingLeft: 0, paddingRight: 0 }}>
-                    <Header {...props} />
-                    <Row noGutters style={{ minHeight: window.innerHeight - 56 }}>
-                        <Switch>
-                            <Route exact={true} path="/login">
-                                <Login />
-                            </Route>
-                            <Route exact path="/">
-                                <Col>
-                                    <div className="d-flex align-items-stretch bg-primary" style={{ height: "100%" }}>
-                                        asdasddas
-                                    </div>
-                                </Col>
-                                <Col>asdasddas</Col>
-                                <Col>asdasddas</Col>
-                                <Col>asdasddas</Col>
-                            </Route>
-                            <Route path="/odbiory" component={OdbioryLayout} />
-                        </Switch>
-                    </Row>
-                </Container>
-                <ModalComponent />
-            </React.Suspense>
-        </>
-    );
+class Layout extends React.Component {
+    componentDidMount() {
+        this.props.logUserIfValid();
+    }
+    render() {
+        return (
+            <>
+                <React.Suspense fallback={<Loader />}>
+                    <Container fluid style={{ minHeight: window.innerHeight, paddingLeft: 0, paddingRight: 0 }}>
+                        <Header {...this.props} />
+                        <Row
+                            noGutters
+                            style={{ minHeight: window.innerHeight - 56 }}
+                            className="justify-content-md-center"
+                        >
+                            <Switch>
+                                <Route path="/login" component={Login} />
+                                <Route exact path="/">
+                                    <Col>
+                                        <div
+                                            className="d-flex align-items-stretch bg-primary"
+                                            style={{ height: "100%" }}
+                                        >
+                                            asdasddas
+                                        </div>
+                                    </Col>
+                                    <Col>asdasddas</Col>
+                                    <Col>asdasddas</Col>
+                                    <Col>asdasddas</Col>
+                                </Route>
+                                <Route path="/acceptance" component={OdbioryLayout} />
+                            </Switch>
+                        </Row>
+                    </Container>
+                    <ModalComponent />
+                </React.Suspense>
+            </>
+        );
+    }
 }
 
-export default connect(null, null)(Layout);
+const mapStateToProps = ({ CMSLogin }) => ({
+    CMSLogin,
+});
+
+const mapDispatchToProps = { logUserIfValid };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);

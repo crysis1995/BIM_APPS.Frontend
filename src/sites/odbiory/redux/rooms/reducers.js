@@ -5,6 +5,7 @@ const initialState = {
     rooms_loading: true,
     rooms_error: {},
     selected_room: null,
+    from_selector: false,
 };
 
 const RoomsReducer = (state = initialState, action) => {
@@ -28,6 +29,7 @@ const RoomsReducer = (state = initialState, action) => {
         case SELECT_ROOM_BY_ODBIORY:
             return {
                 ...state,
+                from_selector: action.from_selector,
                 selected_room: action.selected_room,
             };
 

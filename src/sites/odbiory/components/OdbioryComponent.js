@@ -9,7 +9,7 @@ import { v4 } from "uuid";
 
 function OdbioryComponent(props) {
     return (
-        <>
+        <Col className={"d-flex flex-column"}>
             <Form.Row className="mt-3">
                 <Col className="mt-auto">
                     <Form.Label>Numer pomieszczenia</Form.Label>
@@ -17,15 +17,15 @@ function OdbioryComponent(props) {
                         onChange={(event) => {
                             props.selectElement(event.target.value);
                         }}
-                        disabled={props.objects_jobs_loading}
+                        disabled={props.objects_jobs_loading || props.ForgeViewer.model_rooms_loading}
                         as="select"
                         value={props.Rooms.selected_room}
                         custom
                     >
                         <option value="">Wybierz...</option>
-                        {props.Rooms.rooms.map((e) => (
-                            <option key={v4()} value={e.id}>
-                                {e.room_number}
+                        {Object.keys(props.Rooms.rooms).map((id) => (
+                            <option key={v4()} value={id}>
+                                {props.Rooms.rooms[id].number}
                             </option>
                         ))}
                     </Form.Control>
@@ -33,7 +33,7 @@ function OdbioryComponent(props) {
                 <Col className="mt-auto">
                     <Form.Label>Nazwa pomieszczenia</Form.Label>
                     <Form.Control
-                        disabled={props.objects_jobs_loading}
+                        disabled={props.objects_jobs_loading || props.ForgeViewer.model_rooms_loading}
                         onChange={(event) => {
                             props.selectElement(event.target.value);
                         }}
@@ -42,29 +42,25 @@ function OdbioryComponent(props) {
                         custom
                     >
                         <option value="">Wybierz...</option>
-                        {props.Rooms.rooms.map((e) => (
-                            <option key={v4()} value={e.id}>
-                                {e.room_name}
+                        {Object.keys(props.Rooms.rooms).map((id) => (
+                            <option key={v4()} value={id}>
+                                {props.Rooms.rooms[id].name}
                             </option>
                         ))}
                     </Form.Control>
                 </Col>
             </Form.Row>
             {props.Jobs.jobs_fetched && props.Rooms.selected_room ? (
-                <Row
-                    className="pt-3"
+                <Col
+                    className={"d-flex flex-column"}
                     style={{
-                        height: window.innerHeight - 200,
-                        maxHeight: window.innerHeight - 200,
                         overflowY: "scroll",
                     }}
                 >
-                    <Col>
-                        <TableComponent />
-                    </Col>
-                </Row>
+                    <TableComponent />
+                </Col>
             ) : null}
-        </>
+        </Col>
     );
 }
 const mapStateToProps = ({ Odbiory, ForgeViewer }) => ({

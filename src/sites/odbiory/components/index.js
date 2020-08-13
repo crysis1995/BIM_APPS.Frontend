@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Nav, Row, Col } from "react-bootstrap";
 import { componentStarted } from "../redux/odbiory/actions";
-import { fetch_all_rooms } from "../redux/rooms/actions";
+// import { fetch_all_rooms } from "../redux/rooms/actions";
 import Loader from "../../../components/Loader";
 import LevelSelectorComponent from "./LevelSelectorComponent";
 import OdbioryComponent from "./OdbioryComponent";
@@ -11,9 +11,8 @@ import { setAwansowanieActive, setResultsActive } from "../redux/odbiory/actions
 
 class Odbiory extends React.Component {
     componentDidMount() {
-        const { fetch_all_rooms, componentStarted } = this.props;
+        const { componentStarted } = this.props;
         componentStarted();
-        // fetch_all_rooms();
     }
 
     render() {
@@ -62,7 +61,6 @@ const mapDispatchToProps = {
     setAwansowanieActive,
     setResultsActive,
     componentStarted,
-    fetch_all_rooms,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Odbiory);

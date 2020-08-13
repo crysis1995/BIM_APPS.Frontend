@@ -1,160 +1,179 @@
 import { graphQLClient } from "../../../../services";
 import { gql } from "apollo-boost";
+import { fetchALLAreaJobPerLevel, fetchSummaryAreaJobPerLevel } from "../objects/utils";
 
-/**
- *
- *
- *
- * Funkcja zwraca jobs w postaci słownika
- *
- *
- *
- * jobs_id: {job}
- * @param jobs
- * @returns {*}
- */
-export const prepareJobs = (jobs) => {
-    return jobs.reduce((prev, acc) => {
-        return {
-            ...prev,
-            [acc.id]: acc,
-        };
-    }, {});
+export const fetchAllJobsFromAPI = () => {
+	return graphQLClient.query({
+		query: gql`
+			query getAllAcceptanceJobs {
+				acceptanceJobs {
+					id
+					name
+					unit
+				}
+			}
+		`,
+		fetchPolicy: "no-cache",
+	});
+};
+
+export const addParameterWithValue = (objects, param_name = "", condition = () => {}) => {
+	if (!param_name) return objects;
+	let newObj = { ...objects };
+	for (let key in newObj) {
+		newObj[key] = { ...newObj[key], [param_name]: condition(newObj[key]) };
+	}
+	return newObj;
 };
 
 /**
+ *      Przygotowuje pobrane dane wg klucza
+ *      job:{
+ *          id:{
+ *              ...
+ *              upgrading: {
+ *  	            summary_value: 0,
+ *  		        particular_values: [],
+ *  		        object_ids: [],
+ *  		        current_value: 0,
+ *  		        percentage_value: 0,
+ *  		        reference_job_id: null,
+ *              },
+ *          }
+ *      }
  *
  * @param job_id
  * @param objects
  * @param precision
- * @returns {{area_summary: number, object_ids: [], areas: [], job_key: *, value_percentage: number}}
+ * @returns {{summary_value: number, object_ids: [], particular_values: [], job_key: *, percentage_value: number}}
  */
 export const prepareDataForJobs = (job_id, objects, precision = 2) => {
-    let areas = [];
-    let object_ids = [];
-    let area_summary = 0;
-    let value_percentage = 0;
-    Object.keys(objects).forEach((object_id) => {
-        const isContainsJobId = objects[object_id].type_relation.jobs.reduce(
-            (previous, job) => previous || job.id === job_id,
-            false
-        );
+	let particular_values = []; // tablica powierzchni cząstkowych
+	let object_ids = []; // tablica id obiektów
+	let summary_value = 0; // wartość sumarycznej powierzchni
+	let percentage_value = 0; // wartość procentowa zaawansowania danej roboty
+	let reference_job = null; // id referencejobs - referencji przechowującej aktualny stan w bazie danych
+	let current_value = 0;
+	for (let object_id in objects) {
+		//
+		// iteruje po obiektach i sprawdzam, czy jakis obiekt zawiera daną robote
+		//
+		const isContainsJobId = objects[object_id].object_finish_type.jobs.reduce(
+			(previous, job) => previous || job.id === job_id,
+			false
+		);
 
-        if (isContainsJobId) {
-            object_ids.push(object_id);
-            if (objects[object_id].area) {
-                area_summary += objects[object_id].area;
-                areas.push(objects[object_id].area);
-            }
-            const job_entity = objects[object_id].objects_jobs.filter(
-                (job) => job.odb_job.id === job_id
-            )[0];
-            if (job_entity && value_percentage < job_entity.value_percentage)
-                value_percentage = job_entity.value_percentage;
-        }
-    });
-    return {
-        job_key: job_id,
-        area_summary:
-            Math.floor(area_summary * 10 ** precision) / 10 ** precision,
-        areas,
-        object_ids,
-        value_percentage,
-        area_computed:
-            Math.floor(area_summary * value_percentage * 10 ** precision) /
-            10 ** precision,
-    };
+		if (isContainsJobId) {
+			// dodaje id obiektów
+			object_ids.push(object_id);
+			if (objects[object_id].area) {
+				// jeśli w obiekcie jest area
+				summary_value += objects[object_id].area;
+				particular_values.push(objects[object_id].area);
+			}
+			//
+			//      pobieram reference_jobs dla danych obiektów
+			//
+			const ref_job = objects[object_id].reference_jobs.filter((ref_job) => ref_job.job.id === job_id)[0];
+			if (ref_job && percentage_value < ref_job.percentage_value) {
+				percentage_value = ref_job.percentage_value;
+				reference_job = { id: ref_job.id };
+			}
+		}
+	}
+	summary_value = Math.floor(summary_value * 10 ** precision) / 10 ** precision;
+	current_value = Math.floor(summary_value * percentage_value * 10 ** precision) / 10 ** precision;
+
+	return {
+		summary_value,
+		particular_values,
+		object_ids,
+		reference_job,
+		percentage_value,
+		current_value,
+	};
 };
 
-export const createObjectJob = ({
-    room,
-    odb_job,
-    value_percentage,
-    value_area,
-    type,
-    user,
-    object,
-}) => {
-    return graphQLClient.mutate({
-        mutation: gql`
-            mutation createObjectJobs(
-                $r: ID
-                $j: ID
-                $vp: Float
-                $va: Float
-                $t: ID
-                $us: String
-                $obj: ID
-            ) {
-                createOdbObjectsJob(
-                    input: {
-                        data: {
-                            room: $r
-                            odb_job: $j
-                            value_percentage: $vp
-                            value_area: $va
-                            type: $t
-                            user: $us
-                            object: $obj
-                            isActual: true
-                        }
-                    }
-                ) {
-                    odbObjectsJob {
-                        id
-                    }
-                }
-            }
-        `,
-        variables: {
-            r: room,
-            j: odb_job,
-            vp: value_percentage,
-            va: value_area,
-            t: type,
-            us: user,
-            obj: object,
-        },
-        fetchPolicy: "no-cache",
-    });
+export const createReferenceJob = ({ room, job, percentage_value, value_area, object_type, user, objects }) => {
+	return graphQLClient.mutate({
+		mutation: gql`
+			mutation createAcceptanceReferenceJob($r: ID, $j: ID, $vp: Float, $vc: Float, $ot: ID, $o: [ID], $u: ID) {
+				createAcceptanceReferenceJob(
+					input: {
+						data: {
+							percentage_value: $vp
+							value_calculated: $vc
+							room: $r
+							job: $j
+							object_type: $ot
+							user: $u
+							objects: $o
+						}
+					}
+				) {
+					acceptanceReferenceJob {
+						id
+						room {
+							revit_id
+						}
+					}
+				}
+			}
+		`,
+		variables: {
+			r: room,
+			j: job,
+			vp: percentage_value,
+			vc: value_area,
+			ot: object_type,
+			u: user,
+			o: objects,
+		},
+		fetchPolicy: "no-cache",
+	});
 };
 
 export const updateObjectJob = (id) => {
-    return graphQLClient.mutate({
-        mutation: gql`
-            mutation updateObjectJob($i: ID!) {
-                updateOdbObjectsJob(
-                    input: { where: { id: $i }, data: { isActual: false } }
-                ) {
-                    odbObjectsJob {
-                        id
-                    }
-                }
-            }
-        `,
-        variables: {
-            i: id,
-        },
-        fetchPolicy: "no-cache",
-    });
+	return graphQLClient.mutate({
+		mutation: gql`
+			mutation updateReferenceJob($i: ID!) {
+				updateAcceptanceReferenceJob(input: { where: { id: $i }, data: { is_actual: false } }) {
+					acceptanceReferenceJob {
+						id
+					}
+				}
+			}
+		`,
+		variables: {
+			i: id,
+		},
+		fetchPolicy: "no-cache",
+	});
 };
 
-export const getAllObjectsJobs = (r, j) => {
-    return graphQLClient.query({
-        query: gql`
-            query getAllObjectsJobs($r: ID, $j: ID) {
-                odbObjectsJobs(
-                    where: {
-                        isActual: true
-                        room: { id: $r }
-                        odb_job: { id: $j }
-                    }
-                ) {
-                    id
-                }
-            }
-        `,
-        variables: { r, j },
-        fetchPolicy: "no-cache",
-    });
+export const fetchSummaryValuesByJob = async (job_id, current_level, precision) => {
+	return new Promise((resolve) => {
+		var summary_all_value;
+		var summary_current_value;
+		var percentage_value;
+		Promise.all([
+			fetchALLAreaJobPerLevel(job_id, current_level),
+			fetchSummaryAreaJobPerLevel(job_id, current_level),
+		]).then((resp) => {
+			if (resp[0].data)
+				summary_all_value =
+					Math.floor((resp[0].data.acceptanceObjectsConnection.aggregate.sum.area || 0) * 10 ** precision) /
+					10 ** precision;
+			if (resp[1].data)
+				summary_current_value =
+					Math.floor(
+						(resp[1].data.acceptanceReferenceJobsConnection.aggregate.sum.value_calculated || 0) *
+							10 ** precision
+					) /
+					10 ** precision;
+			percentage_value =
+				Math.floor((summary_current_value / summary_all_value) * 100 * 10 ** precision) / 10 ** precision;
+			resolve({ summary_all_value, summary_current_value, percentage_value });
+		});
+	});
 };

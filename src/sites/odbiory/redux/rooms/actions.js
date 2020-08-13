@@ -1,12 +1,12 @@
 import { graphQLClient } from "../../../../services";
 import { gql } from "apollo-boost";
 import { fetchObjectsByRoom } from "../objects/actions";
-
+import { normalize } from "../../../../utils/normalize";
 /*  rooms   */
-export const ROOMS_LOADING_START = "ROOMS_LOADING_START";
-export const ROOMS_LOADING_ERROR = "ROOMS_LOADING_ERROR";
-export const ROOMS_LOADING_END = "ROOMS_LOADING_END";
-export const SELECT_ROOM_BY_ODBIORY = "SELECT_ROOM_BY_ODBIORY";
+export const ROOMS_LOADING_START = "odbiory__rooms__ROOMS_LOADING_START";
+export const ROOMS_LOADING_ERROR = "odbiory__rooms__ROOMS_LOADING_ERROR";
+export const ROOMS_LOADING_END = "odbiory__rooms__ROOMS_LOADING_END";
+export const SELECT_ROOM_BY_ODBIORY = "odbiory__rooms__SELECT_ROOM_BY_ODBIORY";
 
 const fetchRoomsStart = () => ({
     type: ROOMS_LOADING_START,
@@ -22,25 +22,25 @@ const fetchRoomsEnd = (rooms) => ({
     rooms,
 });
 
-const selectedRoom = (selected_room) => ({
+const selectedRoom = (selected_room, from_selector = true) => ({
     type: SELECT_ROOM_BY_ODBIORY,
     selected_room,
+    from_selector,
 });
 
-export const fetch_all_rooms = () => async (dispatch) => {
+export const fetch_all_rooms = (level) => async (dispatch) => {
     dispatch(fetchRoomsStart());
     const query = gql`
-        query getAllRooms($s: Int) {
-            odbRoomsConnection(sort: "room_number:ASC", start: $s) {
+        query getAllRooms($s: Int, $l: String) {
+            acceptanceRoomsConnection(where: { department: { level: $l } }, start: $s) {
                 values {
                     id
                     revit_id
-                    room_name
-                    room_number
+                    name
+                    number
                 }
                 aggregate {
                     count
-                    totalCount
                 }
             }
         }
@@ -54,11 +54,11 @@ export const fetch_all_rooms = () => async (dispatch) => {
         }
         const { data, errors } = await graphQLClient.query({
             query,
-            variables: { s },
+            variables: { s, l: level },
         });
         if (data) {
-            rooms = rooms.concat(data.odbRoomsConnection.values);
-            max = data.odbRoomsConnection.aggregate.totalCount;
+            rooms = rooms.concat(data.acceptanceRoomsConnection.values);
+            max = data.acceptanceRoomsConnection.aggregate.count;
             s = s + 100;
         }
         if (errors) {
@@ -67,13 +67,15 @@ export const fetch_all_rooms = () => async (dispatch) => {
         }
     }
 
-    dispatch(fetchRoomsEnd(rooms));
+    dispatch(fetchRoomsEnd(normalize(rooms, "revit_id")));
 };
 
-export const setSelectedRoom = (selected_room) => (dispatch, getState) => {
+export const setSelectedRoom = (selected_room, from_selector) => (dispatch, getState) => {
     const { objects_jobs_loading } = getState().Odbiory.Jobs;
-    if (selected_room && !objects_jobs_loading) {
-        dispatch(fetchObjectsByRoom(selected_room));
-        dispatch(selectedRoom(selected_room));
+    const { model_rooms_loading } = getState().ForgeViewer;
+    const { rooms } = getState().Odbiory.Rooms;
+    if (selected_room && !objects_jobs_loading && !model_rooms_loading) {
+        dispatch(fetchObjectsByRoom(rooms[selected_room].id));
+        dispatch(selectedRoom(selected_room, from_selector));
     }
 };
