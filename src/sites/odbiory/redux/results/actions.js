@@ -9,7 +9,6 @@ const resultsColorByRoom = (active_job_id, active) => ({
 export const colorResultByRoom = (job_id) => (dispatch, getState) => {
   const { active_job_id, active } = getState().Odbiory.Results;
   const { model_rooms_loading } = getState().ForgeViewer;
-  console.log(model_rooms_loading);
   if (job_id === active_job_id) {
     dispatch(resultsColorByRoom(null, false));
   } else {

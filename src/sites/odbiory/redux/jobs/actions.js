@@ -3,6 +3,7 @@ import {
   prepareDataForJobs,
   updateObjectJob,
   fetchAllJobsFromAPI,
+  prep_updateResults,
 } from "./utils";
 
 import { normalize } from "../../../../utils/normalize";
@@ -32,6 +33,7 @@ export const SET_SUMMARY_VALUE_TO_JOB_START =
   "odbiory__jobs__SET_SUMMARY_VALUE_TO_JOB_START";
 export const SET_SUMMARY_VALUE_TO_JOB_END =
   "odbiory__jobs__SET_SUMMARY_VALUE_TO_JOB_END";
+export const UPGRADE_RESULTS = "odbiory__jobs__UPGRADE_RESULTS";
 
 // export const COLOR_JOBS_BY
 
@@ -94,6 +96,11 @@ const setSummaryValueToJob = (job_key, results) => ({
   job_key,
   results,
 });
+const upgradeJobResults = (job_key, results) => ({
+  type: UPGRADE_RESULTS,
+  job_key,
+  results,
+});
 
 const setSummaryValueToJobEnd = () => ({
   type: SET_SUMMARY_VALUE_TO_JOB_END,
@@ -139,18 +146,21 @@ export const fetchSummaryAreaByLevel = (current_level, precision = 2) => async (
   getState
 ) => {
   dispatch(setSummaryValueToJobStart());
-  const { jobs } = getState().Odbiory.Jobs;
-  Promise.all(
-    Object.keys(jobs).map((job_id) =>
-      fetchSummaryValuesByJob(
+  try {
+    const { jobs } = getState().Odbiory.Jobs;
+    for (let job_id in jobs) {
+      const results = await fetchSummaryValuesByJob(
         job_id,
         current_level,
         precision
-      ).then((results) => dispatch(setSummaryValueToJob(job_id, results)))
-    )
-  )
-    .then(() => dispatch(setSummaryValueToJobEnd()))
-    .catch((e) => console.error(e));
+      );
+      dispatch(setSummaryValueToJob(job_id, results));
+    }
+  } catch (e) {
+    console.error(e);
+  } finally {
+    dispatch(setSummaryValueToJobEnd());
+  }
 };
 
 /**
@@ -178,7 +188,6 @@ export const changeJobPercentageValue = (
   value,
   precision = 2
 ) => async (dispatch, getState) => {
-  dispatch(objectJobFetchStart());
   /*
    *  Pobranie niezbędnych obiektów ze stora
    * */
@@ -191,6 +200,7 @@ export const changeJobPercentageValue = (
    *     Jeśli wybrane jest jakiekolwiek pomieszczenie oraz kiedy nie są zapisywane inne zmiany
    * */
   if (selected_room && !objects_jobs_loading) {
+    dispatch(objectJobFetchStart());
     let upgrading = {
       percentage_value: value, // wartość procentowa aktualnego zaawansowania roboty
       reference_job: null,
@@ -202,7 +212,7 @@ export const changeJobPercentageValue = (
         : 0, // obliczona wartość powierzchni zaawansowania roboty
     };
     if (currentJob.upgrading.reference_job)
-      updateObjectJob(currentJob.upgrading.reference_job.id).catch(console.log);
+      await updateObjectJob(currentJob.upgrading.reference_job.id);
     const { data, errors } = await createReferenceJob({
       room: rooms[selected_room].id, // id rooma z bazy danych
       job: job_key, // id job'a z bazy danych
@@ -212,9 +222,17 @@ export const changeJobPercentageValue = (
       user: user.id, // ID usera z bazy danych - do śledzenia zmian dokonywanych osobowo
       objects: currentJob.upgrading.object_ids.map((e) => parseInt(e)), // tablica z ID obiektów, których dotyczy dane awansowanie roboty
     });
+    console.log(data);
     if (data) {
-      upgrading.reference_job = data.acceptanceReferenceJob; // uzupełnienie reference-joba do pozycji upgrading w storze
+      upgrading.reference_job = data.createAcceptanceReferenceJob.acceptanceReferenceJob; // uzupełnienie reference-joba do pozycji upgrading w storze
       dispatch(jobsChangePercentageValue(job_key, upgrading));
+      const { results } = currentJob;
+      dispatch(
+        upgradeJobResults(
+          job_key,
+          prep_updateResults({ results, ...upgrading })
+        )
+      );
     }
     if (errors) {
       console.log(errors);

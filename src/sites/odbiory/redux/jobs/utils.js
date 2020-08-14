@@ -233,3 +233,23 @@ export const fetchSummaryValuesByJob = async (
     });
   });
 };
+
+export const prep_updateResults = ({
+  results,
+  current_value,
+  percentage_value,
+  reference_job,
+}) => {
+  results.summary_current_value += current_value;
+  results.percentage_value = calculatePercentValue(
+    results.summary_current_value,
+    results.summary_all_value
+  );
+  results.elements[reference_job.room.revit_id] = percentage_value;
+  return results;
+};
+
+function calculatePercentValue(x, y, normalized = false, precision = 2) {
+  const multipyBy = normalized ? 1 : 100;
+  return Math.floor((x / y) * multipyBy * 10 ** precision) / 10 ** precision;
+}
