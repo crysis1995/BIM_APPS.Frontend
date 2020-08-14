@@ -1,5 +1,6 @@
-import ApolloClient from "apollo-boost";
-import { config } from "../config";
+import ApolloClient from 'apollo-boost';
+import { config } from '../config';
+
 
 const graphQLClient = new ApolloClient({
       uri: config.bim_apps_api.graphql,

@@ -1,8 +1,9 @@
-import React from "react";
-import { Button, Image, NavDropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { userLogout } from "./redux/actions";
+import React from 'react';
+import { Button, NavDropdown } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { userLogout } from './redux/actions';
+
 
 function CMSLogin(props) {
     return props.CMSLogin.is_login ? (

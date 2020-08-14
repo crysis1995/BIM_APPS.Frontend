@@ -1,8 +1,7 @@
-import React from "react";
-import TreeItem from "@material-ui/lab/TreeItem";
-import AutodeskApi from "../../../utils/AutodeskApi";
-import { connect } from "react-redux";
-import { v4 } from "uuid";
+import TreeItem from '@material-ui/lab/TreeItem';
+import React from 'react';
+import { connect } from 'react-redux';
+
 
 class Items extends React.Component {
       componentDidMount() {

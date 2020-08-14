@@ -1,5 +1,5 @@
-import { setSelectedRoom } from "../../../sites/odbiory/redux/rooms/actions";
-import { initialiseModal } from "../../Modal/redux/actions";
+import { setSelectedRoom } from '../../../sites/odbiory/redux/rooms/actions';
+
 
 export const INITIALIZE_VIEWER = "forgeViewer__INITIALIZE_VIEWER";
 export const SET_MODEL_ROOMS = "forgeViewer__SET_MODEL_ROOMS";

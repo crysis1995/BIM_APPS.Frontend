@@ -1,7 +1,7 @@
-import { graphQLClient } from "../../../../services";
-import { gql } from "apollo-boost";
-import { fetchObjectsByRoom } from "../objects/actions";
-import { normalize } from "../../../../utils/normalize";
+import { gql } from 'apollo-boost';
+import { graphQLClient } from '../../../../services';
+import { normalize } from '../../../../utils/normalize';
+import { fetchObjectsByRoom } from '../objects/actions';
 /*  rooms   */
 export const ROOMS_LOADING_START = "odbiory__rooms__ROOMS_LOADING_START";
 export const ROOMS_LOADING_ERROR = "odbiory__rooms__ROOMS_LOADING_ERROR";

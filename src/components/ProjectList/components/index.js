@@ -1,7 +1,8 @@
-import React from "react";
-import "./index.css";
-import ProjectSelector from "../../../components/AutodeskBIM360/components/projectSelector";
-import FolderView from "../../AutodeskBIM360/components/FolderView";
+import React from 'react';
+import ProjectSelector from '../../../components/AutodeskBIM360/components/projectSelector';
+import FolderView from '../../AutodeskBIM360/components/FolderView';
+import './index.css';
+
 
 function ProjectListComponent() {
       return (

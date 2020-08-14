@@ -1,4 +1,5 @@
-import { USER_LOGIN_ERROR, USER_LOGIN_END, USER_LOGIN_START, USER_LOGOUT } from "./actions";
+import { USER_LOGIN_END, USER_LOGIN_ERROR, USER_LOGIN_START, USER_LOGOUT } from './actions';
+
 
 const initialState = {
     user: {},

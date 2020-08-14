@@ -1,9 +1,10 @@
-import React from "react";
-import { Table, Form, Tooltip, OverlayTrigger } from "react-bootstrap";
-import { connect } from "react-redux";
-import { v4 } from "uuid";
-import { changeJobPercentageValue } from "../redux/jobs/actions";
-import Loader from "../../../components/Loader";
+import React from 'react';
+import { Form, OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { v4 } from 'uuid';
+import Loader from '../../../components/Loader';
+import { changeJobPercentageValue } from '../redux/jobs/actions';
+
 
 function TableComponent(props) {
 	if (props.Jobs.jobs_loading || props.Objects.objects_loading)

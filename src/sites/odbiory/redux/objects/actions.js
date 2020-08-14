@@ -1,8 +1,6 @@
-import { graphQLClient } from "../../../../services";
-import { gql } from "apollo-boost";
-import { jobsPrepare } from "../jobs/actions";
-import { normalize } from "../../../../utils/normalize";
-import { getFilteredObjects } from "./utils";
+import { normalize } from '../../../../utils/normalize';
+import { jobsPrepare } from '../jobs/actions';
+import { getFilteredObjects } from './utils';
 /*  objects */
 export const OBJECTS_LOADING_START = "odbiory__objects__LOADING_START";
 export const OBJECTS_LOADING_ERROR = "odbiory__objects__LOADING_ERROR";

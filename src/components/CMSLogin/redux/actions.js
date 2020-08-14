@@ -1,10 +1,5 @@
-import {
-    login,
-    saveUserDataToLocalStorage,
-    getUserFromLocalStorage,
-    isExpired,
-    cleanUserDataInLocalStorage,
-} from "./utils";
+import { cleanUserDataInLocalStorage, getUserFromLocalStorage, isExpired, login, saveUserDataToLocalStorage } from './utils';
+
 
 export const USER_LOGIN_START = "cmslogin__USER_LOGIN_START";
 export const USER_LOGIN_END = "cmslogin__USER_LOGIN_END";

@@ -1,10 +1,10 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Row, Col, ListGroup } from "react-bootstrap";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import Loader from "../../../components/Loader";
-import ProgressBar from "../../../components/ProgressBar";
-import { colorResultByRoom } from "../redux/results/actions";
+import React from 'react';
+import { Col, ListGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import Loader from '../../../components/Loader';
+import ProgressBar from '../../../components/ProgressBar';
+import { colorResultByRoom } from '../redux/results/actions';
+
 
 function ResultComponent(props) {
   const { Jobs, ForgeViewer, Results } = props;

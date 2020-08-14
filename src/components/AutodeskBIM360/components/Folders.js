@@ -1,7 +1,7 @@
-import React from "react";
-import TreeItem from "@material-ui/lab/TreeItem";
+import TreeItem from '@material-ui/lab/TreeItem';
+import React from 'react';
 // import AutodeskApi from "../../../utils/AutodeskApi";
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 // import { v4 } from "uuid";
 // import Versions from "./Versions";
 // import Items from "./Items";

@@ -1,10 +1,7 @@
-import React from "react";
-import { Button, Image, NavDropdown } from "react-bootstrap";
-import { logout_bim360 } from "./redux/operations";
-import { connect } from "react-redux";
-import PopupWindow from "./components/utils/PopupWindow";
-import { config } from "../../config";
-import { fetchAccessToken } from "./redux/operations";
+import React from 'react';
+import { connect } from 'react-redux';
+import { fetchAccessToken } from './redux/operations';
+
 
 class AutodeskLogin extends React.Component {
     componentDidMount() {

@@ -1,4 +1,5 @@
-import { toParams, toQuery } from "./utils";
+import { toParams, toQuery } from './utils';
+
 
 export default class PopupWindow {
       constructor(id, url, options = {}) {

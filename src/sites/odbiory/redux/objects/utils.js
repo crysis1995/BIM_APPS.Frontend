@@ -1,5 +1,6 @@
-import { graphQLClient } from "../../../../services";
-import { gql } from "apollo-boost";
+import { gql } from 'apollo-boost';
+import { graphQLClient } from '../../../../services';
+
 
 export const fetchALLAreaJobPerLevel = (job_id, level) => {
   return graphQLClient.query({

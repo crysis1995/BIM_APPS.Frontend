@@ -1,4 +1,5 @@
-import { HIDE_MODAL, SHOW_MODAL, SET_MODAL_DATA } from "./actions";
+import { HIDE_MODAL, SET_MODAL_DATA, SHOW_MODAL } from './actions';
+
 
 const initialState = {
     modal_visible: false,

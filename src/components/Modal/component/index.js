@@ -1,7 +1,8 @@
-import React from "react";
-import { Button, Modal } from "react-bootstrap";
-import { connect } from "react-redux";
-import { initialiseModal, hideModal } from "../redux/actions";
+import React from 'react';
+import { Button, Modal } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { hideModal, initialiseModal } from '../redux/actions';
+
 
 function ModalComponent(props) {
     const { hideModal, title, body, modal_visible } = props;

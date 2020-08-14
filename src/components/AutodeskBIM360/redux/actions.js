@@ -1,4 +1,5 @@
-import types from "./types";
+import types from './types';
+
 
 const FETCH_ALL_PROJECTS = (projects) => ({
       type: types.FETCH_ALL_PROJECTS,

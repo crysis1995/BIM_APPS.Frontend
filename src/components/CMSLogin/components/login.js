@@ -1,9 +1,11 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
-import { Col, Alert, Form, Button } from "react-bootstrap";
-import { useForm } from "react-hook-form";
-import { userLogin } from "../redux/actions";
+import React from 'react';
+import { Alert, Button, Col, Form } from 'react-bootstrap';
+import { useForm } from 'react-hook-form';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { userLogin } from '../redux/actions';
+
+
 function Login(props) {
     const { register, handleSubmit, errors } = useForm();
     if (props.CMSLogin.is_login) return <Redirect to="/" />;

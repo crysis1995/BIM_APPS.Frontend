@@ -1,9 +1,10 @@
-import React from "react";
-import { Form } from "react-bootstrap";
-import { connect } from "react-redux";
-import { AutodeskBIM360Actions } from "../redux";
-import { v4 } from "uuid";
-import { selectCurrentProject } from "../redux/operations";
+import React from 'react';
+import { Form } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { v4 } from 'uuid';
+import { AutodeskBIM360Actions } from '../redux';
+import { selectCurrentProject } from '../redux/operations';
+
 
 function ProjectSelector(props) {
       return (

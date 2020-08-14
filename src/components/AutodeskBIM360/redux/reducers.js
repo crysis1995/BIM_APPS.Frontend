@@ -1,5 +1,6 @@
-import types from "./types";
-import { config } from "../../../config";
+import { config } from '../../../config';
+import types from './types';
+
 
 const initialState = {
       projects: [],

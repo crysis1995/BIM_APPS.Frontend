@@ -1,6 +1,6 @@
-import ReactPanel from "./ReactPanel";
-import store from "../../../store";
-import { viewerActions } from "../redux";
+import store from '../../../store';
+import { viewerActions } from '../redux';
+
 
 const Autodesk = window.Autodesk;
 

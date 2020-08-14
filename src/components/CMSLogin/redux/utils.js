@@ -1,6 +1,7 @@
-import { graphQLClient } from "../../../services";
-import { gql } from "apollo-boost";
-import jwtDecoder from "jwt-decode";
+import { gql } from 'apollo-boost';
+import jwtDecoder from 'jwt-decode';
+import { graphQLClient } from '../../../services';
+
 
 export const login = async (identifier, password) => {
     return graphQLClient.mutate({

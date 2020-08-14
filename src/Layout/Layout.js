@@ -1,10 +1,10 @@
-import * as React from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import { Link, Route, Switch, Redirect } from "react-router-dom";
-import Loader from "../components/Loader";
-import ModalComponent from "../components/Modal/component";
-import { connect } from "react-redux";
-import { logUserIfValid } from "../components/CMSLogin/redux/actions";
+import * as React from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { Route, Switch } from 'react-router-dom';
+import { logUserIfValid } from '../components/CMSLogin/redux/actions';
+import Loader from '../components/Loader';
+import ModalComponent from '../components/Modal/component';
 
 // todo zrobić sidebar
 

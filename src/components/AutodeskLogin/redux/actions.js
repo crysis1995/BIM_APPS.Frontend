@@ -1,4 +1,5 @@
-import types from "./types";
+import types from './types';
+
 
 const LOGIN_2_LEGGED = ({ access_token, expires_in }) => ({
     type: types.LOGIN_2_LEGGED,

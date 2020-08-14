@@ -1,9 +1,10 @@
-import React from "react";
-import TreeView from "@material-ui/lab/TreeView";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import Folders from "./Folders";
-import { connect } from "react-redux";
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import TreeView from '@material-ui/lab/TreeView';
+import React from 'react';
+import { connect } from 'react-redux';
+import Folders from './Folders';
+
 
 function FolderView(props) {
       return props.projectTopFolders.length > 0 ? (

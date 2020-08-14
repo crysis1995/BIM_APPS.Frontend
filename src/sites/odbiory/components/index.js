@@ -1,13 +1,13 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Nav, Row, Col } from "react-bootstrap";
-import { componentStarted } from "../redux/odbiory/actions";
+import React from 'react';
+import { Nav } from 'react-bootstrap';
+import { connect } from 'react-redux';
 // import { fetch_all_rooms } from "../redux/rooms/actions";
-import Loader from "../../../components/Loader";
-import LevelSelectorComponent from "./LevelSelectorComponent";
-import OdbioryComponent from "./OdbioryComponent";
-import ResultsComponent from "./ResultsComponent";
-import { setAwansowanieActive, setResultsActive } from "../redux/odbiory/actions";
+import Loader from '../../../components/Loader';
+import { componentStarted, setAwansowanieActive, setResultsActive } from '../redux/odbiory/actions';
+import LevelSelectorComponent from './LevelSelectorComponent';
+import OdbioryComponent from './OdbioryComponent';
+import ResultsComponent from './ResultsComponent';
+
 
 class Odbiory extends React.Component {
     componentDidMount() {

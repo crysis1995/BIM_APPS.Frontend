@@ -1,4 +1,4 @@
-import { fetchAllJobs } from "../jobs/actions";
+import { fetchAllJobs } from '../jobs/actions';
 
 //          TYPES
 export const ODBIORY_COMPONENT_STARTED = "odbiory__COMPONENT_STARTED";

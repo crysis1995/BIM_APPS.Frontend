@@ -1,17 +1,12 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 // import ShowRoomsExtension from "./extenstions/TestExtension";
-import { connect } from "react-redux";
-import { config } from "../../../config";
-import Store from "../../../store";
-import { hexToRgb } from "../../../utils/hexToRgb";
-import {
-  initializeViewer,
-  setViewerRooms,
-  setSheetsError,
-  setSheetsSuccess,
-} from "../redux/actions";
-import { setSelectedRoom } from "../../../sites/odbiory/redux/rooms/actions";
-import { initialiseModal } from "../../Modal/redux/actions";
+import { connect } from 'react-redux';
+import { config } from '../../../config';
+import { setSelectedRoom } from '../../../sites/odbiory/redux/rooms/actions';
+import { hexToRgb } from '../../../utils/hexToRgb';
+import { initialiseModal } from '../../Modal/redux/actions';
+import { initializeViewer, setSheetsSuccess, setViewerRooms } from '../redux/actions';
+
 
 const Autodesk = window.Autodesk;
 const THREE = window.THREE;

@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+
 
 function ProgressBar({ results_percentage_area, binary = false }) {
     let color;

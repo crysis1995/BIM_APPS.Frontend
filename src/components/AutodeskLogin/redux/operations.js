@@ -1,7 +1,7 @@
-import { config } from "../../../config";
+import { AutodeskBIM360Actions } from '../../../components/AutodeskBIM360/redux';
+import { config } from '../../../config';
 // import AutodeskApi from "../../../utils/AutodeskApi";
-import { AutodeskLoginActions } from "./index";
-import { AutodeskBIM360Actions } from "../../../components/AutodeskBIM360/redux";
+import { AutodeskLoginActions } from './index';
 // import { fetchProjectInfo } from "./utils";
 
 

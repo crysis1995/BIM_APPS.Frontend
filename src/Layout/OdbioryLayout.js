@@ -1,8 +1,9 @@
-import React from "react";
-import { Col, Row } from "react-bootstrap";
-import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
-import Loader from "../components/Loader";
+import React from 'react';
+import { Col } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import Loader from '../components/Loader';
+
 
 const Odbiory = React.lazy(() => import("../sites/odbiory/components"));
 const Viewer = React.lazy(() => import("../components/ForgeViewer/components"));

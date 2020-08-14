@@ -1,9 +1,7 @@
-import { graphQLClient } from "../../../../services";
-import { gql } from "apollo-boost";
-import {
-  fetchALLAreaJobPerLevel,
-  fetchSummaryAreaJobPerLevel,
-} from "../objects/utils";
+import { gql } from 'apollo-boost';
+import { graphQLClient } from '../../../../services';
+import { fetchALLAreaJobPerLevel, fetchSummaryAreaJobPerLevel } from '../objects/utils';
+
 
 export const fetchAllJobsFromAPI = () => {
   return graphQLClient.query({

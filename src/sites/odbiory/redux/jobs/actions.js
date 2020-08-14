@@ -1,13 +1,6 @@
-import {
-  createReferenceJob,
-  prepareDataForJobs,
-  updateObjectJob,
-  fetchAllJobsFromAPI,
-  prep_updateResults,
-} from "./utils";
+import { normalize } from '../../../../utils/normalize';
+import { addParameterWithValue, createReferenceJob, fetchAllJobsFromAPI, fetchSummaryValuesByJob, prep_updateResults, prepareDataForJobs, updateObjectJob } from './utils';
 
-import { normalize } from "../../../../utils/normalize";
-import { addParameterWithValue, fetchSummaryValuesByJob } from "./utils";
 
 export const JOBS_LOADING_START = "odbiory__jobs__LOADING_START";
 export const JOBS_LOADING_END = "odbiory__jobs__LOADING_END";
@@ -224,7 +217,8 @@ export const changeJobPercentageValue = (
     });
     console.log(data);
     if (data) {
-      upgrading.reference_job = data.createAcceptanceReferenceJob.acceptanceReferenceJob; // uzupełnienie reference-joba do pozycji upgrading w storze
+      upgrading.reference_job =
+        data.createAcceptanceReferenceJob.acceptanceReferenceJob; // uzupełnienie reference-joba do pozycji upgrading w storze
       dispatch(jobsChangePercentageValue(job_key, upgrading));
       const { results } = currentJob;
       dispatch(

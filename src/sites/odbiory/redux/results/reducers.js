@@ -1,4 +1,6 @@
-import { RESULTS_COLOR_BY_ROOM } from "./actions";
+import { RESULTS_COLOR_BY_ROOM } from './actions';
+
+
 const initialState = {
   active_job_id: null,
   active: false,

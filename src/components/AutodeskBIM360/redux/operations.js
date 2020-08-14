@@ -1,5 +1,6 @@
-import AutodeskApi from "../../../utils/AutodeskApi";
-import Actions from "./actions";
+import AutodeskApi from '../../../utils/AutodeskApi';
+import Actions from './actions';
+
 
 export const fetchAllProjects = () => async (dispatch, getState) => {
       const api = new AutodeskApi(
