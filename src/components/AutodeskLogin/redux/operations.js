@@ -1,41 +1,15 @@
 import { config } from "../../../config";
-import AutodeskApi from "../../../utils/AutodeskApi";
+// import AutodeskApi from "../../../utils/AutodeskApi";
 import { AutodeskLoginActions } from "./index";
 import { AutodeskBIM360Actions } from "../../../components/AutodeskBIM360/redux";
-import { fetchProjectInfo } from "./utils";
-// export const fetchAccessToken = (code) => (dispatch) => {
-//     fetch(`${config.api_url}/Forge/threeLegged/setCode/${code}`)
-//         .then((resp) => resp.json())
-//         .then(async (resp) => {
-//             dispatch(startupDependentFunction(resp));
-//         });
-// };
+// import { fetchProjectInfo } from "./utils";
+
 
 export const fetchAccessToken = () => (dispatch) => {
     fetch(`${config.api_url}/Forge/threeLegged/getToken`)
         .then((e) => e.json())
         .then((resp) => dispatch(startupDependentFunction(resp)));
 };
-
-// const refetchAccessToken = (login_3_legged) => async (dispatch) => {
-//     const resp = await fetch(`${config.api_url}/forge/threeLegged/refreshToken`, {
-//         method: "POST",
-//         body: JSON.stringify(login_3_legged),
-//     }).then((r) => r.json());
-//     dispatch(AutodeskLoginActions.LOGIN_3_LEGGED(resp));
-//     dispatch(runTimer());
-// };
-
-// const fetchProjectDetails = () => async (dispatch, getState) => {
-//     const api = new AutodeskApi(getState().Autodesk.login_3_legged.access_token);
-//     const user_detail = await api.authorization.getUserDetails();
-//     // console.log(
-//     //     getState().AutodeskLogin.login_3_legged.access_token,
-//     //     getState().AutodeskBIM360.accountId,
-//     //     user_detail.userId
-//     // );
-//     dispatch(AutodeskLoginActions.FETCH_USER_INFO(user_detail));
-// };
 
 export const logout_bim360 = () => (dispatch) => {
     dispatch(AutodeskBIM360Actions.CLEAR_ALL_DATA());

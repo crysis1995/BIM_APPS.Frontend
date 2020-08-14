@@ -93,6 +93,7 @@ const RoomsReducer = (state = initialState, action) => {
 		case JOBS_SET_DATA:
 			return {
 				...state,
+				jobs_loading: true,
 				jobs: action.jobs,
 			};
 		case JOBS_CHANGE_PERCENTAGE_VALUE:
