@@ -8,7 +8,7 @@ const Layout = React.lazy(() => import("./components"));
 
 function App() {
       return (
-            <BrowserRouter>
+            <BrowserRouter basename="/bim_apps">
                   <React.Suspense fallback={<Loader/>}>
                         <Switch>
                               <Route

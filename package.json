@@ -1,7 +1,7 @@
 {
   "name": "react-app",
   "version": "0.1.0",
-  "private": true,
+  "private": true,"homepage": "/bim_apps",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
@@ -9,6 +9,8 @@
     "apollo-boost": "^0.4.9",
     "bootstrap": "^4.5.0",
     "classnames": "^2.2.6",
+    "express": "^4.17.1",
+    "path": "^0.12.7",
     "forge-apis": "^0.7.3",
     "graphql": "^15.3.0",
     "node-sass": "^4.14.1",
@@ -31,7 +33,7 @@
     "uuid": "^8.2.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node serve.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
