@@ -21,9 +21,9 @@ import rootReducer from '../reducers';
 // });
 
 export default () => {
-    // let store = createStore(persistedReducer, composeWithDevTools(applyMiddleware(thunk)));
-    let store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
-    // let persistor = persistStore(store);
-    // return { store, persistor };
-    return { store };
+	// let store = createStore(persistedReducer, composeWithDevTools(applyMiddleware(thunk)));
+	let store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
+	// let persistor = persistStore(store);
+	// return { store, persistor };
+	return { store };
 };

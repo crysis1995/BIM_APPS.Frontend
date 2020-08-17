@@ -3,14 +3,13 @@ import ProjectSelector from '../../../components/AutodeskBIM360/components/proje
 import FolderView from '../../AutodeskBIM360/components/FolderView';
 import './index.css';
 
-
 function ProjectListComponent() {
-      return (
-            <div className="project-list px-3 pt-3">
-                  <ProjectSelector />
-                  <FolderView />
-          </div>
-      );
+	return (
+		<div className="project-list px-3 pt-3">
+			<ProjectSelector />
+			<FolderView />
+		</div>
+	);
 }
 
 export default ProjectListComponent;
