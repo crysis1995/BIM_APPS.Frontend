@@ -1,3 +1,3 @@
-import ProjectList from "./components";
+import ProjectList from './components';
 
 export default ProjectList;

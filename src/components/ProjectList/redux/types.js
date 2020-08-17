@@ -1,5 +1,5 @@
-const GET_TOKEN = "GET_TOKEN";
+const GET_TOKEN = 'GET_TOKEN';
 
 export default {
-      GET_TOKEN,
+	GET_TOKEN,
 };
