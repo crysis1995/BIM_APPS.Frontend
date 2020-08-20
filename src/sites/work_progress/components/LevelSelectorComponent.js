@@ -2,6 +2,7 @@ import React from 'react';
 import { Col, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { v4 } from 'uuid';
+
 import { setCurrentLevel } from '../redux/levels/actions';
 
 function LevelSelectorComponent(props) {

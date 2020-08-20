@@ -4,7 +4,7 @@ const initialState = {
 	rooms: [],
 	rooms_loading: true,
 	rooms_error: {},
-	selected_room: null,
+	selected_room: '',
 	from_selector: false,
 };
 

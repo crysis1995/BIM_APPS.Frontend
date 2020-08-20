@@ -1,13 +1,13 @@
+import Loader from '../../components/Loader';
 import React from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import Loader from '../components/Loader';
 
-const Odbiory = React.lazy(() => import('../sites/acceptance/components'));
-const Viewer = React.lazy(() => import('../components/ForgeViewer/components'));
+const WorkProgress = React.lazy(() => import('./components'));
+const Viewer = React.lazy(() => import('../../components/ForgeViewer/components'));
 
-function AcceptanceLayout( props) {
+function AcceptanceLayout(props) {
 	if (!props.CMSLogin.is_login) return <Redirect to="/login" />;
 	else
 		return (
@@ -25,7 +25,7 @@ function AcceptanceLayout( props) {
 				</Col>
 				<Col>
 					<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
-						{props.isLogin ? <Odbiory {...props} /> : null}
+						{props.isLogin ? <WorkProgress {...props} /> : null}
 					</div>
 				</Col>
 			</React.Suspense>

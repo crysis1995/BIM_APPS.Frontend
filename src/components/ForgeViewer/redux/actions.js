@@ -1,4 +1,4 @@
-import { setSelectedRoom } from '../../../sites/acceptance/redux/rooms/actions';
+import { setSelectedRoom } from '../../../sites/work_progress/redux/rooms/actions';
 
 export const INITIALIZE_VIEWER = 'forgeViewer__INITIALIZE_VIEWER';
 export const SET_MODEL_ROOMS = 'forgeViewer__SET_MODEL_ROOMS';

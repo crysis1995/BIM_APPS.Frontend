@@ -1,6 +1,7 @@
 import React from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
+
 import AutodeskLogin from '../components/AutodeskLogin';
 import CMSLogin from '../components/CMSLogin';
 
@@ -10,14 +11,17 @@ function Header() {
 			<NavLink to="/">
 				<Navbar.Brand>BIM APPS</Navbar.Brand>
 			</NavLink>
-			<Navbar.Toggle aria-controls="basic-navbar-nav" />
+			{/* <Navbar.Toggle aria-controls="basic-navbar-nav" /> */}
 			<Navbar.Collapse id="responsive-navbar-nav">
 				<Nav className="mr-auto">
 					<NavLink className="nav-link " to="/work_progress">
 						Awansowanie robót
-					</NavLink>{' '}
+					</NavLink>
 					<NavLink className="nav-link " to="/work_acceptance">
 						Odbiory robót
+					</NavLink>
+					<NavLink className="nav-link " to="/schedule">
+						Harmonogramy
 					</NavLink>
 				</Nav>
 

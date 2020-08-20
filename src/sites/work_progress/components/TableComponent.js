@@ -1,13 +1,14 @@
+import classNames from 'classnames';
 import React from 'react';
 import { Form, OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { v4 } from 'uuid';
+
 import Loader from '../../../components/Loader';
 import { changeJobPercentageValue } from '../redux/jobs/actions';
-import classNames from 'classnames';
 
 function TableComponent(props) {
-	if (props.Jobs.jobs_loading || props.Objects.objects_loading)
+	if (props.Jobs.jobs_loading || props.Objects.objects_loading || !props.Jobs.jobs)
 		return (
 			<div className="pt-5">
 				<Loader height={'100%'} />

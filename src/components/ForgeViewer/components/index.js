@@ -1,15 +1,17 @@
+import { debounce } from 'lodash';
 import React, { Component } from 'react';
 // import ShowRoomsExtension from "./extenstions/TestExtension";
 import { connect } from 'react-redux';
+
 import { config } from '../../../config';
-import { setSelectedRoom } from '../../../sites/acceptance/redux/rooms/actions';
+import { setSelectedRoom } from '../../../sites/work_progress/redux/rooms/actions';
 import { hexToRgb } from '../../../utils/hexToRgb';
 import { initialiseModal } from '../../Modal/redux/actions';
 import { initializeViewer, setSheetsSuccess, setViewerRooms } from '../redux/actions';
-import { debounce } from 'lodash';
 
-const Autodesk = window.Autodesk;
-const THREE = window.THREE;
+const Autodesk = window.Autodesk; // import Autodesk Library
+const THREE = window.THREE; // import THREE library
+
 class Viewer extends Component {
 	constructor(props) {
 		super(props);
@@ -32,22 +34,22 @@ class Viewer extends Component {
 		) {
 			if (this.props.Odbiory.Rooms.selected_room) {
 				const roomIds = this.props.ForgeViewer.model_rooms[this.props.Odbiory.Rooms.selected_room];
-				const elementToSelect = roomIds ? roomIds.dbID : [];
+				const elementToSelect = roomIds ? [roomIds.dbID] : [];
 				this.viewer.select(elementToSelect);
 				this.viewer.fitToView(elementToSelect, this.viewer.model, true);
-			} else {
-				this.viewer.select([]);
 			}
 		}
 
-		if (this.props.Odbiory.Results.active_job_id && !this.props.ForgeViewer.model_rooms_loading) {
-			const { active_job_id, active } = this.props.Odbiory.Results;
+		if (this.props.Odbiory.Results.status !== 'initial') {
+			const { active_job_id, status } = this.props.Odbiory.Results;
 			const { jobs } = this.props.Odbiory.Jobs;
 			const { model_rooms } = this.props.ForgeViewer;
-			this.colorByRoom(jobs[active_job_id], model_rooms);
-		}
-		if (prevProps.Odbiory.Results.active_job_id && !this.props.Odbiory.Results.active_job_id && !this.props.ForgeViewer.model_rooms_loading) {
-			this.viewer.clearThemingColors();
+			if (status === 'color' && jobs && model_rooms) {
+				this.colorByRoom(jobs[active_job_id], model_rooms);
+			}
+			if (status === 'clean') {
+				this.viewer.clearThemingColors();
+			}
 		}
 	}
 
@@ -82,6 +84,7 @@ class Viewer extends Component {
 					// "Autodesk.AEC.LevelsExtension",
 				],
 			});
+			// this.subscribeToAllEvents(this.viewer);
 
 			this.viewer.start();
 			var documentId = 'urn:' + urn;
@@ -105,17 +108,15 @@ class Viewer extends Component {
 			this.viewer.addEventListener(
 				Autodesk.Viewing.SELECTION_CHANGED_EVENT,
 				debounce(({ dbIdArray }) => {
-					this.viewer.model.getProperties(
-						dbIdArray[0],
+					this.viewer.model.getBulkProperties(
+						[dbIdArray[0]],
+						['Category', 'name'],
 						(data) => {
-							if (data.name) {
-								const selectedElement = data.name.match(/^.+\[(.+)\]$/)[1];
+							// gdy bedzie wybieranych wiecej pomieszczeń to trzeba tutaj zrobić pętle
+							if (data.length > 0 && data[0].properties[0].displayValue === 'Revit Rooms' && !this.props.rooms_data_loading) {
+								const selectedElement = data[0].name.match(/^.+\[(.+)\]$/)[1];
 								if (selectedElement) {
 									const selectedRoom = this.props.Odbiory.Rooms.rooms[selectedElement];
-									if (this.props.Odbiory.Jobs.jobs_loading || this.props.Odbiory.Objects.objects_loading) {
-										this.viewer.clearSelection();
-									}
-
 									if (selectedRoom) {
 										this.props.setSelectedRoom(selectedRoom.revit_id, false);
 									} else {
@@ -123,18 +124,27 @@ class Viewer extends Component {
 										this.props.initialiseModal('Uwaga!', 'Nie przewidziano robót dla danego pomieszczenia.');
 									}
 								}
-							} else {
-								this.props.setSelectedRoom('', false);
-								this.viewer.clearSelection();
 							}
 						},
 						(a) => {
 							console.log(a);
 						}
 					);
-				}, 400) // opóźnienie kolekcjonowania i wykonywania akcji zaznaczania roomów
+				}, 600) // opóźnienie kolekcjonowania i wykonywania akcji zaznaczania roomów
 			);
 		});
+	}
+
+	subscribeToAllEvents(viewer) {
+		for (var key in Autodesk.Viewing) {
+			if (key.endsWith('_EVENT')) {
+				(function (eventName) {
+					viewer.addEventListener(Autodesk.Viewing[eventName], function (event) {
+						console.log(eventName, event);
+					});
+				})(key);
+			}
+		}
 	}
 
 	colorByRoom(jobData, viewerModelMap) {
@@ -167,6 +177,7 @@ class Viewer extends Component {
 }
 
 const mapStateToProps = ({ ForgeViewer, Autodesk, Odbiory }) => ({
+	rooms_data_loading: ForgeViewer.model_rooms_loading || Odbiory.Rooms.rooms_loading,
 	Autodesk,
 	ForgeViewer,
 	Odbiory,

@@ -1,4 +1,5 @@
 import { fetchAllJobs } from '../jobs/actions';
+import { cleanResults } from '../results/actions';
 
 //          TYPES
 export const ODBIORY_COMPONENT_STARTED = 'odbiory__COMPONENT_STARTED';
@@ -26,4 +27,18 @@ export const setResultsActive = () => ({
 export const componentStarted = () => (dispatch) => {
 	dispatch(componentStart());
 	dispatch(fetchAllJobs());
+};
+
+export const changeActiveTab = (tabName) => (dispatch, getState) => {
+	const { active_job_id } = getState().Odbiory.Results;
+	switch (tabName) {
+		case 'results':
+			dispatch(setResultsActive());
+			break;
+		case 'progress':
+			active_job_id && dispatch(cleanResults());
+			dispatch(setAwansowanieActive());
+			break;
+		default:
+	}
 };

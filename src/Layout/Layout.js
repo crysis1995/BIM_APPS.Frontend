@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
+
 import { logUserIfValid } from '../components/CMSLogin/redux/actions';
 import Loader from '../components/Loader';
 import ModalComponent from '../components/Modal/component';
@@ -10,7 +11,9 @@ import ModalComponent from '../components/Modal/component';
 
 //components
 const Header = React.lazy(() => import('./Header'));
-const AcceptanceLayout = React.lazy(() => import('./AcceptanceLayout'));
+const WorkProgressLayout = React.lazy(() => import('../sites/work_progress'));
+const WorkAcceptanceLayout = React.lazy(() => import('../sites/work_acceptance'));
+const ScheduleLayout = React.lazy(() => import('../sites/schedule'));
 const Login = React.lazy(() => import('../components/CMSLogin/components/login'));
 
 class Layout extends React.Component {
@@ -35,21 +38,14 @@ class Layout extends React.Component {
 								<Route exact path="/">
 									<Col>
 										<div className="p-5">
-											<h1>
-												Strona główna aplikacji BIM
-											</h1>
-											<p>
-												Na feedback czekamy tu - bimspace@warbud.pl
-											</p>
+											<h1>Strona główna aplikacji BIM</h1>
+											<p>Na feedback czekamy tu - bimspace@warbud.pl</p>
 										</div>
-										{/*<div className="d-flex align-items-stretch bg-primary" style={{ height: '100%' }}>*/}
-										{/*	asdasddas*/}
-										{/*</div>*/}
 									</Col>
 								</Route>
-								<Route path="/work_progress" component={AcceptanceLayout} />
-								<Route path="/work_acceptance" component={AcceptanceLayout} />
-								<Route path="/4d" component={AcceptanceLayout} />
+								<Route path="/work_progress" component={WorkProgressLayout} />
+								<Route path="/work_acceptance" component={WorkAcceptanceLayout} />
+								<Route path="/schedule" component={ScheduleLayout} />
 							</Switch>
 						</Row>
 					</Container>
@@ -60,9 +56,7 @@ class Layout extends React.Component {
 	}
 }
 
-const mapStateToProps = ({ CMSLogin }) => ({
-	CMSLogin,
-});
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = { logUserIfValid };
 

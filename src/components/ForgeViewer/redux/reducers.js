@@ -9,7 +9,7 @@ const initialState = {
 	sheets: [],
 	sheets_loaded: false,
 	sheets_error: false,
-	current_sheet: null,
+	current_sheet: '',
 	viewer_isInitialized: false,
 	model_rooms: null,
 	model_rooms_loading: false,

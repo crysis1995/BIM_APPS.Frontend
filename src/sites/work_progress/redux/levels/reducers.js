@@ -1,7 +1,7 @@
 import { SET_CURRENT_LEVEL } from './actions';
 
 const initialState = {
-	current_level: null,
+	current_level: '',
 };
 
 const LevelReducer = (state = initialState, action) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Nav } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Loader from '../../../components/Loader';
-import { componentStarted, setAwansowanieActive, setResultsActive } from '../redux/odbiory/actions';
+import { componentStarted, changeActiveTab } from '../redux/odbiory/actions';
 import LevelSelectorComponent from './LevelSelectorComponent';
 import OdbioryComponent from './OdbioryComponent';
 import ResultsComponent from './ResultsComponent';
@@ -20,14 +20,14 @@ class Odbiory extends React.Component {
 				<>
 					<div className="d-flex flex-column p-3 w-100">
 						<LevelSelectorComponent />
-						<Nav variant="tabs" className="mt-3" defaultActiveKey={this.props.match.url}>
+						<Nav variant="tabs" className="mt-3" defaultActiveKey={'results'}>
 							<Nav.Item>
-								<Nav.Link onSelect={(e) => this.props.setResultsActive()} eventKey={this.props.match.url}>
+								<Nav.Link onSelect={(e) => this.props.changeActiveTab(e)} eventKey={'results'}>
 									Rezultaty
 								</Nav.Link>
 							</Nav.Item>
 							<Nav.Item>
-								<Nav.Link onSelect={(e) => this.props.setAwansowanieActive()} eventKey={`${this.props.match.url}/upgrade`}>
+								<Nav.Link onSelect={(e) => this.props.changeActiveTab(e)} eventKey={'progress'}>
 									Awansowanie robót
 								</Nav.Link>
 							</Nav.Item>
@@ -46,9 +46,8 @@ const mapStateToProps = ({ Odbiory, ForgeViewer }) => ({
 });
 
 const mapDispatchToProps = {
-	setAwansowanieActive,
-	setResultsActive,
 	componentStarted,
+	changeActiveTab,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Odbiory);
