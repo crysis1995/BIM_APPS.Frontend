@@ -84,7 +84,7 @@ class Viewer extends Component {
 			this.viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {
 				extensions: [
 					// 'Autodesk.DocumentBrowser',
-					// 'Autodesk.Measure',
+					'Autodesk.Measure',
 					// "ShowRoomsExtension",
 					// "Autodesk.AEC.LevelsExtension",
 				],
@@ -135,7 +135,7 @@ class Viewer extends Component {
 							console.log(a);
 						}
 					);
-				}, 600) // opóźnienie kolekcjonowania i wykonywania akcji zaznaczania roomów
+				}, 500) // opóźnienie kolekcjonowania i wykonywania akcji zaznaczania roomów
 			);
 		});
 	}

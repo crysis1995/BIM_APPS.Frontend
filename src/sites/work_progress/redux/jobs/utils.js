@@ -1,9 +1,10 @@
 import { gql } from 'apollo-boost';
+
 import { graphQLClient } from '../../../../services';
 import { fetchALLAreaJobPerLevel, fetchSummaryAreaJobPerLevel } from '../objects/utils';
 
 export const fetchAllJobsFromAPI = () => {
-	return graphQLClient.query({
+	return graphQLClient().query({
 		query: gql`
 			query getAllAcceptanceJobs {
 				acceptanceJobs {
@@ -92,7 +93,7 @@ export const prepareDataForJobs = (job_id, objects, precision = 2) => {
 };
 
 export const createReferenceJob = ({ room, job, percentage_value, value_area, object_type, user, objects }) => {
-	return graphQLClient.mutate({
+	return graphQLClient().mutate({
 		mutation: gql`
 			mutation createAcceptanceReferenceJob($r: ID, $j: ID, $vp: Float, $vc: Float, $ot: ID, $o: [ID], $u: ID) {
 				createAcceptanceReferenceJob(input: { data: { percentage_value: $vp, value_calculated: $vc, room: $r, job: $j, object_type: $ot, user: $u, objects: $o } }) {
@@ -119,7 +120,7 @@ export const createReferenceJob = ({ room, job, percentage_value, value_area, ob
 };
 
 export const updateObjectJob = (id) => {
-	return graphQLClient.mutate({
+	return graphQLClient().mutate({
 		mutation: gql`
 			mutation updateReferenceJob($i: ID!) {
 				updateAcceptanceReferenceJob(input: { where: { id: $i }, data: { is_actual: false } }) {

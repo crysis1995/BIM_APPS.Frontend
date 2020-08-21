@@ -1,9 +1,10 @@
-import { cleanUserDataInLocalStorage, getUserFromLocalStorage, isExpired, login, saveUserDataToLocalStorage } from './utils';
+import { cleanUserDataInLocalStorage, getUserFromLocalStorage, isExpired, login, resetPasswordAPI, saveUserDataToLocalStorage } from './utils';
 
 export const USER_LOGIN_START = 'cmslogin__USER_LOGIN_START';
 export const USER_LOGIN_END = 'cmslogin__USER_LOGIN_END';
 export const USER_LOGIN_ERROR = 'cmslogin__USER_LOGIN_ERROR';
 export const USER_LOGOUT = 'cmslogin__USER_LOGOUT';
+export const USER_PASSWORD_RESET = 'cmslogin__USER_PASSWORD_RESET';
 
 const userLoginStart = () => ({
 	type: USER_LOGIN_START,
@@ -22,6 +23,11 @@ const userLoginError = (error) => ({
 
 const userLogoutEnd = () => ({
 	type: USER_LOGOUT,
+});
+
+const userResetPassword = (info) => ({
+	type: USER_PASSWORD_RESET,
+	info,
 });
 
 export const userLogout = () => (dispatch) => {
@@ -51,6 +57,27 @@ export const logUserIfValid = () => async (dispatch) => {
 	if (data.user && data.user_token) {
 		if (!isExpired(data.user_token)) {
 			dispatch(userLoginEnd(data.user, data.user_token));
+		}
+	}
+};
+
+export const resetPassword = ({ password, passwordConfirmation }) => async (dispatch, getState) => {
+	const {
+		credentials: { access_token },
+	} = getState().CMSLogin;
+	if (access_token) {
+		try {
+			const { data, errors } = await resetPasswordAPI(password, access_token);
+			if (data) {
+				dispatch(userResetPassword('Pomyślnie zmieniono hasło'));
+			}
+			if (errors) {
+				console.log(errors);
+				dispatch(userLoginError(errors.message));
+			}
+		} catch (errors) {
+			console.log(errors);
+			dispatch(userLoginError(errors.message));
 		}
 	}
 };

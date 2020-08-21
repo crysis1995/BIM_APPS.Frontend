@@ -1,8 +1,9 @@
-import { USER_LOGIN_END, USER_LOGIN_ERROR, USER_LOGIN_START, USER_LOGOUT } from './actions';
+import { USER_LOGIN_END, USER_LOGIN_ERROR, USER_LOGIN_START, USER_LOGOUT, USER_PASSWORD_RESET } from './actions';
 
 const initialState = {
 	user: {},
 	error: '',
+	info: '',
 	credentials: {
 		access_token: null,
 		expires_in: null,
@@ -40,7 +41,14 @@ const CMSLoginReducer = (state = initialState, action) => {
 				...state,
 				is_login: false,
 				user: initialState.user,
+				error: initialState.error,
 				credentials: initialState.credentials,
+			};
+		case USER_PASSWORD_RESET:
+			return {
+				...state,
+				isLogin: true,
+				info: action.info,
 			};
 		default:
 			return state;

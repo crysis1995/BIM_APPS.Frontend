@@ -1,8 +1,9 @@
 import { gql } from 'apollo-boost';
+
 import { graphQLClient } from '../../../../services';
 
 export const fetchALLAreaJobPerLevel = (job_id, level) => {
-	return graphQLClient.query({
+	return graphQLClient().query({
 		query: gql`
 			query fetchALLAreaJobPerLevel($l: String, $j: ID) {
 				acceptanceObjectsConnection(where: { object_finish_type: { jobs_null: false, jobs: $j }, room: { department: { level: $l } } }) {
@@ -20,7 +21,7 @@ export const fetchALLAreaJobPerLevel = (job_id, level) => {
 };
 
 export const fetchSummaryAreaJobPerLevel = (job_id, level) => {
-	return graphQLClient.query({
+	return graphQLClient().query({
 		query: gql`
 			query fetchSummaryAreaJobPerLevel($l: String, $j: ID) {
 				acceptanceReferenceJobsConnection(where: { room: { department: { level: $l } }, job: $j, is_actual: true }) {
@@ -45,7 +46,7 @@ export const fetchSummaryAreaJobPerLevel = (job_id, level) => {
 };
 
 export const fetchReferenceJobToLevel = (level) => {
-	return graphQLClient.query({
+	return graphQLClient().query({
 		query: gql`
 			query fetchSummaryAreaJobPerLevel($l: String) {
 				acceptanceReferenceJobsConnection(where: { room: { department: { level: $l } }, is_actual: true }) {
@@ -71,7 +72,7 @@ export const fetchReferenceJobToLevel = (level) => {
 };
 
 export const getFilteredObjects = (selected_room) => {
-	return graphQLClient.query({
+	return graphQLClient().query({
 		query: gql`
 			query getFilteredObjects($r: ID) {
 				acceptanceObjects(where: { room: $r, object_finish_type: { jobs_null: false } }) {

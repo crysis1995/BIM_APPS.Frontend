@@ -1,9 +1,10 @@
 import { gql } from 'apollo-boost';
 import jwtDecoder from 'jwt-decode';
+
 import { graphQLClient } from '../../../services';
 
 export const login = async (identifier, password) => {
-	return graphQLClient.mutate({
+	return graphQLClient().mutate({
 		mutation: gql`
 			mutation login($i: String!, $p: String!) {
 				login(input: { identifier: $i, password: $p }) {
@@ -48,4 +49,20 @@ export const cleanUserDataInLocalStorage = () => {
 export const isExpired = (token) => {
 	const { exp } = jwtDecoder(token);
 	return new Date() > new Date(exp * 1000);
+};
+
+export const resetPasswordAPI = async (password, access_token) => {
+	const { id } = jwtDecoder(access_token);
+	return graphQLClient(access_token).mutate({
+		mutation: gql`
+			mutation resetPassword($u: ID!, $p: String) {
+				updateUser(input: { where: { id: $u }, data: { password: $p } }) {
+					user {
+						id
+					}
+				}
+			}
+		`,
+		variables: { p: password, u: id },
+	});
 };

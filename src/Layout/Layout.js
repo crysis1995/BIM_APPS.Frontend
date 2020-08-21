@@ -15,6 +15,7 @@ const WorkProgressLayout = React.lazy(() => import('../sites/work_progress'));
 const WorkAcceptanceLayout = React.lazy(() => import('../sites/work_acceptance'));
 const ScheduleLayout = React.lazy(() => import('../sites/schedule'));
 const Login = React.lazy(() => import('../components/CMSLogin/components/login'));
+const Settings = React.lazy(() => import('../components/CMSLogin/components/settings'));
 
 class Layout extends React.Component {
 	componentDidMount() {
@@ -35,6 +36,7 @@ class Layout extends React.Component {
 						<Row noGutters style={{ minHeight: window.innerHeight - 56 }} className="justify-content-md-center">
 							<Switch>
 								<Route path="/login" component={Login} />
+								<Route path="/settings" component={Settings} />
 								<Route exact path="/">
 									<Col>
 										<div className="p-5">
@@ -56,7 +58,7 @@ class Layout extends React.Component {
 	}
 }
 
-const mapStateToProps = () => ({});
+const mapStateToProps = ({}) => ({});
 
 const mapDispatchToProps = { logUserIfValid };
 

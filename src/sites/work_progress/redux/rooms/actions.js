@@ -1,7 +1,9 @@
 import { gql } from 'apollo-boost';
+
 import { graphQLClient } from '../../../../services';
 import { normalize } from '../../../../utils/normalize';
 import { fetchObjectsByRoom } from '../objects/actions';
+
 /*  rooms   */
 export const ROOMS_LOADING_START = 'odbiory__rooms__ROOMS_LOADING_START';
 export const ROOMS_LOADING_ERROR = 'odbiory__rooms__ROOMS_LOADING_ERROR';
@@ -56,7 +58,7 @@ export const fetch_all_rooms = (level) => async (dispatch) => {
 		if (rooms.length === max) {
 			break;
 		}
-		const { data, errors } = await graphQLClient.query({
+		const { data, errors } = await graphQLClient().query({
 			query,
 			variables: { s, l: level },
 			fetchPolicy: 'no-cache',
