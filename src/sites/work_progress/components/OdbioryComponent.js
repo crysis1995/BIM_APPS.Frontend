@@ -16,9 +16,8 @@ function OdbioryComponent(props) {
 				<Col className="mt-auto">
 					<Form.Label>Numer pomieszczenia</Form.Label>
 					<Select
-						onChange={(data) => data.value && props.selectElement(data.value)}
+						onChange={(data) => props.selectElement(data ? data.value : '')}
 						isDisabled={props.objects_jobs_loading || props.model_rooms_loading}
-						isClearable={true}
 						isSearchable={true}
 						isLoading={props.objects_jobs_loading || props.model_rooms_loading || props.rooms_loading}
 						name="color"
@@ -32,9 +31,8 @@ function OdbioryComponent(props) {
 				<Col className="mt-auto">
 					<Form.Label>Nazwa pomieszczenia</Form.Label>
 					<Select
-						onChange={(data) => data.value && props.selectElement(data.value)}
+						onChange={(data) => props.selectElement(data ? data.value : '')}
 						isDisabled={props.objects_jobs_loading || props.model_rooms_loading}
-						isClearable={true}
 						isSearchable={true}
 						isLoading={props.objects_jobs_loading || props.model_rooms_loading || props.rooms_loading}
 						name="color"

@@ -53,6 +53,10 @@ class Viewer extends Component {
 		}
 	}
 
+	/**
+	 *
+	 * @param urn
+	 */
 	launchViewer(urn) {
 		var options = {
 			env: 'AutodeskProduction',
@@ -79,7 +83,8 @@ class Viewer extends Component {
 
 			this.viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {
 				extensions: [
-					// "Autodesk.DocumentBrowser",
+					// 'Autodesk.DocumentBrowser',
+					// 'Autodesk.Measure',
 					// "ShowRoomsExtension",
 					// "Autodesk.AEC.LevelsExtension",
 				],
@@ -135,6 +140,10 @@ class Viewer extends Component {
 		});
 	}
 
+	/**
+	 * Funkcja
+	 * @param viewer
+	 */
 	subscribeToAllEvents(viewer) {
 		for (var key in Autodesk.Viewing) {
 			if (key.endsWith('_EVENT')) {
