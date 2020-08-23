@@ -1,4 +1,4 @@
-import { fetchAllJobs } from '../jobs/actions';
+import { fetchAllJobs, setJobInitial } from '../jobs/actions';
 import { cleanResults } from '../results/actions';
 
 //          TYPES
@@ -24,9 +24,10 @@ export const setResultsActive = () => ({
 	type: SET_RESULTS_COMPONENT_ACTIVE,
 });
 
-export const componentStarted = () => (dispatch) => {
+export const componentStarted = () => (dispatch, getState) => {
+	const { started } = getState().Odbiory.OdbioryComponent;
 	dispatch(componentStart());
-	dispatch(fetchAllJobs());
+	if (!started) dispatch(fetchAllJobs());
 };
 
 export const changeActiveTab = (tabName) => (dispatch, getState) => {

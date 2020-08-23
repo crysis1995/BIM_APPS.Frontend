@@ -1,6 +1,6 @@
 import { debounce } from 'lodash';
 import React, { Component } from 'react';
-// import ShowRoomsExtension from "./extenstions/TestExtension";
+import ReactPanelExtension from './extenstions/TestExtension';
 import { connect } from 'react-redux';
 
 import { config } from '../../../config';
@@ -75,6 +75,9 @@ class Viewer extends Component {
 				});
 				this.props.setSheetsSuccess(elements);
 				this.props.initializeViewer();
+				if (!!this.props.ForgeViewer.current_sheet) {
+					this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.ForgeViewer.current_sheet));
+				}
 			};
 
 			const onDocumentLoadFailure = (viewerErrorCode) => {
@@ -83,13 +86,14 @@ class Viewer extends Component {
 
 			this.viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {
 				extensions: [
-					// 'Autodesk.DocumentBrowser',
+					'Autodesk.DocumentBrowser',
+					'Autodesk.Edit2D',
 					// 'Autodesk.Measure',
 					// "ShowRoomsExtension",
-					// "Autodesk.AEC.LevelsExtension",
+					// "Autodesk.AEC.LevelsExtension"
+					'Viewing.Extension.ReactPanel',
 				],
 			});
-			// this.subscribeToAllEvents(this.viewer);
 
 			this.viewer.start();
 			var documentId = 'urn:' + urn;
@@ -138,22 +142,6 @@ class Viewer extends Component {
 				}, 600) // opóźnienie kolekcjonowania i wykonywania akcji zaznaczania roomów
 			);
 		});
-	}
-
-	/**
-	 * Funkcja
-	 * @param viewer
-	 */
-	subscribeToAllEvents(viewer) {
-		for (var key in Autodesk.Viewing) {
-			if (key.endsWith('_EVENT')) {
-				(function (eventName) {
-					viewer.addEventListener(Autodesk.Viewing[eventName], function (event) {
-						console.log(eventName, event);
-					});
-				})(key);
-			}
-		}
 	}
 
 	colorByRoom(jobData, viewerModelMap) {
