@@ -122,17 +122,23 @@ export const fetchAllJobs = () => async (dispatch) => {
  */
 export const fetchSummaryAreaByLevel = (current_level, precision = 2) => async (dispatch, getState) => {
 	dispatch(setSummaryValueToJobStart());
-	try {
-		const { jobs } = getState().Odbiory.Jobs;
-		for (let job_id in jobs) {
-			const results = await fetchSummaryValuesByJob(job_id, current_level, precision);
-			dispatch(setSummaryValueToJob(job_id, results));
-		}
-	} catch (e) {
-		console.error(e);
-	} finally {
-		dispatch(setSummaryValueToJobEnd());
-	}
+	// try {
+	// 	console.time('all');
+	const { jobs } = getState().Odbiory.Jobs;
+	// for (let job_id in jobs) {
+	// 	const results = await fetchSummaryValuesByJob(job_id, current_level, precision);
+	// 	dispatch(setSummaryValueToJob(job_id, results));
+	// }
+	Promise.all(Object.keys(jobs).map((job_id) => fetchSummaryValuesByJob(job_id, current_level, precision).then((value) => dispatch(setSummaryValueToJob(job_id, value)))))
+		.then(() => dispatch(setSummaryValueToJobEnd()))
+		.catch(console.log);
+	// } catch (e) {
+	// 	console.error(e);
+	// }
+	// finally {
+	// 	dispatch(setSummaryValueToJobEnd())
+	// 	console.timeEnd('all');
+	// }
 };
 
 /**
