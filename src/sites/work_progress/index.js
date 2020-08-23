@@ -18,7 +18,7 @@ function AcceptanceLayout(props) {
 							<Viewer />
 						) : (
 							<div className="position-center align-items-center mt-5">
-								<p>Aby włączyć viewer, zaloguj się do BIM360</p>
+								<p>Usługa BIM360 niedostępna</p>
 							</div>
 						)}
 					</div>

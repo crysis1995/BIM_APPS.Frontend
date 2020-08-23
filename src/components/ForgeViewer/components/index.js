@@ -24,33 +24,58 @@ class Viewer extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (prevProps.ForgeViewer.current_sheet !== this.props.ForgeViewer.current_sheet && !!this.props.ForgeViewer.current_sheet && !!this.doc && !!this.viewer) {
-			this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.ForgeViewer.current_sheet));
-		}
-		if (
-			prevProps.Odbiory.Rooms.selected_room !== this.props.Odbiory.Rooms.selected_room &&
-			Object.keys(this.props.ForgeViewer.model_rooms).length > 0 &&
-			this.props.Odbiory.Rooms.from_selector
-		) {
-			if (this.props.Odbiory.Rooms.selected_room) {
-				const roomIds = this.props.ForgeViewer.model_rooms[this.props.Odbiory.Rooms.selected_room];
-				const elementToSelect = roomIds ? [roomIds.dbID] : [];
-				this.viewer.select(elementToSelect);
-				this.viewer.fitToView(elementToSelect, this.viewer.model, true);
+		if (!!this.doc && !!this.viewer) {
+			/*
+			 *
+			 * */
+			if (prevProps.ForgeViewer.current_sheet !== this.props.ForgeViewer.current_sheet && !!this.props.ForgeViewer.current_sheet) {
+				this.loadSheet();
 			}
-		}
 
-		if (this.props.Odbiory.Results.status !== 'initial') {
-			const { active_job_id, status } = this.props.Odbiory.Results;
-			const { jobs } = this.props.Odbiory.Jobs;
-			const { model_rooms } = this.props.ForgeViewer;
-			if (status === 'color' && jobs && model_rooms) {
-				this.colorByRoom(jobs[active_job_id], model_rooms);
+			/*
+			 *
+			 * */
+			if (
+				prevProps.Odbiory.Rooms.selected_room !== this.props.Odbiory.Rooms.selected_room &&
+				Object.keys(this.props.ForgeViewer.model_rooms).length > 0 &&
+				this.props.Odbiory.Rooms.from_selector &&
+				this.props.Odbiory.Rooms.selected_room
+			) {
+				this.selectRoomOnViewer();
 			}
-			if (status === 'clean') {
-				this.viewer.clearThemingColors();
+
+			/*
+			 *
+			 * */
+			if (this.props.Odbiory.Results.status !== 'initial') {
+				this.colorizeResults();
 			}
 		}
+	}
+
+	colorizeResults() {
+		const { active_job_id, status } = this.props.Odbiory.Results;
+		const { jobs } = this.props.Odbiory.Jobs;
+		const { model_rooms } = this.props.ForgeViewer;
+		if (status === 'color' && jobs && model_rooms) {
+			this.colorByRoom(jobs[active_job_id], model_rooms);
+		}
+		if (status === 'clean') {
+			this.viewer.clearThemingColors();
+		}
+	}
+
+	selectRoomOnViewer() {
+		// if (this.props.Odbiory.Rooms.selected_room) {
+		const roomIds = this.props.ForgeViewer.model_rooms[this.props.Odbiory.Rooms.selected_room];
+		const elementToSelect = roomIds ? [roomIds.dbID] : [];
+		this.viewer.select(elementToSelect);
+		this.viewer.fitToView(elementToSelect, this.viewer.model, true);
+		// }
+	}
+
+	loadSheet() {
+		this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.ForgeViewer.current_sheet));
 	}
 
 	/**
