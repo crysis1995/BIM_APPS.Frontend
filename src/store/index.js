@@ -19,11 +19,9 @@ import rootReducer from '../reducers';
 //     hostname: "localhost",
 //     port: 8000, // the port your remotedev server is running at
 // });
+// let store = createStore(persistedReducer, composeWithDevTools(applyMiddleware(thunk)));
+let store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
+// let persistor = persistStore(store);
+// return { store, persistor };
 
-export default () => {
-	// let store = createStore(persistedReducer, composeWithDevTools(applyMiddleware(thunk)));
-	let store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
-	// let persistor = persistStore(store);
-	// return { store, persistor };
-	return { store };
-};
+export default store;

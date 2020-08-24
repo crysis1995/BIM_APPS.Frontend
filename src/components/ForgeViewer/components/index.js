@@ -1,6 +1,6 @@
 import { debounce } from 'lodash';
 import React, { Component } from 'react';
-// import ShowRoomsExtension from "./extenstions/TestExtension";
+import ReactPanelExtension from './extenstions/TestExtension';
 import { connect } from 'react-redux';
 
 import { config } from '../../../config';
@@ -24,33 +24,58 @@ class Viewer extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (prevProps.ForgeViewer.current_sheet !== this.props.ForgeViewer.current_sheet && !!this.props.ForgeViewer.current_sheet && !!this.doc && !!this.viewer) {
-			this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.ForgeViewer.current_sheet));
-		}
-		if (
-			prevProps.Odbiory.Rooms.selected_room !== this.props.Odbiory.Rooms.selected_room &&
-			Object.keys(this.props.ForgeViewer.model_rooms).length > 0 &&
-			this.props.Odbiory.Rooms.from_selector
-		) {
-			if (this.props.Odbiory.Rooms.selected_room) {
-				const roomIds = this.props.ForgeViewer.model_rooms[this.props.Odbiory.Rooms.selected_room];
-				const elementToSelect = roomIds ? [roomIds.dbID] : [];
-				this.viewer.select(elementToSelect);
-				this.viewer.fitToView(elementToSelect, this.viewer.model, true);
+		if (!!this.doc && !!this.viewer) {
+			/*
+			 *
+			 * */
+			if (prevProps.ForgeViewer.current_sheet !== this.props.ForgeViewer.current_sheet && !!this.props.ForgeViewer.current_sheet) {
+				this.loadSheet();
 			}
-		}
 
-		if (this.props.Odbiory.Results.status !== 'initial') {
-			const { active_job_id, status } = this.props.Odbiory.Results;
-			const { jobs } = this.props.Odbiory.Jobs;
-			const { model_rooms } = this.props.ForgeViewer;
-			if (status === 'color' && jobs && model_rooms) {
-				this.colorByRoom(jobs[active_job_id], model_rooms);
+			/*
+			 *
+			 * */
+			if (
+				prevProps.Odbiory.Rooms.selected_room !== this.props.Odbiory.Rooms.selected_room &&
+				Object.keys(this.props.ForgeViewer.model_rooms).length > 0 &&
+				this.props.Odbiory.Rooms.from_selector &&
+				this.props.Odbiory.Rooms.selected_room
+			) {
+				this.selectRoomOnViewer();
 			}
-			if (status === 'clean') {
-				this.viewer.clearThemingColors();
+
+			/*
+			 *
+			 * */
+			if (this.props.Odbiory.Results.status !== 'initial') {
+				this.colorizeResults();
 			}
 		}
+	}
+
+	colorizeResults() {
+		const { active_job_id, status } = this.props.Odbiory.Results;
+		const { jobs } = this.props.Odbiory.Jobs;
+		const { model_rooms } = this.props.ForgeViewer;
+		if (status === 'color' && jobs && model_rooms) {
+			this.colorByRoom(jobs[active_job_id], model_rooms);
+		}
+		if (status === 'clean') {
+			this.viewer.clearThemingColors();
+		}
+	}
+
+	selectRoomOnViewer() {
+		// if (this.props.Odbiory.Rooms.selected_room) {
+		const roomIds = this.props.ForgeViewer.model_rooms[this.props.Odbiory.Rooms.selected_room];
+		const elementToSelect = roomIds ? [roomIds.dbID] : [];
+		this.viewer.select(elementToSelect);
+		this.viewer.fitToView(elementToSelect, this.viewer.model, true);
+		// }
+	}
+
+	loadSheet() {
+		this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.ForgeViewer.current_sheet));
 	}
 
 	/**
@@ -75,6 +100,9 @@ class Viewer extends Component {
 				});
 				this.props.setSheetsSuccess(elements);
 				this.props.initializeViewer();
+				if (!!this.props.ForgeViewer.current_sheet) {
+					this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.ForgeViewer.current_sheet));
+				}
 			};
 
 			const onDocumentLoadFailure = (viewerErrorCode) => {
@@ -83,13 +111,14 @@ class Viewer extends Component {
 
 			this.viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {
 				extensions: [
-					// 'Autodesk.DocumentBrowser',
-					'Autodesk.Measure',
+					'Autodesk.DocumentBrowser',
+					'Autodesk.Edit2D',
+					// 'Autodesk.Measure',
 					// "ShowRoomsExtension",
-					// "Autodesk.AEC.LevelsExtension",
+					// "Autodesk.AEC.LevelsExtension"
+					'Viewing.Extension.ReactPanel',
 				],
 			});
-			// this.subscribeToAllEvents(this.viewer);
 
 			this.viewer.start();
 			var documentId = 'urn:' + urn;
@@ -138,22 +167,6 @@ class Viewer extends Component {
 				}, 500) // opóźnienie kolekcjonowania i wykonywania akcji zaznaczania roomów
 			);
 		});
-	}
-
-	/**
-	 * Funkcja
-	 * @param viewer
-	 */
-	subscribeToAllEvents(viewer) {
-		for (var key in Autodesk.Viewing) {
-			if (key.endsWith('_EVENT')) {
-				(function (eventName) {
-					viewer.addEventListener(Autodesk.Viewing[eventName], function (event) {
-						console.log(eventName, event);
-					});
-				})(key);
-			}
-		}
 	}
 
 	colorByRoom(jobData, viewerModelMap) {

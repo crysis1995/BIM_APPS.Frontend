@@ -8,6 +8,7 @@
     "@material-ui/lab": "^4.0.0-alpha.56",
     "apollo-boost": "^0.4.9",
     "bootstrap": "^4.5.0",
+    "bootstrap-icons": "^1.0.0-alpha5",
     "classnames": "^2.2.6",
     "forge-apis": "^0.7.3",
     "graphql": "^15.3.0",
@@ -33,6 +34,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "remote-redux-devtools": "^0.5.16",
+    "reselect": "^4.0.0",
     "uuid": "^8.2.0"
   },
   "scripts": {

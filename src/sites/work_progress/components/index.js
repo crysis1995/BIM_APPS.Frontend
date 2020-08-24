@@ -33,7 +33,7 @@ class Odbiory extends React.Component {
 							</Nav.Item>
 						</Nav>
 
-						{this.props.awansowanie_is_active ? <OdbioryComponent /> : <ResultsComponent />}
+						{this.props.awansowanie_is_active ? !this.props.rooms_loading ? <OdbioryComponent /> : null : <ResultsComponent />}
 					</div>
 				</>
 			);
@@ -41,6 +41,7 @@ class Odbiory extends React.Component {
 }
 
 const mapStateToProps = ({ Odbiory, ForgeViewer }) => ({
+	rooms_loading: Odbiory.Rooms.rooms_loading,
 	awansowanie_is_active: Odbiory.OdbioryComponent.awansowanie.is_active,
 	sheets_loaded: ForgeViewer.sheets_loaded,
 });
