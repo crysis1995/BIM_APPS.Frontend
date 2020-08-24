@@ -1,46 +1,41 @@
 import React from 'react';
 import { Col, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { v4 } from 'uuid';
 import Select from 'react-select';
 
 import { selectElement } from '../../../components/ForgeViewer/redux/actions';
 import { componentStarted } from '../redux/odbiory/actions';
 import { fetch_all_rooms, setSelectedRoom } from '../redux/rooms/actions';
+import { getRoomOptionsByName, getRoomOptionsByNumber } from './OdbioryComponentSelector';
 import TableComponent from './TableComponent';
 
 function OdbioryComponent(props) {
+	const options = {
+		isDisabled: props.objects_jobs_loading || props.model_rooms_loading,
+		isSearchable: true,
+		isMulti: true,
+		isLoading: props.objects_jobs_loading || props.model_rooms_loading || props.rooms_loading,
+		placeholder: 'Wybierz...',
+	};
 	return (
 		<Col className={'d-flex flex-column'}>
 			<Form.Row className="mt-3">
 				<Col className="mt-auto">
 					<Form.Label>Numer pomieszczenia</Form.Label>
 					<Select
-						onChange={(data) => props.selectElement(data ? data.value : '')}
-						isDisabled={props.objects_jobs_loading || props.model_rooms_loading}
-						isSearchable={true}
-						isLoading={props.objects_jobs_loading || props.model_rooms_loading || props.rooms_loading}
-						name="color"
-						placeholder="Wybierz..."
-						options={Object.entries(props.rooms)
-							.sort((a, b) => a[1].number.localeCompare(b[1].number))
-							.map(([id, { number }]) => ({ value: id, label: number }))}
-						value={!props.rooms_loading && props.selected_room && { value: props.selected_room, label: props.rooms[props.selected_room].number }}
+						onChange={(data) => props.selectElement(data ? data.map((data) => data.value) : '')}
+						{...options}
+						options={props.room_number_options}
+						// value={!props.rooms_loading && props.selected_room && { value: props.selected_room, label: props.rooms[props.selected_room].number }}
 					/>
 				</Col>
 				<Col className="mt-auto">
 					<Form.Label>Nazwa pomieszczenia</Form.Label>
 					<Select
-						onChange={(data) => props.selectElement(data ? data.value : '')}
-						isDisabled={props.objects_jobs_loading || props.model_rooms_loading}
-						isSearchable={true}
-						isLoading={props.objects_jobs_loading || props.model_rooms_loading || props.rooms_loading}
-						name="color"
-						placeholder="Wybierz..."
-						options={Object.entries(props.rooms)
-							.sort((a, b) => a[1].name.localeCompare(b[1].name))
-							.map(([id, { name }]) => ({ value: id, label: name }))}
-						value={!props.rooms_loading && props.selected_room && { value: props.selected_room, label: props.rooms[props.selected_room].name }}
+						onChange={(data) => props.selectElement(data ? data.map((data) => data.value) : '')}
+						{...options}
+						options={props.room_name_options}
+						// value={!props.rooms_loading && props.selected_room && { value: props.selected_room, label: props.rooms[props.selected_room].name }}
 					/>
 				</Col>
 			</Form.Row>
@@ -56,14 +51,15 @@ function OdbioryComponent(props) {
 		</Col>
 	);
 }
-const mapStateToProps = ({ Odbiory, ForgeViewer }) => ({
-	objects_jobs_loading: Odbiory.Jobs.objects_jobs_loading,
-	model_rooms_loading: ForgeViewer.model_rooms_loading,
-	selected_room: Odbiory.Rooms.selected_room,
-	jobs_fetched: Odbiory.Jobs.jobs_fetched,
-	rooms: Odbiory.Rooms.rooms,
-	rooms_loading: Odbiory.Rooms.rooms_loading,
-	ForgeViewer: ForgeViewer,
+const mapStateToProps = (state) => ({
+	room_number_options: getRoomOptionsByNumber(state),
+	room_name_options: getRoomOptionsByName(state),
+	objects_jobs_loading: state.Odbiory.Jobs.objects_jobs_loading,
+	model_rooms_loading: state.ForgeViewer.model_rooms_loading,
+	selected_room: state.Odbiory.Rooms.selected_room,
+	jobs_fetched: state.Odbiory.Jobs.jobs_fetched,
+	rooms: state.Odbiory.Rooms.rooms,
+	rooms_loading: state.Odbiory.Rooms.rooms_loading,
 });
 
 const mapDispatchToProps = {
