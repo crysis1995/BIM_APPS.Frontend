@@ -4,7 +4,7 @@ const initialState = {
 	rooms: [],
 	rooms_loading: true,
 	rooms_error: {},
-	selected_room: '',
+	selected_rooms: [],
 	from_selector: false,
 };
 
@@ -30,13 +30,13 @@ const RoomsReducer = (state = initialState, action) => {
 			return {
 				...state,
 				from_selector: action.from_selector,
-				selected_room: action.selected_room,
+				selected_rooms: action.selected_rooms,
 			};
 		case ROOMS_SET_INITIAL:
 			return {
 				...state,
 				// from_selector: initialState.from_selector,
-				selected_room: initialState.selected_room,
+				selected_rooms: initialState.selected_rooms,
 			};
 		default:
 			return state;

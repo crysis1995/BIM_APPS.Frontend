@@ -26,3 +26,23 @@ export const getRoomOptionsByName = createSelector([(state) => state.Odbiory.Roo
 		.sort((a, b) => a[1].name.localeCompare(b[1].name))
 		.map(([id, { name }]) => ({ value: id, label: name }));
 });
+
+export const getSelectedRoomOptionsByNumber = createSelector(
+	(state) => state.Odbiory.Rooms.rooms,
+	(state) => state.Odbiory.Rooms.selected_rooms,
+	(state) => state.Odbiory.Rooms.rooms_loading,
+	(rooms, selected_rooms, rooms_loading) => {
+		if (rooms_loading) return [];
+		return selected_rooms.map((revit_id) => ({ value: revit_id, label: rooms[revit_id].number }));
+	},
+);
+
+export const getSelectedRoomOptionsByName = createSelector(
+	(state) => state.Odbiory.Rooms.rooms,
+	(state) => state.Odbiory.Rooms.selected_rooms,
+	(state) => state.Odbiory.Rooms.rooms_loading,
+	(rooms, selected_rooms, rooms_loading) => {
+		if (rooms_loading) return [];
+		return selected_rooms.map((revit_id) => ({ value: revit_id, label: rooms[revit_id].name }));
+	},
+);

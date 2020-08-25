@@ -1,5 +1,13 @@
 import { normalize } from '../../../../utils/normalize';
-import { addParameterWithValue, createReferenceJob, fetchAllJobsFromAPI, fetchSummaryValuesByJob, prep_updateResults, prepareDataForJobs, updateObjectJob } from './utils';
+import {
+	addParameterWithValue,
+	createReferenceJob,
+	fetchAllJobsFromAPI,
+	fetchSummaryValuesByJob,
+	prep_updateResults,
+	prepareDataForJobs,
+	updateObjectJob,
+} from './utils';
 
 export const JOBS_LOADING_START = 'odbiory__jobs__LOADING_START';
 export const JOBS_LOADING_END = 'odbiory__jobs__LOADING_END';
@@ -97,7 +105,11 @@ export const fetchAllJobs = () => async (dispatch) => {
 	dispatch(jobsFetchStart());
 	const { data, errors } = await fetchAllJobsFromAPI();
 	if (data) {
-		dispatch(jobsFetchEnd(addParameterWithValue(normalize(data.acceptanceJobs), 'hidden', (val) => val.unit === 'piece')));
+		dispatch(
+			jobsFetchEnd(
+				addParameterWithValue(normalize(data.acceptanceJobs), 'hidden', (val) => val.unit === 'piece'),
+			),
+		);
 	}
 	if (errors) {
 		dispatch(jobsFetchError(errors));
@@ -129,7 +141,13 @@ export const fetchSummaryAreaByLevel = (current_level, precision = 2) => async (
 	// 	const results = await fetchSummaryValuesByJob(job_id, current_level, precision);
 	// 	dispatch(setSummaryValueToJob(job_id, results));
 	// }
-	Promise.all(Object.keys(jobs).map((job_id) => fetchSummaryValuesByJob(job_id, current_level, precision).then((value) => dispatch(setSummaryValueToJob(job_id, value)))))
+	Promise.all(
+		Object.keys(jobs).map((job_id) =>
+			fetchSummaryValuesByJob(job_id, current_level, precision).then((value) =>
+				dispatch(setSummaryValueToJob(job_id, value)),
+			),
+		),
+	)
 		.then(() => dispatch(setSummaryValueToJobEnd()))
 		.catch(console.log);
 	// } catch (e) {
@@ -178,7 +196,9 @@ export const changeJobPercentageValue = (job_key, value, precision = 2) => async
 		let upgrading = {
 			percentage_value: value, // wartość procentowa aktualnego zaawansowania roboty
 			reference_job: null,
-			current_value: value ? Math.floor(currentJob.upgrading.summary_value * value * 10 ** precision) / 10 ** precision : 0, // obliczona wartość powierzchni zaawansowania roboty
+			current_value: value
+				? Math.floor(currentJob.upgrading.summary_value * value * 10 ** precision) / 10 ** precision
+				: 0, // obliczona wartość powierzchni zaawansowania roboty
 		};
 		if (currentJob.upgrading.reference_job) await updateObjectJob(currentJob.upgrading.reference_job.id);
 		const { data, errors } = await createReferenceJob({

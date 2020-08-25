@@ -1,5 +1,5 @@
-import ReactPanel from './ReactPanel';
 import Store from '../../../../store';
+import ReactPanel from './ReactPanel';
 
 const Autodesk = window.Autodesk;
 

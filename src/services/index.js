@@ -12,6 +12,9 @@ const graphQLClient = (access_token) => {
 					headers: {
 						Authorization: `Bearer ${access_token}`,
 					},
+					fetchOptions: {
+						mode: 'no-cors',
+					},
 				});
 			}
 		},

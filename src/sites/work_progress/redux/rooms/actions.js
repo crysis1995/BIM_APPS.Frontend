@@ -2,7 +2,8 @@ import { gql } from 'apollo-boost';
 
 import { graphQLClient } from '../../../../services';
 import { normalize } from '../../../../utils/normalize';
-import { fetchObjectsByRoom } from '../objects/actions';
+import { fetchObjectsByRooms } from '../objects/actions';
+import { debounce } from 'lodash';
 
 /*  rooms   */
 export const ROOMS_LOADING_START = 'odbiory__rooms__ROOMS_LOADING_START';
@@ -24,9 +25,9 @@ const fetchRoomsEnd = (rooms) => ({
 	rooms,
 });
 
-const selectedRoom = (selected_room, from_selector = true) => ({
+const selectedRooms = (selected_rooms, from_selector = true) => ({
 	type: SELECT_ROOM_BY_ODBIORY,
-	selected_room,
+	selected_rooms,
 	from_selector,
 });
 
@@ -77,13 +78,12 @@ export const fetch_all_rooms = (level) => async (dispatch) => {
 	dispatch(fetchRoomsEnd(normalize(rooms, 'revit_id')));
 };
 
-export const setSelectedRoom = (selected_room, from_selector) => (dispatch, getState) => {
+export const setSelectedRoom = (selected_rooms, from_selector) => (dispatch, getState) => {
 	const { jobs_loading, objects_jobs_loading } = getState().Odbiory.Jobs;
 	const { objects_loading } = getState().Odbiory.Objects;
 	const { model_rooms_loading } = getState().ForgeViewer;
-	const { rooms } = getState().Odbiory.Rooms;
-	if (selected_room && !objects_jobs_loading && !model_rooms_loading && !jobs_loading && !objects_loading) {
-		dispatch(fetchObjectsByRoom(rooms[selected_room].id));
-		dispatch(selectedRoom(selected_room, from_selector));
+	if (!objects_jobs_loading && !model_rooms_loading && !jobs_loading && !objects_loading) {
+		dispatch(selectedRooms(selected_rooms, from_selector));
+		fetchObjectsByRooms(dispatch, getState);
 	}
 };

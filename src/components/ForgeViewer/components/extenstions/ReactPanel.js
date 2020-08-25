@@ -1,9 +1,12 @@
-import ReactDOM from 'react-dom';
 import React from 'react';
-import './ReactPanel.scss';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+
 import Store from '../../../../store';
 import ReactPanelContent from './ReactPanelContent';
+
+import './ReactPanel.scss';
+
 const Autodesk = window.Autodesk;
 
 export default class ReactPanel extends Autodesk.Viewing.UI.DockingPanel {

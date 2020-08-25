@@ -6,7 +6,9 @@ export const fetchALLAreaJobPerLevel = (job_id, level) => {
 	return graphQLClient().query({
 		query: gql`
 			query fetchALLAreaJobPerLevel($l: String, $j: ID) {
-				acceptanceObjectsConnection(where: { object_finish_type: { jobs_null: false, jobs: $j }, room: { department: { level: $l } } }) {
+				acceptanceObjectsConnection(
+					where: { object_finish_type: { jobs_null: false, jobs: $j }, room: { department: { level: $l } } }
+				) {
 					aggregate {
 						sum {
 							area
@@ -24,7 +26,9 @@ export const fetchSummaryAreaJobPerLevel = (job_id, level) => {
 	return graphQLClient().query({
 		query: gql`
 			query fetchSummaryAreaJobPerLevel($l: String, $j: ID) {
-				acceptanceReferenceJobsConnection(where: { room: { department: { level: $l } }, job: $j, is_actual: true }) {
+				acceptanceReferenceJobsConnection(
+					where: { room: { department: { level: $l } }, job: $j, is_actual: true }
+				) {
 					aggregate {
 						sum {
 							value_calculated
@@ -83,6 +87,9 @@ export const getFilteredObjects = (selected_room) => {
 						jobs {
 							id
 						}
+					}
+					room {
+						revit_id
 					}
 					reference_jobs(where: { is_actual: true }) {
 						id
