@@ -38,28 +38,19 @@ const fetchObjectsSetData = (objects) => ({
  *
  */
 export const fetchObjectsByRooms = debounce(async (dispatch, getState) => {
-	const { rooms, selected_rooms } = getState().Odbiory.Rooms;
 	dispatch(fetchObjectsStart());
-	debouncedFetchObjectsBySelectedRoom(selected_rooms, rooms)
+	fetchObjectsBySelectedRoom(getState)
 		.then((data) => data.reduce((prev, acc) => ({ ...prev, ...acc }), {}))
 		.then((objects) => dispatch(fetchObjectsSetData(objects)))
 		.then(() => dispatch(fetchObjectsEnd()))
 		.then(() => dispatch(jobsPrepare()));
 	// .catch((error) => dispatch(fetchObjectsError(error)));
-	// const { data, errors } = await getFilteredObjects(selected_room);
-	// if (data) {
-	// 	const objects = normalize(data.acceptanceObjects);
-	// 	dispatch(fetchObjectsSetData(objects));
-	// 	dispatch(jobsPrepare());
-	// }
-	// if (errors) {
-	// 	dispatch(fetchObjectsError(errors));
-	// }
+}, 2000);
 
-	// dispatch(fetchObjectsEnd());
-}, 1500);
-
-const debouncedFetchObjectsBySelectedRoom = (selected_rooms, rooms) => {
+const fetchObjectsBySelectedRoom = (getState) => {
+	const fetchedObjects = Object.keys(getState().Odbiory.Objects.objects);
+	const { selected_rooms, rooms } = getState().Odbiory.Rooms;
+	fetchedObjects.forEach((revit_id) => selected_rooms.splice(selected_rooms.indexOf(revit_id), 1));
 	return Promise.all(
 		selected_rooms.map((revit_id) =>
 			getFilteredObjects(rooms[revit_id].id).then(({ data, errors }) => {

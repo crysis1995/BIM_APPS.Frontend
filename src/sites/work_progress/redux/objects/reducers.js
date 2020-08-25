@@ -22,7 +22,7 @@ const ObjectsReducer = (state = initialState, action) => {
 			return {
 				...state,
 				objects_loading: true,
-				objects: action.objects,
+				objects: {...action.objects, ...state.objects},
 			};
 		case OBJECTS_LOADING_END:
 			return {
