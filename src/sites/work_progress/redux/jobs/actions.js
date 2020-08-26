@@ -32,7 +32,7 @@ export const UPGRADE_RESULTS = 'odbiory__jobs__UPGRADE_RESULTS';
 
 // export const COLOR_JOBS_BY
 
-const jobsLoadingStart = () => ({
+export const jobsLoadingStart = () => ({
 	type: JOBS_LOADING_START,
 });
 
@@ -166,7 +166,6 @@ export const fetchSummaryAreaByLevel = (current_level, precision = 2) => async (
  *
  */
 export const jobsPrepare = () => (dispatch, getState) => {
-	dispatch(jobsLoadingStart());
 	const { objects } = getState().Odbiory.Objects;
 	const { jobs } = getState().Odbiory.Jobs;
 	if (Object.keys(jobs).length > 0) {

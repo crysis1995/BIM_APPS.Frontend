@@ -3,7 +3,7 @@ import { gql } from 'apollo-boost';
 import { graphQLClient } from '../../../../services';
 import { normalize } from '../../../../utils/normalize';
 import { fetchObjectsByRooms } from '../objects/actions';
-import { debounce } from 'lodash';
+import { fetchObjectsStart } from '../objects/actions';
 
 /*  rooms   */
 export const ROOMS_LOADING_START = 'odbiory__rooms__ROOMS_LOADING_START';
@@ -82,8 +82,9 @@ export const setSelectedRoom = (selected_rooms, from_selector) => (dispatch, get
 	const { jobs_loading, objects_jobs_loading } = getState().Odbiory.Jobs;
 	const { objects_loading } = getState().Odbiory.Objects;
 	const { model_rooms_loading } = getState().ForgeViewer;
-	if (!objects_jobs_loading && !model_rooms_loading && !jobs_loading && !objects_loading) {
+	if (!objects_jobs_loading && !model_rooms_loading) {
 		dispatch(selectedRooms(selected_rooms, from_selector));
+		dispatch(fetchObjectsStart());
 		fetchObjectsByRooms(dispatch, getState);
 	}
 };

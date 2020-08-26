@@ -2,6 +2,7 @@ import { normalize } from '../../../../utils/normalize';
 import { jobsPrepare } from '../jobs/actions';
 import { getFilteredObjects } from './utils';
 import { debounce } from 'lodash';
+import { jobsLoadingStart } from '../jobs/actions';
 
 /*  objects */
 export const OBJECTS_LOADING_START = 'odbiory__objects__LOADING_START';
@@ -10,7 +11,7 @@ export const OBJECTS_LOADING_END = 'odbiory__objects__LOADING_END';
 export const OBJECTS_SET_DATA = 'odbiory__objects__SET_DATA';
 export const OBJECTS_SET_INITIAL = 'odbiory__objects__SET_INITIAL';
 
-const fetchObjectsStart = () => ({
+export const fetchObjectsStart = () => ({
 	type: OBJECTS_LOADING_START,
 });
 
@@ -38,29 +39,38 @@ const fetchObjectsSetData = (objects) => ({
  *
  */
 export const fetchObjectsByRooms = debounce(async (dispatch, getState) => {
-	dispatch(fetchObjectsStart());
-	fetchObjectsBySelectedRoom(getState)
-		.then((data) => data.reduce((prev, acc) => ({ ...prev, ...acc }), {}))
-		.then((objects) => dispatch(fetchObjectsSetData(objects)))
-		.then(() => dispatch(fetchObjectsEnd()))
-		.then(() => dispatch(jobsPrepare()));
-	// .catch((error) => dispatch(fetchObjectsError(error)));
+	const { selected_rooms } = getState().Odbiory.Rooms;
+	if (selected_rooms.length > 0) {
+		fetchObjectsBySelectedRoom(dispatch, getState)
+			.then((data) => data.reduce((prev, acc) => ({ ...prev, ...acc }), {}))
+			.then((objects) => dispatch(fetchObjectsSetData(objects)))
+			.then(() => dispatch(jobsLoadingStart()))
+			.then(() => dispatch(fetchObjectsEnd()))
+			.then(() => dispatch(jobsPrepare()));
+		// .catch((error) => dispatch(fetchObjectsError(error)));
+	} else {
+		dispatch(setObjectInitial());
+	}
 }, 2000);
 
-const fetchObjectsBySelectedRoom = (getState) => {
+const fetchObjectsBySelectedRoom = (dispatch, getState) => {
 	const fetchedObjects = Object.keys(getState().Odbiory.Objects.objects);
 	const { selected_rooms, rooms } = getState().Odbiory.Rooms;
-	fetchedObjects.forEach((revit_id) => selected_rooms.splice(selected_rooms.indexOf(revit_id), 1));
+	let new_selected_rooms = [...selected_rooms];
+	fetchedObjects.forEach((revit_id) => new_selected_rooms.splice(new_selected_rooms.indexOf(revit_id), 1));
 	return Promise.all(
-		selected_rooms.map((revit_id) =>
-			getFilteredObjects(rooms[revit_id].id).then(({ data, errors }) => {
-				if (data) {
-					return { [revit_id]: normalize(data.acceptanceObjects) };
-				}
-				if (errors) {
-					return errors;
-				}
-			}),
+		new_selected_rooms.map(
+			(revit_id) =>
+				revit_id &&
+				getFilteredObjects(rooms[revit_id].id).then(({ data, errors }) => {
+					if (data) {
+						return { [revit_id]: normalize(data.acceptanceObjects) };
+					}
+					if (errors) {
+						dispatch(fetchObjectsError(errors));
+						return;
+					}
+				}),
 		),
 	);
 };
