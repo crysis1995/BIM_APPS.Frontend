@@ -1,9 +1,9 @@
-import React from 'react';
-import { OverlayTrigger, Tooltip, Form } from 'react-bootstrap';
-import { connect } from 'react-redux';
-
-import { v4 } from 'uuid';
+import { changeJobPercentageValue } from '../redux/jobs/actions';
 import { getSingleSelectionFilteredJobs } from './TableComponentSelector';
+import React from 'react';
+import { Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { v4 } from 'uuid';
 
 function SingularJobsComponent(props) {
 	return Object.entries(props.filteredJobs).map(([job_key, job]) => (
@@ -43,9 +43,9 @@ function SingularJobsComponent(props) {
 			</OverlayTrigger>
 			<td>
 				<Form.Control
-					// onChange={(e) => {
-					// 	props.changeJobPercentageValue(job_key, parseFloat(e.target.value));
-					// }}
+					onChange={(e) => {
+						props.changeJobPercentageValue(job_key, parseFloat(e.target.value));
+					}}
 					disabled={props.objects_jobs_loading}
 					size={'sm'}
 					as="select"
@@ -81,6 +81,8 @@ const mapStateToProps = (state) => ({
 	objects: state.Odbiory.Objects.objects[state.Odbiory.Rooms.selected_rooms[0]],
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+	changeJobPercentageValue,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingularJobsComponent);

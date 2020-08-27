@@ -6,6 +6,7 @@ import { componentStarted, changeActiveTab } from '../redux/odbiory/actions';
 import LevelSelectorComponent from './LevelSelectorComponent';
 import OdbioryComponent from './OdbioryComponent';
 import ResultsComponent from './ResultsComponent';
+import Tools from './Tools';
 
 class Odbiory extends React.Component {
 	componentDidMount() {
@@ -19,6 +20,7 @@ class Odbiory extends React.Component {
 			return (
 				<>
 					<div className="d-flex flex-column p-3 w-100">
+						<Tools />
 						<LevelSelectorComponent />
 						<Nav variant="tabs" className="mt-3" defaultActiveKey={'results'}>
 							<Nav.Item>
@@ -33,7 +35,13 @@ class Odbiory extends React.Component {
 							</Nav.Item>
 						</Nav>
 
-						{this.props.awansowanie_is_active ? !this.props.rooms_loading ? <OdbioryComponent /> : null : <ResultsComponent />}
+						{this.props.awansowanie_is_active ? (
+							!this.props.rooms_loading ? (
+								<OdbioryComponent />
+							) : null
+						) : (
+							<ResultsComponent />
+						)}
 					</div>
 				</>
 			);

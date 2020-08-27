@@ -1,6 +1,7 @@
 import { gql } from 'apollo-boost';
 
 import { graphQLClient } from '../../../../services';
+import { sumOfArray } from '../../../../utils/sumOfArray';
 import { fetchALLAreaJobPerLevel, fetchSummaryAreaJobPerLevel } from '../objects/utils';
 
 export const fetchAllJobsFromAPI = () => {
@@ -216,9 +217,9 @@ export const fetchSummaryValuesByJob = async (job_id, current_level, precision) 
 };
 
 export const prep_updateResults = ({ results, current_value, percentage_value, reference_job }) => {
-	results.summary_current_value += current_value;
+	results.summary_current_value += sumOfArray(Object.values(current_value));
 	results.percentage_value = calculatePercentValue(results.summary_current_value, results.summary_all_value);
-	results.elements[reference_job.room.revit_id] = percentage_value;
+	results.elements = { ...results.elements, ...percentage_value };
 	return results;
 };
 

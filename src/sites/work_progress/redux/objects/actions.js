@@ -1,8 +1,9 @@
+import { debounce } from 'lodash';
+
 import { normalize } from '../../../../utils/normalize';
 import { jobsPrepare } from '../jobs/actions';
-import { getFilteredObjects } from './utils';
-import { debounce } from 'lodash';
 import { jobsLoadingStart } from '../jobs/actions';
+import { getFilteredObjects } from './utils';
 
 /*  objects */
 export const OBJECTS_LOADING_START = 'odbiory__objects__LOADING_START';
@@ -62,15 +63,17 @@ const fetchObjectsBySelectedRoom = (dispatch, getState) => {
 		new_selected_rooms.map(
 			(revit_id) =>
 				revit_id &&
-				getFilteredObjects(rooms[revit_id].id).then(({ data, errors }) => {
-					if (data) {
-						return { [revit_id]: normalize(data.acceptanceObjects) };
-					}
-					if (errors) {
-						dispatch(fetchObjectsError(errors));
-						return;
-					}
-				}),
+				getFilteredObjects(rooms[revit_id].id)
+					.then(({ data, errors }) => {
+						if (data) {
+							return { [revit_id]: normalize(data.acceptanceObjects) };
+						}
+						if (errors) {
+							dispatch(fetchObjectsError(errors));
+							return;
+						}
+					})
+					.catch((errors) => console.log(errors)),
 		),
 	);
 };
