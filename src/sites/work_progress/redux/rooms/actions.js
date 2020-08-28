@@ -35,7 +35,7 @@ export const setRoomsInitial = () => ({
 	type: ROOMS_SET_INITIAL,
 });
 
-export const fetch_all_rooms = (level) => async (dispatch) => {
+export const fetch_all_rooms = async (dispatch, level) => {
 	dispatch(fetchRoomsStart());
 	const query = gql`
 		query getAllRooms($s: Int, $l: String) {
@@ -82,7 +82,7 @@ export const setSelectedRoom = (selected_rooms, from_selector) => (dispatch, get
 	const { jobs_loading, objects_jobs_loading } = getState().Odbiory.Jobs;
 	const { objects_loading } = getState().Odbiory.Objects;
 	const { model_rooms_loading } = getState().ForgeViewer;
-	if (!objects_jobs_loading && !model_rooms_loading) {
+	if (!jobs_loading && !objects_jobs_loading && !model_rooms_loading) {
 		dispatch(selectedRooms(selected_rooms, from_selector));
 		dispatch(fetchObjectsStart());
 		fetchObjectsByRooms(dispatch, getState);

@@ -1,3 +1,4 @@
+import { SET_INITIAL } from '../actions';
 import { CLEAN_RESULTS, COLOR_RESULTS, RESET_RESULTS } from './actions';
 
 const initialState = {
@@ -7,6 +8,11 @@ const initialState = {
 
 const ResultsReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case SET_INITIAL:
+			return {
+				...state,
+				...initialState,
+			};
 		case CLEAN_RESULTS:
 			return {
 				...state,

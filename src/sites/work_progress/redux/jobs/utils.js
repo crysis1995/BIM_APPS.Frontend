@@ -206,6 +206,7 @@ export const fetchSummaryValuesByJob = async (job_id, current_level, precision) 
 			percentage_value =
 				Math.floor((summary_current_value / summary_all_value) * 100 * 10 ** precision) / 10 ** precision;
 			resolve({
+				id: job_id,
 				summary_all_value,
 				summary_current_value,
 				percentage_value,

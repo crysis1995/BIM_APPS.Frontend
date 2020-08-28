@@ -1,4 +1,21 @@
-import { ALL_JOBS_FETCH_END, ALL_JOBS_FETCH_ERROR, ALL_JOBS_FETCH_START, JOBS_CHANGE_PERCENTAGE_VALUE, JOBS_CLEAN_DATA_OF_JOB, JOBS_LOADING_END, JOBS_LOADING_START, JOBS_SET_DATA, OBJECT_JOB_FETCH_COMPLETED, OBJECT_JOB_FETCH_ERROR, OBJECT_JOB_FETCH_START, SET_SUMMARY_VALUE_TO_JOB, SET_SUMMARY_VALUE_TO_JOB_END, SET_SUMMARY_VALUE_TO_JOB_START, UPGRADE_RESULTS } from './actions';
+import { SET_INITIAL } from '../actions';
+import {
+	ALL_JOBS_FETCH_END,
+	ALL_JOBS_FETCH_ERROR,
+	ALL_JOBS_FETCH_START,
+	JOBS_CHANGE_PERCENTAGE_VALUE,
+	JOBS_CLEAN_DATA_OF_JOB,
+	JOBS_LOADING_END,
+	JOBS_LOADING_START,
+	JOBS_SET_DATA,
+	OBJECT_JOB_FETCH_COMPLETED,
+	OBJECT_JOB_FETCH_ERROR,
+	OBJECT_JOB_FETCH_START,
+	SET_SUMMARY_VALUE_TO_JOB,
+	SET_SUMMARY_VALUE_TO_JOB_END,
+	SET_SUMMARY_VALUE_TO_JOB_START,
+	UPGRADE_RESULTS,
+} from './actions';
 
 //  singleJob = {
 // 	name: "",
@@ -31,7 +48,21 @@ const initialState = {
 	objects_jobs_error: null,
 };
 
-const RoomsReducer = (state = initialState, action) => {
+// function AddJobReducer(state, action) {
+// 	const { job_id, job_data } = action;
+// 	const job = state[job_id];
+
+// 	return{
+// 		...state,
+// 		[job_id] : {
+// 			...job,
+
+// 		}
+// 	}
+
+// }
+
+const JobsReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case JOBS_LOADING_START:
 			return {
@@ -143,4 +174,4 @@ const RoomsReducer = (state = initialState, action) => {
 	}
 };
 
-export default RoomsReducer;
+export default JobsReducer;

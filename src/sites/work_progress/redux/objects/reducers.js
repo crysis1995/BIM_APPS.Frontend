@@ -1,3 +1,4 @@
+import { SET_INITIAL } from '../actions';
 import {
 	OBJECTS_LOADING_END,
 	OBJECTS_LOADING_ERROR,
@@ -7,13 +8,18 @@ import {
 } from './actions';
 
 const initialState = {
-	objects: [],
+	objects: {},
 	objects_loading: false,
 	objects_error: {},
 };
 
 const ObjectsReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case SET_INITIAL:
+			return {
+				...state,
+				...initialState,
+			};
 		case OBJECTS_LOADING_START:
 			return {
 				...state,
