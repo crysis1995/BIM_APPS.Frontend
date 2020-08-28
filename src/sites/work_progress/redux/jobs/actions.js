@@ -1,13 +1,5 @@
 import { normalize } from '../../../../utils/normalize';
-import {
-	addParameterWithValue,
-	createReferenceJob,
-	fetchAllJobsFromAPI,
-	fetchSummaryValuesByJob,
-	prep_updateResults,
-	prepareDataForJobs,
-	updateObjectJob,
-} from './utils';
+import { addParameterWithValue, createReferenceJob, fetchAllJobsFromAPI, fetchSummaryValuesByJob, prep_updateResults, prepareDataForJobs, updateObjectJob } from './utils';
 
 export const JOBS_LOADING_START = 'odbiory__jobs__LOADING_START';
 export const JOBS_LOADING_END = 'odbiory__jobs__LOADING_END';
@@ -134,29 +126,14 @@ export const fetchAllJobs = () => async (dispatch) => {
  */
 export const fetchSummaryAreaByLevel = (current_level, precision = 2) => async (dispatch, getState) => {
 	dispatch(setSummaryValueToJobStart());
-	// try {
-	// 	console.time('all');
 	const { jobs } = getState().Odbiory.Jobs;
-	// for (let job_id in jobs) {
-	// 	const results = await fetchSummaryValuesByJob(job_id, current_level, precision);
-	// 	dispatch(setSummaryValueToJob(job_id, results));
-	// }
-	Promise.all(
-		Object.keys(jobs).map((job_id) =>
-			fetchSummaryValuesByJob(job_id, current_level, precision).then((value) =>
-				dispatch(setSummaryValueToJob(job_id, value)),
-			),
-		),
-	)
+	Promise.all(Object.keys(jobs).map((job_id) => fetchSummaryValuesByJob(job_id, current_level, precision)))
+		.then(
+			(value) => console.log(value),
+			// dispatch(setSummaryValueToJob(job_id, value)),
+		)
 		.then(() => dispatch(setSummaryValueToJobEnd()))
 		.catch(console.log);
-	// } catch (e) {
-	// 	console.error(e);
-	// }
-	// finally {
-	// 	dispatch(setSummaryValueToJobEnd())
-	// 	console.timeEnd('all');
-	// }
 };
 
 /**

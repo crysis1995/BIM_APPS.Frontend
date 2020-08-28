@@ -30,6 +30,7 @@
 		"react-select": "^3.1.0",
 		"react-simple-tree-menu": "^1.1.17",
 		"react-treebeard": "^3.2.4",
+		"reduce-reducers": "^1.0.4",
 		"redux": "^4.0.5",
 		"redux-devtools-extension": "^2.13.8",
 		"redux-persist": "^6.0.0",
