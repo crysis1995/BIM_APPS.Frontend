@@ -36,7 +36,7 @@ export const jobsLoadingStart = () => ({
 	type: JOBS_LOADING_START,
 });
 
-const jobsLoadingEnd = () => ({
+export const jobsLoadingEnd = () => ({
 	type: JOBS_LOADING_END,
 });
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Form, Button, Popover, OverlayTrigger } from 'react-bootstrap';
+import { Col, Form} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 
