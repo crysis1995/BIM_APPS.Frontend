@@ -3,6 +3,7 @@ import { gql } from 'apollo-boost';
 import { graphQLClient } from '../../../../services';
 import { sumOfArray } from '../../../../utils/sumOfArray';
 import { fetchALLAreaJobPerLevel, fetchSummaryAreaJobPerLevel } from '../objects/utils';
+import { RoundNumber } from '../../../../utils/RoundNumber';
 
 export const fetchAllJobsFromAPI = () => {
 	return graphQLClient().query({
@@ -49,14 +50,14 @@ export const addParameterWithValue = (objects, param_name = '', condition = () =
  * @param precision
  * @returns {{summary_value: {}, object_ids: {}, particular_values: {}, job_key: {}, percentage_value: {}}}
  */
-export const prepareDataForJobs = (job_id, objects, precision = 2) => {
+export const prepareDataForJobs = (job_id, objects, selected_rooms, precision = 2) => {
 	let particular_values = {}; // tablica powierzchni cząstkowych
 	let object_ids = {}; // tablica id obiektów
 	let summary_value = {}; // wartość sumarycznej powierzchni
 	let percentage_value = {}; // wartość procentowa zaawansowania danej roboty
 	let reference_job = {}; // id referencejobs - referencji przechowującej aktualny stan w bazie danych
 	let current_value = {};
-	for (let revit_id in objects) {
+	for (let revit_id of selected_rooms) {
 		for (let object_id in objects[revit_id]) {
 			//
 			// iteruje po obiektach i sprawdzam, czy jakis obiekt zawiera daną robote
@@ -218,13 +219,15 @@ export const fetchSummaryValuesByJob = async (job_id, current_level, precision) 
 };
 
 export const prep_updateResults = ({ results, current_value, percentage_value, reference_job }) => {
-	results.summary_current_value += sumOfArray(Object.values(current_value));
+	results.summary_current_value = RoundNumber(
+		sumOfArray(Object.values(current_value)) + results.summary_current_value,
+	);
 	results.percentage_value = calculatePercentValue(results.summary_current_value, results.summary_all_value);
 	results.elements = { ...results.elements, ...percentage_value };
 	return results;
 };
 
-function calculatePercentValue(x, y, normalized = false, precision = 2) {
+function calculatePercentValue(x, y, normalized = false) {
 	const multipyBy = normalized ? 1 : 100;
-	return Math.floor((x / y) * multipyBy * 10 ** precision) / 10 ** precision;
+	return RoundNumber((x / y) * multipyBy);
 }

@@ -7,20 +7,23 @@ import { sumOfArray } from '../../../utils/sumOfArray';
 import { changeJobPercentageValue } from '../redux/jobs/actions';
 import PopoverTable from './PopoverTable';
 import { getSplitedJobsByKey } from './TableComponentSelector';
+import { RoundNumber } from '../../../utils/RoundNumber';
 
 function PluralJobsComponent(props) {
 	const { equal, different } = props.jobs;
 	return (
 		<>
-			{props.showUnitedJobs && (
+			{props.showUnitedJobs && Object.entries(equal).length > 0 && (
 				<>
-					<tr colSpan="4">Część wspólna</tr>
+					<tr className="table-secondary">
+						<td colSpan="4">Roboty wspólne</td>
+					</tr>
 					{Object.entries(equal).map(([job_key, job]) => (
 						<tr key={v4()}>
 							<OverlayTrigger
 								placement={'top'}
 								overlay={
-									<Popover id={v4()}>
+									<Popover style={{ maxWidth: 600 }} id={v4()}>
 										<Popover.Content>
 											<PopoverTable
 												labels={['Pomieszczenie', 'Typ wykończenia']}
@@ -35,6 +38,7 @@ function PluralJobsComponent(props) {
 																	props.objects[revit_id][e].object_finish_type.name,
 															),
 														),
+														,
 													],
 												])}
 											/>
@@ -54,7 +58,7 @@ function PluralJobsComponent(props) {
 													job.upgrading.particular_values,
 												).map(([revit_id, values]) => [
 													[props.rooms[revit_id].number],
-													[values.join('+')],
+													[values.join(' + ')],
 												])}
 											/>
 										</Popover.Content>
@@ -62,7 +66,8 @@ function PluralJobsComponent(props) {
 								}>
 								<td className="">
 									<span>
-										{sumOfArray(Object.values(job.upgrading.summary_value))} m<sup>2</sup>
+										{RoundNumber(sumOfArray(Object.values(job.upgrading.summary_value)))} m
+										<sup>2</sup>
 									</span>
 								</td>
 							</OverlayTrigger>
@@ -92,16 +97,18 @@ function PluralJobsComponent(props) {
 							</td>
 							<td>
 								<span>
-									{sumOfArray(Object.values(job.upgrading.current_value))} m<sup>2</sup>
+									{RoundNumber(sumOfArray(Object.values(job.upgrading.current_value)))} m<sup>2</sup>
 								</span>
 							</td>
 						</tr>
 					))}
 				</>
 			)}
-			{props.showDifferentialJobs && (
+			{props.showDifferentialJobs && Object.entries(different).length > 0 && (
 				<>
-					<tr colSpan="4">Część różniąca się</tr>
+					<tr className="table-secondary">
+						<td colSpan="4">Różnice w robotach</td>
+					</tr>
 					{Object.entries(different).map(([job_key, job]) => (
 						<tr key={v4()}>
 							<OverlayTrigger
@@ -149,7 +156,8 @@ function PluralJobsComponent(props) {
 								}>
 								<td className="">
 									<span>
-										{sumOfArray(Object.values(job.upgrading.summary_value))} m<sup>2</sup>
+										{RoundNumber(sumOfArray(Object.values(job.upgrading.summary_value)))} m
+										<sup>2</sup>
 									</span>
 								</td>
 							</OverlayTrigger>
@@ -179,7 +187,7 @@ function PluralJobsComponent(props) {
 							</td>
 							<td>
 								<span>
-									{sumOfArray(Object.values(job.upgrading.current_value))} m<sup>2</sup>
+									{RoundNumber(sumOfArray(Object.values(job.upgrading.current_value)))} m<sup>2</sup>
 								</span>
 							</td>
 						</tr>

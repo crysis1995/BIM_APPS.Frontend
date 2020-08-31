@@ -24,12 +24,16 @@ class Odbiory extends React.Component {
 						<LevelSelectorComponent />
 						<Nav variant="tabs" className="mt-3" defaultActiveKey={'results'}>
 							<Nav.Item>
-								<Nav.Link onSelect={(e) => this.props.changeActiveTab(e)} eventKey={'results'}>
+								<Nav.Link
+									onSelect={(e) => this.props.awansowanie_is_active && this.props.changeActiveTab(e)}
+									eventKey={'results'}>
 									Rezultaty
 								</Nav.Link>
 							</Nav.Item>
 							<Nav.Item>
-								<Nav.Link onSelect={(e) => this.props.changeActiveTab(e)} eventKey={'progress'}>
+								<Nav.Link
+									onSelect={(e) => this.props.results_is_active && this.props.changeActiveTab(e)}
+									eventKey={'progress'}>
 									Awansowanie robót
 								</Nav.Link>
 							</Nav.Item>
@@ -38,7 +42,9 @@ class Odbiory extends React.Component {
 						{this.props.awansowanie_is_active ? (
 							!this.props.rooms_loading ? (
 								<OdbioryComponent />
-							) : null
+							) : (
+								<Loader height={'100%'} />
+							)
 						) : (
 							<ResultsComponent />
 						)}
@@ -51,6 +57,7 @@ class Odbiory extends React.Component {
 const mapStateToProps = ({ Odbiory, ForgeViewer }) => ({
 	rooms_loading: Odbiory.Rooms.rooms_loading,
 	awansowanie_is_active: Odbiory.OdbioryComponent.awansowanie.is_active,
+	results_is_active: Odbiory.OdbioryComponent.results.is_active,
 	sheets_loaded: ForgeViewer.sheets_loaded,
 });
 

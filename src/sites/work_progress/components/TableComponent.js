@@ -4,7 +4,7 @@ import { Form, OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { changeVisibilityDifferentialJobs, changeVisibilityUnitedJobs } from '../redux/odbiory/actions';
-import SingularJobsComponent from './SingularJobsComponent';
+// import SingularJobsComponent from './SingularJobsComponent';
 import PluralJobsComponent from './PluralJobsComponent';
 function TableComponent(props) {
 	return (
@@ -38,15 +38,7 @@ function TableComponent(props) {
 						<th>Ilość wykonana</th>
 					</tr>
 				</thead>
-				<tbody>
-					{props.selected_rooms_length > 0 ? (
-						props.selected_rooms_length > 1 ? (
-							<PluralJobsComponent />
-						) : (
-							<SingularJobsComponent />
-						)
-					) : null}
-				</tbody>
+				<tbody>{props.selected_rooms_length > 0 ? <PluralJobsComponent /> : null}</tbody>
 			</Table>
 		</>
 	);

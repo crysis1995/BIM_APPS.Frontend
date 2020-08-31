@@ -9,7 +9,7 @@ import {
 
 const initialState = {
 	rooms: [],
-	rooms_loading: true,
+	rooms_loading: false,
 	rooms_error: {},
 	selected_rooms: [],
 	from_selector: false,

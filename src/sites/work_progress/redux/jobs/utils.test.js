@@ -653,6 +653,8 @@ const expected = {
 	current_value: { '1613128': 0, '4903821': 0 },
 };
 
+const selectedRooms = ['1613128', '4903821'];
+
 test('should prepareDataForJobs function generate expected object', () => {
-	expect(prepareDataForJobs(job_id, objects)).toStrictEqual(expected);
+	expect(prepareDataForJobs(job_id, objects, selectedRooms)).toStrictEqual(expected);
 });

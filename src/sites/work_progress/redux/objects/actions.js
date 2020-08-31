@@ -3,6 +3,7 @@ import { debounce } from 'lodash';
 import { normalize } from '../../../../utils/normalize';
 import { jobsLoadingEnd, jobsLoadingStart, jobsPrepare } from '../jobs/actions';
 import { getFilteredObjects } from './utils';
+import { object } from 'prop-types';
 
 /*  objects */
 export const OBJECTS_LOADING_START = 'odbiory__objects__LOADING_START';
@@ -41,19 +42,20 @@ const fetchObjectsSetData = (objects) => ({
 export const fetchObjectsByRooms = debounce(async (dispatch, getState) => {
 	const { selected_rooms } = getState().Odbiory.Rooms;
 	if (selected_rooms.length > 0) {
-		const data = await fetchObjectsBySelectedRoom(dispatch, getState)
-			if(data){
-				const objects = data.reduce((prev, acc) => ({ ...prev, ...acc }), {})
-				dispatch(fetchObjectsSetData(objects))
-				dispatch(jobsLoadingStart())
-				dispatch(fetchObjectsEnd())
-				dispatch(jobsPrepare())
-			} else {
-				dispatch(fetchObjectsEnd())
-				// dispatch(jobsLoadingEnd());
-			}
+		const data = await fetchObjectsBySelectedRoom(dispatch, getState);
+		if (data) {
+			const objects = data.reduce((prev, acc) => ({ ...prev, ...acc }), {}); // zamiana array na obiekt
+			console.log(objects);
+			dispatch(fetchObjectsSetData(objects));
+			dispatch(jobsLoadingStart());
+			dispatch(fetchObjectsEnd());
+			dispatch(jobsPrepare());
+		} else {
+			dispatch(fetchObjectsEnd());
+			// dispatch(jobsLoadingEnd());
+		}
 	} else {
-		dispatch(setObjectInitial());
+		dispatch(fetchObjectsEnd());
 	}
 }, 2000);
 
@@ -61,12 +63,10 @@ const fetchObjectsBySelectedRoom = (dispatch, getState) => {
 	const fetchedObjects = Object.keys(getState().Odbiory.Objects.objects);
 	const { selected_rooms, rooms } = getState().Odbiory.Rooms;
 	let new_selected_rooms = [...selected_rooms];
-	console.log(new_selected_rooms);
 	fetchedObjects.forEach(
 		(revit_id) =>
 			new_selected_rooms.includes(revit_id) && new_selected_rooms.splice(new_selected_rooms.indexOf(revit_id), 1),
 	);
-	console.log(new_selected_rooms);
 	if (new_selected_rooms.length !== 0)
 		return Promise.all(
 			new_selected_rooms.map(
@@ -76,10 +76,10 @@ const fetchObjectsBySelectedRoom = (dispatch, getState) => {
 						.then(({ data, errors }) => {
 							if (data) {
 								const { acceptanceObjects } = data;
-								console.log(acceptanceObjects);
 								return { [revit_id]: normalize(acceptanceObjects) };
 							}
 							if (errors) {
+								console.log(errors);
 								dispatch(fetchObjectsError(errors));
 							}
 						})

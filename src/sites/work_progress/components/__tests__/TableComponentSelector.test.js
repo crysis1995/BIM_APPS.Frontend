@@ -1,4 +1,4 @@
-import { splitJobsByKey, genSingleSelectionFilteredJobs } from './TableComponentSelector';
+import { splitJobsByKey, genSingleSelectionFilteredJobs } from '../TableComponentSelector';
 
 const objects = {
 	jobs: {

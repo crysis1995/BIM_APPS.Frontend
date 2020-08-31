@@ -149,11 +149,12 @@ export const fetchSummaryAreaByLevel = async (dispatch, getState, current_level,
  */
 export const jobsPrepare = () => (dispatch, getState) => {
 	const { objects } = getState().Odbiory.Objects;
+	const { selected_rooms } = getState().Odbiory.Rooms;
 	const { jobs } = getState().Odbiory.Jobs;
 	if (Object.keys(jobs).length > 0) {
 		let newJobs = { ...jobs };
 		for (let job_key in jobs) {
-			newJobs[job_key].upgrading = { ...prepareDataForJobs(job_key, objects) };
+			newJobs[job_key].upgrading = { ...prepareDataForJobs(job_key, objects, selected_rooms) };
 		}
 		dispatch(setJobsData(newJobs));
 	}
@@ -209,38 +210,4 @@ export const changeJobPercentageValue = (job_key, value) => async (dispatch, get
 		dispatch(upgradeJobResults(job_key, prep_updateResults({ results, ...new_upgrading })));
 		dispatch(objectJobFetchCompleted());
 	}
-	/*
-	 *     Jeśli wybrane jest jakiekolwiek pomieszczenie oraz kiedy nie są zapisywane inne zmiany
-	 * */
-	// if (selected_room.length && !objects_jobs_loading) {
-	// 	dispatch(objectJobFetchStart());
-	// 	let upgrading = {
-	// 		percentage_value: value, // wartość procentowa aktualnego zaawansowania roboty
-	// 		reference_job: null,
-	// 		current_value: value
-	// 			? Math.floor(currentJob.upgrading.summary_value * value * 10 ** precision) / 10 ** precision
-	// 			: 0, // obliczona wartość powierzchni zaawansowania roboty
-	// 	};
-	// 	if (currentJob.upgrading.reference_job) await updateObjectJob(currentJob.upgrading.reference_job.id);
-	// 	const { data, errors } = await createReferenceJob({
-	// 		room: rooms[selected_room].id, // id rooma z bazy danych
-	// 		job: job_key, // id job'a z bazy danych
-	// 		percentage_value: upgrading.percentage_value,
-	// 		value_area: upgrading.current_value,
-	// 		object_type: null, // obecnie niewykorzystywane - w przyszłości ID typu obiektu z bazy danych
-	// 		user: user.id, // ID usera z bazy danych - do śledzenia zmian dokonywanych osobowo
-	// 		objects: currentJob.upgrading.object_ids.map((e) => parseInt(e)), // tablica z ID obiektów, których dotyczy dane awansowanie roboty
-	// 	});
-	// 	console.log(data);
-	// 	if (data) {
-	// 		upgrading.reference_job = data.createAcceptanceReferenceJob.acceptanceReferenceJob; // uzupełnienie reference-joba do pozycji upgrading w storze
-	// 		dispatch(jobsChangePercentageValue(job_key, upgrading));
-	// 		const { results } = currentJob;
-	// 		dispatch(upgradeJobResults(job_key, prep_updateResults({ results, ...upgrading })));
-	// 	}
-	// 	if (errors) {
-	// 		console.log(errors);
-	// 	}
-	// 	dispatch(objectJobFetchCompleted());
-	// }
 };

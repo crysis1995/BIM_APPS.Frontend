@@ -31,6 +31,6 @@ export const setViewerRooms = (model_rooms) => ({
 	model_rooms,
 });
 
-export const selectElement = (selected_room) => (dispatch, getState) => {
-	dispatch(setSelectedRoom(selected_room));
-};
+// export const selectElement = (selected_room) => (dispatch, getState) => {
+// 	dispatch(setSelectedRoom(selected_room));
+// };

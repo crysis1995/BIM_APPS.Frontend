@@ -79,12 +79,12 @@ export const fetch_all_rooms = async (dispatch, level) => {
 };
 
 export const setSelectedRoom = (selected_rooms, from_selector) => (dispatch, getState) => {
-	const { jobs_loading, objects_jobs_loading } = getState().Odbiory.Jobs;
+	const { jobs_loading } = getState().Odbiory.Jobs;
 	const { objects_loading } = getState().Odbiory.Objects;
 	const { model_rooms_loading } = getState().ForgeViewer;
-	if (!jobs_loading && !objects_jobs_loading && !model_rooms_loading) {
-		dispatch(selectedRooms(selected_rooms, from_selector));
+	if (!jobs_loading && !model_rooms_loading) {
 		dispatch(fetchObjectsStart());
+		dispatch(selectedRooms(selected_rooms, from_selector));
 		fetchObjectsByRooms(dispatch, getState);
 	}
 };

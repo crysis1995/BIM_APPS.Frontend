@@ -28,7 +28,10 @@ class Viewer extends Component {
 			/*
 			 *
 			 * */
-			if (prevProps.ForgeViewer.current_sheet !== this.props.ForgeViewer.current_sheet && !!this.props.ForgeViewer.current_sheet) {
+			if (
+				prevProps.ForgeViewer.current_sheet !== this.props.ForgeViewer.current_sheet &&
+				!!this.props.ForgeViewer.current_sheet
+			) {
 				this.loadSheet();
 			}
 
@@ -36,10 +39,11 @@ class Viewer extends Component {
 			 *
 			 * */
 			if (
-				prevProps.Odbiory.Rooms.selected_room !== this.props.Odbiory.Rooms.selected_room &&
+				prevProps.Odbiory.Rooms.selected_rooms.toString() !==
+					this.props.Odbiory.Rooms.selected_rooms.toString() &&
 				Object.keys(this.props.ForgeViewer.model_rooms).length > 0 &&
 				this.props.Odbiory.Rooms.from_selector &&
-				this.props.Odbiory.Rooms.selected_room
+				this.props.Odbiory.Rooms.selected_rooms
 			) {
 				this.selectRoomOnViewer();
 			}
@@ -66,12 +70,10 @@ class Viewer extends Component {
 	}
 
 	selectRoomOnViewer() {
-		// if (this.props.Odbiory.Rooms.selected_room) {
-		const roomIds = this.props.ForgeViewer.model_rooms[this.props.Odbiory.Rooms.selected_room];
-		const elementToSelect = roomIds ? [roomIds.dbID] : [];
+		const roomIds = this.props.Odbiory.Rooms.selected_rooms.map((e) => this.props.ForgeViewer.model_rooms[e].dbID);
+		const elementToSelect = roomIds.length > 0 ? roomIds : [];
 		this.viewer.select(elementToSelect);
 		this.viewer.fitToView(elementToSelect, this.viewer.model, true);
-		// }
 	}
 
 	loadSheet() {
@@ -85,7 +87,11 @@ class Viewer extends Component {
 	launchViewer(urn) {
 		var options = {
 			env: 'AutodeskProduction',
-			getAccessToken: (callback) => callback(this.props.Autodesk.login_3_legged.access_token, this.props.Autodesk.login_3_legged.expires_in),
+			getAccessToken: (callback) =>
+				callback(
+					this.props.Autodesk.login_3_legged.access_token,
+					this.props.Autodesk.login_3_legged.expires_in,
+				),
 		};
 
 		Autodesk.Viewing.Initializer(options, () => {
@@ -101,7 +107,10 @@ class Viewer extends Component {
 				this.props.setSheetsSuccess(elements);
 				this.props.initializeViewer();
 				if (!!this.props.ForgeViewer.current_sheet) {
-					this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.ForgeViewer.current_sheet));
+					this.viewer.loadDocumentNode(
+						this.doc,
+						this.doc.getRoot().findByGuid(this.props.ForgeViewer.current_sheet),
+					);
 				}
 			};
 
@@ -143,28 +152,37 @@ class Viewer extends Component {
 				Autodesk.Viewing.SELECTION_CHANGED_EVENT,
 				debounce(({ dbIdArray }) => {
 					this.viewer.model.getBulkProperties(
-						[dbIdArray[0]],
+						dbIdArray,
 						['Category', 'name'],
 						(data) => {
 							// gdy bedzie wybieranych wiecej pomieszczeń to trzeba tutaj zrobić pętle
-							if (data.length > 0 && data[0].properties[0].displayValue === 'Revit Rooms' && !this.props.rooms_data_loading) {
-								const selectedElement = data[0].name.match(/^.+\[(.+)\]$/)[1];
-								if (selectedElement) {
-									const selectedRoom = this.props.Odbiory.Rooms.rooms[selectedElement];
+							if (
+								data.length > 0 &&
+								data[0].properties[0].displayValue === 'Revit Rooms' &&
+								!this.props.rooms_data_loading
+							) {
+								const selectedElement = data.map((dat) => dat.name.match(/^.+\[(.+)\]$/)[1]);
+								if (selectedElement.toString()) {
+									const selectedRoom = selectedElement.filter(
+										(e) => this.props.Odbiory.Rooms.rooms[e],
+									);
 									if (selectedRoom) {
-										this.props.setSelectedRoom(selectedRoom.revit_id, false);
+										this.props.setSelectedRoom(selectedRoom, false);
 									} else {
 										this.viewer.clearSelection();
-										this.props.initialiseModal('Uwaga!', 'Nie przewidziano robót dla danego pomieszczenia.');
+										this.props.initialiseModal(
+											'Uwaga!',
+											'Nie przewidziano robót dla danego pomieszczenia.',
+										);
 									}
 								}
 							}
 						},
 						(a) => {
 							console.log(a);
-						}
+						},
 					);
-				}, 500) // opóźnienie kolekcjonowania i wykonywania akcji zaznaczania roomów
+				}, 1000), // opóźnienie kolekcjonowania i wykonywania akcji zaznaczania roomów
 			);
 		});
 	}
@@ -180,7 +198,9 @@ class Viewer extends Component {
 			const percentage_value = elements[revit_id] * 100;
 			let colorIndex = 1;
 			if (percentage_value) {
-				colorIndex = Object.keys(setting_color_map).filter((id) => setting_color_map[id].condition(percentage_value))[0];
+				colorIndex = Object.keys(setting_color_map).filter((id) =>
+					setting_color_map[id].condition(percentage_value),
+				)[0];
 			}
 			const color = hexToRgb(setting_color_map[colorIndex].color, true);
 			elemTable.push({

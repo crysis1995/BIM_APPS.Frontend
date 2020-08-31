@@ -44,13 +44,18 @@ export const changeVisibilityDifferentialJobs = (value) => ({
 
 export const changeActiveTab = (tabName) => (dispatch, getState) => {
 	const { active_job_id } = getState().Odbiory.Results;
+	const { awansowanie, results } = getState().Odbiory.OdbioryComponent;
 	switch (tabName) {
 		case 'results':
-			dispatch(setResultsActive());
+			if (awansowanie.is_active) {
+				dispatch(setResultsActive());
+			}
 			break;
 		case 'progress':
-			active_job_id && dispatch(cleanResults());
-			dispatch(setAwansowanieActive());
+			if (results.is_active) {
+				active_job_id && dispatch(cleanResults());
+				dispatch(setAwansowanieActive());
+			}
 			break;
 		default:
 	}
