@@ -162,7 +162,18 @@ class Viewer extends Component {
 								!this.props.rooms_data_loading
 							) {
 								const selectedElement = data.map((dat) => dat.name.match(/^.+\[(.+)\]$/)[1]);
-								if (selectedElement.toString()) {
+								if (
+									selectedElement.toString() &&
+									this.props.Odbiory.Rooms.selected_rooms.toString() !== selectedElement.toString()
+								) {
+									console.log(
+										{
+											storage: this.props.Odbiory.Rooms.selected_rooms.toString(),
+											viewer: selectedElement.toString(),
+										},
+										this.props.Odbiory.Rooms.selected_rooms.toString() !==
+											selectedElement.toString(),
+									);
 									const selectedRoom = selectedElement.filter(
 										(e) => this.props.Odbiory.Rooms.rooms[e],
 									);

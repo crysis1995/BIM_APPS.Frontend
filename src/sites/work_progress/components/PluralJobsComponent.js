@@ -11,6 +11,7 @@ import { RoundNumber } from '../../../utils/RoundNumber';
 
 function PluralJobsComponent(props) {
 	const { equal, different } = props.jobs;
+	console.log(different);
 	return (
 		<>
 			{props.showUnitedJobs && Object.entries(equal).length > 0 && (
