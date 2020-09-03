@@ -7,11 +7,16 @@
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^10.4.9",
     "apollo-boost": "^0.4.9",
     "bootstrap": "^4.5.0",
+    "bootstrap-icons": "^1.0.0-alpha5",
     "classnames": "^2.2.6",
     "express": "^4.17.1",
     "path": "^0.12.7",
+    "connected-react-router": "^6.8.0",
+    "dot-prop-immutable": "^2.1.0",
     "forge-apis": "^0.7.3",
     "graphql": "^15.3.0",
     "jwt-decode": "^2.2.0",
@@ -28,20 +33,25 @@
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
+    "react-select": "^3.1.0",
     "react-simple-tree-menu": "^1.1.17",
     "react-treebeard": "^3.2.4",
+    "reduce-reducers": "^1.0.4",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "remote-redux-devtools": "^0.5.16",
+    "reselect": "^4.0.0",
     "uuid": "^8.2.0"
   },
   "scripts": {
     "start": "node serve.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "storybook": "start-storybook -p 6006 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -57,5 +67,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.4",
+    "@storybook/addon-actions": "^6.0.20",
+    "@storybook/addon-essentials": "^6.0.20",
+    "@storybook/addon-links": "^6.0.20",
+    "@storybook/node-logger": "^6.0.20",
+    "@storybook/preset-create-react-app": "^3.1.4",
+    "@storybook/react": "^6.0.20",
+    "babel-loader": "^8.1.0",
+    "react-is": "^16.13.1"
   }
 }

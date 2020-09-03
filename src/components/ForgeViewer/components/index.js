@@ -1,15 +1,17 @@
+import { debounce } from 'lodash';
 import React, { Component } from 'react';
-// import ShowRoomsExtension from "./extenstions/TestExtension";
+import ReactPanelExtension from './extenstions/TestExtension';
 import { connect } from 'react-redux';
+
 import { config } from '../../../config';
-import { setSelectedRoom } from '../../../sites/acceptance/redux/rooms/actions';
+import { setSelectedRoom } from '../../../sites/work_progress/redux/rooms/actions';
 import { hexToRgb } from '../../../utils/hexToRgb';
 import { initialiseModal } from '../../Modal/redux/actions';
 import { initializeViewer, setSheetsSuccess, setViewerRooms } from '../redux/actions';
-import { debounce } from 'lodash';
 
-const Autodesk = window.Autodesk;
-const THREE = window.THREE;
+const Autodesk = window.Autodesk; // import Autodesk Library
+const THREE = window.THREE; // import THREE library
+
 class Viewer extends Component {
 	constructor(props) {
 		super(props);
@@ -22,39 +24,74 @@ class Viewer extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (prevProps.ForgeViewer.current_sheet !== this.props.ForgeViewer.current_sheet && !!this.props.ForgeViewer.current_sheet && !!this.doc && !!this.viewer) {
-			this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.ForgeViewer.current_sheet));
-		}
-		if (
-			prevProps.Odbiory.Rooms.selected_room !== this.props.Odbiory.Rooms.selected_room &&
-			Object.keys(this.props.ForgeViewer.model_rooms).length > 0 &&
-			this.props.Odbiory.Rooms.from_selector
-		) {
-			if (this.props.Odbiory.Rooms.selected_room) {
-				const roomIds = this.props.ForgeViewer.model_rooms[this.props.Odbiory.Rooms.selected_room];
-				const elementToSelect = roomIds ? roomIds.dbID : [];
-				this.viewer.select(elementToSelect);
-				this.viewer.fitToView(elementToSelect, this.viewer.model, true);
-			} else {
-				this.viewer.select([]);
+		if (!!this.doc && !!this.viewer) {
+			/*
+			 *
+			 * */
+			if (
+				prevProps.ForgeViewer.current_sheet !== this.props.ForgeViewer.current_sheet &&
+				!!this.props.ForgeViewer.current_sheet
+			) {
+				this.loadSheet();
+			}
+
+			/*
+			 *
+			 * */
+			if (
+				prevProps.Odbiory.Rooms.selected_rooms.toString() !==
+					this.props.Odbiory.Rooms.selected_rooms.toString() &&
+				Object.keys(this.props.ForgeViewer.model_rooms).length > 0 &&
+				this.props.Odbiory.Rooms.from_selector &&
+				this.props.Odbiory.Rooms.selected_rooms
+			) {
+				this.selectRoomOnViewer();
+			}
+
+			/*
+			 *
+			 * */
+			if (this.props.Odbiory.Results.status !== 'initial') {
+				this.colorizeResults();
 			}
 		}
+	}
 
-		if (this.props.Odbiory.Results.active_job_id && !this.props.ForgeViewer.model_rooms_loading) {
-			const { active_job_id, active } = this.props.Odbiory.Results;
-			const { jobs } = this.props.Odbiory.Jobs;
-			const { model_rooms } = this.props.ForgeViewer;
+	colorizeResults() {
+		const { active_job_id, status } = this.props.Odbiory.Results;
+		const { jobs } = this.props.Odbiory.Jobs;
+		const { model_rooms } = this.props.ForgeViewer;
+		if (status === 'color' && jobs && model_rooms) {
 			this.colorByRoom(jobs[active_job_id], model_rooms);
 		}
-		if (prevProps.Odbiory.Results.active_job_id && !this.props.Odbiory.Results.active_job_id && !this.props.ForgeViewer.model_rooms_loading) {
+		if (status === 'clean') {
 			this.viewer.clearThemingColors();
 		}
 	}
 
+	selectRoomOnViewer() {
+		const roomIds = this.props.Odbiory.Rooms.selected_rooms.map((e) => this.props.ForgeViewer.model_rooms[e].dbID);
+		const elementToSelect = roomIds.length > 0 ? roomIds : [];
+		this.viewer.select(elementToSelect);
+		this.viewer.fitToView(elementToSelect, this.viewer.model, true);
+	}
+
+	loadSheet() {
+		this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.ForgeViewer.current_sheet));
+	}
+
+	/**
+	 *
+	 * @param urn
+	 */
 	launchViewer(urn) {
 		var options = {
 			env: 'AutodeskProduction',
-			getAccessToken: (callback) => callback(this.props.Autodesk.login_3_legged.access_token, this.props.Autodesk.login_3_legged.expires_in),
+			getAccessToken: (callback) =>
+				callback(
+					this.props.Autodesk.login_3_legged.access_token,
+					this.props.Autodesk.login_3_legged.expires_in,
+				),
 		};
 
 		Autodesk.Viewing.Initializer(options, () => {
@@ -69,6 +106,12 @@ class Viewer extends Component {
 				});
 				this.props.setSheetsSuccess(elements);
 				this.props.initializeViewer();
+				if (!!this.props.ForgeViewer.current_sheet) {
+					this.viewer.loadDocumentNode(
+						this.doc,
+						this.doc.getRoot().findByGuid(this.props.ForgeViewer.current_sheet),
+					);
+				}
 			};
 
 			const onDocumentLoadFailure = (viewerErrorCode) => {
@@ -77,9 +120,12 @@ class Viewer extends Component {
 
 			this.viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {
 				extensions: [
-					// "Autodesk.DocumentBrowser",
+					'Autodesk.DocumentBrowser',
+					'Autodesk.Edit2D',
+					// 'Autodesk.Measure',
 					// "ShowRoomsExtension",
-					// "Autodesk.AEC.LevelsExtension",
+					// "Autodesk.AEC.LevelsExtension"
+					'Viewing.Extension.ReactPanel',
 				],
 			});
 
@@ -105,34 +151,49 @@ class Viewer extends Component {
 			this.viewer.addEventListener(
 				Autodesk.Viewing.SELECTION_CHANGED_EVENT,
 				debounce(({ dbIdArray }) => {
-					this.viewer.model.getProperties(
-						dbIdArray[0],
+					this.viewer.model.getBulkProperties(
+						dbIdArray,
+						['Category', 'name'],
 						(data) => {
-							if (data.name) {
-								const selectedElement = data.name.match(/^.+\[(.+)\]$/)[1];
-								if (selectedElement) {
-									const selectedRoom = this.props.Odbiory.Rooms.rooms[selectedElement];
-									if (this.props.Odbiory.Jobs.jobs_loading || this.props.Odbiory.Objects.objects_loading) {
-										this.viewer.clearSelection();
-									}
-
+							// gdy bedzie wybieranych wiecej pomieszczeń to trzeba tutaj zrobić pętle
+							if (
+								data.length > 0 &&
+								data[0].properties[0].displayValue === 'Revit Rooms' &&
+								!this.props.rooms_data_loading
+							) {
+								const selectedElement = data.map((dat) => dat.name.match(/^.+\[(.+)\]$/)[1]);
+								if (
+									selectedElement.toString() &&
+									this.props.Odbiory.Rooms.selected_rooms.toString() !== selectedElement.toString()
+								) {
+									console.log(
+										{
+											storage: this.props.Odbiory.Rooms.selected_rooms.toString(),
+											viewer: selectedElement.toString(),
+										},
+										this.props.Odbiory.Rooms.selected_rooms.toString() !==
+											selectedElement.toString(),
+									);
+									const selectedRoom = selectedElement.filter(
+										(e) => this.props.Odbiory.Rooms.rooms[e],
+									);
 									if (selectedRoom) {
-										this.props.setSelectedRoom(selectedRoom.revit_id, false);
+										this.props.setSelectedRoom(selectedRoom, false);
 									} else {
 										this.viewer.clearSelection();
-										this.props.initialiseModal('Uwaga!', 'Nie przewidziano robót dla danego pomieszczenia.');
+										this.props.initialiseModal(
+											'Uwaga!',
+											'Nie przewidziano robót dla danego pomieszczenia.',
+										);
 									}
 								}
-							} else {
-								this.props.setSelectedRoom('', false);
-								this.viewer.clearSelection();
 							}
 						},
 						(a) => {
 							console.log(a);
-						}
+						},
 					);
-				}, 400) // opóźnienie kolekcjonowania i wykonywania akcji zaznaczania roomów
+				}, 1000), // opóźnienie kolekcjonowania i wykonywania akcji zaznaczania roomów
 			);
 		});
 	}
@@ -148,7 +209,9 @@ class Viewer extends Component {
 			const percentage_value = elements[revit_id] * 100;
 			let colorIndex = 1;
 			if (percentage_value) {
-				colorIndex = Object.keys(setting_color_map).filter((id) => setting_color_map[id].condition(percentage_value))[0];
+				colorIndex = Object.keys(setting_color_map).filter((id) =>
+					setting_color_map[id].condition(percentage_value),
+				)[0];
 			}
 			const color = hexToRgb(setting_color_map[colorIndex].color, true);
 			elemTable.push({
@@ -167,6 +230,7 @@ class Viewer extends Component {
 }
 
 const mapStateToProps = ({ ForgeViewer, Autodesk, Odbiory }) => ({
+	rooms_data_loading: ForgeViewer.model_rooms_loading || Odbiory.Rooms.rooms_loading,
 	Autodesk,
 	ForgeViewer,
 	Odbiory,

@@ -1,4 +1,4 @@
-import { setSelectedRoom } from '../../../sites/acceptance/redux/rooms/actions';
+import { setSelectedRoom } from '../../../sites/work_progress/redux/rooms/actions';
 
 export const INITIALIZE_VIEWER = 'forgeViewer__INITIALIZE_VIEWER';
 export const SET_MODEL_ROOMS = 'forgeViewer__SET_MODEL_ROOMS';
@@ -31,6 +31,6 @@ export const setViewerRooms = (model_rooms) => ({
 	model_rooms,
 });
 
-export const selectElement = (selected_room) => (dispatch, getState) => {
-	dispatch(setSelectedRoom(selected_room));
-};
+// export const selectElement = (selected_room) => (dispatch, getState) => {
+// 	dispatch(setSelectedRoom(selected_room));
+// };
