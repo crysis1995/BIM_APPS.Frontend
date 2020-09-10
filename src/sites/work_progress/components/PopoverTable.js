@@ -12,7 +12,9 @@ function PopoverTable({ labels = [], content = [[], []] }) {
 			<tbody>
 				{content.length &&
 					content
-						.sort(([a_id], [b_id]) => a_id[0].localeCompare(b_id[0]))
+						.sort(([a_id], [b_id]) => {
+							a_id[0].localeCompare(b_id[0]);
+						})
 						.map(([name, values]) =>
 							values.map((e, idx) => (
 								<tr key={v4()}>

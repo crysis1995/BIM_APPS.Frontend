@@ -9,7 +9,7 @@ import PluralJobsComponent from './PluralJobsComponent';
 function TableComponent(props) {
 	return (
 		<>
-			{props.selected_rooms_length > 1 && (
+			{props.selected_rooms.length > 1 && (
 				<div className="mt-3">
 					<Form.Check
 						inline
@@ -38,14 +38,16 @@ function TableComponent(props) {
 						<th>Ilość wykonana</th>
 					</tr>
 				</thead>
-				<tbody>{props.selected_rooms_length > 0 ? <PluralJobsComponent /> : null}</tbody>
+				<tbody>
+					{props.selected_rooms.length > 0 ? <PluralJobsComponent /> : <p>Wybierz pomieszczenie</p>}
+				</tbody>
 			</Table>
 		</>
 	);
 }
 
 const mapStateToProps = ({ Odbiory }) => ({
-	selected_rooms_length: Odbiory.Rooms.selected_rooms.length,
+	selected_rooms: Odbiory.Rooms.selected_rooms,
 	showUnitedJobs: Odbiory.OdbioryComponent.awansowanie.showUnitedJobs,
 	showDifferentialJobs: Odbiory.OdbioryComponent.awansowanie.showDifferentialJobs,
 	jobs_loading: Odbiory.Jobs.jobs_loading,

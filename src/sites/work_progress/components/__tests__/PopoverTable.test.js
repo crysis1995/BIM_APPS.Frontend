@@ -14,11 +14,6 @@ describe('Test PopoverTable Component', () => {
 	});
 	test('should render properly without values', async () => {
 		render(<PopoverTable content={[[[], []]]} labels={labels} />);
-		screen.debug();
-		// expect(screen.getByText('1.111')).toBeInTheDocument();
-		// expect(screen.getByText('warstwa 1')).toBeInTheDocument();
-		// console.log(await screen.findByRole('tbody'));
-		expect(screen.getByRole('rowgroup')[1]).toBeEmpty();
 
 		expect(screen.getByText('Pomieszczenie')).toBeInTheDocument();
 		expect(screen.getByText('Wartości robót')).toBeInTheDocument();
