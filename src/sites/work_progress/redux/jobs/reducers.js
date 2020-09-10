@@ -1,21 +1,8 @@
+import dotProp from 'dot-prop';
+
 import { SET_INITIAL } from '../actions';
-import {
-	ALL_JOBS_FETCH_END,
-	ALL_JOBS_FETCH_ERROR,
-	ALL_JOBS_FETCH_START,
-	JOBS_CHANGE_PERCENTAGE_VALUE,
-	JOBS_CLEAN_DATA_OF_JOB,
-	JOBS_LOADING_END,
-	JOBS_LOADING_START,
-	JOBS_SET_DATA,
-	OBJECT_JOB_FETCH_COMPLETED,
-	OBJECT_JOB_FETCH_ERROR,
-	OBJECT_JOB_FETCH_START,
-	SET_SUMMARY_VALUE_TO_JOB,
-	SET_SUMMARY_VALUE_TO_JOB_END,
-	SET_SUMMARY_VALUE_TO_JOB_START,
-	UPGRADE_RESULTS,
-} from './actions';
+import { CLEAN_SELECTION, REMOVE_ROOM_FROM_SELECTION } from '../rooms/actions';
+import { ALL_JOBS_FETCH_END, ALL_JOBS_FETCH_ERROR, ALL_JOBS_FETCH_START, JOBS_CHANGE_PERCENTAGE_VALUE, JOBS_CLEAN_DATA_OF_JOB, JOBS_LOADING_END, JOBS_LOADING_START, JOBS_SET_DATA, OBJECT_JOB_FETCH_COMPLETED, OBJECT_JOB_FETCH_ERROR, OBJECT_JOB_FETCH_START, SET_SUMMARY_VALUE_TO_JOB, SET_SUMMARY_VALUE_TO_JOB_END, SET_SUMMARY_VALUE_TO_JOB_START, UPGRADE_RESULTS } from './actions';
 
 //  singleJob = {
 // 	name: "",
@@ -62,8 +49,32 @@ const initialState = {
 
 // }
 
+const removeRoomFromJobs = (state, action) => {
+	Object.keys(state.jobs).forEach((job_id) =>
+		Object.keys(dotProp.get(state, `jobs.${job_id}.upgrading`)).forEach((upgrading_key) =>
+			dotProp.delete(state, `jobs.${job_id}.upgrading.${upgrading_key}.${action.deletedRoom}`),
+		),
+	);
+	return { ...state };
+};
+
+const removeAllRoomsFromJobs = (state) => {
+	Object.keys(state.jobs).forEach((job_id) =>
+		Object.keys(dotProp.get(state, `jobs.${job_id}.upgrading`)).forEach((upgrading_key) =>
+			Object.keys(dotProp.get(state, `jobs.${job_id}.upgrading.${upgrading_key}`)).forEach((revit_id) =>
+				dotProp.delete(state, `jobs.${job_id}.upgrading.${upgrading_key}.${revit_id}`),
+			),
+		),
+	);
+	return { ...state };
+};
+
 const JobsReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case REMOVE_ROOM_FROM_SELECTION:
+			return removeRoomFromJobs(state, action);
+		case CLEAN_SELECTION:
+			return removeAllRoomsFromJobs(state);
 		case JOBS_LOADING_START:
 			return {
 				...state,

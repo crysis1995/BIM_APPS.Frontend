@@ -4,18 +4,20 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 
 import ErrorBoundary from '../../../components/ErrorBoundary';
-import { setSelectedRoom } from '../redux/rooms/actions';
 import Loader from '../../../components/Loader';
-import {
-	getRoomOptionsByName,
-	getRoomOptionsByNumber,
-	getSelectedRoomOptionsByNumber,
-	getSelectedRoomOptionsByName,
-} from './OdbioryComponentSelector';
+import { setSelectedRoom } from '../redux/rooms/actions';
+import { getRoomOptionsByName, getRoomOptionsByNumber, getSelectedRoomOptionsByName, getSelectedRoomOptionsByNumber } from './OdbioryComponentSelector';
 import TableComponent from './TableComponent';
 
 function OdbioryComponent(props) {
 	const options = {
+		onChange: (_, data) => {
+			if (data.action === 'remove-value') {
+				props.setSelectedRoom(data.removedValue && data.removedValue.value, data.action);
+			} else {
+				props.setSelectedRoom(data.option && data.option.value, data.action);
+			}
+		},
 		isSearchable: true,
 		isMulti: true,
 		placeholder: 'Wybierz...',
@@ -33,7 +35,6 @@ function OdbioryComponent(props) {
 					<Col className="mt-auto" xs={5}>
 						<Form.Label>Numer pomieszczenia</Form.Label>
 						<Select
-							onChange={(data) => props.setSelectedRoom(data ? data.map((data) => data.value) : [])}
 							{...options}
 							options={props.room_number_options}
 							value={props.selected_room_by_number}
@@ -41,12 +42,7 @@ function OdbioryComponent(props) {
 					</Col>
 					<Col className="mt-auto" xs={7}>
 						<Form.Label>Nazwa pomieszczenia</Form.Label>
-						<Select
-							onChange={(data) => props.setSelectedRoom(data ? data.map((data) => data.value) : [])}
-							{...options}
-							options={props.room_name_options}
-							value={props.selected_room_by_name}
-						/>
+						<Select {...options} options={props.room_name_options} value={props.selected_room_by_name} />
 					</Col>
 				</Form.Row>
 				{props.jobs_fetched && props.selected_rooms_length > 0 ? (

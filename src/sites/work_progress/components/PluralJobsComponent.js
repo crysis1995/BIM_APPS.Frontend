@@ -3,15 +3,14 @@ import { Form, OverlayTrigger, Popover } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { v4 } from 'uuid';
 
+import { RoundNumber } from '../../../utils/RoundNumber';
 import { sumOfArray } from '../../../utils/sumOfArray';
 import { changeJobPercentageValue } from '../redux/jobs/actions';
 import PopoverTable from './PopoverTable';
 import { getSplitedJobsByKey } from './TableComponentSelector';
-import { RoundNumber } from '../../../utils/RoundNumber';
 
 function PluralJobsComponent(props) {
 	const { equal, different } = props.jobs;
-	console.log(different);
 	return (
 		<>
 			{props.showUnitedJobs && Object.entries(equal).length > 0 && (

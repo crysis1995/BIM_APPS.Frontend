@@ -13,6 +13,7 @@
     "bootstrap-icons": "^1.0.0-alpha5",
     "classnames": "^2.2.6",
     "connected-react-router": "^6.8.0",
+    "dot-prop": "^5.3.0",
     "dot-prop-immutable": "^2.1.0",
     "forge-apis": "^0.7.3",
     "graphql": "^15.3.0",

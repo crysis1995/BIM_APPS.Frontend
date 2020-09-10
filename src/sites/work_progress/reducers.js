@@ -8,7 +8,7 @@ import OdbioryComponent from './redux/odbiory/reducers';
 import Results from './redux/results/reducers';
 import Rooms from './redux/rooms/reducers';
 import Upgrading from './redux/upgrading/reducers';
-import TEST from './redux/test/reducers';
+
 const OdbioryReducer = combineReducers({
 	OdbioryComponent,
 	Rooms,
@@ -17,7 +17,6 @@ const OdbioryReducer = combineReducers({
 	Levels,
 	Upgrading,
 	Results,
-	TEST,
 });
 
 export default OdbioryReducer;
