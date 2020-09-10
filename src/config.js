@@ -11,9 +11,9 @@ export const config = {
 	units: {
 		area: {
 			color_map: {
-				1: { color: '#C9C9C9', option: '%=0', condition: (x) => x === 0 },
+				1: { color: '#c9c9c9', option: '%=0', condition: (x) => x === 0 },
 				2: {
-					color: '#FF0000',
+					color: '#ff0000',
 					option: '0>%>25',
 					condition: (x) => x > 0 && x < 25,
 				},

@@ -114,7 +114,7 @@ function PluralJobsComponent(props) {
 							<OverlayTrigger
 								placement={'top'}
 								overlay={
-									<Popover id={v4()}>
+									<Popover style={{ maxWidth: 600 }} id={v4()}>
 										<Popover.Content>
 											<PopoverTable
 												labels={['Pomieszczenie', 'Typ wykończenia']}

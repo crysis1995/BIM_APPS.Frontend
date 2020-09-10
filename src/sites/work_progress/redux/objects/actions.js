@@ -1,9 +1,8 @@
 import { debounce } from 'lodash';
 
 import { normalize } from '../../../../utils/normalize';
-import { jobsLoadingEnd, jobsLoadingStart, jobsPrepare } from '../jobs/actions';
+import { jobsLoadingStart, jobsPrepare } from '../jobs/actions';
 import { getFilteredObjects } from './utils';
-import { object } from 'prop-types';
 
 /*  objects */
 export const OBJECTS_LOADING_START = 'odbiory__objects__LOADING_START';
@@ -45,7 +44,6 @@ export const fetchObjectsByRooms = debounce(async (dispatch, getState) => {
 		const data = await fetchObjectsBySelectedRoom(dispatch, getState);
 		if (data) {
 			const objects = data.reduce((prev, acc) => ({ ...prev, ...acc }), {}); // zamiana array na obiekt
-			console.log(objects);
 			dispatch(fetchObjectsSetData(objects));
 			dispatch(jobsLoadingStart());
 			dispatch(fetchObjectsEnd());

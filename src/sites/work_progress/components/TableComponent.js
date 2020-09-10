@@ -1,11 +1,11 @@
-import classNames from 'classnames';
 import React from 'react';
-import { Form, OverlayTrigger, Table, Tooltip } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table';
 import { connect } from 'react-redux';
 
 import { changeVisibilityDifferentialJobs, changeVisibilityUnitedJobs } from '../redux/odbiory/actions';
-// import SingularJobsComponent from './SingularJobsComponent';
 import PluralJobsComponent from './PluralJobsComponent';
+
 function TableComponent(props) {
 	return (
 		<>

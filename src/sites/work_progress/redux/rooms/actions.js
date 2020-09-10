@@ -83,7 +83,9 @@ export const setSelectedRoom = (selected_rooms, from_selector) => (dispatch, get
 	const { objects_loading } = getState().Odbiory.Objects;
 	const { model_rooms_loading } = getState().ForgeViewer;
 	if (!jobs_loading && !model_rooms_loading) {
-		dispatch(fetchObjectsStart());
+		if (!objects_loading) {
+			dispatch(fetchObjectsStart());
+		}
 		dispatch(selectedRooms(selected_rooms, from_selector));
 		fetchObjectsByRooms(dispatch, getState);
 	}
