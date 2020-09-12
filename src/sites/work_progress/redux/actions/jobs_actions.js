@@ -1,4 +1,21 @@
 import { normalize } from '../../../../utils/normalize';
+
+import {
+	ALL_JOBS_FETCH_END,
+	ALL_JOBS_FETCH_ERROR,
+	ALL_JOBS_FETCH_START,
+	JOBS_CHANGE_PERCENTAGE_VALUE,
+	JOBS_CLEAN_DATA_OF_JOB,
+	JOBS_LOADING_END,
+	JOBS_LOADING_START,
+	JOBS_SET_DATA,
+	OBJECT_JOB_FETCH_COMPLETED,
+	OBJECT_JOB_FETCH_START,
+	SET_SUMMARY_VALUE_TO_JOB,
+	SET_SUMMARY_VALUE_TO_JOB_END,
+	SET_SUMMARY_VALUE_TO_JOB_START,
+	UPGRADE_RESULTS
+} from '../types';
 import {
 	addParameterWithValue,
 	createReferenceJob,
@@ -6,31 +23,9 @@ import {
 	fetchSummaryValuesByJob,
 	prep_updateResults,
 	prepareDataForJobs,
-	updateObjectJob,
-} from './utils';
+	updateObjectJob
+} from '../utils/jobs_utils';
 
-export const JOBS_LOADING_START = 'odbiory__jobs__LOADING_START';
-export const JOBS_LOADING_END = 'odbiory__jobs__LOADING_END';
-
-export const ALL_JOBS_FETCH_START = 'odbiory__jobs__ALL_FETCH_START';
-export const ALL_JOBS_FETCH_END = 'odbiory__jobs__ALL_FETCH_END';
-export const ALL_JOBS_FETCH_ERROR = 'odbiory__jobs__ALL_FETCH_ERROR';
-
-export const JOBS_SET_DATA = 'odbiory__jobs__SET_DATA';
-export const JOBS_CHANGE_PERCENTAGE_VALUE = 'odbiory__jobs__CHANGE_PERCENTAGE_VALUE';
-
-export const JOBS_CLEAN_DATA_OF_JOB = 'odbiory__jobs__CLEAN_JOBS';
-
-export const OBJECT_JOB_FETCH_START = 'odbiory__jobs__OBJECT_JOB_FETCH_START';
-export const OBJECT_JOB_FETCH_ERROR = 'odbiory__jobs__OBJECT_JOB_FETCH_ERROR';
-export const OBJECT_JOB_FETCH_COMPLETED = 'odbiory__jobs__OBJECT_JOB_FETCH_COMPLETED';
-
-export const SET_SUMMARY_VALUE_TO_JOB = 'odbiory__jobs__SET_SUMMARY_VALUE_TO_JOB';
-export const SET_SUMMARY_VALUE_TO_JOB_START = 'odbiory__jobs__SET_SUMMARY_VALUE_TO_JOB_START';
-export const SET_SUMMARY_VALUE_TO_JOB_END = 'odbiory__jobs__SET_SUMMARY_VALUE_TO_JOB_END';
-export const UPGRADE_RESULTS = 'odbiory__jobs__UPGRADE_RESULTS';
-
-export const ADD_INITIAL_JOB = 'odbiory__jobs__ADD_INITIAL_JOB';
 
 export const jobsLoadingStart = () => ({
 	type: JOBS_LOADING_START,
@@ -176,7 +171,7 @@ export const changeJobPercentageValue = (job_key, value) => async (dispatch, get
 
 		// tworze nowy obiekt do uzupełnienia
 		let new_upgrading = { ...jobs[job_key].upgrading };
-		// iteruje po zaznaczonych elementach
+		// iteruje po zaznaczonych elementach ==> []
 		for (const revit_id of selected_rooms) {
 			// nadaje nowe wartosci parametrom
 			new_upgrading.percentage_value[revit_id] = value;

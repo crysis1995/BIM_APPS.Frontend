@@ -5,7 +5,7 @@ import {
 	OBJECTS_LOADING_START,
 	OBJECTS_SET_DATA,
 	OBJECTS_SET_INITIAL,
-} from './actions';
+} from '../types';
 
 const initialState = {
 	objects: {},

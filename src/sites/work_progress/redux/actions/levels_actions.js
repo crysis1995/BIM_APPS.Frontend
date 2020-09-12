@@ -1,8 +1,8 @@
 import { setCurrentSheet } from '../../../../components/ForgeViewer/redux/actions';
 import { initialiseModal } from '../../../../components/Modal/redux/actions';
 import { SET_CURRENT_LEVEL, setInitial } from '../actions';
-import { fetchSummaryAreaByLevel } from '../jobs/actions';
-import { fetch_all_rooms } from '../rooms/actions';
+import { fetchSummaryAreaByLevel } from './jobs_actions';
+import { fetch_all_rooms } from './rooms_actions';
 
 const _setCurrentLevel = (current_level) => ({
 	type: SET_CURRENT_LEVEL,

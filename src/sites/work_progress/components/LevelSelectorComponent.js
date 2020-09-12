@@ -3,7 +3,7 @@ import { Col, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { v4 } from 'uuid';
 
-import { setCurrentLevel } from '../redux/levels/actions';
+import { setCurrentLevel } from '../redux/actions/levels_actions';
 
 function LevelSelectorComponent(props) {
 	return (

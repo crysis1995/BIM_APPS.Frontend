@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 
+
 export const getSelectedRoomsByProperty = (state, key) => {
 	const { selected_rooms, rooms } = state.Odbiory.Rooms;
 	if (selected_rooms.length > 0) {

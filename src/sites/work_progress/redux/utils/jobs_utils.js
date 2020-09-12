@@ -2,7 +2,7 @@ import { gql } from 'apollo-boost';
 
 import { graphQLClient } from '../../../../services';
 import { sumOfArray } from '../../../../utils/sumOfArray';
-import { fetchALLAreaJobPerLevel, fetchSummaryAreaJobPerLevel } from '../objects/utils';
+import { fetchALLAreaJobPerLevel, fetchSummaryAreaJobPerLevel } from './objects_utils';
 import { RoundNumber } from '../../../../utils/RoundNumber';
 
 export const fetchAllJobsFromAPI = () => {

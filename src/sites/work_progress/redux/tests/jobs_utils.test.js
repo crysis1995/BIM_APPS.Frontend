@@ -1,4 +1,4 @@
-import { prepareDataForJobs } from './utils';
+import { prepareDataForJobs } from '../utils/jobs_utils';
 
 const job_id = '2';
 const objects = {

@@ -1,13 +1,13 @@
 import reduceReducers from 'reduce-reducers';
 import { combineReducers } from 'redux';
 
-import Jobs from './redux/jobs/reducers';
-import Levels from './redux/levels/reducers';
-import Objects from './redux/objects/reducers';
-import OdbioryComponent from './redux/odbiory/reducers';
-import Results from './redux/results/reducers';
-import Rooms from './redux/rooms/reducers';
-import Upgrading from './redux/upgrading/reducers';
+import Jobs from './redux/reducers/jobs_reducers';
+import Levels from './redux/reducers/levels_reducers';
+import Objects from './redux/reducers/objects_reducers';
+import OdbioryComponent from './redux/reducers/odbiory_reducers';
+import Results from './redux/reducers/results_reducers';
+import Rooms from './redux/reducers/rooms_reducers';
+import Upgrading from './redux/reducers/upgrading_reducers';
 
 const OdbioryReducer = combineReducers({
 	OdbioryComponent,

@@ -5,9 +5,10 @@ import { v4 } from 'uuid';
 
 import { RoundNumber } from '../../../utils/RoundNumber';
 import { sumOfArray } from '../../../utils/sumOfArray';
-import { changeJobPercentageValue } from '../redux/jobs/actions';
+import { changeJobPercentageValue } from '../redux/actions/jobs_actions';
 import PopoverTable from './PopoverTable';
 import { getSplitedJobsByKey } from './TableComponentSelector';
+
 
 function PluralJobsComponent(props) {
 	const { equal, different } = props.jobs;

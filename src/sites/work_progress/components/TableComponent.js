@@ -3,8 +3,9 @@ import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import { connect } from 'react-redux';
 
-import { changeVisibilityDifferentialJobs, changeVisibilityUnitedJobs } from '../redux/odbiory/actions';
+import { changeVisibilityDifferentialJobs, changeVisibilityUnitedJobs } from '../redux/actions/odbiory_actions';
 import PluralJobsComponent from './PluralJobsComponent';
+
 
 function TableComponent(props) {
 	return (

@@ -5,7 +5,7 @@ import {
 	CHANGE_VISIBILITY_UNITED_JOBS,
 	CHANGE_VISIBILITY_DIFFERENTIAL_JOBS,
 	SET_RESULTS_COMPONENT_ACTIVE,
-} from './actions';
+} from '../types';
 
 const initialState = {
 	started: false,

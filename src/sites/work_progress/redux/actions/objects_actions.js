@@ -1,15 +1,16 @@
 import { debounce } from 'lodash';
 
 import { normalize } from '../../../../utils/normalize';
-import { jobsLoadingStart, jobsPrepare } from '../jobs/actions';
-import { getFilteredObjects } from './utils';
+import { jobsLoadingStart, jobsPrepare } from './jobs_actions';
+import { getFilteredObjects } from '../utils/objects_utils';
 
-/*  objects */
-export const OBJECTS_LOADING_START = 'odbiory__objects__LOADING_START';
-export const OBJECTS_LOADING_ERROR = 'odbiory__objects__LOADING_ERROR';
-export const OBJECTS_LOADING_END = 'odbiory__objects__LOADING_END';
-export const OBJECTS_SET_DATA = 'odbiory__objects__SET_DATA';
-export const OBJECTS_SET_INITIAL = 'odbiory__objects__SET_INITIAL';
+import {
+	OBJECTS_LOADING_END,
+	OBJECTS_LOADING_ERROR,
+	OBJECTS_LOADING_START,
+	OBJECTS_SET_DATA,
+	OBJECTS_SET_INITIAL,
+} from '../types';
 
 export const fetchObjectsStart = () => ({
 	type: OBJECTS_LOADING_START,

@@ -4,7 +4,7 @@ import ReactPanelExtension from './extenstions/TestExtension';
 import { connect } from 'react-redux';
 
 import { config } from '../../../config';
-import { setSelectedRoom } from '../../../sites/work_progress/redux/rooms/actions';
+import { setSelectedRoom } from '../../../sites/work_progress/redux/actions/rooms_actions';
 import { hexToRgb } from '../../../utils/hexToRgb';
 import { initialiseModal } from '../../Modal/redux/actions';
 import { initializeViewer, setSheetsSuccess, setViewerRooms } from '../redux/actions';

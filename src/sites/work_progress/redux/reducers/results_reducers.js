@@ -1,5 +1,5 @@
 import { SET_INITIAL } from '../actions';
-import { CLEAN_RESULTS, COLOR_RESULTS, RESET_RESULTS } from './actions';
+import { CLEAN_RESULTS, COLOR_RESULTS, RESET_RESULTS } from '../types';
 
 const initialState = {
 	active_job_id: null,

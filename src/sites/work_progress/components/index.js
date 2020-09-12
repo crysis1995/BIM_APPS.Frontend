@@ -2,7 +2,7 @@ import React from 'react';
 import { Nav } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Loader from '../../../components/Loader';
-import { componentStarted, changeActiveTab } from '../redux/odbiory/actions';
+import { componentStarted, changeActiveTab } from '../redux/actions/odbiory_actions';
 import LevelSelectorComponent from './LevelSelectorComponent';
 import OdbioryComponent from './OdbioryComponent';
 import ResultsComponent from './ResultsComponent';

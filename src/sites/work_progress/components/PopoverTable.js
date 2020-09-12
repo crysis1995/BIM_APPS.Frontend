@@ -1,7 +1,7 @@
 import React from 'react';
-import { Table, Popover } from 'react-bootstrap';
-import { get } from 'lodash';
+import { Table } from 'react-bootstrap';
 import { v4 } from 'uuid';
+
 
 function PopoverTable({ labels = [], content = [[], []] }) {
 	return (

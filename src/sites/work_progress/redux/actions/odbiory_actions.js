@@ -1,14 +1,14 @@
-import { fetchAllJobs, setJobInitial } from '../jobs/actions';
-import { cleanResults } from '../results/actions';
+import { fetchAllJobs, setJobInitial } from './jobs_actions';
+import { cleanResults } from './results_actions';
 
-//          TYPES
-export const ODBIORY_COMPONENT_STARTED = 'odbiory__COMPONENT_STARTED';
-export const ODBIORY_COMPONENT_ENDED = 'odbiory__COMPONENT_ENDED';
-export const SET_AWANSOWANIE_COMPONENT_ACTIVE = 'odbiory__SET_AWANSOWANIE_COMPONENT_ACTIVE';
-export const SET_RESULTS_COMPONENT_ACTIVE = 'odbiory__SET_RESULTS_COMPONENT_ACTIVE';
-export const CHANGE_VISIBILITY_UNITED_JOBS = 'odbiory__CHANGE_VISIBILITY_UNITED_JOBS';
-export const CHANGE_VISIBILITY_DIFFERENTIAL_JOBS = 'odbiory__CHANGE_VISIBILITY_DIFFERENTIAL_JOBS';
-
+import {
+	CHANGE_VISIBILITY_DIFFERENTIAL_JOBS,
+	CHANGE_VISIBILITY_UNITED_JOBS,
+	ODBIORY_COMPONENT_ENDED,
+	ODBIORY_COMPONENT_STARTED,
+	SET_AWANSOWANIE_COMPONENT_ACTIVE,
+	SET_RESULTS_COMPONENT_ACTIVE,
+} from '../types';
 //          ACTIONS
 const componentStart = () => ({
 	type: ODBIORY_COMPONENT_STARTED,
@@ -26,12 +26,6 @@ export const setResultsActive = () => ({
 	type: SET_RESULTS_COMPONENT_ACTIVE,
 });
 
-export const componentStarted = () => (dispatch, getState) => {
-	const { started } = getState().Odbiory.OdbioryComponent;
-	dispatch(componentStart());
-	if (!started) dispatch(fetchAllJobs());
-};
-
 export const changeVisibilityUnitedJobs = (value) => ({
 	type: CHANGE_VISIBILITY_UNITED_JOBS,
 	value,
@@ -41,6 +35,12 @@ export const changeVisibilityDifferentialJobs = (value) => ({
 	type: CHANGE_VISIBILITY_DIFFERENTIAL_JOBS,
 	value,
 });
+
+export const componentStarted = () => (dispatch, getState) => {
+	const { started } = getState().Odbiory.OdbioryComponent;
+	dispatch(componentStart());
+	if (!started) dispatch(fetchAllJobs());
+};
 
 export const changeActiveTab = (tabName) => (dispatch, getState) => {
 	const { active_job_id } = getState().Odbiory.Results;

@@ -5,8 +5,13 @@ import Select from 'react-select';
 
 import ErrorBoundary from '../../../components/ErrorBoundary';
 import Loader from '../../../components/Loader';
-import { setSelectedRoom } from '../redux/rooms/actions';
-import { getRoomOptionsByName, getRoomOptionsByNumber, getSelectedRoomOptionsByName, getSelectedRoomOptionsByNumber } from './OdbioryComponentSelector';
+import { setSelectedRoom } from '../redux/actions/rooms_actions';
+import {
+	getRoomOptionsByName,
+	getRoomOptionsByNumber,
+	getSelectedRoomOptionsByName,
+	getSelectedRoomOptionsByNumber,
+} from './OdbioryComponentSelector';
 import TableComponent from './TableComponent';
 
 function OdbioryComponent(props) {

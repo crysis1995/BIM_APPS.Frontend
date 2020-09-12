@@ -1,6 +1,4 @@
-export const COLOR_RESULTS = 'odbiory__results__COLOR_RESULTS';
-export const CLEAN_RESULTS = 'odbiory__results__CLEAN_RESULTS';
-export const RESET_RESULTS = 'odbiory__results__RESET_RESULTS';
+import { CLEAN_RESULTS, COLOR_RESULTS, RESET_RESULTS } from '../types';
 
 const resultsColorByRoom = (active_job_id) => ({
 	type: COLOR_RESULTS,

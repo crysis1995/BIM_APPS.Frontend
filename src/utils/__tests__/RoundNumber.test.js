@@ -1,4 +1,4 @@
-import { RoundNumber } from './RoundNumber';
+import { RoundNumber } from '../RoundNumber';
 
 describe('Round Number test', () => {
 	test('should round number properly', () => {

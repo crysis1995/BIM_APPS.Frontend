@@ -3,18 +3,17 @@ import { debounce } from 'lodash';
 
 import { graphQLClient } from '../../../../services';
 import { normalize } from '../../../../utils/normalize';
-import { fetchObjectsByRooms } from '../objects/actions';
-import { fetchObjectsStart } from '../objects/actions';
+import { fetchObjectsByRooms, fetchObjectsStart } from './objects_actions';
 
-/*  rooms   */
-export const ROOMS_LOADING_START = 'odbiory__rooms__ROOMS_LOADING_START';
-export const ROOMS_LOADING_ERROR = 'odbiory__rooms__ROOMS_LOADING_ERROR';
-export const ROOMS_LOADING_END = 'odbiory__rooms__ROOMS_LOADING_END';
-export const SELECT_ROOM_BY_ODBIORY = 'odbiory__rooms__SELECT_ROOM_BY_ODBIORY';
-export const ADD_ROOM_TO_SELECTION = 'odbiory__rooms__ADD_ROOM_TO_SELECTION';
-export const REMOVE_ROOM_FROM_SELECTION = 'odbiory__rooms__REMOVE_ROOM_FROM_SELECTION';
-export const CLEAN_SELECTION = 'odbiory__rooms__CLEAN_SELECTION';
-export const ROOMS_SET_INITIAL = 'odbiory__rooms__SET_INITIAL';
+import {
+	ADD_ROOM_TO_SELECTION,
+	CLEAN_SELECTION,
+	REMOVE_ROOM_FROM_SELECTION,
+	ROOMS_LOADING_END,
+	ROOMS_LOADING_ERROR,
+	ROOMS_LOADING_START,
+	ROOMS_SET_INITIAL,
+} from '../types';
 
 const fetchRoomsStart = () => ({
 	type: ROOMS_LOADING_START,

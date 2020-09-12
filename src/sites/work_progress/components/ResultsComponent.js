@@ -1,12 +1,14 @@
 import React from 'react';
 import { Col, ListGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import v4 from 'uuid/dist/esm-browser/v4';
 import Loader from '../../../components/Loader';
 import ProgressBar from '../../../components/ProgressBar';
-import { colorResultByRoom } from '../redux/results/actions';
+import { colorResultByRoom } from '../redux/actions/results_actions';
+import { getFilteredJobsResults } from './ResultsComponent.Selector';
 
 function ResultComponent(props) {
-	const { Jobs, ForgeViewer, Results } = props;
+	const { Jobs, jobs_data, ForgeViewer } = props;
 	if (!Jobs.jobs_fetched || Jobs.jobs_loading) return <Loader height={'100%'} />;
 	else if (!ForgeViewer.current_sheet)
 		return (
@@ -18,41 +20,36 @@ function ResultComponent(props) {
 		return (
 			<Col className={'d-flex flex-column'} style={{ overflowY: 'scroll' }}>
 				<ListGroup variant="flush">
-					{Object.keys(Jobs.jobs)
-						.filter((job_key) => !Jobs.jobs[job_key].hidden)
-						.map((job_key) => (
+					{jobs_data.map(
+						({ job_key, percentage_value, summary_current_value, summary_all_value, isActive, name }) => (
 							<OverlayTrigger
+								key={v4()}
 								placement="top"
-								overlay={
-									<Tooltip id={`tooltip-top`}>{`${
-										Jobs.jobs[job_key].results.percentage_value || 0
-									}%`}</Tooltip>
-								}>
+								overlay={<Tooltip id={`tooltip-top`}>{`${percentage_value}%`}</Tooltip>}>
 								<ListGroup.Item
 									action
-									active={Results.active_job_id === job_key}
+									active={isActive}
 									key={job_key}
 									onClick={() => props.colorResultByRoom(job_key)}>
 									<div className="d-flex justify-content-between">
-										<span>{Jobs.jobs[job_key].name}</span>
+										<span>{name}</span>
 										<span>
-											{Jobs.jobs[job_key].results.summary_current_value || 0} m<sup>2</sup> /{' '}
-											{Jobs.jobs[job_key].results.summary_all_value || 0} m<sup>2</sup>
+											{summary_current_value} m<sup>2</sup> / {summary_all_value} m<sup>2</sup>
 										</span>
 									</div>
-									<ProgressBar
-										results_percentage_area={Jobs.jobs[job_key].results.percentage_value}
-									/>
+									<ProgressBar results_percentage_area={percentage_value} />
 								</ListGroup.Item>
 							</OverlayTrigger>
-						))}
+						),
+					)}
 				</ListGroup>
 			</Col>
 		);
 }
-const mapStateToProps = ({ Odbiory, ForgeViewer }) => ({
-	...Odbiory,
-	ForgeViewer,
+const mapStateToProps = (state) => ({
+	ForgeViewer: state.ForgeViewer,
+	Jobs: state.Odbiory.Jobs,
+	jobs_data: getFilteredJobsResults(state),
 });
 
 const mapDispatchToProps = { colorResultByRoom };
