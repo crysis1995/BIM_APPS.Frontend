@@ -5,7 +5,7 @@ import Loader from '../../../components/Loader';
 import { componentStarted, changeActiveTab } from '../redux/actions/odbiory_actions';
 import LevelSelectorComponent from './LevelSelectorComponent';
 import OdbioryComponent from './OdbioryComponent';
-import ResultsComponent from './ResultsComponent';
+import ResultsComponent from './Results';
 import Tools from './Tools';
 
 class Odbiory extends React.Component {
