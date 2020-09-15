@@ -11,16 +11,37 @@ export const login = async (identifier, password) => {
 					jwt
 					user {
 						id
-						username
-						email
-						role {
-							type
-						}
 					}
 				}
 			}
 		`,
 		variables: { i: identifier, p: password },
+		fetchPolicy: 'no-cache',
+	});
+};
+
+export const fetchUserData = (access_token, id) => {
+	return graphQLClient(access_token).query({
+		query: gql`
+			query getUserData($i: ID!) {
+				user(id: $i) {
+					id
+					username
+					email
+					project_roles {
+						project_role {
+							name
+						}
+						project {
+							id
+							name
+							model_urn
+						}
+					}
+				}
+			}
+		`,
+		variables: { i: id },
 		fetchPolicy: 'no-cache',
 	});
 };
