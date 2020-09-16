@@ -156,12 +156,13 @@ export const jobsPrepare = () => (dispatch, getState) => {
 	dispatch(jobsLoadingEnd());
 };
 
+/**
+*
+*
+*
+ * */
 export const changeJobPercentageValue = (job_key, value) => async (dispatch, getState) => {
 	const precision = 2;
-
-	/*
-	 *  Pobranie niezbędnych obiektów ze stora
-	 * */
 	const { jobs, objects_jobs_loading } = getState().Odbiory.Jobs;
 	const { selected_rooms, rooms } = getState().Odbiory.Rooms;
 	const { user } = getState().CMSLogin;

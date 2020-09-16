@@ -8,22 +8,22 @@ export const USER_PASSWORD_RESET = 'cmslogin__USER_PASSWORD_RESET';
 export const USER_FETCH_DATA = 'cmslogin__USER_FETCH_DATA';
 export const USER_SET_CURRENT_PROJECT = 'cmslogin__USER_SET_CURRENT_PROJECT';
 
-const userLoginStart = () => ({
+export const userLoginStart = () => ({
 	type: USER_LOGIN_START,
 });
 
-const userLoginEnd = (user, credentials) => ({
+export const userLoginEnd = (user, credentials) => ({
 	type: USER_LOGIN_END,
 	user,
 	credentials,
 });
 
-const userLoginError = (error) => ({
+export const userLoginError = (error) => ({
 	type: USER_LOGIN_ERROR,
 	error,
 });
 
-const userLogoutEnd = () => ({
+export const userLogoutEnd = () => ({
 	type: USER_LOGOUT,
 });
 
@@ -32,14 +32,14 @@ const userResetPassword = (info) => ({
 	info,
 });
 
-const setUserData = ({ username, email, project_roles }) => ({
+export const setUserData = ({ username, email, project_roles }) => ({
 	type: USER_FETCH_DATA,
 	username,
 	email,
 	project_roles,
 });
 
-const setCurrentProject = (project_id) => ({
+export const setCurrentProject = (project_id) => ({
 	type: USER_SET_CURRENT_PROJECT,
 	project_id,
 });
