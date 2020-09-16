@@ -1,4 +1,12 @@
-import { USER_FETCH_DATA, USER_LOGIN_END, USER_LOGIN_ERROR, USER_LOGIN_START, USER_LOGOUT, USER_PASSWORD_RESET, USER_SET_CURRENT_PROJECT } from './actions';
+import {
+	USER_FETCH_DATA,
+	USER_LOGIN_END,
+	USER_LOGIN_ERROR,
+	USER_LOGIN_START,
+	USER_LOGOUT,
+	USER_PASSWORD_RESET,
+	USER_SET_CURRENT_PROJECT,
+} from './actions';
 
 const initialState = {
 	user: { id: {} },
@@ -30,6 +38,8 @@ const CMSLoginReducer = (state = initialState, action) => {
 				...state,
 				project: {
 					id: action.project_id,
+					urn: action.urn,
+					name: action.name,
 				},
 			};
 		case USER_LOGIN_ERROR:

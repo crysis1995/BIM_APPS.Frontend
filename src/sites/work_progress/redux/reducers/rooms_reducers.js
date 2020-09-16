@@ -1,16 +1,7 @@
 import dotProp from 'dot-prop';
 
 import { SET_INITIAL } from '../actions';
-import {
-	ADD_ROOM_TO_SELECTION,
-	CLEAN_SELECTION,
-	REMOVE_ROOM_FROM_SELECTION,
-	ROOMS_LOADING_END,
-	ROOMS_LOADING_ERROR,
-	ROOMS_LOADING_START,
-	ROOMS_SET_INITIAL,
-	SELECT_ROOM_BY_ODBIORY,
-} from '../types';
+import { ADD_ROOM_TO_SELECTION, ADD_SPECYFIC_ROOM_TO_SELECTION, CLEAN_SELECTION, REMOVE_ROOM_FROM_SELECTION, ROOMS_LOADING_END, ROOMS_LOADING_ERROR, ROOMS_LOADING_START, ROOMS_SET_INITIAL, SELECT_ROOM_BY_ODBIORY } from '../types';
 
 const initialState = {
 	rooms: [],
@@ -27,14 +18,30 @@ const RoomsReducer = (state = initialState, action) => {
 				return {
 					...state,
 					selected_rooms: [...state.selected_rooms, ...action.selectedRoom],
+					from_selector: action.from_selector,
 				};
 			} else {
 				return {
 					...state,
 					selected_rooms: [...state.selected_rooms, action.selectedRoom],
+					from_selector: action.from_selector,
 				};
 			}
 		}
+		case ADD_SPECYFIC_ROOM_TO_SELECTION:
+			if (Array.isArray(action.selectedRooms)) {
+				return {
+					...state,
+					selected_rooms: [...action.selectedRooms],
+					from_selector: action.from_selector,
+				};
+			} else {
+				return {
+					...state,
+					selected_rooms: [action.selectedRooms],
+					from_selector: action.from_selector,
+				};
+			}
 		case CLEAN_SELECTION:
 			return {
 				...state,

@@ -9,6 +9,9 @@ import {
 	SET_AWANSOWANIE_COMPONENT_ACTIVE,
 	SET_RESULTS_COMPONENT_ACTIVE,
 } from '../types';
+
+import { CONSTANTS } from '../types/constans';
+
 //          ACTIONS
 const componentStart = () => ({
 	type: ODBIORY_COMPONENT_STARTED,
@@ -46,12 +49,18 @@ export const changeActiveTab = (tabName) => (dispatch, getState) => {
 	const { active_job_id } = getState().Odbiory.Results;
 	const { awansowanie, results } = getState().Odbiory.OdbioryComponent;
 	switch (tabName) {
-		case 'results':
+		case CONSTANTS.RESULTS:
 			if (awansowanie.is_active) {
 				dispatch(setResultsActive());
 			}
 			break;
-		case 'progress':
+		case CONSTANTS.PROGRESS:
+			if (results.is_active) {
+				active_job_id && dispatch(cleanResults());
+				dispatch(setAwansowanieActive());
+			}
+			break;
+		case CONSTANTS.TERMS:
 			if (results.is_active) {
 				active_job_id && dispatch(cleanResults());
 				dispatch(setAwansowanieActive());

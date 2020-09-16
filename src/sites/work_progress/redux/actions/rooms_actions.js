@@ -3,10 +3,9 @@ import { debounce } from 'lodash';
 
 import { graphQLClient } from '../../../../services';
 import { normalize } from '../../../../utils/normalize';
-import { fetchObjectsByRooms, fetchObjectsStart } from './objects_actions';
-
 import {
 	ADD_ROOM_TO_SELECTION,
+	ADD_SPECYFIC_ROOM_TO_SELECTION,
 	CLEAN_SELECTION,
 	REMOVE_ROOM_FROM_SELECTION,
 	ROOMS_LOADING_END,
@@ -14,6 +13,7 @@ import {
 	ROOMS_LOADING_START,
 	ROOMS_SET_INITIAL,
 } from '../types';
+import { fetchObjectsByRooms, fetchObjectsStart } from './objects_actions';
 
 const fetchRoomsStart = () => ({
 	type: ROOMS_LOADING_START,
@@ -38,6 +38,12 @@ const fetchRoomsEnd = (rooms) => ({
 const addRoomToSelection = (selectedRoom, from_selector = true) => ({
 	type: ADD_ROOM_TO_SELECTION,
 	selectedRoom,
+	from_selector,
+});
+
+const addSpecyficRoomToSelection = (selectedRooms, from_selector = true) => ({
+	type: ADD_SPECYFIC_ROOM_TO_SELECTION,
+	selectedRooms,
 	from_selector,
 });
 
@@ -113,6 +119,9 @@ export const setSelectedRoom = (room_value, status, from_selector = true) => (di
 				break;
 			case 'remove-value':
 				dispatch(removeRoomFromSelection(room_value, from_selector));
+				break;
+			case 'add-specyfic':
+				dispatch(addSpecyficRoomToSelection(room_value, from_selector));
 				break;
 			default:
 				dispatch(addRoomToSelection(room_value, from_selector));

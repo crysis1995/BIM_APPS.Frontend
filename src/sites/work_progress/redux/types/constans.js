@@ -1,0 +1,5 @@
+export const CONSTANTS = {
+	RESULTS: 'RESULTS',
+	PROGRESS: 'PROGRESS',
+	TERMS: 'TERMS',
+};

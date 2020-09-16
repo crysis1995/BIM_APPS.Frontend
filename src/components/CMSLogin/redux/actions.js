@@ -39,9 +39,11 @@ export const setUserData = ({ username, email, project_roles }) => ({
 	project_roles,
 });
 
-export const setCurrentProject = (project_id) => ({
+export const setCurrentProject = (project_id, urn, name) => ({
 	type: USER_SET_CURRENT_PROJECT,
 	project_id,
+	urn,
+	name,
 });
 
 export const userLogout = () => (dispatch) => {
@@ -56,8 +58,8 @@ export const userLogin = ({ identifier, password, checkbox }) => async (dispatch
 		if (data) {
 			const { jwt, user } = data.login;
 			dispatch(userLoginEnd(user.id, jwt));
-			getUserData(dispatch, getState);
-			if (checkbox) saveUserDataToLocalStorage(user, jwt);
+			dispatch(getUserData(checkbox));
+			dispatch(setActiveProject());
 		}
 		if (errors) {
 			dispatch(userLoginError(errors.message));
@@ -67,17 +69,32 @@ export const userLogin = ({ identifier, password, checkbox }) => async (dispatch
 	}
 };
 
-const getUserData = async (dispatch, getState) => {
+const getUserData = (checkbox) => async (dispatch, getState) => {
 	const {
 		user: { id },
 		credentials: { access_token },
 	} = getState().CMSLogin;
-	const { data, errors } = await fetchUserData(access_token, id);
-	if (data) {
-		console.log(data);
+	try {
+		const { data, errors } = await fetchUserData(access_token, id);
+		if (data) {
+			dispatch(setUserData({ ...data.user }));
+			if (checkbox) saveUserDataToLocalStorage(data.user, access_token);
+		}
+		if (errors) {
+			console.log(errors.message);
+		}
+	} catch (e) {
+		console.log(e.message);
 	}
-	if (errors) {
-		console.log(errors);
+};
+
+const setActiveProject = () => (dispatch, getState) => {
+	const { project_roles } = getState().CMSLogin.user;
+	if (Array.isArray(project_roles)) {
+		if (project_roles.length === 1) {
+			const { id, name, model_urn } = project_roles[0].project;
+			dispatch(setCurrentProject(id, model_urn, name));
+		}
 	}
 };
 
@@ -86,6 +103,8 @@ export const logUserIfValid = () => async (dispatch) => {
 	if (data.user && data.user_token) {
 		if (!isExpired(data.user_token)) {
 			dispatch(userLoginEnd(data.user, data.user_token));
+			dispatch(setUserData(data.user));
+			dispatch(setActiveProject());
 		}
 	}
 };

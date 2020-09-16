@@ -20,7 +20,7 @@ export const login = async (identifier, password) => {
 	});
 };
 
-export const fetchUserData = (access_token, id) => {
+export const fetchUserData = (access_token, user_id) => {
 	return graphQLClient(access_token).query({
 		query: gql`
 			query getUserData($i: ID!) {
@@ -41,7 +41,7 @@ export const fetchUserData = (access_token, id) => {
 				}
 			}
 		`,
-		variables: { i: id },
+		variables: { i: user_id },
 		fetchPolicy: 'no-cache',
 	});
 };
