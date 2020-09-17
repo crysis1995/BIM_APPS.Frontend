@@ -1,8 +1,9 @@
 import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import { createEpicMiddleware } from 'redux-observable';
 import thunk from 'redux-thunk';
 
-import rootReducer from '../reducers';
+import { rootEpic, rootReducer } from '../reducers';
 
 // import { composeWithDevTools } from "remote-redux-devtools";
 // import { persistStore, persistReducer } from "redux-persist";
@@ -22,8 +23,11 @@ import rootReducer from '../reducers';
 //     port: 8000, // the port your remotedev server is running at
 // });
 // let store = createStore(persistedReducer, composeWithDevTools(applyMiddleware(thunk)));
-let store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
+const epicMiddleware = createEpicMiddleware();
+let store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk, epicMiddleware)));
 // let persistor = persistStore(store);
 // return { store, persistor };
+
+epicMiddleware.run(rootEpic);
 
 export default store;

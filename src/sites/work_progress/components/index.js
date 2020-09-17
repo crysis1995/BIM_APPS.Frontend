@@ -6,8 +6,10 @@ import { componentStarted, changeActiveTab } from '../redux/actions/odbiory_acti
 import LevelSelectorComponent from './LevelSelectorComponent';
 import OdbioryComponent from './OdbioryComponent';
 import ResultsComponent from './Results';
+import TermsComponent from './Terms';
 import Tools from './Tools';
 import { CONSTANTS } from '../redux/types/constans';
+
 class Odbiory extends React.Component {
 	componentDidMount() {
 		const { componentStarted } = this.props;
@@ -19,11 +21,14 @@ class Odbiory extends React.Component {
 		else {
 			let component;
 			switch (true) {
-				case CONSTANTS.TERMS ===  && !this.props.rooms_loading:
+				case CONSTANTS.PROGRESS === this.props.active_tab && !this.props.rooms_loading:
 					component = <OdbioryComponent />;
 					break;
-				case this.props.results_is_active:
+				case CONSTANTS.RESULTS === this.props.active_tab:
 					component = <ResultsComponent />;
+					break;
+				case CONSTANTS.TERMS === this.props.active_tab:
+					component = <TermsComponent />;
 					break;
 				default:
 					component = <Loader height={'100%'} />;
@@ -37,21 +42,30 @@ class Odbiory extends React.Component {
 						<Nav variant="tabs" className="mt-3" defaultActiveKey={'results'}>
 							<Nav.Item>
 								<Nav.Link
-									onSelect={(e) => this.props.awansowanie_is_active && this.props.changeActiveTab(e)}
+									active={CONSTANTS.RESULTS === this.props.active_tab}
+									onSelect={(e) =>
+										CONSTANTS.RESULTS !== this.props.active_tab && this.props.changeActiveTab(e)
+									}
 									eventKey={CONSTANTS.RESULTS}>
 									Rezultaty
 								</Nav.Link>
 							</Nav.Item>
 							<Nav.Item>
 								<Nav.Link
-									onSelect={(e) => this.props.results_is_active && this.props.changeActiveTab(e)}
+									active={CONSTANTS.PROGRESS === this.props.active_tab}
+									onSelect={(e) =>
+										CONSTANTS.PROGRESS !== this.props.active_tab && this.props.changeActiveTab(e)
+									}
 									eventKey={CONSTANTS.PROGRESS}>
 									Awansowanie robót
 								</Nav.Link>
 							</Nav.Item>
 							<Nav.Item>
 								<Nav.Link
-									onSelect={(e) => this.props.terms_is_active && this.props.changeActiveTab(e)}
+									active={CONSTANTS.TERMS === this.props.active_tab}
+									onSelect={(e) =>
+										CONSTANTS.TERMS !== this.props.active_tab && this.props.changeActiveTab(e)
+									}
 									eventKey={CONSTANTS.TERMS}>
 									Terminy
 								</Nav.Link>
@@ -67,9 +81,7 @@ class Odbiory extends React.Component {
 
 const mapStateToProps = ({ Odbiory, ForgeViewer }) => ({
 	rooms_loading: Odbiory.Rooms.rooms_loading,
-	awansowanie_is_active: Odbiory.OdbioryComponent.awansowanie.is_active,
-	results_is_active: Odbiory.OdbioryComponent.results.is_active,
-	date_is_active: Odbiory.OdbioryComponent.date.is_active,
+	active_tab: Odbiory.OdbioryComponent.active_tab,
 	sheets_loaded: ForgeViewer.sheets_loaded,
 });
 

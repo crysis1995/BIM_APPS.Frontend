@@ -1,4 +1,6 @@
+// import OdbioryEpics from '../sites/work_progress/epics';
 import { combineReducers } from 'redux';
+import { combineEpics } from 'redux-observable';
 
 import AutodeskBIM360 from '../components/AutodeskBIM360/redux';
 import Autodesk from '../components/AutodeskLogin/redux';
@@ -16,4 +18,6 @@ const rootReducer = combineReducers({
 	CMSLogin,
 });
 
-export default rootReducer;
+const rootEpic = combineEpics();
+
+export { rootReducer, rootEpic };

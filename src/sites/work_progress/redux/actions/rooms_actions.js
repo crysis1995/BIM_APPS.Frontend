@@ -29,12 +29,6 @@ const fetchRoomsEnd = (rooms) => ({
 	rooms,
 });
 
-// const selectedRooms = (selected_rooms, from_selector = true) => ({
-// 	type: SELECT_ROOM_BY_ODBIORY,
-// 	selected_rooms,
-// 	from_selector,
-// });
-
 const addRoomToSelection = (selectedRoom, from_selector = true) => ({
 	type: ADD_ROOM_TO_SELECTION,
 	selectedRoom,

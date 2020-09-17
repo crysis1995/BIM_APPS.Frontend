@@ -6,8 +6,7 @@ import {
 	CHANGE_VISIBILITY_UNITED_JOBS,
 	ODBIORY_COMPONENT_ENDED,
 	ODBIORY_COMPONENT_STARTED,
-	SET_AWANSOWANIE_COMPONENT_ACTIVE,
-	SET_RESULTS_COMPONENT_ACTIVE,
+	SET_ACTIVE_TAB,
 } from '../types';
 
 import { CONSTANTS } from '../types/constans';
@@ -21,12 +20,9 @@ export const componentEnd = () => ({
 	type: ODBIORY_COMPONENT_ENDED,
 });
 
-export const setAwansowanieActive = () => ({
-	type: SET_AWANSOWANIE_COMPONENT_ACTIVE,
-});
-
-export const setResultsActive = () => ({
-	type: SET_RESULTS_COMPONENT_ACTIVE,
+const setActiveTab = (active_tab) => ({
+	type: SET_ACTIVE_TAB,
+	active_tab,
 });
 
 export const changeVisibilityUnitedJobs = (value) => ({
@@ -47,24 +43,16 @@ export const componentStarted = () => (dispatch, getState) => {
 
 export const changeActiveTab = (tabName) => (dispatch, getState) => {
 	const { active_job_id } = getState().Odbiory.Results;
-	const { awansowanie, results } = getState().Odbiory.OdbioryComponent;
 	switch (tabName) {
 		case CONSTANTS.RESULTS:
-			if (awansowanie.is_active) {
-				dispatch(setResultsActive());
-			}
+			dispatch(setActiveTab(tabName));
 			break;
 		case CONSTANTS.PROGRESS:
-			if (results.is_active) {
-				active_job_id && dispatch(cleanResults());
-				dispatch(setAwansowanieActive());
-			}
+			active_job_id && dispatch(cleanResults());
+			dispatch(setActiveTab(tabName));
 			break;
 		case CONSTANTS.TERMS:
-			if (results.is_active) {
-				active_job_id && dispatch(cleanResults());
-				dispatch(setAwansowanieActive());
-			}
+			dispatch(setActiveTab(tabName));
 			break;
 		default:
 	}

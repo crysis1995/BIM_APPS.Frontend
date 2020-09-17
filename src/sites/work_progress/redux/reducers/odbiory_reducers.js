@@ -1,10 +1,9 @@
 import {
 	ODBIORY_COMPONENT_ENDED,
 	ODBIORY_COMPONENT_STARTED,
-	// SET_AWANSOWANIE_COMPONENT_ACTIVE,
 	CHANGE_VISIBILITY_UNITED_JOBS,
 	CHANGE_VISIBILITY_DIFFERENTIAL_JOBS,
-	// SET_RESULTS_COMPONENT_ACTIVE,
+	SET_ACTIVE_TAB,
 } from '../types';
 
 import { CONSTANTS } from '../types/constans';
@@ -38,31 +37,6 @@ const OdbioryComponentReducer = (state = initialState, action) => {
 				active_tab: action.active_tab,
 			};
 
-		// case SET_AWANSOWANIE_COMPONENT_ACTIVE:
-		// 	return {
-		// 		...state,
-		// 		awansowanie: {
-		// 			...state.awansowanie,
-		// 			is_active: true,
-		// 		},
-		// 		results: {
-		// 			...state.results,
-		// 			is_active: false,
-		// 		},
-		// 	};
-
-		// case SET_RESULTS_COMPONENT_ACTIVE:
-		// 	return {
-		// 		...state,
-		// 		awansowanie: {
-		// 			...state.awansowanie,
-		// 			is_active: false,
-		// 		},
-		// 		results: {
-		// 			...state.results,
-		// 			is_active: true,
-		// 		},
-		// 	};
 		case CHANGE_VISIBILITY_UNITED_JOBS:
 			return {
 				...state,
