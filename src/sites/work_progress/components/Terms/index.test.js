@@ -52,7 +52,7 @@ describe('TESTING TERMS COMPONENT', () => {
 		const { getByTestId } = renderWithRedux(<Terms />, {
 			initialState: {
 				ForgeViewer: { current_sheet: 'asdasd' },
-				Odbiory: { Jobs: { jobs_fetched: true, jobs_loading: false } },
+				Odbiory: { Jobs: { jobs_fetched: true, jobs_loading: false, jobs: {} } },
 			},
 		});
 		expect(getByTestId('TermsComponent')).toBeInTheDocument();

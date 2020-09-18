@@ -5,17 +5,17 @@ import Loader from '../../../../components/Loader';
 import TermsComponent from './TermsComponent';
 
 function Terms({ Jobs, ForgeViewer }) {
-	// if (!Jobs.jobs_fetched || Jobs.jobs_loading) {
-	// 	return <Loader height={'100%'} />;
-	// } else if (!ForgeViewer.current_sheet) {
-	// 	return (
-	// 		<div className="p-3 text-center">
-	// 			<p>Wybierz kondygnacje</p>
-	// 		</div>
-	// 	);
-	// } else {
-	return <TermsComponent />;
-	// }
+	if (!Jobs.jobs_fetched || Jobs.jobs_loading) {
+		return <Loader height={'100%'} />;
+	} else if (!ForgeViewer.current_sheet) {
+		return (
+			<div className="p-3 text-center">
+				<p>Wybierz kondygnacje</p>
+			</div>
+		);
+	} else {
+		return <TermsComponent />;
+	}
 }
 
 const mapStateToProps = (state) => ({

@@ -23,3 +23,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 /.prettierrc
+.idea/fileColors.xml
+.idea/inspectionProfiles/Project_Default.xml
+.vscode/launch.json
+.idea/fileColors.xml
+.idea/inspectionProfiles/Project_Default.xml
