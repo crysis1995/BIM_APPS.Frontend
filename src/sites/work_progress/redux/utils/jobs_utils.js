@@ -4,10 +4,6 @@ import { graphQLClient } from '../../../../services';
 import { sumOfArray } from '../../../../utils/sumOfArray';
 import { fetchALLAreaJobPerLevel, fetchSummaryAreaJobPerLevel } from './objects_utils';
 import { RoundNumber } from '../../../../utils/RoundNumber';
-//
-// if(process.env.NODE_ENV === 'test'){
-// 	graphQLClient =
-// }
 
 
 export const GET_ALL_ACCEPTANCE_JOBS = gql`

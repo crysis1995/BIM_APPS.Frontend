@@ -1,5 +1,5 @@
-import { createMockClient } from 'mock-apollo-client';
-import 'cross-fetch/polyfill';
+import { graphql } from 'msw';
+import { setupServer } from 'msw/node';
 import configurateMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {
@@ -17,10 +17,10 @@ import {
 	setSummaryValueToJob,
 	setSummaryValueToJobEnd,
 	setSummaryValueToJobStart,
-	upgradeJobResults,
+	upgradeJobResults
 } from '../actions/jobs_actions';
 import * as types from '../types';
-import { GET_ALL_ACCEPTANCE_JOBS } from '../utils/jobs_utils';
+
 
 describe('JOBS ACTION TEST - simple actions', () => {
 	test('should create a jobsLoadingStart action', () => {
@@ -118,42 +118,55 @@ describe('JOBS ACTION TEST - simple actions', () => {
 	});
 });
 
-const middle = [thunk];
-const mockstore = configurateMockStore(middle);
-
 describe('TEST JOBS ACTIONS - dispatch many actions', () => {
-	let mockClient;
-	beforeEach(() => {
-		mockClient = createMockClient();
-	});
-
-	test('', () => {
-		mockClient.setRequestHandler(GET_ALL_ACCEPTANCE_JOBS, () =>
-			Promise.resolve({
-				data: {
+	var middle = [thunk];
+	var mockstore = configurateMockStore(middle);
+	const server = setupServer(
+		graphql.query('getAllAcceptanceJobs', (req, res, ctx) => {
+			return res(
+				ctx.data({
 					acceptanceJobs: [
 						{
 							id: '1',
-							name: 'test name 1',
+							name: 'test',
 							unit: 'area',
 						},
 						{
 							id: '2',
-							name: 'test name 2',
+							name: 'asd',
 							unit: 'area',
 						},
 					],
-				},
-			}),
-		);
+				}),
+			);
+		}),
+	);
+
+	beforeAll(() => {
+		// Establish requests interception layer before all tests.
+		server.listen();
+	});
+	afterAll(() => {
+		// Clean up after all tests are done, preventing this
+		// interception layer from affecting irrelevant tests.
+		server.close();
+	});
+
+	test('test graphql mock', () => {
 		const expectedActions = [
 			{ type: types.ALL_JOBS_FETCH_START },
-			{ type: types.ALL_JOBS_FETCH_END, jobs: { '1': { id: '1' } } },
+			{
+				type: types.ALL_JOBS_FETCH_END,
+				jobs: {
+					'1': { id: '1', name: 'test', hidden: false, unit: 'area' },
+					'2': { id: '2', name: 'asd', hidden: false, unit: 'area' },
+				},
+			},
 		];
-		console.log(process.env);
+		// console.log(process.env);
 		const store = mockstore({ jobs: {}, jobs_loading: false });
 
-		return store.dispatch(fetchAllJobs()).then(() => {
+		store.dispatch(fetchAllJobs()).then(() => {
 			expect(store.getActions()).toEqual(expectedActions);
 		});
 	});
