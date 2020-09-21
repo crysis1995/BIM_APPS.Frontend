@@ -26,6 +26,10 @@ export const setTermByJob = (term_type, term, job_id) => ({
 	term,
 	job_id,
 });
+/*
+*
+*
+* */
 export const setTermByDepartment = (term_type, term, department_id, job_id) => ({
 	type: TERMS_SET_BY_DEPARTMENT,
 	term_type,

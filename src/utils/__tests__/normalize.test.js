@@ -18,5 +18,5 @@ var expected = {
 };
 
 test('normalize object', () => {
-	expect(normalize(data)).toStrictEqual(expected);
+	expect(normalize(data)).toEqual(expected);
 });

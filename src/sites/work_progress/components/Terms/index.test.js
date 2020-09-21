@@ -15,8 +15,6 @@ const renderWithRedux = (component, { initialState, store = createStore(rootRedu
 	};
 };
 
-afterEach(cleanup);
-
 describe('TESTING TERMS COMPONENT', () => {
 	test('should render loading component', () => {
 		const { getByText } = renderWithRedux(<Terms />, {

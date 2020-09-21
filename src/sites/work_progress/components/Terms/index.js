@@ -1,4 +1,5 @@
 import React from 'react';
+import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Loader from '../../../../components/Loader';
@@ -14,7 +15,17 @@ function Terms({ Jobs, ForgeViewer }) {
 			</div>
 		);
 	} else {
-		return <TermsComponent />;
+		return (
+			<Col
+				className="d-flex flex-column"
+				style={{
+					paddingLeft: 0,
+					paddingRight: 0,
+					overflowY: 'scroll',
+				}}>
+				<TermsComponent />
+			</Col>
+		);
 	}
 }
 

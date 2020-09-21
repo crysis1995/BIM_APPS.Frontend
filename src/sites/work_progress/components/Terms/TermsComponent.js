@@ -4,7 +4,8 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 import { connect } from 'react-redux';
 import { v4 } from 'uuid';
-
+import { TERM_TYPE } from '../../redux/types/constans';
+import { setTermByDepartment, setTermByJob } from '../../redux/actions/terms_actions';
 
 function TermsComponent(props) {
 	const onClickHandler = (e) => {
@@ -15,6 +16,7 @@ function TermsComponent(props) {
 				: hiddenElement.classList.add('show'),
 		);
 	};
+
 	return (
 		<Table data-testid="TermsComponent">
 			<thead>
@@ -26,37 +28,84 @@ function TermsComponent(props) {
 				</tr>
 			</thead>
 			<tbody>
-				{Object.entries(props.jobs)
-					.map(([job_id, job]) => (
-						<React.Fragment key={v4()}>
-							<tr>
-								<td data-parentid={job_id} onClick={onClickHandler}>
-									{job.name}
-								</td>
-								<td>
-									<DayPickerInput />
-								</td>
-								<td>
-									<DayPickerInput />
-								</td>
-								<td>
-									<DayPickerInput />
-								</td>
-							</tr>
-							<tr name={job_id} className="collapse table-secondary">
-								<td></td>
-								<td>
-									<DayPickerInput />
-								</td>
-								<td>
-									<DayPickerInput />
-								</td>
-								<td>
-									<DayPickerInput />
-								</td>
-							</tr>
-						</React.Fragment>
-					))}
+				{Object.entries(props.terms).map(([job_id, terms]) => (
+					<React.Fragment key={v4()}>
+						<tr>
+							<td data-parentid={job_id} onClick={onClickHandler}>
+								{props.jobs[job_id].name}
+							</td>
+							<td>
+								<DayPickerInput
+									onDayChange={(selectedDay) =>
+										props.setTermByJob(TERM_TYPE.REAL_START, selectedDay, job_id)
+									}
+									value={terms[TERM_TYPE.REAL_START] || ''}
+								/>
+							</td>
+							<td>
+								<DayPickerInput
+									onDayChange={(selectedDay) =>
+										props.setTermByJob(TERM_TYPE.REAL_START, selectedDay, job_id)
+									}
+									value={terms[TERM_TYPE.PLANNED_FINISH] || ''}
+								/>
+							</td>
+							<td>
+								<DayPickerInput
+									onDayChange={(selectedDay) =>
+										props.setTermByJob(TERM_TYPE.REAL_START, selectedDay, job_id)
+									}
+									value={terms[TERM_TYPE.REAL_FINISH] || ''}
+								/>
+							</td>
+						</tr>
+						{terms.byDepartment &&
+							Object.entries(terms.byDepartment).map(([dep_id, dep]) => (
+								<tr name={job_id} key={v4()} className="collapse table-secondary">
+									<td>{dep.name}</td>
+									<td>
+										<DayPickerInput
+											onDayChange={(selectedDay) =>
+												props.setTermByDepartment(
+													TERM_TYPE.REAL_START,
+													selectedDay,
+													dep_id,
+													job_id,
+												)
+											}
+											value={dep[TERM_TYPE.REAL_START] || ''}
+										/>
+									</td>
+									<td>
+										<DayPickerInput
+											onDayChange={(selectedDay) =>
+												props.setTermByDepartment(
+													TERM_TYPE.PLANNED_FINISH,
+													selectedDay,
+													dep_id,
+													job_id,
+												)
+											}
+											value={dep[TERM_TYPE.PLANNED_FINISH] || ''}
+										/>
+									</td>
+									<td>
+										<DayPickerInput
+											onDayChange={(selectedDay) =>
+												props.setTermByDepartment(
+													TERM_TYPE.REAL_FINISH,
+													selectedDay,
+													dep_id,
+													job_id,
+												)
+											}
+											value={dep[TERM_TYPE.REAL_FINISH] || ''}
+										/>
+									</td>
+								</tr>
+							))}
+					</React.Fragment>
+				))}
 			</tbody>
 		</Table>
 	);
@@ -64,8 +113,9 @@ function TermsComponent(props) {
 
 const mapStateToProps = (state) => ({
 	jobs: state.Odbiory.Jobs.jobs,
+	terms: state.Odbiory.Terms.byJobId,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { setTermByDepartment, setTermByJob };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TermsComponent);

@@ -14,7 +14,7 @@ import {
 	SET_SUMMARY_VALUE_TO_JOB,
 	SET_SUMMARY_VALUE_TO_JOB_END,
 	SET_SUMMARY_VALUE_TO_JOB_START,
-	UPGRADE_RESULTS
+	UPGRADE_RESULTS,
 } from '../types';
 import {
 	addParameterWithValue,
@@ -23,9 +23,8 @@ import {
 	fetchSummaryValuesByJob,
 	prep_updateResults,
 	prepareDataForJobs,
-	updateObjectJob
+	updateObjectJob,
 } from '../utils/jobs_utils';
-
 
 export const jobsLoadingStart = () => ({
 	type: JOBS_LOADING_START,
@@ -35,21 +34,21 @@ export const jobsLoadingEnd = () => ({
 	type: JOBS_LOADING_END,
 });
 
-const jobsFetchStart = () => ({
+export const jobsFetchStart = () => ({
 	type: ALL_JOBS_FETCH_START,
 });
 
-const jobsFetchEnd = (jobs) => ({
+export const jobsFetchEnd = (jobs) => ({
 	type: ALL_JOBS_FETCH_END,
 	jobs,
 });
 
-const jobsFetchError = (jobs_errors) => ({
+export const jobsFetchError = (jobs_errors) => ({
 	type: ALL_JOBS_FETCH_ERROR,
 	jobs_errors,
 });
 
-const objectJobFetchStart = () => ({
+export const objectJobFetchStart = () => ({
 	type: OBJECT_JOB_FETCH_START,
 });
 
@@ -58,16 +57,16 @@ const objectJobFetchStart = () => ({
 //     errors,
 // });
 
-const objectJobFetchCompleted = () => ({
+export const objectJobFetchCompleted = () => ({
 	type: OBJECT_JOB_FETCH_COMPLETED,
 });
 
-const setJobsData = (jobs) => ({
+export const setJobsData = (jobs) => ({
 	type: JOBS_SET_DATA,
 	jobs,
 });
 
-const jobsChangePercentageValue = (job_key, upgrading) => ({
+export const jobsChangePercentageValue = (job_key, upgrading) => ({
 	type: JOBS_CHANGE_PERCENTAGE_VALUE,
 	job_key,
 	upgrading,
@@ -77,23 +76,23 @@ export const setJobInitial = () => ({
 	type: JOBS_CLEAN_DATA_OF_JOB,
 });
 
-const setSummaryValueToJobStart = () => ({
+export const setSummaryValueToJobStart = () => ({
 	type: SET_SUMMARY_VALUE_TO_JOB_START,
 });
 
-const setSummaryValueToJob = (job_key, results) => ({
+export const setSummaryValueToJob = (job_key, results) => ({
 	type: SET_SUMMARY_VALUE_TO_JOB,
 	job_key,
 	results,
 });
-const upgradeJobResults = (job_key, results) => ({
+export const setSummaryValueToJobEnd = () => ({
+	type: SET_SUMMARY_VALUE_TO_JOB_END,
+});
+
+export const upgradeJobResults = (job_key, results) => ({
 	type: UPGRADE_RESULTS,
 	job_key,
 	results,
-});
-
-const setSummaryValueToJobEnd = () => ({
-	type: SET_SUMMARY_VALUE_TO_JOB_END,
 });
 
 export const fetchAllJobs = () => async (dispatch) => {
@@ -157,9 +156,9 @@ export const jobsPrepare = () => (dispatch, getState) => {
 };
 
 /**
-*
-*
-*
+ *
+ *
+ *
  * */
 export const changeJobPercentageValue = (job_key, value) => async (dispatch, getState) => {
 	const precision = 2;

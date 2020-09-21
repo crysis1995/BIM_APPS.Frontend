@@ -45,6 +45,7 @@ function setTermsByDepartment(state, action) {
 	const { term_type, term, department_id, job_id } = action;
 	const property = 'byDepartment';
 	dotProp.set(state, `byJobId.${job_id}.${property}.${department_id}.${term_type}`, term);
+	dotProp.delete(state, `byJobId.${job_id}.${term_type}`);
 	return { ...state };
 }
 
@@ -55,9 +56,8 @@ function setTermsByJob(state, action) {
 		Object.keys(state.byJobId[job_id][property]).forEach((dep_id) => {
 			dotProp.set(state, `byJobId.${job_id}.${property}.${dep_id}.${term_type}`, term);
 		});
-	} else {
-		dotProp.set(state, `byJobId.${job_id}`, { [term_type]: term });
 	}
+	dotProp.set(state, `byJobId.${job_id}.${term_type}`, term);
 	return { ...state };
 }
 
