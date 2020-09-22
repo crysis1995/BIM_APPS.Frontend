@@ -15,22 +15,12 @@ const graphQLClient = (access_token) => {
 			uri: config.bim_apps_api.graphql,
 		}),
 		cache: new InMemoryCache(),
-		// uri: config.bim_apps_api.graphql,
 		onError: (error) => console.log(error),
 		headers,
 		fetchOptions: {
 			mode: 'no-cors',
 		},
-		// request: (operation) => {
-		// 	if (access_token) {
-		// 		operation.setContext({
-		// 			headers: {
-		// 				Authorization: `Bearer ${access_token}`,
-		// 			},
 
-		// 		});
-		// 	}
-		// },
 	});
 };
 
