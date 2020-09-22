@@ -39,6 +39,7 @@ export const componentStarted = () => (dispatch, getState) => {
 	const { started } = getState().Odbiory.OdbioryComponent;
 	dispatch(componentStart());
 	if (!started) dispatch(fetchAllJobs());
+
 };
 
 export const changeActiveTab = (tabName) => (dispatch, getState) => {

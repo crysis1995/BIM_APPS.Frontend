@@ -3,6 +3,7 @@ import { initialiseModal } from '../../../../components/Modal/redux/actions';
 import { SET_CURRENT_LEVEL, setInitial } from '../actions';
 import { fetchSummaryAreaByLevel } from './jobs_actions';
 import { fetch_all_rooms } from './rooms_actions';
+import { getDepartmentsWithTerms } from './terms_actions';
 
 const _setCurrentLevel = (current_level) => ({
 	type: SET_CURRENT_LEVEL,
@@ -22,6 +23,7 @@ export const setCurrentLevel = (current_level_id) => async (dispatch, getState) 
 		dispatch(_setCurrentLevel(current_level));
 		fetch_all_rooms(dispatch, current_level);
 		fetchSummaryAreaByLevel(dispatch, getState, current_level);
+		getDepartmentsWithTerms(dispatch, current_level);
 	} else {
 		dispatch(initialiseModal('Uwaga!', 'Wygląda na to, że nie ma takiego poziomu'));
 	}
