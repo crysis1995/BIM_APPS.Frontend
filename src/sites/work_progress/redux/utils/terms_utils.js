@@ -1,8 +1,7 @@
 import { gql } from 'apollo-boost';
 import { graphQLClient } from '../../../../services';
 import { TERM_TYPE } from '../types/constans';
-import dotProp from 'dot-prop';
-import _ from 'lodash';
+
 
 const GET_DEPARTMENTS_WITH_TERMS_QUERY = gql`
 	query getDepartmentsWithTerms($l: String, $p: ID) {

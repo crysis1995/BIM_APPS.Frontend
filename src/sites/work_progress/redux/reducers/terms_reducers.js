@@ -45,7 +45,7 @@ function setTermsByDepartment(state, action) {
 	const { term_type, term, department_id, job_id } = action;
 	const property = 'byDepartment';
 	dotProp.set(state, `byJobId.${job_id}.${property}.${department_id}.${term_type}`, term);
-	dotProp.delete(state, `byJobId.${job_id}.${term_type}`);
+	dotProp.set(state, `byJobId.${job_id}.${term_type}`, '...');
 	return { ...state };
 }
 

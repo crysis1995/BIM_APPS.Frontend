@@ -1,12 +1,6 @@
-import Levels from '../reducers/levels_reducers';
-import { fetchDepartmentsWithTerms } from '../utils/terms_utils';
-import {
-	TERMS_DATA_FETCH_START,
-	TERMS_DATA_FETCH_END,
-	TERMS_DATA_FETCH_ERROR,
-	TERMS_SET_BY_JOB,
-	TERMS_SET_BY_DEPARTMENT,
-} from '../types';
+import { TERMS_DATA_FETCH_END, TERMS_DATA_FETCH_ERROR, TERMS_DATA_FETCH_START, TERMS_SET_BY_DEPARTMENT, TERMS_SET_BY_JOB } from '../types';
+import { fetchDepartmentsWithTerms, normalizeTermsData } from '../utils/terms_utils';
+
 
 export const termsDataFetchStart = () => ({
 	type: TERMS_DATA_FETCH_START,
@@ -46,13 +40,15 @@ export const getDepartmentsWithTerms = async (dispatch, current_level) => {
 		const { data, errors } = await fetchDepartmentsWithTerms(current_level);
 
 		if (data) {
+			dispatch(termsDataFetchEnd(normalizeTermsData(data.acceptanceJobs)));
 			console.log(data);
 		}
 		if (errors) {
+			dispatch(termsDataFetchError(errors.message));
 			console.log(errors);
 		}
 	} catch (e) {
 		console.log(e);
-		dispatch(termsDataFetchEnd(e.message));
+		dispatch(termsDataFetchError(e.message));
 	}
 };

@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import Loader from '../../../../components/Loader';
 import TermsComponent from './TermsComponent';
 
-function Terms({ Jobs, ForgeViewer }) {
-	if (!Jobs.jobs_fetched || Jobs.jobs_loading) {
+function Terms({ terms, ForgeViewer }) {
+	if (terms.loading) {
 		return <Loader height={'100%'} />;
-	} else if (!ForgeViewer.current_sheet) {
+	} else if (!ForgeViewer.current_sheet || Object.keys(terms.byJobId) === 0) {
 		return (
 			<div className="p-3 text-center">
 				<p>Wybierz kondygnacje</p>
@@ -31,7 +31,7 @@ function Terms({ Jobs, ForgeViewer }) {
 
 const mapStateToProps = (state) => ({
 	ForgeViewer: state.ForgeViewer,
-	Jobs: state.Odbiory.Jobs,
+	terms: state.Odbiory.Terms,
 });
 
 const mapDispatchToProps = {};

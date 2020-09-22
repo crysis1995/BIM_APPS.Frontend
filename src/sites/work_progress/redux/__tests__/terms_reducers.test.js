@@ -16,7 +16,6 @@ describe('TERMS_REDUCERS TEST', () => {
 			error: null,
 		});
 	});
-
 	test('should properly dispatch termsDataFetchStart action', () => {
 		const action = termsDataFetchStart();
 		expect(TermsReducer(undefined, action)).toEqual({
@@ -25,7 +24,6 @@ describe('TERMS_REDUCERS TEST', () => {
 			error: null,
 		});
 	});
-
 	test('should properly dispatch termsDataFetchEnd action', () => {
 		const action = termsDataFetchEnd({ '1': 'test' });
 		expect(TermsReducer(undefined, action)).toEqual({
@@ -34,7 +32,6 @@ describe('TERMS_REDUCERS TEST', () => {
 			error: null,
 		});
 	});
-
 	test('should properly dispatch termsDataFetchError action', () => {
 		const action = termsDataFetchError('message');
 		expect(TermsReducer(undefined, action)).toEqual({
@@ -43,7 +40,6 @@ describe('TERMS_REDUCERS TEST', () => {
 			error: 'message',
 		});
 	});
-
 	test('should properly dispatch setTermByJob action', () => {
 		const initialState = {
 			byJobId: {
@@ -137,7 +133,6 @@ describe('TERMS_REDUCERS TEST', () => {
 			expectedv3,
 		);
 	});
-
 	test('should properly dispatch setTermByDepartment action', () => {
 		const initialStatev2 = {
 			byJobId: {
@@ -155,6 +150,7 @@ describe('TERMS_REDUCERS TEST', () => {
 		const expectedv2 = {
 			byJobId: {
 				'1': {
+					[TERM_TYPE.PLANNED_FINISH]: '...',
 					byDepartment: {
 						'1': { [TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1) },
 						'2': {},
@@ -181,6 +177,7 @@ describe('TERMS_REDUCERS TEST', () => {
 		const expectedv3 = {
 			byJobId: {
 				'1': {
+					[TERM_TYPE.REAL_FINISH]: '...',
 					byDepartment: {
 						'1': {
 							[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
@@ -226,6 +223,7 @@ describe('TERMS_REDUCERS TEST', () => {
 			byJobId: {
 				'1': {
 					[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
+					[TERM_TYPE.REAL_FINISH]: '...',
 					byDepartment: {
 						'1': {
 							[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),

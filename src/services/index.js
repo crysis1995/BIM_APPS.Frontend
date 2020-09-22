@@ -1,9 +1,8 @@
-import ApolloClient from 'apollo-client';
-
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import ApolloClient from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
-import { createMockClient } from 'mock-apollo-client';
 import { config } from '../config';
+
 
 const graphQLClient = (access_token) => {
 	var headers = {};

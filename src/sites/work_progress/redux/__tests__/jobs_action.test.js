@@ -17,10 +17,9 @@ import {
 	setSummaryValueToJob,
 	setSummaryValueToJobEnd,
 	setSummaryValueToJobStart,
-	upgradeJobResults
+	upgradeJobResults,
 } from '../actions/jobs_actions';
 import * as types from '../types';
-
 
 describe('JOBS ACTION TEST - simple actions', () => {
 	test('should create a jobsLoadingStart action', () => {
@@ -118,11 +117,23 @@ describe('JOBS ACTION TEST - simple actions', () => {
 	});
 });
 
-describe('TEST JOBS ACTIONS - dispatch many actions', () => {
+describe('TEST JOBS ACTIONS - dispatch many actions - success', () => {
 	var middle = [thunk];
+	var throwError = false;
 	var mockstore = configurateMockStore(middle);
 	const server = setupServer(
 		graphql.query('getAllAcceptanceJobs', (req, res, ctx) => {
+			if (throwError) {
+				return res(
+					ctx.errors([
+						{
+							message: 'Not authenticated',
+							errorType: 'AuthenticationError',
+						},
+					]),
+				);
+			}
+
 			return res(
 				ctx.data({
 					acceptanceJobs: [
@@ -152,7 +163,7 @@ describe('TEST JOBS ACTIONS - dispatch many actions', () => {
 		server.close();
 	});
 
-	test('test graphql mock', () => {
+	test('should fetch all jobs and properly set them to store', () => {
 		const expectedActions = [
 			{ type: types.ALL_JOBS_FETCH_START },
 			{
@@ -168,6 +179,23 @@ describe('TEST JOBS ACTIONS - dispatch many actions', () => {
 
 		store.dispatch(fetchAllJobs()).then(() => {
 			expect(store.getActions()).toEqual(expectedActions);
+		});
+	});
+	test('should properly handle error when fetch all jobs', () => {
+		throwError = true;
+		const expectedActions = [
+			{ type: types.ALL_JOBS_FETCH_START },
+			{
+				type: types.ALL_JOBS_FETCH_ERROR,
+				jobs_errors: 'GraphQL error: Not authenticated',
+			},
+		];
+
+		const store = mockstore({ jobs: {}, jobs_loading: false, jobs_errors: null });
+
+		store.dispatch(fetchAllJobs()).then(() => {
+			expect(store.getActions()).toEqual(expectedActions);
+			throwError = false;
 		});
 	});
 });

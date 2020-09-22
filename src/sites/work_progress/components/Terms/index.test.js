@@ -1,12 +1,11 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
+import { render } from '@testing-library/react';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
 import { rootReducer } from '../../../../reducers';
 import Terms from '../Terms/index';
-
-import '@testing-library/jest-dom/extend-expect';
 
 const renderWithRedux = (component, { initialState, store = createStore(rootReducer, initialState) } = {}) => {
 	return {
@@ -20,7 +19,7 @@ describe('TESTING TERMS COMPONENT', () => {
 		const { getByText } = renderWithRedux(<Terms />, {
 			initialState: {
 				ForgeViewer: { current_sheet: '' },
-				Odbiory: { Jobs: { jobs_fetched: true, jobs_loading: true } },
+				Odbiory: { Terms: { byJobId: {}, loading: true } },
 			},
 		});
 		expect(getByText('Loading...')).toBeInTheDocument();
@@ -30,7 +29,7 @@ describe('TESTING TERMS COMPONENT', () => {
 		const { getByText } = renderWithRedux(<Terms />, {
 			initialState: {
 				ForgeViewer: { current_sheet: '' },
-				Odbiory: { Jobs: { jobs_fetched: false, jobs_loading: true } },
+				Odbiory: { Terms: { byJobId: {}, loading: true } },
 			},
 		});
 		expect(getByText('Loading...')).toBeInTheDocument();
@@ -40,7 +39,7 @@ describe('TESTING TERMS COMPONENT', () => {
 		const { getByText } = renderWithRedux(<Terms />, {
 			initialState: {
 				ForgeViewer: { current_sheet: '' },
-				Odbiory: { Jobs: { jobs_fetched: true, jobs_loading: false } },
+				Odbiory: { Terms: { byJobId: {}, loading: false } },
 			},
 		});
 		expect(getByText('Wybierz kondygnacje')).toBeInTheDocument();
@@ -50,7 +49,10 @@ describe('TESTING TERMS COMPONENT', () => {
 		const { getByTestId } = renderWithRedux(<Terms />, {
 			initialState: {
 				ForgeViewer: { current_sheet: 'asdasd' },
-				Odbiory: { Jobs: { jobs_fetched: true, jobs_loading: false, jobs: {} } },
+				Odbiory: {
+					Terms: { byJobId: { '1': { asd: 'asd' } }, loading: false },
+					Jobs: { jobs: { '1': { name: 'asd' } } },
+				},
 			},
 		});
 		expect(getByTestId('TermsComponent')).toBeInTheDocument();

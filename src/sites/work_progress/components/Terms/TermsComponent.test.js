@@ -30,7 +30,6 @@ describe('TESTING TERMS COMPONENT', () => {
 			initialState: {},
 		});
 		expect(getAllByRole('columnheader').length).toBe(4);
-
 		expect(getByText('Nazwa roboty')).toBeInTheDocument();
 		expect(getByText('Data rzeczywistego rozpoczęcia')).toBeInTheDocument();
 		expect(getByText('Data planowanego zakończenia')).toBeInTheDocument();
@@ -85,7 +84,6 @@ describe('TESTING TERMS COMPONENT', () => {
 			},
 		});
 		expect(getAllByRole('cell').length).toBe(16);
-
 		expect(getByText('malowanie stropów, słupów, ścian nad sufitem podwieszanym')).toBeInTheDocument();
 		expect(getByText('Otwarcie ścian GK')).toBeInTheDocument();
 		expect(getByText('Wykonanie podkładów betonowych')).toBeInTheDocument();
