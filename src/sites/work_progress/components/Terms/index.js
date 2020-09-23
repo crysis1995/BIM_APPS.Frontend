@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import Loader from '../../../../components/Loader';
 import TermsComponent from './TermsComponent';
 
-function Terms({ terms, ForgeViewer }) {
-	if (terms.loading) {
+function Terms({ terms, ForgeViewer, jobs_loading }) {
+	if (terms.loading || jobs_loading) {
 		return <Loader height={'100%'} />;
 	} else if (!ForgeViewer.current_sheet || Object.keys(terms.byJobId) === 0) {
 		return (
@@ -32,6 +32,7 @@ function Terms({ terms, ForgeViewer }) {
 const mapStateToProps = (state) => ({
 	ForgeViewer: state.ForgeViewer,
 	terms: state.Odbiory.Terms,
+	jobs_loading: state.Odbiory.Jobs.jobs_loading,
 });
 
 const mapDispatchToProps = {};
