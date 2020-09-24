@@ -1,10 +1,8 @@
 import { gql } from 'apollo-boost';
-
 import { graphQLClient } from '../../../../services';
 import { sumOfArray } from '../../../../utils/sumOfArray';
 import { fetchALLAreaJobPerLevel, fetchSummaryAreaJobPerLevel } from './objects_utils';
 import { RoundNumber } from '../../../../utils/RoundNumber';
-
 
 export const GET_ALL_ACCEPTANCE_JOBS = gql`
 	query getAllAcceptanceJobs {
@@ -177,7 +175,7 @@ export const updateObjectJob = (id) => {
 	});
 };
 
-export const fetchSummaryValuesByJob = async (job_id, current_level, precision) => {
+export const fetchSummaryValuesByJob = async (job_id, current_level) => {
 	return new Promise((resolve, reject) => {
 		var summary_all_value;
 		var summary_current_value;
@@ -188,16 +186,12 @@ export const fetchSummaryValuesByJob = async (job_id, current_level, precision) 
 			fetchSummaryAreaJobPerLevel(job_id, current_level),
 		]).then((resp) => {
 			if (resp[0].data)
-				summary_all_value =
-					Math.floor((resp[0].data.acceptanceObjectsConnection.aggregate.sum.area || 0) * 10 ** precision) /
-					10 ** precision;
+				summary_all_value = RoundNumber(resp[0].data.acceptanceObjectsConnection.aggregate.sum.area || 0);
+
 			if (resp[1].data) {
-				summary_current_value =
-					Math.floor(
-						(resp[1].data.acceptanceReferenceJobsConnection.aggregate.sum.value_calculated || 0) *
-							10 ** precision,
-					) /
-					10 ** precision;
+				summary_current_value = RoundNumber(
+					resp[1].data.acceptanceReferenceJobsConnection.aggregate.sum.value_calculated || 0,
+				);
 				elements = resp[1].data.acceptanceReferenceJobsConnection.values.reduce(
 					(prev, acc) => ({
 						...prev,
@@ -207,8 +201,7 @@ export const fetchSummaryValuesByJob = async (job_id, current_level, precision) 
 				);
 			}
 
-			percentage_value =
-				Math.floor((summary_current_value / summary_all_value) * 100 * 10 ** precision) / 10 ** precision;
+			percentage_value = RoundNumber((summary_current_value / summary_all_value) * 100);
 			resolve({
 				id: job_id,
 				summary_all_value,

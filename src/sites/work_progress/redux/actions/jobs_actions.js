@@ -9,12 +9,12 @@ import {
 	JOBS_LOADING_END,
 	JOBS_LOADING_START,
 	JOBS_SET_DATA,
-	OBJECT_JOB_FETCH_COMPLETED,
+	OBJECT_JOB_FETCH_COMPLETED, OBJECT_JOB_FETCH_ERROR,
 	OBJECT_JOB_FETCH_START,
 	SET_SUMMARY_VALUE_TO_JOB,
 	SET_SUMMARY_VALUE_TO_JOB_END,
 	SET_SUMMARY_VALUE_TO_JOB_START,
-	UPGRADE_RESULTS,
+	UPGRADE_RESULTS
 } from '../types';
 import {
 	addParameterWithValue,
@@ -52,10 +52,10 @@ export const objectJobFetchStart = () => ({
 	type: OBJECT_JOB_FETCH_START,
 });
 
-// const objectJobFetchError = (errors) => ({
-//     type: OBJECT_JOB_FETCH_ERROR,
-//     errors,
-// });
+export const objectJobFetchError = (errors) => ({
+    type: OBJECT_JOB_FETCH_ERROR,
+    errors,
+});
 
 export const objectJobFetchCompleted = () => ({
 	type: OBJECT_JOB_FETCH_COMPLETED,
@@ -107,9 +107,11 @@ export const fetchAllJobs = () => async (dispatch) => {
 			);
 		}
 		if (errors) {
+			// console.log(errors);
 			dispatch(jobsFetchError(errors.message));
 		}
 	} catch (errors) {
+		// console.log(errors);
 		dispatch(jobsFetchError(errors.message));
 	}
 };
@@ -130,10 +132,10 @@ export const fetchAllJobs = () => async (dispatch) => {
  *
  *
  */
-export const fetchSummaryAreaByLevel = async (dispatch, getState, current_level, precision = 2) => {
+export const fetchSummaryAreaByLevel = async (dispatch, getState, current_level) => {
 	dispatch(setSummaryValueToJobStart());
 	const { jobs } = getState().Odbiory.Jobs;
-	Promise.all(Object.keys(jobs).map((job_id) => fetchSummaryValuesByJob(job_id, current_level, precision)))
+	return Promise.all(Object.keys(jobs).map((job_id) => fetchSummaryValuesByJob(job_id, current_level)))
 		.then((value) => value.forEach((item) => dispatch(setSummaryValueToJob(item.id, item))))
 		.then(() => dispatch(setSummaryValueToJobEnd()))
 		.catch(console.log);

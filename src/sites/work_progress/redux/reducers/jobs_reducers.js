@@ -51,10 +51,6 @@ const initialState = {
 	objects_jobs_error: null,
 };
 
-// function AddJobReducer(state, action) {
-// 	const { job_id, job_data } = action;
-// 	const job = state[job_id];
-
 // 	return{
 // 		...state,
 // 		[job_id] : {
@@ -64,26 +60,6 @@ const initialState = {
 // 	}
 
 // }
-
-const removeRoomFromJobs = (state, action) => {
-	Object.keys(state.jobs).forEach((job_id) =>
-		Object.keys(dotProp.get(state, `jobs.${job_id}.upgrading`)).forEach((upgrading_key) =>
-			dotProp.delete(state, `jobs.${job_id}.upgrading.${upgrading_key}.${action.deletedRoom}`),
-		),
-	);
-	return { ...state };
-};
-
-const removeAllRoomsFromJobs = (state) => {
-	Object.keys(state.jobs).forEach((job_id) =>
-		Object.keys(dotProp.get(state, `jobs.${job_id}.upgrading`)).forEach((upgrading_key) =>
-			Object.keys(dotProp.get(state, `jobs.${job_id}.upgrading.${upgrading_key}`)).forEach((revit_id) =>
-				dotProp.delete(state, `jobs.${job_id}.upgrading.${upgrading_key}.${revit_id}`),
-			),
-		),
-	);
-	return { ...state };
-};
 
 const JobsReducer = (state = initialState, action) => {
 	switch (action.type) {
@@ -102,6 +78,7 @@ const JobsReducer = (state = initialState, action) => {
 				jobs_loading: false,
 			};
 		case ALL_JOBS_FETCH_START:
+			return { ...state };
 		case ALL_JOBS_FETCH_END:
 			return {
 				...state,
@@ -140,57 +117,22 @@ const JobsReducer = (state = initialState, action) => {
 				jobs: action.jobs,
 			};
 		case JOBS_CHANGE_PERCENTAGE_VALUE:
-			return {
-				...state,
-				jobs: {
-					...state.jobs,
-					[action.job_key]: {
-						...state.jobs[action.job_key],
-						upgrading: {
-							...state.jobs[action.job_key].upgrading,
-							...action.upgrading,
-						},
-					},
-				},
-			};
-		case SET_SUMMARY_VALUE_TO_JOB:
-			return {
-				...state,
-				jobs_loading: true,
-				jobs: {
-					...state.jobs,
-					[action.job_key]: {
-						...state.jobs[action.job_key],
-						results: {
-							...state.jobs[action.job_key].results,
-							...action.results,
-						},
-					},
-				},
-			};
-		case UPGRADE_RESULTS:
-			return {
-				...state,
-				jobs: {
-					...state.jobs,
-					[action.job_key]: {
-						...state.jobs[action.job_key],
-						results: {
-							...action.results,
-						},
-					},
-				},
-			};
-		case SET_SUMMARY_VALUE_TO_JOB_END:
-			return {
-				...state,
-				jobs_loading: false,
-			};
+			return changeJobPercentageValue(state, action);
 		case SET_SUMMARY_VALUE_TO_JOB_START:
 			return {
 				...state,
 				jobs_loading: true,
 			};
+		case SET_SUMMARY_VALUE_TO_JOB:
+			return setResultsToJob(state, action);
+		case SET_SUMMARY_VALUE_TO_JOB_END:
+			return {
+				...state,
+				jobs_loading: false,
+			};
+		case UPGRADE_RESULTS:
+			return setResultsToJob(state, action);
+
 		case JOBS_CLEAN_DATA_OF_JOB:
 			return {
 				...state,
@@ -202,3 +144,41 @@ const JobsReducer = (state = initialState, action) => {
 };
 
 export default JobsReducer;
+
+const removeRoomFromJobs = (state, action) => {
+	Object.keys(state.jobs).forEach((job_id) =>
+		Object.keys(dotProp.get(state, `jobs.${job_id}.upgrading`)).forEach((upgrading_key) =>
+			dotProp.delete(state, `jobs.${job_id}.upgrading.${upgrading_key}.${action.deletedRoom}`),
+		),
+	);
+	return { ...state };
+};
+
+const removeAllRoomsFromJobs = (state) => {
+	Object.keys(state.jobs).forEach((job_id) =>
+		Object.keys(dotProp.get(state, `jobs.${job_id}.upgrading`)).forEach((upgrading_key) =>
+			Object.keys(dotProp.get(state, `jobs.${job_id}.upgrading.${upgrading_key}`)).forEach((revit_id) =>
+				dotProp.delete(state, `jobs.${job_id}.upgrading.${upgrading_key}.${revit_id}`),
+			),
+		),
+	);
+	return { ...state };
+};
+
+const changeJobPercentageValue = (state, { job_key, upgrading }) => {
+	if (!upgrading || !upgrading instanceof Object || Array.isArray(upgrading)) return state;
+
+	Object.keys(upgrading).forEach((upgrading_key) =>
+		dotProp.set(state, `jobs.${job_key}.upgrading.${upgrading_key}`, upgrading[upgrading_key]),
+	);
+	return { ...state };
+};
+
+const setResultsToJob = (state, { job_key, results }) => {
+	if (!results || !results instanceof Object || Array.isArray(results)) return state;
+
+	Object.keys(results).forEach((results_key) =>
+		dotProp.set(state, `jobs.${job_key}.results.${results_key}`, results[results_key]),
+	);
+	return { ...state };
+};
