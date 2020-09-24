@@ -117,7 +117,7 @@ describe('JOBS ACTION TEST - simple actions', () => {
 	});
 });
 
-describe('TEST JOBS ACTIONS - dispatch many actions - success', () => {
+describe('TEST JOBS ACTIONS - dispatch many actions', () => {
 	var middle = [thunk];
 	var throwError = false;
 	var mockstore = configurateMockStore(middle);
