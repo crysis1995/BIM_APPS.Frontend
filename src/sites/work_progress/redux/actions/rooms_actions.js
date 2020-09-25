@@ -99,6 +99,10 @@ export const fetch_all_rooms = async (dispatch, level) => {
 	dispatch(fetchRoomsEnd(normalize(rooms, 'revit_id')));
 };
 
+
+
+
+
 export const setSelectedRoom = (room_value, status, from_selector = true) => (dispatch, getState) => {
 	const { jobs_loading } = getState().Odbiory.Jobs;
 	const { objects_loading } = getState().Odbiory.Objects;

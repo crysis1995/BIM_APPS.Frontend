@@ -18,10 +18,10 @@ import {
 	setSummaryValueToJob,
 	setSummaryValueToJobEnd,
 	setSummaryValueToJobStart,
-	upgradeJobResults,
+	upgradeJobResults
 } from '../actions/jobs_actions';
-import { SET_SUMMARY_VALUE_TO_JOB } from '../types';
 import * as types from '../types';
+
 
 describe('JOBS ACTION TEST - simple actions', () => {
 	test('should create a jobsLoadingStart action', () => {

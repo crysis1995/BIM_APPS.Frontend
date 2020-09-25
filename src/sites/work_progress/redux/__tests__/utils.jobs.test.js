@@ -1,10 +1,9 @@
-import thunk from 'redux-thunk';
-import { fetchAllJobs } from '../actions/jobs_actions';
-import * as types from '../types';
-import { prepareDataForJobs, fetchSummaryValuesByJob } from '../utils/jobs_utils';
 import { graphql } from 'msw';
 import { setupServer } from 'msw/node';
 import configurateMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import { fetchSummaryValuesByJob, prepareDataForJobs } from '../utils/jobs_utils';
+
 
 describe('JOBS UTILS TEST', () => {
 	var middle = [thunk];
@@ -729,7 +728,7 @@ describe('JOBS UTILS TEST', () => {
 		expect(prepareDataForJobs(job_id, objects, selectedRooms)).toStrictEqual(expected);
 	});
 
-	test('', async () => {
+	test('should fetch and parse elements as expected object', async () => {
 		const job_id = '1';
 		const current_level = 'Poziom 1';
 

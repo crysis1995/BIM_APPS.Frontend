@@ -5,7 +5,3 @@ export const setInitial = () => ({
 	type: SET_INITIAL,
 });
 
-// export const setCurrentLevel = (current_level) => ({
-// 	type: SET_CURRENT_LEVEL,
-// 	current_level,
-// });

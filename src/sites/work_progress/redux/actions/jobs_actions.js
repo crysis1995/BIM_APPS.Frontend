@@ -97,23 +97,23 @@ export const upgradeJobResults = (job_key, results) => ({
 
 export const fetchAllJobs = () => async (dispatch) => {
 	dispatch(jobsFetchStart());
-	try {
-		const { data, errors } = await fetchAllJobsFromAPI();
-		if (data) {
-			dispatch(
-				jobsFetchEnd(
-					addParameterWithValue(normalize(data.acceptanceJobs), 'hidden', (val) => val.unit === 'piece'),
-				),
-			);
-		}
-		if (errors) {
-			// console.log(errors);
-			dispatch(jobsFetchError(errors.message));
-		}
-	} catch (errors) {
-		// console.log(errors);
-		dispatch(jobsFetchError(errors.message));
-	}
+	// try {
+	// 	const { data, errors } = await fetchAllJobsFromAPI();
+	// 	if (data) {
+	// 		dispatch(
+	// 			jobsFetchEnd(
+	// 				addParameterWithValue(normalize(data.acceptanceJobs), 'hidden', (val) => val.unit === 'piece'),
+	// 			),
+	// 		);
+	// 	}
+	// 	if (errors) {
+	// 		// console.log(errors);
+	// 		dispatch(jobsFetchError(errors.message));
+	// 	}
+	// } catch (errors) {
+	// 	// console.log(errors);
+	// 	dispatch(jobsFetchError(errors.message));
+	// }
 };
 
 /**

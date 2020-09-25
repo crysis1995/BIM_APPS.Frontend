@@ -1,5 +1,8 @@
-import reduceReducers from 'reduce-reducers';
 import { combineReducers } from 'redux';
+import { combineEpics } from 'redux-observable';
+
+import { test } from './redux/epics';
+import TEST_REDUCER from './redux/reducers';
 
 import Jobs from './redux/reducers/jobs_reducers';
 import Levels from './redux/reducers/levels_reducers';
@@ -7,10 +10,10 @@ import Objects from './redux/reducers/objects_reducers';
 import OdbioryComponent from './redux/reducers/odbiory_reducers';
 import Results from './redux/reducers/results_reducers';
 import Rooms from './redux/reducers/rooms_reducers';
-import Upgrading from './redux/reducers/upgrading_reducers';
 import Terms from './redux/reducers/terms_reducers';
+import Upgrading from './redux/reducers/upgrading_reducers';
 
-const OdbioryReducer = combineReducers({
+export const OdbioryReducer = combineReducers({
 	OdbioryComponent,
 	Rooms,
 	Objects,
@@ -19,6 +22,7 @@ const OdbioryReducer = combineReducers({
 	Upgrading,
 	Results,
 	Terms,
+	TEST_REDUCER,
 });
 
-export default OdbioryReducer;
+export const OdbioryEpics = combineEpics(test);

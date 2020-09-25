@@ -145,10 +145,10 @@ const JobsReducer = (state = initialState, action) => {
 
 export default JobsReducer;
 
-const removeRoomFromJobs = (state, action) => {
+const removeRoomFromJobs = (state, { deletedRoom }) => {
 	Object.keys(state.jobs).forEach((job_id) =>
 		Object.keys(dotProp.get(state, `jobs.${job_id}.upgrading`)).forEach((upgrading_key) =>
-			dotProp.delete(state, `jobs.${job_id}.upgrading.${upgrading_key}.${action.deletedRoom}`),
+			dotProp.delete(state, `jobs.${job_id}.upgrading.${upgrading_key}.${deletedRoom}`),
 		),
 	);
 	return { ...state };
