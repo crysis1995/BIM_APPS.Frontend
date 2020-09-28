@@ -1,23 +1,27 @@
 import { ofType } from 'redux-observable';
-import { mergeMap, map, mapTo } from 'rxjs/operators';
-import { normalize } from '../../../utils/normalize';
-import { jobsFetchEnd } from './actions/jobs_actions';
-import { TEST, TEST2, TEST3, TEST_START } from './types';
-import { addParameterWithValue, fetchAllJobsFromAPI } from './utils/jobs_utils';
+import { concat, from, of } from 'rxjs';
+import { catchError, map, mergeMap } from 'rxjs/operators';
+import { setResultsByJobId } from './actions/results_actions';
+import { RESULTS_FETCH_END, RESULTS_FETCH_START } from './types';
+import { fetchSummaryData, prepareResultsByJob } from './utils/results_utils';
 
-export const test = (action$) =>
+export const fetchResultsForLevel = (action$, state$) =>
 	action$.pipe(
-		ofType(TEST_START),
-		mergeMap(() => console.log('asdasd')),
-		mapTo({ type: TEST }),
-
-		// 	mergeMap((action) => fetchAllJobsFromAPI()),
-		// 	.pipe(
-		// 	map(
-		// 		({ data }) => console.log(data),
-		// 		// addParameterWithValue(normalize(data.acceptanceJobs), 'hidden', (val) => val.unit === 'piece'),
-		// 	),
-		// 	map((e) => console.log('jtesem tutaj')),
-		// 	// map(jobsFetchEnd),
-		// ),
+		ofType(RESULTS_FETCH_START),
+		mergeMap(({ current_level }) =>
+			concat(
+				from(Object.keys(state$.value.Odbiory.Jobs.jobs)).pipe(
+					mergeMap((job_id) => {
+						return from(fetchSummaryData(job_id, current_level)).pipe(
+							map((value) => setResultsByJobId(job_id, prepareResultsByJob(value))),
+							catchError((error) => {
+								console.log(error);
+								return of('error');
+							}),
+						);
+					}),
+				),
+				of({ type: RESULTS_FETCH_END }),
+			),
+		),
 	);

@@ -1,8 +1,9 @@
-import Loader from '../../components/Loader';
 import React from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import Loader from '../../components/Loader';
+import { TEST, TEST_START } from './redux/types';
 
 const WorkProgress = React.lazy(() => import('./components'));
 const Viewer = React.lazy(() => import('../../components/ForgeViewer/components'));
@@ -18,7 +19,7 @@ function AcceptanceLayout(props) {
 							<Viewer />
 						) : (
 							<div className="position-center align-items-center mt-5">
-								<p>Usługa BIM360 niedostępna</p>
+								<p onClick={() => props.click()}>Usługa BIM360 niedostępna</p>
 							</div>
 						)}
 					</div>
@@ -37,5 +38,7 @@ const mapStateToProps = ({ Autodesk, Odbiory, CMSLogin }) => ({
 	started: Odbiory.OdbioryComponent.started,
 	CMSLogin,
 });
-
-export default connect(mapStateToProps, null)(AcceptanceLayout);
+const mapDispatchToProps = {
+	click: () => (dispatch) => dispatch({ type: TEST }),
+};
+export default connect(mapStateToProps, mapDispatchToProps)(AcceptanceLayout);

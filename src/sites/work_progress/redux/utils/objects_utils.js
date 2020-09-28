@@ -22,6 +22,9 @@ export const fetchALLAreaJobPerLevel = (job_id, level) => {
 	});
 };
 
+
+
+
 export const fetchSummaryAreaJobPerLevel = (job_id, level) => {
 	return graphQLClient().query({
 		query: gql`

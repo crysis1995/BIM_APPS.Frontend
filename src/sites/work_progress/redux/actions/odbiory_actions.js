@@ -1,6 +1,3 @@
-import { fetchAllJobs, setJobInitial } from './jobs_actions';
-import { cleanResults } from './results_actions';
-
 import {
 	CHANGE_VISIBILITY_DIFFERENTIAL_JOBS,
 	CHANGE_VISIBILITY_UNITED_JOBS,
@@ -10,6 +7,8 @@ import {
 } from '../types';
 
 import { CONSTANTS } from '../types/constans';
+import { fetchAllJobs } from './jobs_actions';
+import { cleanResults } from './results_actions';
 
 //          ACTIONS
 const componentStart = () => ({
@@ -39,22 +38,19 @@ export const componentStarted = () => (dispatch, getState) => {
 	const { started } = getState().Odbiory.OdbioryComponent;
 	dispatch(componentStart());
 	if (!started) dispatch(fetchAllJobs());
-
 };
 
 export const changeActiveTab = (tabName) => (dispatch, getState) => {
 	const { active_job_id } = getState().Odbiory.Results;
 	switch (tabName) {
 		case CONSTANTS.RESULTS:
-			dispatch(setActiveTab(tabName));
 			break;
 		case CONSTANTS.PROGRESS:
 			active_job_id && dispatch(cleanResults());
-			dispatch(setActiveTab(tabName));
 			break;
 		case CONSTANTS.TERMS:
-			dispatch(setActiveTab(tabName));
 			break;
 		default:
 	}
+	dispatch(setActiveTab(tabName));
 };

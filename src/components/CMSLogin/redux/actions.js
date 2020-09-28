@@ -1,4 +1,13 @@
-import { cleanUserDataInLocalStorage, fetchUserData, getUserFromLocalStorage, isExpired, login, resetPasswordAPI, saveUserDataToLocalStorage } from './utils';
+import { TEST_START } from '../../../sites/work_progress/redux/types';
+import {
+	cleanUserDataInLocalStorage,
+	fetchUserData,
+	getUserFromLocalStorage,
+	isExpired,
+	login,
+	resetPasswordAPI,
+	saveUserDataToLocalStorage,
+} from './utils';
 
 export const USER_LOGIN_START = 'cmslogin__USER_LOGIN_START';
 export const USER_LOGIN_END = 'cmslogin__USER_LOGIN_END';

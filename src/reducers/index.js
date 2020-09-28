@@ -7,7 +7,7 @@ import Autodesk from '../components/AutodeskLogin/redux';
 import CMSLogin from '../components/CMSLogin/redux/reducers';
 import ForgeViewer from '../components/ForgeViewer/redux/reducers';
 import Modal from '../components/Modal/redux/reducers';
-import { OdbioryReducer as Odbiory, OdbioryEpics } from '../sites/work_progress/reducers';
+import { OdbioryReducer as Odbiory, OdbioryEpics as rootEpic } from '../sites/work_progress/reducers';
 
 const rootReducer = combineReducers({
 	Autodesk,
@@ -18,6 +18,6 @@ const rootReducer = combineReducers({
 	CMSLogin,
 });
 
-const rootEpic = combineEpics(OdbioryEpics);
+// const rootEpic = combineEpics(OdbioryEpics);
 
 export { rootReducer, rootEpic };

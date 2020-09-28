@@ -9,12 +9,13 @@ import {
 	JOBS_LOADING_END,
 	JOBS_LOADING_START,
 	JOBS_SET_DATA,
-	OBJECT_JOB_FETCH_COMPLETED, OBJECT_JOB_FETCH_ERROR,
+	OBJECT_JOB_FETCH_COMPLETED,
+	OBJECT_JOB_FETCH_ERROR,
 	OBJECT_JOB_FETCH_START,
 	SET_SUMMARY_VALUE_TO_JOB,
 	SET_SUMMARY_VALUE_TO_JOB_END,
 	SET_SUMMARY_VALUE_TO_JOB_START,
-	UPGRADE_RESULTS
+	UPGRADE_RESULTS,
 } from '../types';
 import {
 	addParameterWithValue,
@@ -53,8 +54,8 @@ export const objectJobFetchStart = () => ({
 });
 
 export const objectJobFetchError = (errors) => ({
-    type: OBJECT_JOB_FETCH_ERROR,
-    errors,
+	type: OBJECT_JOB_FETCH_ERROR,
+	errors,
 });
 
 export const objectJobFetchCompleted = () => ({
@@ -97,23 +98,21 @@ export const upgradeJobResults = (job_key, results) => ({
 
 export const fetchAllJobs = () => async (dispatch) => {
 	dispatch(jobsFetchStart());
-	// try {
-	// 	const { data, errors } = await fetchAllJobsFromAPI();
-	// 	if (data) {
-	// 		dispatch(
-	// 			jobsFetchEnd(
-	// 				addParameterWithValue(normalize(data.acceptanceJobs), 'hidden', (val) => val.unit === 'piece'),
-	// 			),
-	// 		);
-	// 	}
-	// 	if (errors) {
-	// 		// console.log(errors);
-	// 		dispatch(jobsFetchError(errors.message));
-	// 	}
-	// } catch (errors) {
-	// 	// console.log(errors);
-	// 	dispatch(jobsFetchError(errors.message));
-	// }
+	try {
+		const { data, errors } = await fetchAllJobsFromAPI();
+		if (data) {
+			dispatch(
+				jobsFetchEnd(
+					addParameterWithValue(normalize(data.acceptanceJobs), 'hidden', (val) => val.unit === 'piece'),
+				),
+			);
+		}
+		if (errors) {
+			dispatch(jobsFetchError(errors.message));
+		}
+	} catch (errors) {
+		dispatch(jobsFetchError(errors.message));
+	}
 };
 
 /**
