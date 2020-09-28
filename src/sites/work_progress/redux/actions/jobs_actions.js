@@ -21,7 +21,6 @@ import {
 	addParameterWithValue,
 	createReferenceJob,
 	fetchAllJobsFromAPI,
-	fetchSummaryValuesByJob,
 	prep_updateResults,
 	prepareDataForJobs,
 	updateObjectJob,
@@ -131,14 +130,14 @@ export const fetchAllJobs = () => async (dispatch) => {
  *
  *
  */
-export const fetchSummaryAreaByLevel = async (dispatch, getState, current_level) => {
-	dispatch(setSummaryValueToJobStart());
-	const { jobs } = getState().Odbiory.Jobs;
-	return Promise.all(Object.keys(jobs).map((job_id) => fetchSummaryValuesByJob(job_id, current_level)))
-		.then((value) => value.forEach((item) => dispatch(setSummaryValueToJob(item.id, item))))
-		.then(() => dispatch(setSummaryValueToJobEnd()))
-		.catch(console.log);
-};
+// export const fetchSummaryAreaByLevel = async (dispatch, getState, current_level) => {
+// 	dispatch(setSummaryValueToJobStart());
+// 	const { jobs } = getState().Odbiory.Jobs;
+// 	return Promise.all(Object.keys(jobs).map((job_id) => fetchSummaryValuesByJob(job_id, current_level)))
+// 		.then((value) => value.forEach((item) => dispatch(setSummaryValueToJob(item.id, item))))
+// 		.then(() => dispatch(setSummaryValueToJobEnd()))
+// 		.catch(console.log);
+// };
 
 /**
  *

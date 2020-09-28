@@ -1,8 +1,6 @@
 import { debounce } from 'lodash';
 
 import { normalize } from '../../../../utils/normalize';
-import { jobsLoadingStart, jobsPrepare } from './jobs_actions';
-import { getFilteredObjects } from '../utils/objects_utils';
 
 import {
 	OBJECTS_LOADING_END,
@@ -11,6 +9,8 @@ import {
 	OBJECTS_SET_DATA,
 	OBJECTS_SET_INITIAL,
 } from '../types';
+import { getFilteredObjects } from '../utils/objects_utils';
+import { jobsLoadingStart, jobsPrepare } from './jobs_actions';
 
 export const fetchObjectsStart = () => ({
 	type: OBJECTS_LOADING_START,

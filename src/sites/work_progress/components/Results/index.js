@@ -3,9 +3,8 @@ import { connect } from 'react-redux';
 import Loader from '../../../../components/Loader';
 import ResultsListComponent from './Results';
 
-
-function ResultComponent({ Jobs, ForgeViewer }) {
-	if (!Jobs.jobs_fetched || Jobs.jobs_loading) {
+function ResultComponent({ Results, Jobs, ForgeViewer }) {
+	if (!Jobs.jobs_fetched || Results.loading) {
 		return <Loader height={'100%'} />;
 	} else if (!ForgeViewer.current_sheet) {
 		return (
@@ -19,9 +18,10 @@ function ResultComponent({ Jobs, ForgeViewer }) {
 }
 const mapStateToProps = (state) => ({
 	ForgeViewer: state.ForgeViewer,
+	Results: state.Odbiory.Results,
 	Jobs: state.Odbiory.Jobs,
 });
 
-const mapDispatchToProps = {  };
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResultComponent);

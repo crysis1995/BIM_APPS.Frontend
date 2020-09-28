@@ -14,10 +14,6 @@ import {
 	OBJECT_JOB_FETCH_ERROR,
 	OBJECT_JOB_FETCH_START,
 	REMOVE_ROOM_FROM_SELECTION,
-	SET_SUMMARY_VALUE_TO_JOB,
-	SET_SUMMARY_VALUE_TO_JOB_END,
-	SET_SUMMARY_VALUE_TO_JOB_START,
-	UPGRADE_RESULTS,
 } from '../types';
 
 //  singleJob = {
@@ -33,14 +29,6 @@ import {
 // 		percentage_value: 0,
 // 		reference_job: null,
 // 	},
-// results: {
-// 	summary_all_value: 0,
-// 	summary_current_value: 0,
-// 	percentage_value: 0,
-// 	elements: {
-// 		1: [4674, 75547], // element ids
-// 	},
-// },
 // };
 const initialState = {
 	jobs: {},
@@ -50,16 +38,6 @@ const initialState = {
 	objects_jobs_loading: false,
 	objects_jobs_error: null,
 };
-
-// 	return{
-// 		...state,
-// 		[job_id] : {
-// 			...job,
-
-// 		}
-// 	}
-
-// }
 
 const JobsReducer = (state = initialState, action) => {
 	switch (action.type) {
@@ -118,20 +96,6 @@ const JobsReducer = (state = initialState, action) => {
 			};
 		case JOBS_CHANGE_PERCENTAGE_VALUE:
 			return changeJobPercentageValue(state, action);
-		case SET_SUMMARY_VALUE_TO_JOB_START:
-			return {
-				...state,
-				jobs_loading: true,
-			};
-		case SET_SUMMARY_VALUE_TO_JOB:
-			return setResultsToJob(state, action);
-		case SET_SUMMARY_VALUE_TO_JOB_END:
-			return {
-				...state,
-				jobs_loading: false,
-			};
-		case UPGRADE_RESULTS:
-			return setResultsToJob(state, action);
 
 		case JOBS_CLEAN_DATA_OF_JOB:
 			return {
@@ -174,11 +138,11 @@ const changeJobPercentageValue = (state, { job_key, upgrading }) => {
 	return { ...state };
 };
 
-const setResultsToJob = (state, { job_key, results }) => {
-	if (!results || !results instanceof Object || Array.isArray(results)) return state;
-
-	Object.keys(results).forEach((results_key) =>
-		dotProp.set(state, `jobs.${job_key}.results.${results_key}`, results[results_key]),
-	);
-	return { ...state };
-};
+// const setResultsToJob = (state, { job_key, results }) => {
+// 	if (!results || !results instanceof Object || Array.isArray(results)) return state;
+//
+// 	Object.keys(results).forEach((results_key) =>
+// 		dotProp.set(state, `jobs.${job_key}.results.${results_key}`, results[results_key]),
+// 	);
+// 	return { ...state };
+// };

@@ -8,7 +8,7 @@ import {
 	RESULTS_SET_DATA,
 	RESULTS_UPDATE_DATA,
 } from '../types';
-// import { fetchSummaryData, prepareResultsByJob } from '../utils/results_utils';
+import { fetchSummaryData, prepareResultsByJob } from '../utils/results_utils';
 
 export const resultsColorByRoom = (active_job_id) => ({
 	type: COLOR_RESULTS,
@@ -56,16 +56,15 @@ export const updateResultsByJobId = (jobId, rooms, value) => ({
 	value,
 });
 
-// export const fetchResultsForLevel = async (dispatch, getState, current_level) => {
-// 	console.time('fetchResultsForLevel');
-// 	dispatch(fetchResultStart());
-// 	// const { jobs } = getState().Odbiory.Jobs;
-// 	// return Promise.all(
-// 	// 	Object.keys(jobs).map((job_id) =>
-// 	// 		fetchSummaryData(job_id, current_level)
-// 	// 			.then((value) => prepareResultsByJob(value))
-// 	// 			.then((data) => dispatch(setResultsByJobId(job_id, data)))
-// 	// 			.catch((error) => dispatch(fetchResultError(error.message))),
-// 	// 	),
-// 	// ).then(() => console.log(new Date().getTime() - old));
-// };
+export const fetchResultsForLevel = async (dispatch, getState, current_level) => {
+	dispatch(fetchResultStart());
+	const { jobs } = getState().Odbiory.Jobs;
+	return Promise.all(
+		Object.keys(jobs).map((job_id) =>
+			fetchSummaryData(job_id, current_level)
+				.then((value) => prepareResultsByJob(value))
+				.then((data) => dispatch(setResultsByJobId(job_id, data)))
+				.catch((error) => dispatch(fetchResultError(error.message))),
+		),
+	);
+};
