@@ -1,7 +1,16 @@
-import dotProp from 'dot-prop';
-
 import { SET_INITIAL } from '../actions';
-import { ADD_ROOM_TO_SELECTION, ADD_SPECYFIC_ROOM_TO_SELECTION, CLEAN_SELECTION, REMOVE_ROOM_FROM_SELECTION, ROOMS_LOADING_END, ROOMS_LOADING_ERROR, ROOMS_LOADING_START, ROOMS_SET_INITIAL, SELECT_ROOM_BY_ODBIORY } from '../types';
+import {
+	ADD_ROOM_TO_SELECTION,
+	ADD_SPECYFIC_ROOM_TO_SELECTION,
+	CLEAN_SELECTION,
+	REMOVE_ROOM_FROM_SELECTION,
+	ROOMS_LOADING_END,
+	ROOMS_LOADING_ERROR,
+	ROOMS_LOADING_START,
+	ROOMS_SET_INITIAL,
+	SELECT_ROOM_BY_ODBIORY
+} from '../types';
+
 
 const initialState = {
 	rooms: [],
@@ -13,35 +22,10 @@ const initialState = {
 
 const RoomsReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case ADD_ROOM_TO_SELECTION: {
-			if (Array.isArray(action.selectedRoom)) {
-				return {
-					...state,
-					selected_rooms: [...state.selected_rooms, ...action.selectedRoom],
-					from_selector: action.from_selector,
-				};
-			} else {
-				return {
-					...state,
-					selected_rooms: [...state.selected_rooms, action.selectedRoom],
-					from_selector: action.from_selector,
-				};
-			}
-		}
+		case ADD_ROOM_TO_SELECTION:
+			return addRoomToSelection(state, action);
 		case ADD_SPECYFIC_ROOM_TO_SELECTION:
-			if (Array.isArray(action.selectedRooms)) {
-				return {
-					...state,
-					selected_rooms: [...action.selectedRooms],
-					from_selector: action.from_selector,
-				};
-			} else {
-				return {
-					...state,
-					selected_rooms: [action.selectedRooms],
-					from_selector: action.from_selector,
-				};
-			}
+			return addOnlyRoomToSelection(state, action);
 		case CLEAN_SELECTION:
 			return {
 				...state,
@@ -86,7 +70,6 @@ const RoomsReducer = (state = initialState, action) => {
 		case ROOMS_SET_INITIAL:
 			return {
 				...state,
-				// from_selector: initialState.from_selector,
 				selected_rooms: initialState.selected_rooms,
 			};
 		default:
@@ -95,3 +78,35 @@ const RoomsReducer = (state = initialState, action) => {
 };
 
 export default RoomsReducer;
+
+function addRoomToSelection(state, { selectedRoom, from_selector }) {
+	if (Array.isArray(selectedRoom)) {
+		return {
+			...state,
+			selected_rooms: [...state.selected_rooms, ...selectedRoom],
+			from_selector: from_selector,
+		};
+	} else {
+		return {
+			...state,
+			selected_rooms: [...state.selected_rooms, selectedRoom],
+			from_selector: from_selector,
+		};
+	}
+}
+
+function addOnlyRoomToSelection(state, { selectedRooms, from_selector }) {
+	if (Array.isArray(selectedRooms)) {
+		return {
+			...state,
+			selected_rooms: [...selectedRooms],
+			from_selector: from_selector,
+		};
+	} else {
+		return {
+			...state,
+			selected_rooms: [selectedRooms],
+			from_selector: from_selector,
+		};
+	}
+}

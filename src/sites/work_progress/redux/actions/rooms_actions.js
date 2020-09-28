@@ -1,5 +1,4 @@
 import { gql } from 'apollo-boost';
-import { debounce } from 'lodash';
 
 import { graphQLClient } from '../../../../services';
 import { normalize } from '../../../../utils/normalize';
@@ -15,39 +14,39 @@ import {
 } from '../types';
 import { fetchObjectsByRooms, fetchObjectsStart } from './objects_actions';
 
-const fetchRoomsStart = () => ({
+export const fetchRoomsStart = () => ({
 	type: ROOMS_LOADING_START,
 });
 
-const fetchRoomsError = (errors) => ({
+export const fetchRoomsError = (errors) => ({
 	type: ROOMS_LOADING_ERROR,
 	errors,
 });
 
-const fetchRoomsEnd = (rooms) => ({
+export const fetchRoomsEnd = (rooms) => ({
 	type: ROOMS_LOADING_END,
 	rooms,
 });
 
-const addRoomToSelection = (selectedRoom, from_selector = true) => ({
+export const addRoomToSelection = (selectedRoom, from_selector = true) => ({
 	type: ADD_ROOM_TO_SELECTION,
 	selectedRoom,
 	from_selector,
 });
 
-const addSpecyficRoomToSelection = (selectedRooms, from_selector = true) => ({
+export const addSpecyficRoomToSelection = (selectedRooms, from_selector = true) => ({
 	type: ADD_SPECYFIC_ROOM_TO_SELECTION,
 	selectedRooms,
 	from_selector,
 });
 
-const removeRoomFromSelection = (deletedRoom, from_selector = true) => ({
+export const removeRoomFromSelection = (deletedRoom, from_selector = true) => ({
 	type: REMOVE_ROOM_FROM_SELECTION,
 	deletedRoom,
 	from_selector,
 });
 
-const cleanSelection = (from_selector = true) => ({
+export const cleanSelection = (from_selector = true) => ({
 	type: CLEAN_SELECTION,
 	from_selector,
 });
@@ -98,10 +97,6 @@ export const fetch_all_rooms = async (dispatch, level) => {
 
 	dispatch(fetchRoomsEnd(normalize(rooms, 'revit_id')));
 };
-
-
-
-
 
 export const setSelectedRoom = (room_value, status, from_selector = true) => (dispatch, getState) => {
 	const { jobs_loading } = getState().Odbiory.Jobs;
