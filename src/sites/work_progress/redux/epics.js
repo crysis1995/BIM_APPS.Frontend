@@ -1,9 +1,12 @@
 import { ofType } from 'redux-observable';
 import { concat, from, of } from 'rxjs';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap } from 'rxjs/operators';
+import { fetchObjectsStart } from './actions/objects_actions';
 import { setResultsByJobId } from './actions/results_actions';
-import { RESULTS_FETCH_END, RESULTS_FETCH_START } from './types';
+import { dispatchActionDependOfParams } from './actions/rooms_actions';
+import { RESULTS_FETCH_END, RESULTS_FETCH_START, SELECT_ROOM } from './types';
 import { fetchSummaryData, prepareResultsByJob } from './utils/results_utils';
+
 
 export const fetchResultsForLevel = (action$, state$) =>
 	action$.pipe(
@@ -24,4 +27,16 @@ export const fetchResultsForLevel = (action$, state$) =>
 				of({ type: RESULTS_FETCH_END }),
 			),
 		),
+	);
+
+export const selectRoom = (action$, state$) =>
+	action$.pipe(
+		ofType(SELECT_ROOM),
+		filter(() => !state$.value.Odbiory.Jobs.jobs_loading || !state$.value.ForgeViewer.model_rooms_loading),
+		mergeMap(({ room, status, from_selector }) => {
+			return concat(
+				!state$.value.Odbiory.Objects.objects_loading ? of(fetchObjectsStart()) : of(),
+				of(dispatchActionDependOfParams(room, status, from_selector)),
+			);
+		}),
 	);

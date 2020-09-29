@@ -11,6 +11,7 @@ import {
 	ROOMS_LOADING_ERROR,
 	ROOMS_LOADING_START,
 	ROOMS_SET_INITIAL,
+	SELECT_ROOM,
 } from '../types';
 import { fetchObjectsByRooms, fetchObjectsStart } from './objects_actions';
 
@@ -55,6 +56,13 @@ export const setRoomsInitial = () => ({
 	type: ROOMS_SET_INITIAL,
 });
 
+export const selectRoom = (room, status, from_selector) => ({
+	type: SELECT_ROOM,
+	room,
+	status,
+	from_selector,
+});
+
 export const fetch_all_rooms = async (dispatch, level) => {
 	dispatch(fetchRoomsStart());
 	const query = gql`
@@ -79,18 +87,19 @@ export const fetch_all_rooms = async (dispatch, level) => {
 		if (rooms.length === max) {
 			break;
 		}
-		const { data, errors } = await graphQLClient().query({
-			query,
-			variables: { s, l: level },
-			fetchPolicy: 'no-cache',
-		});
-		if (data) {
-			rooms = rooms.concat(data.acceptanceRoomsConnection.values);
-			max = data.acceptanceRoomsConnection.aggregate.count;
-			s = s + 100;
-		}
-		if (errors) {
-			dispatch(fetchRoomsError(errors));
+		try {
+			const { data } = await graphQLClient().query({
+				query,
+				variables: { s, l: level },
+				fetchPolicy: 'no-cache',
+			});
+			if (data) {
+				rooms = rooms.concat(data.acceptanceRoomsConnection.values);
+				max = data.acceptanceRoomsConnection.aggregate.count;
+				s = s + 100;
+			}
+		} catch (e) {
+			dispatch(fetchRoomsError(e.message));
 			break;
 		}
 	}
@@ -98,28 +107,42 @@ export const fetch_all_rooms = async (dispatch, level) => {
 	dispatch(fetchRoomsEnd(normalize(rooms, 'revit_id')));
 };
 
-export const setSelectedRoom = (room_value, status, from_selector = true) => (dispatch, getState) => {
-	const { jobs_loading } = getState().Odbiory.Jobs;
-	const { objects_loading } = getState().Odbiory.Objects;
-	const { model_rooms_loading } = getState().ForgeViewer;
-	if (!jobs_loading && !model_rooms_loading) {
-		if (!objects_loading) {
-			dispatch(fetchObjectsStart());
-		}
-		switch (status) {
-			case 'clear':
-				dispatch(cleanSelection(from_selector));
-				break;
-			case 'remove-value':
-				dispatch(removeRoomFromSelection(room_value, from_selector));
-				break;
-			case 'add-specyfic':
-				dispatch(addSpecyficRoomToSelection(room_value, from_selector));
-				break;
-			default:
-				dispatch(addRoomToSelection(room_value, from_selector));
-				break;
-		}
-		fetchObjectsByRooms(dispatch, getState);
-	}
+export const setSelectedRoom = (room_value, status, from_selector = true) => (dispatch) => {
+	return dispatch(selectRoom(room_value, status, from_selector));
+	// const { jobs_loading } = getState().Odbiory.Jobs;
+	// const { objects_loading } = getState().Odbiory.Objects;
+	// const { model_rooms_loading } = getState().ForgeViewer;
+	// if (!jobs_loading && !model_rooms_loading) {
+	// 	if (!objects_loading) {
+	// 		dispatch(fetchObjectsStart());
+	// 	}
+	// 	switch (status) {
+	// 		case 'clear':
+	// 			dispatch(cleanSelection(from_selector));
+	// 			break;
+	// 		case 'remove-value':
+	// 			dispatch(removeRoomFromSelection(room_value, from_selector));
+	// 			break;
+	// 		case 'add-specyfic':
+	// 			dispatch(addSpecyficRoomToSelection(room_value, from_selector));
+	// 			break;
+	// 		default:
+	// 			dispatch(addRoomToSelection(room_value, from_selector));
+	// 			break;
+	// 	}
+	// 	// fetchObjectsByRooms(dispatch, getState);
+	// }
 };
+
+export function dispatchActionDependOfParams(room_value, status, from_selector) {
+	switch (status) {
+		case 'clear':
+			return cleanSelection(from_selector);
+		case 'remove-value':
+			return removeRoomFromSelection(room_value, from_selector);
+		case 'add-specyfic':
+			return addSpecyficRoomToSelection(room_value, from_selector);
+		default:
+			return addRoomToSelection(room_value, from_selector);
+	}
+}

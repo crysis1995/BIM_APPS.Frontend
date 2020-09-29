@@ -10,25 +10,25 @@ import {
 	OBJECTS_SET_INITIAL,
 } from '../types';
 import { getFilteredObjects } from '../utils/objects_utils';
-import { jobsLoadingStart, jobsPrepare } from './jobs_actions';
+import { jobsLoadingEnd, jobsLoadingStart, jobsPrepare } from './jobs_actions';
 
 export const fetchObjectsStart = () => ({
 	type: OBJECTS_LOADING_START,
 });
 
-const fetchObjectsError = (errors) => ({
+export const fetchObjectsError = (errors) => ({
 	type: OBJECTS_LOADING_ERROR,
 	errors,
 });
 
-const fetchObjectsEnd = () => ({
+export const fetchObjectsEnd = () => ({
 	type: OBJECTS_LOADING_END,
 });
 
 export const setObjectInitial = () => ({
 	type: OBJECTS_SET_INITIAL,
 });
-const fetchObjectsSetData = (objects) => ({
+export const fetchObjectsSetData = (objects) => ({
 	type: OBJECTS_SET_DATA,
 	objects,
 });
@@ -49,9 +49,9 @@ export const fetchObjectsByRooms = debounce(async (dispatch, getState) => {
 			dispatch(jobsLoadingStart());
 			dispatch(fetchObjectsEnd());
 			dispatch(jobsPrepare());
+			dispatch(jobsLoadingEnd());
 		} else {
 			dispatch(fetchObjectsEnd());
-			// dispatch(jobsLoadingEnd());
 		}
 	} else {
 		dispatch(fetchObjectsEnd());
@@ -72,17 +72,24 @@ const fetchObjectsBySelectedRoom = (dispatch, getState) => {
 				(revit_id) =>
 					revit_id &&
 					getFilteredObjects(rooms[revit_id].id)
-						.then(({ data, errors }) => {
+						.then(({ data }) => {
 							if (data) {
 								const { acceptanceObjects } = data;
 								return { [revit_id]: normalize(acceptanceObjects) };
 							}
-							if (errors) {
-								console.log(errors);
-								dispatch(fetchObjectsError(errors));
-							}
 						})
-						.catch((errors) => console.log(errors)),
+						.catch((errors) => {
+							console.log(errors);
+							dispatch(fetchObjectsError(errors.message));
+						}),
 			),
 		);
+};
+
+export const fetchObjectsByRoom = (room_id) => {
+	try {
+		
+	} catch (e) {
+		console.log(e);
+	}
 };
