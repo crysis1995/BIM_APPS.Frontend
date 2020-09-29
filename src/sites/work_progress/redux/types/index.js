@@ -81,3 +81,9 @@ export const TEST = 'TEST';
 export const TEST_START = 'TEST_START';
 export const TEST2 = 'TEST2';
 export const TEST3 = 'TEST3';
+
+/*
+ *       UPGRADING COMPONENT
+ *
+ * */
+export const UPGRADING_SET_DATA = 'UPGRADING_SET_DATA';
