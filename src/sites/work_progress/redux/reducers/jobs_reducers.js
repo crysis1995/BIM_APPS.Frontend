@@ -137,12 +137,3 @@ const changeJobPercentageValue = (state, { job_key, upgrading }) => {
 	);
 	return { ...state };
 };
-
-// const setResultsToJob = (state, { job_key, results }) => {
-// 	if (!results || !results instanceof Object || Array.isArray(results)) return state;
-//
-// 	Object.keys(results).forEach((results_key) =>
-// 		dotProp.set(state, `jobs.${job_key}.results.${results_key}`, results[results_key]),
-// 	);
-// 	return { ...state };
-// };

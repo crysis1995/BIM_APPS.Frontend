@@ -156,7 +156,7 @@ export const jobsPrepare = () => (dispatch, getState) => {
 		}
 		dispatch(setJobsData(newJobs));
 	}
-	dispatch(jobsLoadingEnd());
+
 };
 
 /**

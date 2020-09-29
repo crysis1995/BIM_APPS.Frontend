@@ -8,12 +8,11 @@ import {
 	ROOMS_LOADING_ERROR,
 	ROOMS_LOADING_START,
 	ROOMS_SET_INITIAL,
-	SELECT_ROOM_BY_ODBIORY
+	SELECT_ROOM_BY_ODBIORY,
 } from '../types';
 
-
 const initialState = {
-	rooms: [],
+	rooms: {},
 	rooms_loading: false,
 	rooms_error: {},
 	selected_rooms: [],
@@ -70,7 +69,7 @@ const RoomsReducer = (state = initialState, action) => {
 		case ROOMS_SET_INITIAL:
 			return {
 				...state,
-				selected_rooms: initialState.selected_rooms,
+				...initialState,
 			};
 		default:
 			return state;

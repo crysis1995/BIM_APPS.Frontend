@@ -52,6 +52,7 @@
 		"remote-redux-devtools": "^0.5.16",
 		"reselect": "^4.0.0",
 		"rxjs": "^6.6.3",
+		"set-value": "^3.0.2",
 		"uuid": "^8.2.0"
 	},
 	"scripts": {
@@ -91,6 +92,7 @@
 		"mock-apollo-client": "^1.0.0",
 		"msw": "^0.21.2",
 		"nock": "^13.0.4",
-		"react-is": "^16.13.1"
+		"react-is": "^16.13.1",
+		"rxjs-marbles": "^6.0.1"
 	}
 }

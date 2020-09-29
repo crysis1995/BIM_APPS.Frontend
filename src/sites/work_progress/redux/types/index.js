@@ -42,6 +42,7 @@ export const ADD_SPECYFIC_ROOM_TO_SELECTION = 'odbiory__rooms__ADD_SPECYFIC_ROOM
 export const REMOVE_ROOM_FROM_SELECTION = 'odbiory__rooms__REMOVE_ROOM_FROM_SELECTION';
 export const CLEAN_SELECTION = 'odbiory__rooms__CLEAN_SELECTION';
 export const ROOMS_SET_INITIAL = 'odbiory__rooms__SET_INITIAL';
+export const SELECT_ROOM = 'SELECT_ROOM';
 
 /*
  *       ODBIORY COMPONENT
