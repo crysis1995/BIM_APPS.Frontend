@@ -6,10 +6,10 @@ import {
 	fetchRoomsError,
 	fetchRoomsStart,
 	removeRoomFromSelection,
-	setRoomsInitial,
+	setRoomsInitial
 } from '../actions/rooms_actions';
-import { ADD_ROOM_TO_SELECTION, ADD_SPECYFIC_ROOM_TO_SELECTION, CLEAN_SELECTION, ROOMS_SET_INITIAL } from '../types';
 import * as types from '../types';
+
 
 describe('TEST ROOMS ACTIONS - simple action', () => {
 	test('should create a fetchRoomsStart action', () => {
