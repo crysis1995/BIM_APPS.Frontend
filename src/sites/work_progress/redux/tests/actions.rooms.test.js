@@ -158,10 +158,10 @@ describe('TEST ROOMS ACTION - many dispatch with calling api', () => {
 		const level = 'Poziom 1';
 		const expectedActions = [
 			{
-				type: ROOMS_LOADING_START,
+				type: types.ROOMS_LOADING_START,
 			},
 			{
-				type: ROOMS_LOADING_END,
+				type: types.ROOMS_LOADING_END,
 				rooms: {
 					'123456': {
 						id: '1',
@@ -208,13 +208,13 @@ describe('TEST ROOMS ACTION - many dispatch with calling api', () => {
 		throwError = true;
 		const expectedActions = [
 			{
-				type: ROOMS_LOADING_START,
+				type: types.ROOMS_LOADING_START,
 			},
 			{
-				type: ROOMS_LOADING_ERROR,
+				type: types.ROOMS_LOADING_ERROR,
 				errors: 'GraphQL error: Error',
 			},
-			{ type: ROOMS_LOADING_END, rooms: {} },
+			{ type: types.ROOMS_LOADING_END, rooms: {} },
 		];
 
 		const store = mockstore({});
