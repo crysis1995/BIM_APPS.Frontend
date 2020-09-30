@@ -4,7 +4,6 @@ import {
 	ALL_JOBS_FETCH_END,
 	ALL_JOBS_FETCH_ERROR,
 	ALL_JOBS_FETCH_START,
-	JOBS_CHANGE_PERCENTAGE_VALUE,
 	JOBS_CLEAN_DATA_OF_JOB,
 	JOBS_LOADING_END,
 	JOBS_LOADING_START,
@@ -12,10 +11,6 @@ import {
 	OBJECT_JOB_FETCH_COMPLETED,
 	OBJECT_JOB_FETCH_ERROR,
 	OBJECT_JOB_FETCH_START,
-	SET_SUMMARY_VALUE_TO_JOB,
-	SET_SUMMARY_VALUE_TO_JOB_END,
-	SET_SUMMARY_VALUE_TO_JOB_START,
-	UPGRADE_RESULTS,
 } from '../types';
 import {
 	addParameterWithValue,
@@ -66,33 +61,8 @@ export const setJobsData = (jobs) => ({
 	jobs,
 });
 
-export const jobsChangePercentageValue = (job_key, upgrading) => ({
-	type: JOBS_CHANGE_PERCENTAGE_VALUE,
-	job_key,
-	upgrading,
-});
-
 export const setJobInitial = () => ({
 	type: JOBS_CLEAN_DATA_OF_JOB,
-});
-
-export const setSummaryValueToJobStart = () => ({
-	type: SET_SUMMARY_VALUE_TO_JOB_START,
-});
-
-export const setSummaryValueToJob = (job_key, results) => ({
-	type: SET_SUMMARY_VALUE_TO_JOB,
-	job_key,
-	results,
-});
-export const setSummaryValueToJobEnd = () => ({
-	type: SET_SUMMARY_VALUE_TO_JOB_END,
-});
-
-export const upgradeJobResults = (job_key, results) => ({
-	type: UPGRADE_RESULTS,
-	job_key,
-	results,
 });
 
 export const fetchAllJobs = () => async (dispatch) => {
@@ -116,31 +86,6 @@ export const fetchAllJobs = () => async (dispatch) => {
 
 /**
  *
- *
- *
- * results: {
-		summary_all_value: 0,
-		summary_current_value: 0,
-		percentage_value: 0,
-		elements: {
-			1: [4674, 75547], // element ids
-		},
-	},
- *
- *
- *
- */
-// export const fetchSummaryAreaByLevel = async (dispatch, getState, current_level) => {
-// 	dispatch(setSummaryValueToJobStart());
-// 	const { jobs } = getState().Odbiory.Jobs;
-// 	return Promise.all(Object.keys(jobs).map((job_id) => fetchSummaryValuesByJob(job_id, current_level)))
-// 		.then((value) => value.forEach((item) => dispatch(setSummaryValueToJob(item.id, item))))
-// 		.then(() => dispatch(setSummaryValueToJobEnd()))
-// 		.catch(console.log);
-// };
-
-/**
- *
  *      Funkcja przetwarza pobrane obiekty i grupuje dane wg prac do wykonania
  *
  *
@@ -156,7 +101,6 @@ export const jobsPrepare = () => (dispatch, getState) => {
 		}
 		dispatch(setJobsData(newJobs));
 	}
-
 };
 
 /**

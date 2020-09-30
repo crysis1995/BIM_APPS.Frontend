@@ -8,15 +8,10 @@ export const ALL_JOBS_FETCH_START = 'odbiory__jobs__ALL_FETCH_START';
 export const ALL_JOBS_FETCH_END = 'odbiory__jobs__ALL_FETCH_END';
 export const ALL_JOBS_FETCH_ERROR = 'odbiory__jobs__ALL_FETCH_ERROR';
 export const JOBS_SET_DATA = 'odbiory__jobs__SET_DATA';
-export const JOBS_CHANGE_PERCENTAGE_VALUE = 'odbiory__jobs__CHANGE_PERCENTAGE_VALUE';
 export const JOBS_CLEAN_DATA_OF_JOB = 'odbiory__jobs__CLEAN_JOBS';
 export const OBJECT_JOB_FETCH_START = 'odbiory__jobs__OBJECT_JOB_FETCH_START';
 export const OBJECT_JOB_FETCH_ERROR = 'odbiory__jobs__OBJECT_JOB_FETCH_ERROR';
 export const OBJECT_JOB_FETCH_COMPLETED = 'odbiory__jobs__OBJECT_JOB_FETCH_COMPLETED';
-export const SET_SUMMARY_VALUE_TO_JOB = 'odbiory__jobs__SET_SUMMARY_VALUE_TO_JOB';
-export const SET_SUMMARY_VALUE_TO_JOB_START = 'odbiory__jobs__SET_SUMMARY_VALUE_TO_JOB_START';
-export const SET_SUMMARY_VALUE_TO_JOB_END = 'odbiory__jobs__SET_SUMMARY_VALUE_TO_JOB_END';
-export const UPGRADE_RESULTS = 'odbiory__jobs__UPGRADE_RESULTS';
 export const ADD_INITIAL_JOB = 'odbiory__jobs__ADD_INITIAL_JOB';
 
 /*
@@ -76,11 +71,6 @@ export const TERMS_DATA_FETCH_END = 'TERMS_DATA_FETCH_END';
 export const TERMS_DATA_FETCH_ERROR = 'TERMS_DATA_FETCH_ERROR';
 export const TERMS_SET_BY_JOB = 'TERMS_SET_BY_JOB';
 export const TERMS_SET_BY_DEPARTMENT = 'TERMS_SET_BY_DEPARTMENT';
-
-export const TEST = 'TEST';
-export const TEST_START = 'TEST_START';
-export const TEST2 = 'TEST2';
-export const TEST3 = 'TEST3';
 
 /*
  *       UPGRADING COMPONENT

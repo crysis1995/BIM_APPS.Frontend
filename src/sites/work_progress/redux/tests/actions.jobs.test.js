@@ -4,8 +4,6 @@ import configurateMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {
 	fetchAllJobs,
-	fetchSummaryAreaByLevel,
-	jobsChangePercentageValue,
 	jobsFetchEnd,
 	jobsFetchError,
 	jobsFetchStart,
@@ -15,13 +13,8 @@ import {
 	objectJobFetchStart,
 	setJobInitial,
 	setJobsData,
-	setSummaryValueToJob,
-	setSummaryValueToJobEnd,
-	setSummaryValueToJobStart,
-	upgradeJobResults
 } from '../actions/jobs_actions';
 import * as types from '../types';
-
 
 describe('JOBS ACTION TEST - simple actions', () => {
 	test('should create a jobsLoadingStart action', () => {
@@ -75,47 +68,12 @@ describe('JOBS ACTION TEST - simple actions', () => {
 		};
 		expect(setJobsData({})).toEqual(expected);
 	});
-	test('should create a jobsChangePercentageValue action', () => {
-		const expected = {
-			type: types.JOBS_CHANGE_PERCENTAGE_VALUE,
-			job_key: '1',
-			upgrading: { asd: 'asd' },
-		};
-		expect(jobsChangePercentageValue('1', { asd: 'asd' })).toEqual(expected);
-	});
+
 	test('should create a setJobInitial action', () => {
 		const expected = {
 			type: types.JOBS_CLEAN_DATA_OF_JOB,
 		};
 		expect(setJobInitial()).toEqual(expected);
-	});
-	test('should create a setSummaryValueToJobStart action', () => {
-		const expected = {
-			type: types.SET_SUMMARY_VALUE_TO_JOB_START,
-		};
-		expect(setSummaryValueToJobStart()).toEqual(expected);
-	});
-	test('should create a setSummaryValueToJob action', () => {
-		const expected = {
-			type: types.SET_SUMMARY_VALUE_TO_JOB,
-			job_key: '1',
-			results: { asd: 'asd' },
-		};
-		expect(setSummaryValueToJob('1', { asd: 'asd' })).toEqual(expected);
-	});
-	test('should create a setSummaryValueToJob action', () => {
-		const expected = {
-			type: types.SET_SUMMARY_VALUE_TO_JOB_END,
-		};
-		expect(setSummaryValueToJobEnd()).toEqual(expected);
-	});
-	test('should create a upgradeJobResults action', () => {
-		const expected = {
-			type: types.UPGRADE_RESULTS,
-			job_key: '1',
-			results: { asd: 'asd' },
-		};
-		expect(upgradeJobResults('1', { asd: 'asd' })).toEqual(expected);
 	});
 });
 
@@ -244,51 +202,6 @@ describe('TEST JOBS ACTIONS - dispatch many actions', () => {
 		store.dispatch(fetchAllJobs()).then(() => {
 			expect(store.getActions()).toEqual(expectedActions);
 			throwError = false;
-		});
-	});
-	test('should fetch summary data to all jobs', async () => {
-		const current_level = 'Poziom 1';
-		const expectedActions = [
-			{ type: types.SET_SUMMARY_VALUE_TO_JOB_START },
-			{
-				type: types.SET_SUMMARY_VALUE_TO_JOB,
-				job_key: '1',
-				results: {
-					id: '1',
-					summary_all_value: 100,
-					summary_current_value: 50,
-					percentage_value: 50,
-					elements: {
-						'111111': 0.5,
-						'222222': 1,
-						'333333': 1,
-					},
-				},
-			},
-			{
-				type: types.SET_SUMMARY_VALUE_TO_JOB,
-				job_key: '2',
-				results: {
-					id: '2',
-					summary_all_value: 200,
-					summary_current_value: 100,
-					percentage_value: 50,
-					elements: {
-						'111111': 0.5,
-						'222222': 1,
-						'333333': 1,
-					},
-				},
-			},
-			{ type: types.SET_SUMMARY_VALUE_TO_JOB_END },
-		];
-
-		const store = mockstore({
-			Odbiory: { Jobs: { jobs: { '1': {}, '2': {} }, jobs_loading: false, jobs_errors: null } },
-		});
-
-		await fetchSummaryAreaByLevel(store.dispatch, store.getState, current_level).then(() => {
-			expect(store.getActions()).toEqual(expectedActions);
 		});
 	});
 });

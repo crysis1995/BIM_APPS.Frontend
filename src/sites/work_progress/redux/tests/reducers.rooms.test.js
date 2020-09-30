@@ -22,7 +22,6 @@ describe('TEST ROOMS REDUCER', () => {
 	test('should return initialState', () => {
 		expect(RoomsReducer(undefined, {})).toEqual(initial);
 	});
-
 	test('should properly dispatch fetchRoomsStart action', () => {
 		const action = fetchRoomsStart();
 		state = {
