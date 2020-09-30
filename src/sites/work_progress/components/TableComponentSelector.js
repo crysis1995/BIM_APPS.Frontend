@@ -1,26 +1,27 @@
 import { createSelector } from 'reselect';
 
-
 /**
  *
  *
  */
 export const getSplitedJobsByKey = createSelector(
 	(state) => state.Odbiory.Jobs.jobs,
+	(state) => state.Odbiory.Upgrading.byJobId,
 	(state) => state.Odbiory.Rooms.selected_rooms,
-	(jobs, selected_rooms) => splitJobsByKey(jobs, selected_rooms.length),
+	(jobs, upgrading, selected_rooms) => splitJobsByKey(jobs, upgrading, selected_rooms.length),
 );
 
 /**
  *
  * @param {{}} jobs
+ * @param {{}} upgrading
  * @param {number} selected_rooms_length
  * @param {string} key
  */
-export const splitJobsByKey = (jobs, selected_rooms_length, key = 'percentage_value') => {
-	return Object.entries(jobs).reduce(
-		(prev, [id, object]) => {
-			const data = Object.keys(object.upgrading[key]);
+export const splitJobsByKey = (jobs, upgrading, selected_rooms_length, key = 'percentage_value') => {
+	return Object.keys(jobs).reduce(
+		(prev, job_key) => {
+			const data = Object.keys(upgrading[job_key]);
 			if (data.length > 0) {
 				if (data.length === selected_rooms_length) {
 					const { isEqual } = data.reduce((pre, revit_id) => {

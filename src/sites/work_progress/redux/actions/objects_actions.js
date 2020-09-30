@@ -28,9 +28,10 @@ export const fetchObjectsEnd = () => ({
 export const setObjectInitial = () => ({
 	type: OBJECTS_SET_INITIAL,
 });
-export const fetchObjectsSetData = (objects) => ({
+export const fetchObjectsSetData = (revit_id, objects) => ({
 	type: OBJECTS_SET_DATA,
 	objects,
+	revit_id,
 });
 
 /**

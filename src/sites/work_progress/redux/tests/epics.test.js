@@ -537,7 +537,7 @@ describe('RESULTS EPICS TEST', () => {
 				object_ids: ['7421', '7422', '7423', '7424', '7425', '7426', '7429', '7430', '7431', '7432'],
 				summary_value: 23.13 + 4.12 + 4.54 + 1.51 + 1.51 + 1.75 + 1.85 + 6.45 + 6.45 + 4.91,
 				percentage_value: 0,
-				reference_job: null,
+				reference_job: null,   
 				current_value: 0,
 			},
 		]);

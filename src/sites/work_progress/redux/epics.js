@@ -1,7 +1,8 @@
 import { ofType } from 'redux-observable';
 import { concat, from, of } from 'rxjs';
 import { catchError, filter, map, mergeMap } from 'rxjs/operators';
-import { fetchObjectsByRoom, fetchObjectsStart } from './actions/objects_actions';
+import { jobsLoadingEnd, jobsLoadingStart } from './actions/jobs_actions';
+import { fetchObjectsByRoom, fetchObjectsEnd, fetchObjectsSetData, fetchObjectsStart } from './actions/objects_actions';
 import { setResultsByJobId } from './actions/results_actions';
 import { dispatchActionDependOfParams } from './actions/rooms_actions';
 import { setUpgradingData } from './actions/upgrading_actions';
@@ -48,22 +49,33 @@ export const getRoomData = (action$, state$) =>
 			if (state$.value.Odbiory.Objects.objects.hasOwnProperty(selectedRoom)) {
 				return from(Object.keys(state$.value.Odbiory.Jobs.jobs)).pipe(
 					mergeMap((job_id) =>
-						of(
-							setUpgradingData(
-								job_id,
-								selectedRoom,
-								prepUpgradingDataToSet(job_id, state$.value.Odbiory.Objects.objects[selectedRoom]),
+						concat(
+							of(jobsLoadingStart()),
+							of(fetchObjectsEnd()),
+							of(
+								setUpgradingData(
+									job_id,
+									selectedRoom,
+									prepUpgradingDataToSet(job_id, state$.value.Odbiory.Objects.objects[selectedRoom]),
+								),
 							),
+							of(jobsLoadingEnd()),
 						),
 					),
 				);
 			} else {
 				return from(fetchObjectsByRoom(state$.value.Odbiory.Rooms.rooms[selectedRoom].id)).pipe(
 					mergeMap((data) => {
-						return from(Object.keys(state$.value.Odbiory.Jobs.jobs)).pipe(
-							map((job_id) =>
-								setUpgradingData(job_id, selectedRoom, prepUpgradingDataToSet(job_id, data)),
+						return concat(
+							of(fetchObjectsSetData(data)),
+							of(jobsLoadingStart()),
+							of(fetchObjectsEnd()),
+							from(Object.keys(state$.value.Odbiory.Jobs.jobs)).pipe(
+								map((job_id) =>
+									setUpgradingData(job_id, selectedRoom, prepUpgradingDataToSet(job_id, data)),
+								),
 							),
+							of(jobsLoadingEnd()),
 						);
 					}),
 					catchError((error) => {
