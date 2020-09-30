@@ -19,24 +19,24 @@ export const getSplitedJobsByKey = createSelector(
  * @param {string} key
  */
 export const splitJobsByKey = (jobs, upgrading, selected_rooms_length, key = 'percentage_value') => {
-	return Object.keys(jobs).reduce(
+	const data = Object.keys(jobs).reduce(
 		(prev, job_key) => {
-			const data = Object.keys(upgrading[job_key]);
+			const data = Object.keys(upgrading[job_key][key]);
 			if (data.length > 0) {
 				if (data.length === selected_rooms_length) {
 					const { isEqual } = data.reduce((pre, revit_id) => {
-						if (!pre.val) pre.val = object.upgrading[key][revit_id];
+						if (!pre.val) pre.val = upgrading[job_key][key][revit_id];
 						if (!pre.isEqual) pre.isEqual = true;
-						pre.isEqual = pre.isEqual && pre.val === object.upgrading[key][revit_id];
+						pre.isEqual = pre.isEqual && pre.val === upgrading[job_key][key][revit_id];
 						return pre;
 					}, {});
 					if (isEqual) {
-						return { ...prev, equal: { ...prev.equal, [id]: object } };
+						return { ...prev, equal: { ...prev.equal, [job_key]: upgrading[job_key] } };
 					} else {
-						return { ...prev, different: { ...prev.different, [id]: object } };
+						return { ...prev, different: { ...prev.different, [job_key]: upgrading[job_key] } };
 					}
 				} else {
-					return { ...prev, different: { ...prev.different, [id]: object } };
+					return { ...prev, different: { ...prev.different, [job_key]: upgrading[job_key] } };
 				}
 			} else {
 				return prev;
@@ -47,6 +47,7 @@ export const splitJobsByKey = (jobs, upgrading, selected_rooms_length, key = 'pe
 			different: {},
 		},
 	);
+	return data;
 };
 
 export const getSingleSelectionFilteredJobs = createSelector(

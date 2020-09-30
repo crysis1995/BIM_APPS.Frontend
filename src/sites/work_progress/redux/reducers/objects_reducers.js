@@ -34,7 +34,7 @@ const ObjectsReducer = (state = initialState, action) => {
 			return {
 				...state,
 				objects_loading: true,
-				objects: { ...state.objects, ...action.objects },
+				objects: { ...state.objects, [action.revit_id]: action.objects },
 			};
 		case OBJECTS_LOADING_END:
 			return {

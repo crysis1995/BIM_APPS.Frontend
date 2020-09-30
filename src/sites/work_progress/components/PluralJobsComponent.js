@@ -9,9 +9,8 @@ import { changeJobPercentageValue } from '../redux/actions/jobs_actions';
 import PopoverTable from './PopoverTable';
 import { getSplitedJobsByKey } from './TableComponentSelector';
 
-
 function PluralJobsComponent(props) {
-	const { equal, different } = props.jobs;
+	const { equal, different } = props.jobs_data;
 	return (
 		<>
 			{props.showUnitedJobs && Object.entries(equal).length > 0 && (
@@ -29,7 +28,7 @@ function PluralJobsComponent(props) {
 											<PopoverTable
 												labels={['Pomieszczenie', 'Typ wykończenia']}
 												content={Object.entries(
-													job.upgrading.object_ids,
+													job.object_ids,
 												).map(([revit_id, object_ids]) => [
 													[props.rooms[revit_id].number],
 													[
@@ -46,7 +45,7 @@ function PluralJobsComponent(props) {
 										</Popover.Content>
 									</Popover>
 								}>
-								<td>{job.name}</td>
+								<td>{props.jobs[job_key].name}</td>
 							</OverlayTrigger>
 							<OverlayTrigger
 								placement={'top'}
@@ -56,7 +55,7 @@ function PluralJobsComponent(props) {
 											<PopoverTable
 												labels={['Pomieszczenie', 'Wartości']}
 												content={Object.entries(
-													job.upgrading.particular_values,
+													job.particular_values,
 												).map(([revit_id, values]) => [
 													[props.rooms[revit_id].number],
 													[values.join(' + ')],
@@ -67,8 +66,7 @@ function PluralJobsComponent(props) {
 								}>
 								<td className="">
 									<span>
-										{RoundNumber(sumOfArray(Object.values(job.upgrading.summary_value)))} m
-										<sup>2</sup>
+										{RoundNumber(sumOfArray(Object.values(job.summary_value)))} m<sup>2</sup>
 									</span>
 								</td>
 							</OverlayTrigger>
@@ -80,7 +78,7 @@ function PluralJobsComponent(props) {
 									disabled={props.objects_jobs_loading}
 									size={'sm'}
 									as="select"
-									value={Object.values(job.upgrading.percentage_value)[0]}
+									value={Object.values(job.percentage_value)[0]}
 									custom>
 									<option value="">Wybierz</option>
 									<option value="0">0%</option>
@@ -98,7 +96,7 @@ function PluralJobsComponent(props) {
 							</td>
 							<td>
 								<span>
-									{RoundNumber(sumOfArray(Object.values(job.upgrading.current_value)))} m<sup>2</sup>
+									{RoundNumber(sumOfArray(Object.values(job.current_value)))} m<sup>2</sup>
 								</span>
 							</td>
 						</tr>
@@ -120,7 +118,7 @@ function PluralJobsComponent(props) {
 											<PopoverTable
 												labels={['Pomieszczenie', 'Typ wykończenia']}
 												content={Object.entries(
-													job.upgrading.object_ids,
+													job.object_ids,
 												).map(([revit_id, object_ids]) => [
 													[props.rooms[revit_id].number],
 													[
@@ -146,7 +144,7 @@ function PluralJobsComponent(props) {
 											<PopoverTable
 												labels={['Pomieszczenie', 'Wartości']}
 												content={Object.entries(
-													job.upgrading.particular_values,
+													job.particular_values,
 												).map(([revit_id, values]) => [
 													[props.rooms[revit_id].number],
 													[values.join('+')],
@@ -157,8 +155,7 @@ function PluralJobsComponent(props) {
 								}>
 								<td className="">
 									<span>
-										{RoundNumber(sumOfArray(Object.values(job.upgrading.summary_value)))} m
-										<sup>2</sup>
+										{RoundNumber(sumOfArray(Object.values(job.summary_value)))} m<sup>2</sup>
 									</span>
 								</td>
 							</OverlayTrigger>
@@ -170,7 +167,7 @@ function PluralJobsComponent(props) {
 									disabled={props.objects_jobs_loading}
 									size={'sm'}
 									as="select"
-									value={Object.values(job.upgrading.percentage_value)[0]}
+									value={Object.values(job.percentage_value)[0]}
 									custom>
 									<option value="">Wybierz</option>
 									<option value="0">0%</option>
@@ -188,7 +185,7 @@ function PluralJobsComponent(props) {
 							</td>
 							<td>
 								<span>
-									{RoundNumber(sumOfArray(Object.values(job.upgrading.current_value)))} m<sup>2</sup>
+									{RoundNumber(sumOfArray(Object.values(job.current_value)))} m<sup>2</sup>
 								</span>
 							</td>
 						</tr>
@@ -203,7 +200,8 @@ const mapStateToProps = (state) => ({
 	rooms: state.Odbiory.Rooms.rooms,
 	showUnitedJobs: state.Odbiory.OdbioryComponent.awansowanie.showUnitedJobs,
 	showDifferentialJobs: state.Odbiory.OdbioryComponent.awansowanie.showDifferentialJobs,
-	jobs: getSplitedJobsByKey(state),
+	jobs_data: getSplitedJobsByKey(state),
+	jobs: state.Odbiory.Jobs.jobs,
 	objects: state.Odbiory.Objects.objects,
 });
 

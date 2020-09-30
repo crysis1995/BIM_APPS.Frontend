@@ -1,6 +1,286 @@
 import { splitJobsByKey, genSingleSelectionFilteredJobs } from '../TableComponentSelector';
 
 const objects = {
+	results: {
+		'1': {
+			summary_all_value: 9146.27,
+			summary_current_value: 298.75,
+			percentage_value: 3.26,
+			elements: {
+				'1104476': 0.4,
+				'1104503': 0.5,
+				'3510928': 0.6,
+			},
+		},
+		'2': {
+			summary_all_value: 21228.33,
+			summary_current_value: 5.03,
+			percentage_value: 0.02,
+			elements: {
+				'1104503': 0.1,
+			},
+		},
+		'3': {
+			summary_all_value: 4395.12,
+			summary_current_value: 215.24,
+			percentage_value: 4.89,
+			elements: {
+				'1104503': 0.5,
+				'3510928': 0.9,
+			},
+		},
+		'4': {
+			summary_all_value: 3447.67,
+			summary_current_value: 0,
+			percentage_value: 0,
+			elements: {},
+		},
+		'5': {
+			summary_all_value: 21404.11,
+			summary_current_value: 40.24,
+			percentage_value: 0.18,
+			elements: {
+				'1104503': 0.8,
+			},
+		},
+		'6': {
+			summary_all_value: 0,
+			summary_current_value: 0,
+			percentage_value: null,
+			elements: {},
+		},
+		'7': {
+			summary_all_value: 24851.77,
+			summary_current_value: 266.2,
+			percentage_value: 1.07,
+			elements: {
+				'1104503': 0.9,
+				'3510928': 1,
+			},
+		},
+		'8': {
+			summary_all_value: 9146.27,
+			summary_current_value: 0,
+			percentage_value: 0,
+			elements: {},
+		},"9":{
+			summary_all_value: 0,
+			summary_current_value: 0,
+			percentage_value: null,
+			elements: {},
+		},"10":{
+			summary_all_value: 4395.12,
+			summary_current_value: 0,
+			percentage_value: 0,
+			elements: {},
+		}
+	},
+	upgrading: {
+		'1': {
+			summary_value: {
+				'1681704': 5.78,
+				'1950062': 14.44,
+			},
+			particular_values: {
+				'1681704': [2.89, 2.89],
+				'1950062': [7.22, 7.22],
+			},
+			object_ids: {
+				'1681704': ['26423', '26424'],
+				'1950062': ['26811', '26812'],
+			},
+			reference_job: {
+				'1681704': null,
+				'1950062': null,
+			},
+			percentage_value: {
+				'1681704': 0,
+				'1950062': 0,
+			},
+			current_value: {
+				'1681704': 0,
+				'1950062': 0,
+			},
+		},
+		'2': {
+			summary_value: {
+				'1681704': 43.11,
+				'1950062': 42.69,
+			},
+			particular_values: {
+				'1681704': [18.49, 6.74, 6.74, 5.68, 5.46],
+				'1950062': [8.39, 7.96, 3.25, 10.64, 9.78, 1.92, 0.75],
+			},
+			object_ids: {
+				'1681704': ['26416', '26417', '26418', '26419', '26422'],
+				'1950062': ['26804', '26805', '26806', '26807', '26808', '26809', '26810'],
+			},
+			reference_job: {
+				'1681704': null,
+				'1950062': null,
+			},
+			percentage_value: {
+				'1681704': 0,
+				'1950062': 0,
+			},
+			current_value: {
+				'1681704': 0,
+				'1950062': 0,
+			},
+		},
+		'3': {
+			summary_value: {
+				'1681704': 2.88,
+				'1950062': 6.61,
+			},
+			particular_values: {
+				'1681704': [2.88],
+				'1950062': [6.61],
+			},
+			object_ids: {
+				'1681704': ['26415'],
+				'1950062': ['26803'],
+			},
+			reference_job: {
+				'1681704': null,
+				'1950062': null,
+			},
+			percentage_value: {
+				'1681704': 0,
+				'1950062': 0,
+			},
+			current_value: {
+				'1681704': 0,
+				'1950062': 0,
+			},
+		},
+		'4': {
+			summary_value: {},
+			particular_values: {},
+			object_ids: {},
+			reference_job: {},
+			percentage_value: {},
+			current_value: {},
+		},
+		'5': {
+			summary_value: {
+				'1681704': 43.11,
+				'1950062': 42.69,
+			},
+			particular_values: {
+				'1681704': [18.49, 6.74, 6.74, 5.68, 5.46],
+				'1950062': [8.39, 7.96, 3.25, 10.64, 9.78, 1.92, 0.75],
+			},
+			object_ids: {
+				'1681704': ['26416', '26417', '26418', '26419', '26422'],
+				'1950062': ['26804', '26805', '26806', '26807', '26808', '26809', '26810'],
+			},
+			reference_job: {
+				'1681704': null,
+				'1950062': null,
+			},
+			percentage_value: {
+				'1681704': 0,
+				'1950062': 0,
+			},
+			current_value: {
+				'1681704': 0,
+				'1950062': 0,
+			},
+		},
+		'6': {
+			summary_value: {},
+			particular_values: {},
+			object_ids: {},
+			reference_job: {},
+			percentage_value: {},
+			current_value: {},
+		},
+		'7': {
+			summary_value: {
+				'1681704': 43.11,
+				'1950062': 42.69,
+			},
+			particular_values: {
+				'1681704': [18.49, 6.74, 6.74, 5.68, 5.46],
+				'1950062': [8.39, 7.96, 3.25, 10.64, 9.78, 1.92, 0.75],
+			},
+			object_ids: {
+				'1681704': ['26416', '26417', '26418', '26419', '26422'],
+				'1950062': ['26804', '26805', '26806', '26807', '26808', '26809', '26810'],
+			},
+			reference_job: {
+				'1681704': null,
+				'1950062': null,
+			},
+			percentage_value: {
+				'1681704': 0,
+				'1950062': 0,
+			},
+			current_value: {
+				'1681704': 0,
+				'1950062': 0,
+			},
+		},
+		'8': {
+			summary_value: {
+				'1681704': 5.78,
+				'1950062': 14.44,
+			},
+			particular_values: {
+				'1681704': [2.89, 2.89],
+				'1950062': [7.22, 7.22],
+			},
+			object_ids: {
+				'1681704': ['26423', '26424'],
+				'1950062': ['26811', '26812'],
+			},
+			reference_job: {
+				'1681704': null,
+				'1950062': null,
+			},
+			percentage_value: {
+				'1681704': 0,
+				'1950062': 0,
+			},
+			current_value: {
+				'1681704': 0,
+				'1950062': 0,
+			},
+		},"9":{
+			summary_value: {},
+			particular_values: {},
+			object_ids: {},
+			reference_job: {},
+			percentage_value: {},
+			current_value: {},
+		},"10":{
+			summary_value: {
+				'1681704': 2.88,
+				'1950062': 6.61,
+			},
+			particular_values: {
+				'1681704': [2.88],
+				'1950062': [6.61],
+			},
+			object_ids: {
+				'1681704': ['26415'],
+				'1950062': ['26803'],
+			},
+			reference_job: {
+				'1681704': null,
+				'1950062': null,
+			},
+			percentage_value: {
+				'1681704': 0,
+				'1950062': 0,
+			},
+			current_value: {
+				'1681704': 0,
+				'1950062': 0,
+			},
+		}
+	},
 	jobs: {
 		'1': {
 			id: '1',
@@ -8,42 +288,6 @@ const objects = {
 			unit: 'area',
 
 			hidden: false,
-			results: {
-				summary_all_value: 9146.27,
-				summary_current_value: 298.75,
-				percentage_value: 3.26,
-				elements: {
-					'1104476': 0.4,
-					'1104503': 0.5,
-					'3510928': 0.6,
-				},
-			},
-			upgrading: {
-				summary_value: {
-					'1681704': 5.78,
-					'1950062': 14.44,
-				},
-				particular_values: {
-					'1681704': [2.89, 2.89],
-					'1950062': [7.22, 7.22],
-				},
-				object_ids: {
-					'1681704': ['26423', '26424'],
-					'1950062': ['26811', '26812'],
-				},
-				reference_job: {
-					'1681704': null,
-					'1950062': null,
-				},
-				percentage_value: {
-					'1681704': 0,
-					'1950062': 0,
-				},
-				current_value: {
-					'1681704': 0,
-					'1950062': 0,
-				},
-			},
 		},
 		'2': {
 			id: '2',
@@ -51,40 +295,6 @@ const objects = {
 			unit: null,
 
 			hidden: false,
-			results: {
-				summary_all_value: 21228.33,
-				summary_current_value: 5.03,
-				percentage_value: 0.02,
-				elements: {
-					'1104503': 0.1,
-				},
-			},
-			upgrading: {
-				summary_value: {
-					'1681704': 43.11,
-					'1950062': 42.69,
-				},
-				particular_values: {
-					'1681704': [18.49, 6.74, 6.74, 5.68, 5.46],
-					'1950062': [8.39, 7.96, 3.25, 10.64, 9.78, 1.92, 0.75],
-				},
-				object_ids: {
-					'1681704': ['26416', '26417', '26418', '26419', '26422'],
-					'1950062': ['26804', '26805', '26806', '26807', '26808', '26809', '26810'],
-				},
-				reference_job: {
-					'1681704': null,
-					'1950062': null,
-				},
-				percentage_value: {
-					'1681704': 0,
-					'1950062': 0,
-				},
-				current_value: {
-					'1681704': 0,
-					'1950062': 0,
-				},
-			},
 		},
 		'3': {
 			id: '3',
@@ -92,41 +302,6 @@ const objects = {
 			unit: null,
 
 			hidden: false,
-			results: {
-				summary_all_value: 4395.12,
-				summary_current_value: 215.24,
-				percentage_value: 4.89,
-				elements: {
-					'1104503': 0.5,
-					'3510928': 0.9,
-				},
-			},
-			upgrading: {
-				summary_value: {
-					'1681704': 2.88,
-					'1950062': 6.61,
-				},
-				particular_values: {
-					'1681704': [2.88],
-					'1950062': [6.61],
-				},
-				object_ids: {
-					'1681704': ['26415'],
-					'1950062': ['26803'],
-				},
-				reference_job: {
-					'1681704': null,
-					'1950062': null,
-				},
-				percentage_value: {
-					'1681704': 0,
-					'1950062': 0,
-				},
-				current_value: {
-					'1681704': 0,
-					'1950062': 0,
-				},
-			},
 		},
 		'4': {
 			id: '4',
@@ -134,20 +309,6 @@ const objects = {
 			unit: null,
 
 			hidden: false,
-			results: {
-				summary_all_value: 3447.67,
-				summary_current_value: 0,
-				percentage_value: 0,
-				elements: {},
-			},
-			upgrading: {
-				summary_value: {},
-				particular_values: {},
-				object_ids: {},
-				reference_job: {},
-				percentage_value: {},
-				current_value: {},
-			},
 		},
 		'5': {
 			id: '5',
@@ -155,40 +316,6 @@ const objects = {
 			unit: null,
 
 			hidden: false,
-			results: {
-				summary_all_value: 21404.11,
-				summary_current_value: 40.24,
-				percentage_value: 0.18,
-				elements: {
-					'1104503': 0.8,
-				},
-			},
-			upgrading: {
-				summary_value: {
-					'1681704': 43.11,
-					'1950062': 42.69,
-				},
-				particular_values: {
-					'1681704': [18.49, 6.74, 6.74, 5.68, 5.46],
-					'1950062': [8.39, 7.96, 3.25, 10.64, 9.78, 1.92, 0.75],
-				},
-				object_ids: {
-					'1681704': ['26416', '26417', '26418', '26419', '26422'],
-					'1950062': ['26804', '26805', '26806', '26807', '26808', '26809', '26810'],
-				},
-				reference_job: {
-					'1681704': null,
-					'1950062': null,
-				},
-				percentage_value: {
-					'1681704': 0,
-					'1950062': 0,
-				},
-				current_value: {
-					'1681704': 0,
-					'1950062': 0,
-				},
-			},
 		},
 		'6': {
 			id: '6',
@@ -196,20 +323,6 @@ const objects = {
 			unit: 'piece',
 
 			hidden: true,
-			results: {
-				summary_all_value: 0,
-				summary_current_value: 0,
-				percentage_value: null,
-				elements: {},
-			},
-			upgrading: {
-				summary_value: {},
-				particular_values: {},
-				object_ids: {},
-				reference_job: {},
-				percentage_value: {},
-				current_value: {},
-			},
 		},
 		'7': {
 			id: '7',
@@ -217,41 +330,6 @@ const objects = {
 			unit: null,
 
 			hidden: false,
-			results: {
-				summary_all_value: 24851.77,
-				summary_current_value: 266.2,
-				percentage_value: 1.07,
-				elements: {
-					'1104503': 0.9,
-					'3510928': 1,
-				},
-			},
-			upgrading: {
-				summary_value: {
-					'1681704': 43.11,
-					'1950062': 42.69,
-				},
-				particular_values: {
-					'1681704': [18.49, 6.74, 6.74, 5.68, 5.46],
-					'1950062': [8.39, 7.96, 3.25, 10.64, 9.78, 1.92, 0.75],
-				},
-				object_ids: {
-					'1681704': ['26416', '26417', '26418', '26419', '26422'],
-					'1950062': ['26804', '26805', '26806', '26807', '26808', '26809', '26810'],
-				},
-				reference_job: {
-					'1681704': null,
-					'1950062': null,
-				},
-				percentage_value: {
-					'1681704': 0,
-					'1950062': 0,
-				},
-				current_value: {
-					'1681704': 0,
-					'1950062': 0,
-				},
-			},
 		},
 		'8': {
 			id: '8',
@@ -259,38 +337,6 @@ const objects = {
 			unit: null,
 
 			hidden: false,
-			results: {
-				summary_all_value: 9146.27,
-				summary_current_value: 0,
-				percentage_value: 0,
-				elements: {},
-			},
-			upgrading: {
-				summary_value: {
-					'1681704': 5.78,
-					'1950062': 14.44,
-				},
-				particular_values: {
-					'1681704': [2.89, 2.89],
-					'1950062': [7.22, 7.22],
-				},
-				object_ids: {
-					'1681704': ['26423', '26424'],
-					'1950062': ['26811', '26812'],
-				},
-				reference_job: {
-					'1681704': null,
-					'1950062': null,
-				},
-				percentage_value: {
-					'1681704': 0,
-					'1950062': 0,
-				},
-				current_value: {
-					'1681704': 0,
-					'1950062': 0,
-				},
-			},
 		},
 		'9': {
 			id: '9',
@@ -298,59 +344,13 @@ const objects = {
 			unit: 'piece',
 
 			hidden: true,
-			results: {
-				summary_all_value: 0,
-				summary_current_value: 0,
-				percentage_value: null,
-				elements: {},
-			},
-			upgrading: {
-				summary_value: {},
-				particular_values: {},
-				object_ids: {},
-				reference_job: {},
-				percentage_value: {},
-				current_value: {},
-			},
 		},
 		'10': {
 			id: '10',
 			name: 'Wylewka samopoziomująca',
 			unit: null,
 
-			hidden: false,
-			results: {
-				summary_all_value: 4395.12,
-				summary_current_value: 0,
-				percentage_value: 0,
-				elements: {},
-			},
-			upgrading: {
-				summary_value: {
-					'1681704': 2.88,
-					'1950062': 6.61,
-				},
-				particular_values: {
-					'1681704': [2.88],
-					'1950062': [6.61],
-				},
-				object_ids: {
-					'1681704': ['26415'],
-					'1950062': ['26803'],
-				},
-				reference_job: {
-					'1681704': null,
-					'1950062': null,
-				},
-				percentage_value: {
-					'1681704': 0,
-					'1950062': 0,
-				},
-				current_value: {
-					'1681704': 0,
-					'1950062': 0,
-				},
-			},
+			hidden: false
 		},
 		'11': {
 			id: '11',

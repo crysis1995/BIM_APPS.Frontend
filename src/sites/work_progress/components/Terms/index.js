@@ -8,7 +8,7 @@ import TermsComponent from './TermsComponent';
 function Terms({ terms, ForgeViewer, jobs_loading }) {
 	if (terms.loading || jobs_loading) {
 		return <Loader height={'100%'} />;
-	} else if (!ForgeViewer.current_sheet || Object.keys(terms.byJobId) === 0) {
+	} else if (!ForgeViewer.current_sheet || Object.keys(terms.byDepartment) === 0) {
 		return (
 			<div className="p-3 text-center">
 				<p>Wybierz kondygnacje</p>

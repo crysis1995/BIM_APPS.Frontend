@@ -2,19 +2,21 @@ import { gql } from 'apollo-boost';
 import { graphQLClient } from '../../../../services';
 import { TERM_TYPE } from '../types/constans';
 
-
 const GET_DEPARTMENTS_WITH_TERMS_QUERY = gql`
 	query getDepartmentsWithTerms($l: String, $p: ID) {
-		acceptanceJobs {
+		acceptanceDepartments(where: { level: $l }) {
 			id
-			departments(where: { level: $l }) {
+			name
+			jobs {
 				id
-				name
-				terms(where: { project: $p }) {
+			}
+			terms(where: { project: $p }) {
+				id
+				REAL_START
+				PLANNED_FINISH
+				REAL_FINISH
+				job {
 					id
-					REAL_START
-					PLANNED_FINISH
-					REAL_FINISH
 				}
 			}
 		}
@@ -35,23 +37,20 @@ export const normalizeTermsData = (data) => {
 	}
 	let termObject = {};
 
-	for (let job of data) {
+	for (let department of data) {
 		// jeśli departamenty są puste to pomiń roboty
 		// UWAGA! POMIJAMY W TEN SPOSÓB ROBOTY NIEPRZYPISANE DO ŻADNEGO DEPARTAMENTU - CZYLI ROBOTY JEDNOSTKOWE
-		if (job.departments.length === 0) continue;
+		if (department.jobs.length === 0) continue;
 
-		const job_id = job.id;
-		termObject[job_id] = {
-			byDepartment: {},
-			[TERM_TYPE.PLANNED_FINISH]: null,
-			[TERM_TYPE.REAL_FINISH]: null,
-			[TERM_TYPE.REAL_START]: null,
+		const dep_id = department.id;
+		termObject[dep_id] = {
+			name: department.name,
+			byJobId: {},
 		};
 
-		for (let dep of job.departments) {
-			const dep_id = dep.id;
-			termObject[job_id].byDepartment[dep_id] = {
-				name: dep.name,
+		for (let job of department.jobs) {
+			const job_id = job.id;
+			termObject[dep_id].byJobId[job_id] = {
 				[TERM_TYPE.PLANNED_FINISH]: null,
 				[TERM_TYPE.REAL_FINISH]: null,
 				[TERM_TYPE.REAL_START]: null,

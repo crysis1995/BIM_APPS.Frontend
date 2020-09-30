@@ -6,6 +6,7 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 		expect(normalizeTermsData([])).not.toBeNull();
 		expect(normalizeTermsData([])).not.toBeUndefined();
 	});
+
 	test('should throw error if data is not array type', () => {
 		expect(() => normalizeTermsData([])).not.toThrow();
 		expect(() => normalizeTermsData('')).toThrowError('Data nie jest typu Array');
@@ -14,607 +15,269 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 	test('', () => {
 		const data = [
 			{
-				id: '2',
-				departments: [
-					{
-						id: '26',
-						name: 'Oddział Chirurgii',
-						terms: [],
-					},
-					{
-						id: '28',
-						name: 'Zespół Poradni Specjalistycznych',
-						terms: [],
-					},
-					{
-						id: '29',
-						name: 'Komunikacja ogólna',
-						terms: [],
-					},
-				],
-			},
-			{
-				id: '4',
-				departments: [
-					{
-						id: '26',
-						name: 'Oddział Chirurgii',
-						terms: [],
-					},
-					{
-						id: '27',
-						name: 'Pow techniczna',
-						terms: [],
-					},
-					{
-						id: '28',
-						name: 'Zespół Poradni Specjalistycznych',
-						terms: [],
-					},
-					{
-						id: '29',
-						name: 'Komunikacja ogólna',
-						terms: [],
-					},
-				],
-			},
-			{
-				id: '3',
-				departments: [
-					{
-						id: '26',
-						name: 'Oddział Chirurgii',
-						terms: [],
-					},
-					{
-						id: '27',
-						name: 'Pow techniczna',
-						terms: [],
-					},
-					{
-						id: '28',
-						name: 'Zespół Poradni Specjalistycznych',
-						terms: [],
-					},
-					{
-						id: '29',
-						name: 'Komunikacja ogólna',
-						terms: [],
-					},
-				],
-			},
-			{
-				id: '5',
-				departments: [
-					{
-						id: '26',
-						name: 'Oddział Chirurgii',
-						terms: [],
-					},
-					{
-						id: '28',
-						name: 'Zespół Poradni Specjalistycznych',
-						terms: [],
-					},
-					{
-						id: '29',
-						name: 'Komunikacja ogólna',
-						terms: [],
-					},
-				],
-			},
-			{
-				id: '7',
-				departments: [
-					{
-						id: '26',
-						name: 'Oddział Chirurgii',
-						terms: [],
-					},
-					{
-						id: '27',
-						name: 'Pow techniczna',
-						terms: [],
-					},
-					{
-						id: '28',
-						name: 'Zespół Poradni Specjalistycznych',
-						terms: [],
-					},
-					{
-						id: '29',
-						name: 'Komunikacja ogólna',
-						terms: [],
-					},
-				],
-			},
-			{
-				id: '8',
-				departments: [
-					{
-						id: '26',
-						name: 'Oddział Chirurgii',
-						terms: [],
-					},
-					{
-						id: '28',
-						name: 'Zespół Poradni Specjalistycznych',
-						terms: [],
-					},
-					{
-						id: '29',
-						name: 'Komunikacja ogólna',
-						terms: [],
-					},
-				],
-			},
-			{
-				id: '10',
-				departments: [
-					{
-						id: '26',
-						name: 'Oddział Chirurgii',
-						terms: [],
-					},
-					{
-						id: '27',
-						name: 'Pow techniczna',
-						terms: [],
-					},
-					{
-						id: '28',
-						name: 'Zespół Poradni Specjalistycznych',
-						terms: [],
-					},
-					{
-						id: '29',
-						name: 'Komunikacja ogólna',
-						terms: [],
-					},
-				],
-			},
-			{
-				id: '11',
-				departments: [
-					{
-						id: '26',
-						name: 'Oddział Chirurgii',
-						terms: [],
-					},
-					{
-						id: '27',
-						name: 'Pow techniczna',
-						terms: [],
-					},
-					{
-						id: '28',
-						name: 'Zespół Poradni Specjalistycznych',
-						terms: [],
-					},
-					{
-						id: '29',
-						name: 'Komunikacja ogólna',
-						terms: [],
-					},
-				],
-			},
-			{
-				id: '13',
-				departments: [
-					{
-						id: '26',
-						name: 'Oddział Chirurgii',
-						terms: [],
-					},
-				],
-			},
-			{
-				id: '14',
-				departments: [
-					{
-						id: '26',
-						name: 'Oddział Chirurgii',
-						terms: [],
-					},
-					{
-						id: '27',
-						name: 'Pow techniczna',
-						terms: [],
-					},
-					{
-						id: '28',
-						name: 'Zespół Poradni Specjalistycznych',
-						terms: [],
-					},
-					{
-						id: '29',
-						name: 'Komunikacja ogólna',
-						terms: [],
-					},
-				],
-			},
-			{
 				id: '16',
-				departments: [
+				name: 'Kuchnia i Kantyna',
+				jobs: [
 					{
-						id: '26',
-						name: 'Oddział Chirurgii',
-						terms: [],
+						id: '1',
 					},
 					{
-						id: '28',
-						name: 'Zespół Poradni Specjalistycznych',
-						terms: [],
+						id: '2',
 					},
 					{
-						id: '29',
-						name: 'Komunikacja ogólna',
-						terms: [],
+						id: '3',
+					},
+					{
+						id: '4',
+					},
+					{
+						id: '5',
+					},
+					{
+						id: '7',
+					},
+					{
+						id: '8',
+					},
+					{
+						id: '10',
+					},
+					{
+						id: '11',
+					},
+					{
+						id: '14',
+					},
+					{
+						id: '16',
 					},
 				],
+				terms: [],
 			},
 			{
-				id: '1',
-				departments: [
+				id: '17',
+				name: 'Pow techniczna',
+				jobs: [
 					{
-						id: '26',
-						name: 'Oddział Chirurgii',
-						terms: [],
+						id: '1',
 					},
 					{
-						id: '28',
-						name: 'Zespół Poradni Specjalistycznych',
-						terms: [],
+						id: '2',
 					},
 					{
-						id: '29',
-						name: 'Komunikacja ogólna',
-						terms: [],
+						id: '4',
+					},
+					{
+						id: '5',
+					},
+					{
+						id: '7',
+					},
+					{
+						id: '8',
+					},
+					{
+						id: '13',
+					},
+					{
+						id: '14',
 					},
 				],
+				terms: [],
 			},
 			{
-				id: '6',
-				departments: [],
-			},
-			{
-				id: '9',
-				departments: [],
-			},
-			{
-				id: '12',
-				departments: [],
-			},
-			{
-				id: '15',
-				departments: [],
+				id: '18',
+				name: 'Pow magazynowa',
+				jobs: [
+					{
+						id: '1',
+					},
+					{
+						id: '2',
+					},
+					{
+						id: '4',
+					},
+					{
+						id: '5',
+					},
+					{
+						id: '7',
+					},
+					{
+						id: '8',
+					},
+					{
+						id: '13',
+					},
+					{
+						id: '14',
+					},
+					{
+						id: '16',
+					},
+				],
+				terms: [],
 			},
 		];
 
 		const expected = {
-			'1': {
-				byDepartment: {
-					'26': {
-						name: 'Oddział Chirurgii',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'28': {
-						name: 'Zespół Poradni Specjalistycznych',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'29': {
-						name: 'Komunikacja ogólna',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-				},
-				[TERM_TYPE.PLANNED_FINISH]: null,
-				[TERM_TYPE.REAL_FINISH]: null,
-				[TERM_TYPE.REAL_START]: null,
-			},
-			'2': {
-				byDepartment: {
-					'26': {
-						name: 'Oddział Chirurgii',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'28': {
-						name: 'Zespół Poradni Specjalistycznych',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'29': {
-						name: 'Komunikacja ogólna',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-				},
-				[TERM_TYPE.PLANNED_FINISH]: null,
-				[TERM_TYPE.REAL_FINISH]: null,
-				[TERM_TYPE.REAL_START]: null,
-			},
-			'3': {
-				byDepartment: {
-					'26': {
-						name: 'Oddział Chirurgii',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'27': {
-						name: 'Pow techniczna',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'28': {
-						name: 'Zespół Poradni Specjalistycznych',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'29': {
-						name: 'Komunikacja ogólna',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-				},
-				[TERM_TYPE.PLANNED_FINISH]: null,
-				[TERM_TYPE.REAL_FINISH]: null,
-				[TERM_TYPE.REAL_START]: null,
-			},
-			'4': {
-				byDepartment: {
-					'26': {
-						name: 'Oddział Chirurgii',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'27': {
-						name: 'Pow techniczna',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'28': {
-						name: 'Zespół Poradni Specjalistycznych',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'29': {
-						name: 'Komunikacja ogólna',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-				},
-				[TERM_TYPE.PLANNED_FINISH]: null,
-				[TERM_TYPE.REAL_FINISH]: null,
-				[TERM_TYPE.REAL_START]: null,
-			},
-			'5': {
-				byDepartment: {
-					'26': {
-						name: 'Oddział Chirurgii',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'28': {
-						name: 'Zespół Poradni Specjalistycznych',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'29': {
-						name: 'Komunikacja ogólna',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-				},
-				[TERM_TYPE.PLANNED_FINISH]: null,
-				[TERM_TYPE.REAL_FINISH]: null,
-				[TERM_TYPE.REAL_START]: null,
-			},
-			'7': {
-				byDepartment: {
-					'26': {
-						name: 'Oddział Chirurgii',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'27': {
-						name: 'Pow techniczna',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'28': {
-						name: 'Zespół Poradni Specjalistycznych',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'29': {
-						name: 'Komunikacja ogólna',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-				},
-				[TERM_TYPE.PLANNED_FINISH]: null,
-				[TERM_TYPE.REAL_FINISH]: null,
-				[TERM_TYPE.REAL_START]: null,
-			},
-			'8': {
-				byDepartment: {
-					'26': {
-						name: 'Oddział Chirurgii',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'28': {
-						name: 'Zespół Poradni Specjalistycznych',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'29': {
-						name: 'Komunikacja ogólna',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-				},
-				[TERM_TYPE.PLANNED_FINISH]: null,
-				[TERM_TYPE.REAL_FINISH]: null,
-				[TERM_TYPE.REAL_START]: null,
-			},
-			'10': {
-				byDepartment: {
-					'26': {
-						name: 'Oddział Chirurgii',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'27': {
-						name: 'Pow techniczna',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'28': {
-						name: 'Zespół Poradni Specjalistycznych',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'29': {
-						name: 'Komunikacja ogólna',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-				},
-				[TERM_TYPE.PLANNED_FINISH]: null,
-				[TERM_TYPE.REAL_FINISH]: null,
-				[TERM_TYPE.REAL_START]: null,
-			},
-			'11': {
-				byDepartment: {
-					'26': {
-						name: 'Oddział Chirurgii',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'27': {
-						name: 'Pow techniczna',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'28': {
-						name: 'Zespół Poradni Specjalistycznych',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'29': {
-						name: 'Komunikacja ogólna',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-				},
-				[TERM_TYPE.PLANNED_FINISH]: null,
-				[TERM_TYPE.REAL_FINISH]: null,
-				[TERM_TYPE.REAL_START]: null,
-			},
-			'13': {
-				byDepartment: {
-					'26': {
-						name: 'Oddział Chirurgii',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-				},
-				[TERM_TYPE.PLANNED_FINISH]: null,
-				[TERM_TYPE.REAL_FINISH]: null,
-				[TERM_TYPE.REAL_START]: null,
-			},
-			'14': {
-				byDepartment: {
-					'26': {
-						name: 'Oddział Chirurgii',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'27': {
-						name: 'Pow techniczna',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'28': {
-						name: 'Zespół Poradni Specjalistycznych',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-					'29': {
-						name: 'Komunikacja ogólna',
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
-					},
-				},
-				[TERM_TYPE.PLANNED_FINISH]: null,
-				[TERM_TYPE.REAL_FINISH]: null,
-				[TERM_TYPE.REAL_START]: null,
-			},
 			'16': {
-				byDepartment: {
-					'26': {
-						name: 'Oddział Chirurgii',
+				name: 'Kuchnia i Kantyna',
+				byJobId: {
+					'1': {
 						[TERM_TYPE.PLANNED_FINISH]: null,
 						[TERM_TYPE.REAL_FINISH]: null,
 						[TERM_TYPE.REAL_START]: null,
 					},
-					'28': {
-						name: 'Zespół Poradni Specjalistycznych',
+					'2': {
 						[TERM_TYPE.PLANNED_FINISH]: null,
 						[TERM_TYPE.REAL_FINISH]: null,
 						[TERM_TYPE.REAL_START]: null,
 					},
-					'29': {
-						name: 'Komunikacja ogólna',
+					'3': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'4': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'5': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'7': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'8': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'10': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'11': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'14': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'16': {
 						[TERM_TYPE.PLANNED_FINISH]: null,
 						[TERM_TYPE.REAL_FINISH]: null,
 						[TERM_TYPE.REAL_START]: null,
 					},
 				},
-				[TERM_TYPE.PLANNED_FINISH]: null,
-				[TERM_TYPE.REAL_FINISH]: null,
-				[TERM_TYPE.REAL_START]: null,
+			},
+			'17': {
+				name: 'Pow techniczna',
+				byJobId: {
+					'1': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'2': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'4': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'5': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'7': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'8': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+
+					'13': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'14': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+				},
+			},
+			'18': {
+				name: 'Pow magazynowa',
+				byJobId: {
+					'1': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'2': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'4': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'5': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'7': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'8': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+
+					'13': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'14': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+					'16': {
+						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.REAL_FINISH]: null,
+						[TERM_TYPE.REAL_START]: null,
+					},
+				},
 			},
 		};
 		expect(normalizeTermsData(data)).toEqual(expected);

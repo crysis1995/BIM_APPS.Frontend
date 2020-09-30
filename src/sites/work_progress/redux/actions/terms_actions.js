@@ -1,6 +1,11 @@
-import { TERMS_DATA_FETCH_END, TERMS_DATA_FETCH_ERROR, TERMS_DATA_FETCH_START, TERMS_SET_BY_DEPARTMENT, TERMS_SET_BY_JOB } from '../types';
+import {
+	TERMS_DATA_FETCH_END,
+	TERMS_DATA_FETCH_ERROR,
+	TERMS_DATA_FETCH_START,
+	TERMS_SET_BY_DEPARTMENT,
+	TERMS_SET_DEPARTMENT,
+} from '../types';
 import { fetchDepartmentsWithTerms, normalizeTermsData } from '../utils/terms_utils';
-
 
 export const termsDataFetchStart = () => ({
 	type: TERMS_DATA_FETCH_START,
@@ -16,12 +21,17 @@ export const termsDataFetchError = (error) => ({
 	error,
 });
 
-export const setTermByJob = (term_type, term, job_id) => ({
-	type: TERMS_SET_BY_JOB,
-	term_type,
-	term,
-	job_id,
+export const setDepartment = (chosenDepartment) => ({
+	type: TERMS_SET_DEPARTMENT,
+	chosenDepartment,
 });
+
+// export const setTermByJob = (term_type, term, job_id) => ({
+// 	type: TERMS_SET_BY_JOB,
+// 	term_type,
+// 	term,
+// 	job_id,
+// });
 /*
  *
  *
@@ -40,7 +50,7 @@ export const getDepartmentsWithTerms = async (dispatch, current_level) => {
 		const { data, errors } = await fetchDepartmentsWithTerms(current_level);
 
 		if (data) {
-			dispatch(termsDataFetchEnd(normalizeTermsData(data.acceptanceJobs)));
+			dispatch(termsDataFetchEnd(normalizeTermsData(data.acceptanceDepartments)));
 			console.log(data);
 		}
 		if (errors) {

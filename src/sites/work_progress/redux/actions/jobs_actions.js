@@ -89,18 +89,18 @@ export const fetchAllJobs = () => async (dispatch) => {
  *      Funkcja przetwarza pobrane obiekty i grupuje dane wg prac do wykonania
  *
  */
-export const jobsPrepare = () => (dispatch, getState) => {
-	const { objects } = getState().Odbiory.Objects;
-	const { selected_rooms } = getState().Odbiory.Rooms;
-	const { jobs } = getState().Odbiory.Jobs;
-	if (Object.keys(jobs).length > 0) {
-		let newJobs = { ...jobs };
-		for (let job_key in jobs) {
-			newJobs[job_key].upgrading = { ...prepareDataForJobs(job_key, objects, selected_rooms) };
-		}
-		dispatch(setJobsData(newJobs));
-	}
-};
+// export const jobsPrepare = () => (dispatch, getState) => {
+// 	const { objects } = getState().Odbiory.Objects;
+// 	const { selected_rooms } = getState().Odbiory.Rooms;
+// 	const { jobs } = getState().Odbiory.Jobs;
+// 	if (Object.keys(jobs).length > 0) {
+// 		let newJobs = { ...jobs };
+// 		for (let job_key in jobs) {
+// 			newJobs[job_key].upgrading = { ...prepareDataForJobs(job_key, objects, selected_rooms) };
+// 		}
+// 		dispatch(setJobsData(newJobs));
+// 	}
+// };
 
 /**
  *

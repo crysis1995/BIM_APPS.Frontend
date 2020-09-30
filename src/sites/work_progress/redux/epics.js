@@ -47,6 +47,7 @@ export const getRoomData = (action$, state$) =>
 		ofType(ADD_ROOM_TO_SELECTION),
 		mergeMap(({ selectedRoom }) => {
 			if (state$.value.Odbiory.Objects.objects.hasOwnProperty(selectedRoom)) {
+				console.log(state$.value.Odbiory.Objects.objects);
 				return from(Object.keys(state$.value.Odbiory.Jobs.jobs)).pipe(
 					mergeMap((job_id) =>
 						concat(
@@ -66,8 +67,9 @@ export const getRoomData = (action$, state$) =>
 			} else {
 				return from(fetchObjectsByRoom(state$.value.Odbiory.Rooms.rooms[selectedRoom].id)).pipe(
 					mergeMap((data) => {
+						// console.log(data);
 						return concat(
-							of(fetchObjectsSetData(data)),
+							of(fetchObjectsSetData(selectedRoom, data)),
 							of(jobsLoadingStart()),
 							of(fetchObjectsEnd()),
 							from(Object.keys(state$.value.Odbiory.Jobs.jobs)).pipe(

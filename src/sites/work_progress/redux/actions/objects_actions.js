@@ -40,24 +40,24 @@ export const fetchObjectsSetData = (revit_id, objects) => ({
  *
  *
  */
-export const fetchObjectsByRooms = debounce(async (dispatch, getState) => {
-	const { selected_rooms } = getState().Odbiory.Rooms;
-	if (selected_rooms.length > 0) {
-		const data = await fetchObjectsBySelectedRoom(dispatch, getState);
-		if (data) {
-			const objects = data.reduce((prev, acc) => ({ ...prev, ...acc }), {}); // zamiana array na obiekt
-			dispatch(fetchObjectsSetData(objects));
-			dispatch(jobsLoadingStart());
-			dispatch(fetchObjectsEnd());
-			dispatch(jobsPrepare());
-			dispatch(jobsLoadingEnd());
-		} else {
-			dispatch(fetchObjectsEnd());
-		}
-	} else {
-		dispatch(fetchObjectsEnd());
-	}
-}, 2000);
+// export const fetchObjectsByRooms = debounce(async (dispatch, getState) => {
+// 	const { selected_rooms } = getState().Odbiory.Rooms;
+// 	if (selected_rooms.length > 0) {
+// 		const data = await fetchObjectsBySelectedRoom(dispatch, getState);
+// 		if (data) {
+// 			const objects = data.reduce((prev, acc) => ({ ...prev, ...acc }), {}); // zamiana array na obiekt
+// 			dispatch(fetchObjectsSetData(objects));
+// 			dispatch(jobsLoadingStart());
+// 			dispatch(fetchObjectsEnd());
+// 			dispatch(jobsPrepare());
+// 			dispatch(jobsLoadingEnd());
+// 		} else {
+// 			dispatch(fetchObjectsEnd());
+// 		}
+// 	} else {
+// 		dispatch(fetchObjectsEnd());
+// 	}
+// }, 2000);
 
 const fetchObjectsBySelectedRoom = (dispatch, getState) => {
 	const fetchedObjects = Object.keys(getState().Odbiory.Objects.objects);
