@@ -86,6 +86,6 @@ const fetchObjectsBySelectedRoom = (dispatch, getState) => {
 		);
 };
 
-export const fetchObjectsByRoom = (room_id, revit_id) => {
-	return getFilteredObjects(room_id).then(({ data }) => ({ [revit_id]: normalize(data.acceptanceObjects) }));
+export const fetchObjectsByRoom = (room_id) => {
+	return getFilteredObjects(room_id).then(({ data }) => normalize(data.acceptanceObjects));
 };

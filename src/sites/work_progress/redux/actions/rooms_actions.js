@@ -109,29 +109,6 @@ export const fetch_all_rooms = async (dispatch, level) => {
 
 export const setSelectedRoom = (room_value, status, from_selector = true) => (dispatch) => {
 	return dispatch(selectRoom(room_value, status, from_selector));
-	// const { jobs_loading } = getState().Odbiory.Jobs;
-	// const { objects_loading } = getState().Odbiory.Objects;
-	// const { model_rooms_loading } = getState().ForgeViewer;
-	// if (!jobs_loading && !model_rooms_loading) {
-	// 	if (!objects_loading) {
-	// 		dispatch(fetchObjectsStart());
-	// 	}
-	// 	switch (status) {
-	// 		case 'clear':
-	// 			dispatch(cleanSelection(from_selector));
-	// 			break;
-	// 		case 'remove-value':
-	// 			dispatch(removeRoomFromSelection(room_value, from_selector));
-	// 			break;
-	// 		case 'add-specyfic':
-	// 			dispatch(addSpecyficRoomToSelection(room_value, from_selector));
-	// 			break;
-	// 		default:
-	// 			dispatch(addRoomToSelection(room_value, from_selector));
-	// 			break;
-	// 	}
-	// 	// fetchObjectsByRooms(dispatch, getState);
-	// }
 };
 
 export function dispatchActionDependOfParams(room_value, status, from_selector) {

@@ -1,8 +1,7 @@
 import { combineReducers } from 'redux';
 import { combineEpics } from 'redux-observable';
 
-import { fetchResultsForLevel, selectRoom } from './redux/epics';
-import TEST_REDUCER from './redux/reducers';
+import { fetchResultsForLevel, getRoomData, selectRoom } from './redux/epics';
 
 import Jobs from './redux/reducers/jobs_reducers';
 import Levels from './redux/reducers/levels_reducers';
@@ -22,7 +21,6 @@ export const OdbioryReducer = combineReducers({
 	Upgrading,
 	Results,
 	Terms,
-	TEST_REDUCER,
 });
 
-export const OdbioryEpics = combineEpics(fetchResultsForLevel, selectRoom);
+export const OdbioryEpics = combineEpics(fetchResultsForLevel, selectRoom, getRoomData);

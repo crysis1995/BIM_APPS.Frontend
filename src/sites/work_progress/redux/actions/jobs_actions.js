@@ -88,7 +88,6 @@ export const fetchAllJobs = () => async (dispatch) => {
  *
  *      Funkcja przetwarza pobrane obiekty i grupuje dane wg prac do wykonania
  *
- *
  */
 export const jobsPrepare = () => (dispatch, getState) => {
 	const { objects } = getState().Odbiory.Objects;
@@ -143,14 +142,14 @@ export const changeJobPercentageValue = (job_key, value) => async (dispatch, get
 				});
 				if (data) {
 					new_upgrading.reference_job[revit_id] = data.createAcceptanceReferenceJob.acceptanceReferenceJob; // uzupełnienie reference-joba do pozycji upgrading w storze
-					dispatch(jobsChangePercentageValue(job_key, new_upgrading));
+					// dispatch(jobsChangePercentageValue(job_key, new_upgrading));
 				}
 			} catch (error) {
 				console.log(error);
 			}
 		}
 		const { results } = jobs[job_key];
-		dispatch(upgradeJobResults(job_key, prep_updateResults({ results, ...new_upgrading })));
+		// dispatch(upgradeJobResults(job_key, prep_updateResults({ results, ...new_upgrading })));
 		dispatch(objectJobFetchCompleted());
 	}
 };
