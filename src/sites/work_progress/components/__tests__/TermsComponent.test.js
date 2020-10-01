@@ -6,7 +6,7 @@ import { createStore } from 'redux';
 import configureStore from 'redux-mock-store';
 import { rootReducer } from '../../../../reducers';
 import { TERM_TYPE } from '../../redux/types/constans';
-import TermsComponent from './TermsComponent';
+import TermsComponent from '../Terms/TermsComponent';
 
 const mockStore = configureStore([]);
 
@@ -24,7 +24,6 @@ describe('TESTING TERMS COMPONENT', () => {
 		});
 		expect(getByRole('table')).toBeInTheDocument();
 	});
-
 	test('should render thead properly', () => {
 		const { getByText, getAllByRole } = renderWithRedux(<TermsComponent />, {
 			initialState: {},
@@ -35,7 +34,6 @@ describe('TESTING TERMS COMPONENT', () => {
 		expect(getByText('Data planowanego zakończenia')).toBeInTheDocument();
 		expect(getByText('Data rzeczywistego zakończenia')).toBeInTheDocument();
 	});
-
 	test('should render properly jobs and their names', () => {
 		const { getByText, getAllByRole } = renderWithRedux(<TermsComponent />, {
 			initialState: {
@@ -65,18 +63,13 @@ describe('TESTING TERMS COMPONENT', () => {
 						},
 					},
 					Terms: {
-						byJobId: {
+						chosenDepartment: '1',
+						byDepartment: {
 							'1': {
-								byDepartment: {},
+								byJobId: {},
 							},
 							'2': {
-								byDepartment: {},
-							},
-							'3': {
-								byDepartment: {},
-							},
-							'4': {
-								byDepartment: {},
+								byJobId: {},
 							},
 						},
 					},
@@ -89,7 +82,6 @@ describe('TESTING TERMS COMPONENT', () => {
 		expect(getByText('Wykonanie podkładów betonowych')).toBeInTheDocument();
 		expect(getByText('Tynk - GK')).toBeInTheDocument();
 	});
-
 	test('should render table rows as accordion', () => {
 		const { getByText, getAllByRole, container } = renderWithRedux(<TermsComponent />, {
 			initialState: {
@@ -109,18 +101,17 @@ describe('TESTING TERMS COMPONENT', () => {
 						},
 					},
 					Terms: {
-						byJobId: {
+						chosenDepartment: '1',
+						byDepartment: {
 							'1': {
-								byDepartment: {
+								name: 'test1',
+								byJobId: {
 									'1': {
-										name: 'test1',
-										[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-										[TERM_TYPE.REAL_FINISH]: new Date(2020, 1, 1),
+										[TERM_TYPE.REAL_START]: new Date(2020, 0, 1),
+										[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 1, 1),
+										[TERM_TYPE.REAL_FINISH]: new Date(2020, 2, 1),
 									},
 								},
-							},
-							'2': {
-								byDepartment: {},
 							},
 						},
 					},
@@ -155,14 +146,12 @@ describe('TESTING TERMS COMPONENT', () => {
 						},
 					},
 					Terms: {
-						byJobId: {
+						chosenDepartment: '1',
+						byDepartment: {
 							'1': {
-								[TERM_TYPE.REAL_START]: new Date(2020, 0, 1),
-								[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 1, 1),
-								[TERM_TYPE.REAL_FINISH]: new Date(2020, 2, 1),
-								byDepartment: {
+								name: 'test1',
+								byJobId: {
 									'1': {
-										name: 'test1',
 										[TERM_TYPE.REAL_START]: new Date(2020, 0, 1),
 										[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 1, 1),
 										[TERM_TYPE.REAL_FINISH]: new Date(2020, 2, 1),
@@ -174,7 +163,7 @@ describe('TESTING TERMS COMPONENT', () => {
 				},
 			},
 		});
-		expect(container.querySelectorAll('.DayPickerInput').length).toBe(6);
+		expect(container.querySelectorAll('.DayPickerInput').length).toBe(3);
 		expect(container.querySelectorAll('[name="1"]').length).toBe(1);
 		expect(screen.getByText('test1')).toBeInTheDocument();
 		expect(screen.getAllByDisplayValue('2020-1-1').length).toBe(2);

@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
 import { rootReducer } from '../../../../reducers';
-import Terms from '../Terms/index';
+import Terms from '../Terms';
 
 const renderWithRedux = (component, { initialState, store = createStore(rootReducer, initialState) } = {}) => {
 	return {
