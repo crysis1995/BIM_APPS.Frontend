@@ -11,8 +11,8 @@ function TermsComponent(props) {
 	const { jobs, terms, setTermByDepartment } = props;
 	return (
 		<>
-			<Form.Row>
-				<Col className="my-3">
+			<Form.Row className="m-3">
+				<Col >
 					<Form.Label>Oddział</Form.Label>
 					<Form.Control
 						onChange={(event) => {
@@ -74,6 +74,7 @@ function TermsComponent(props) {
 									</td>
 									<td>
 										<DayPickerInput
+											inputProps={{ disabled: true }}
 											onDayChange={(selectedDay) =>
 												setTermByDepartment(
 													TERM_TYPE.REAL_FINISH,
