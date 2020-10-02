@@ -19,7 +19,7 @@ describe('TESTING TERMS COMPONENT', () => {
 		const { getByText } = renderWithRedux(<Terms />, {
 			initialState: {
 				ForgeViewer: { current_sheet: '' },
-				Odbiory: { Terms: { byJobId: {}, loading: true } },
+				Odbiory: { Terms: { byDepartment: {}, loading: true } },
 			},
 		});
 		expect(getByText('Loading...')).toBeInTheDocument();
@@ -29,7 +29,7 @@ describe('TESTING TERMS COMPONENT', () => {
 		const { getByText } = renderWithRedux(<Terms />, {
 			initialState: {
 				ForgeViewer: { current_sheet: '' },
-				Odbiory: { Terms: { byJobId: {}, loading: true } },
+				Odbiory: { Terms: { byDepartment: {}, loading: true } },
 			},
 		});
 		expect(getByText('Loading...')).toBeInTheDocument();
@@ -39,7 +39,7 @@ describe('TESTING TERMS COMPONENT', () => {
 		const { getByText } = renderWithRedux(<Terms />, {
 			initialState: {
 				ForgeViewer: { current_sheet: '' },
-				Odbiory: { Terms: { byJobId: {}, loading: false } },
+				Odbiory: { Terms: { byDepartment: {}, loading: false } },
 			},
 		});
 		expect(getByText('Wybierz kondygnacje')).toBeInTheDocument();
@@ -50,7 +50,7 @@ describe('TESTING TERMS COMPONENT', () => {
 			initialState: {
 				ForgeViewer: { current_sheet: 'asdasd' },
 				Odbiory: {
-					Terms: { byJobId: { '1': { asd: 'asd' } }, loading: false },
+					Terms: { byDepartment: { '1': { asd: 'asd' } }, loading: false },
 					Jobs: { jobs: { '1': { name: 'asd' } } },
 				},
 			},

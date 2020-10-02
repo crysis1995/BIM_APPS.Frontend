@@ -5,11 +5,10 @@ import { v4 } from 'uuid';
 function Selector({
 	classname = 'm-3',
 	label,
-	isDisabled,
+	isDisabled = false,
 	value,
 	onChangeValue,
-	options,
-	options_loaded,
+	options = [],
 	option_id_property = 'id',
 	option_name_property = 'name',
 }) {
@@ -18,6 +17,7 @@ function Selector({
 			<Col>
 				<Form.Label>{label}</Form.Label>
 				<Form.Control
+					data-testid={'Selector'}
 					onChange={(event) => {
 						onChangeValue(event.target.value);
 					}}
@@ -26,12 +26,11 @@ function Selector({
 					value={value}
 					custom>
 					<option value="">Wybierz...</option>
-					{options_loaded &&
-						options.map((e) => (
-							<option data-testid="options" key={v4()} value={e[option_id_property]}>
-								{e[option_name_property]}
-							</option>
-						))}
+					{options.map((e) => (
+						<option data-testid="options" key={v4()} value={e[option_id_property]}>
+							{e[option_name_property]}
+						</option>
+					))}
 				</Form.Control>
 			</Col>
 		</Form.Row>

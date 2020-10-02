@@ -6,31 +6,22 @@ import { connect } from 'react-redux';
 import { v4 } from 'uuid';
 import { setDepartment, setTermByDepartment } from '../../redux/actions/terms_actions';
 import { TERM_TYPE } from '../../redux/types/constans';
+import Selector from '../Selector';
 
 function TermsComponent(props) {
-	const { jobs, terms, setTermByDepartment } = props;
+	const { jobs, terms, setTermByDepartment, setDepartment } = props;
 	return (
 		<>
-			<Form.Row className="m-3">
-				<Col >
-					<Form.Label>Oddział</Form.Label>
-					<Form.Control
-						onChange={(event) => {
-							props.setDepartment(event.target.value);
-						}}
-						as="select"
-						value={props.terms.chosenDepartment}
-						custom>
-						<option value="">Wybierz...</option>
-						{props.terms.byDepartment &&
-							Object.keys(props.terms.byDepartment).map((key) => (
-								<option key={v4()} value={key}>
-									{props.terms.byDepartment[key].name}
-								</option>
-							))}
-					</Form.Control>
-				</Col>
-			</Form.Row>
+			<Selector
+				label="Oddział"
+				options={Object.keys(terms.byDepartment).map((key) => ({
+					id: key,
+					name: terms.byDepartment[key].name,
+				}))}
+				options_loaded={Object.keys(terms.byDepartment) > 0}
+				value={terms.chosenDepartment}
+				onChangeValue={setDepartment}
+			/>
 			<Table data-testid="TermsComponent">
 				<thead>
 					<tr>
@@ -48,6 +39,7 @@ function TermsComponent(props) {
 									<td>{jobs[job_id].name}</td>
 									<td>
 										<DayPickerInput
+											inputProps={{ disabled: true }}
 											onDayChange={(selectedDay) =>
 												setTermByDepartment(
 													TERM_TYPE.REAL_START,

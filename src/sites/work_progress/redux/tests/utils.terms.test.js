@@ -1,4 +1,4 @@
-import { TERM_TYPE } from '../types/constans';
+import { PERMISSION, TERM_TYPE } from '../types/constans';
 import { normalizeTermsData } from '../utils/terms_utils';
 
 describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
@@ -126,7 +126,10 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 				name: 'Kuchnia i Kantyna',
 				byJobId: {
 					'1': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 						[TERM_TYPE.REAL_FINISH]: null,
 						[TERM_TYPE.REAL_START]: null,
 					},

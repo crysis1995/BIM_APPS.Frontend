@@ -9,3 +9,9 @@ export const TERM_TYPE = {
 	PLANNED_FINISH: 'PLANNED_FINISH',
 	REAL_FINISH: 'REAL_FINISH',
 };
+
+export const PERMISSION = {
+	VIEW: 'VIEW',
+	CREATE: 'CREATE',
+	UPDATE: 'UPDATE',
+};

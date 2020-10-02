@@ -45,9 +45,23 @@ const TermsReducer = (state = initialState, action) => {
 	}
 };
 
-function setTermsByDepartment(state, { term_type, term, department_id, job_id }) {
+function setTermsByDepartment(state, { term_type, term, department_id, job_id, permissions }) {
 	const property = 'byJobId';
-	dotProp.set(state, `byDepartment.${department_id}.${property}.${job_id}.${term_type}`, term);
+	dotProp.set(state, `byDepartment.${department_id}.${property}.${job_id}.${term_type}.value`, term);
+	setPermission(state, { term_type, department_id, job_id, permissions });
+	return { ...state };
+}
+
+function setPermission(state, { term_type, permissions, department_id, job_id }) {
+	const property = 'byJobId';
+	if (!Array.isArray(permissions)) permissions = [permissions];
+	dotProp.set(state, `byDepartment.${department_id}.${property}.${job_id}.${term_type}.permission`, [...permissions]);
+	return { ...state };
+}
+
+function deletePermission(state, { term_type, permission, department_id, job_id }) {
+	const property = 'byJobId';
+	dotProp.set(state, `byDepartment.${department_id}.${property}.${job_id}.${term_type}.permission`, permission);
 	return { ...state };
 }
 
