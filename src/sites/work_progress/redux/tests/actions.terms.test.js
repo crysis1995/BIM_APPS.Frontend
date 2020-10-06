@@ -3,7 +3,6 @@ import {
 	termsDataFetchEnd,
 	termsDataFetchError,
 	termsDataFetchStart,
-	setTermByJob,
 	setTermByDepartment,
 } from '../actions/terms_actions';
 import { TERM_TYPE } from '../types/constans';
@@ -35,20 +34,6 @@ describe('terms_actions test', () => {
 		};
 
 		expect(termsDataFetchEnd(data)).toEqual(expected);
-	});
-
-	test('should create setTermByJob action', () => {
-		const term_type = TERM_TYPE.PLANNED_FINISH;
-		const term = new Date(2020, 0, 1);
-		const job_id = '1';
-		const expected = {
-			type: types.TERMS_SET_BY_JOB,
-			term_type,
-			term,
-			job_id,
-		};
-
-		expect(setTermByJob(term_type, term, job_id)).toEqual(expected);
 	});
 	test('should create setTermByDepartment action', () => {
 		const term_type = TERM_TYPE.PLANNED_FINISH;

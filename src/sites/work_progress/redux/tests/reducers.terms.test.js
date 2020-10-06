@@ -1,69 +1,67 @@
-import TermsReducer from '../reducers/terms_reducers';
 import {
-	termsDataFetchError,
-	termsDataFetchEnd,
-	termsDataFetchStart,
-	setTermByJob,
 	setTermByDepartment,
+	termsDataFetchEnd,
+	termsDataFetchError,
+	termsDataFetchStart,
+	setDepartment,
 } from '../actions/terms_actions';
+import TermsReducer from '../reducers/terms_reducers';
 import { TERM_TYPE } from '../types/constans';
 
 describe('TERMS_REDUCERS TEST', () => {
 	test('should return initial state', () => {
 		expect(TermsReducer(undefined, {})).toEqual({
-			byJobId: {},
+			byDepartment: {},
 			loading: false,
 			error: null,
+			chosenDepartment: '',
 		});
 	});
 	test('should properly dispatch termsDataFetchStart action', () => {
 		const action = termsDataFetchStart();
 		expect(TermsReducer(undefined, action)).toEqual({
-			byJobId: {},
+			byDepartment: {},
 			loading: true,
 			error: null,
+			chosenDepartment: '',
 		});
 	});
 	test('should properly dispatch termsDataFetchEnd action', () => {
-		const action = termsDataFetchEnd({ '1': 'test' });
+		const action = termsDataFetchEnd({ '1': { name: 'asdasdasd' } });
 		expect(TermsReducer(undefined, action)).toEqual({
-			byJobId: { '1': 'test' },
+			byDepartment: { '1': { name: 'asdasdasd' } },
 			loading: false,
 			error: null,
+			chosenDepartment: '',
 		});
 	});
 	test('should properly dispatch termsDataFetchError action', () => {
 		const action = termsDataFetchError('message');
 		expect(TermsReducer(undefined, action)).toEqual({
-			byJobId: {},
+			byDepartment: {},
 			loading: false,
 			error: 'message',
+			chosenDepartment: '',
 		});
 	});
-	test('should properly dispatch setTermByJob action', () => {
-		const initialState = {
-			byJobId: {
-				'1': {},
-			},
+	test('should properly dispatch setDepartment action', () => {
+		const action = setDepartment('123123123');
+		expect(TermsReducer(undefined, action)).toEqual({
+			byDepartment: {},
 			loading: false,
 			error: null,
-		};
-		const expected = {
-			byJobId: {
-				'1': {
-					[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-				},
-			},
-			loading: false,
-			error: null,
-		};
+			chosenDepartment: '123123123',
+		});
+	});
+	test('should properly dispatch setTermByDepartment action - set new value', () => {
+		const action2 = setTermByDepartment(TERM_TYPE.PLANNED_FINISH, new Date(2020, 0, 1), '1', '1');
 		const initialStatev2 = {
-			byJobId: {
+			byDepartment: {
 				'1': {
-					byDepartment: {
+					name: 'TEST',
+					byJobId: {
 						'1': {},
 						'2': {},
-						'3': {},
 					},
 				},
 			},
@@ -71,51 +69,61 @@ describe('TERMS_REDUCERS TEST', () => {
 			error: null,
 		};
 		const expectedv2 = {
-			byJobId: {
+			byDepartment: {
 				'1': {
-					[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-					byDepartment: {
-						'1': { [TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1) },
-						'2': { [TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1) },
-						'3': { [TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1) },
-					},
-				},
-			},
-			loading: false,
-			error: null,
-		};
-		const initialStatev3 = {
-			byJobId: {
-				'1': {
-					[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-					byDepartment: {
-						'1': { [TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1) },
-						'2': { [TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1) },
-						'3': { [TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1) },
-					},
-				},
-			},
-			loading: false,
-			error: null,
-		};
-		const expectedv3 = {
-			byJobId: {
-				'1': {
-					[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-					[TERM_TYPE.REAL_FINISH]: new Date(2020, 1, 1),
-					byDepartment: {
+					name: 'TEST',
+					byJobId: {
 						'1': {
-							[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-							[TERM_TYPE.REAL_FINISH]: new Date(2020, 1, 1),
+							[TERM_TYPE.PLANNED_FINISH]: {
+								value: new Date(2020, 0, 1),
+								permissions: [],
+							},
 						},
-						'2': {
-							[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-							[TERM_TYPE.REAL_FINISH]: new Date(2020, 1, 1),
+						'2': {},
+					},
+				},
+			},
+			loading: false,
+			error: null,
+		};
+		expect(TermsReducer(initialStatev2, action2)).toEqual(expectedv2);
+	});
+	test('should properly dispatch setTermByDepartment action - set new value when others exist', () => {
+		const initialStatev3 = {
+			byDepartment: {
+				'1': {
+					name: 'TEST',
+					byJobId: {
+						'1': {
+							[TERM_TYPE.PLANNED_FINISH]: {
+								value: new Date(2020, 0, 1),
+								permissions: [],
+							},
 						},
-						'3': {
-							[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-							[TERM_TYPE.REAL_FINISH]: new Date(2020, 1, 1),
+						'2': {},
+					},
+				},
+			},
+			loading: false,
+			error: null,
+		};
+		const action3 = setTermByDepartment(TERM_TYPE.REAL_FINISH, new Date(2020, 1, 1), '1', '1');
+		const expectedv3 = {
+			byDepartment: {
+				'1': {
+					name: 'TEST',
+					byJobId: {
+						'1': {
+							[TERM_TYPE.PLANNED_FINISH]: {
+								value: new Date(2020, 0, 1),
+								permissions: [],
+							},
+							[TERM_TYPE.REAL_FINISH]: {
+								value: new Date(2020, 1, 1),
+								permissions: [],
+							},
 						},
+						'2': {},
 					},
 				},
 			},
@@ -123,96 +131,26 @@ describe('TERMS_REDUCERS TEST', () => {
 			error: null,
 		};
 
-		expect(TermsReducer(initialState, setTermByJob(TERM_TYPE.PLANNED_FINISH, new Date(2020, 0, 1), '1'))).toEqual(
-			expected,
-		);
-		expect(TermsReducer(initialStatev2, setTermByJob(TERM_TYPE.PLANNED_FINISH, new Date(2020, 0, 1), '1'))).toEqual(
-			expectedv2,
-		);
-		expect(TermsReducer(initialStatev3, setTermByJob(TERM_TYPE.REAL_FINISH, new Date(2020, 1, 1), '1'))).toEqual(
-			expectedv3,
-		);
+		expect(TermsReducer(initialStatev3, action3)).toEqual(expectedv3);
 	});
-	test('should properly dispatch setTermByDepartment action', () => {
-		const initialStatev2 = {
-			byJobId: {
-				'1': {
-					byDepartment: {
-						'1': {},
-						'2': {},
-						'3': {},
-					},
-				},
-			},
-			loading: false,
-			error: null,
-		};
-		const expectedv2 = {
-			byJobId: {
-				'1': {
-					[TERM_TYPE.PLANNED_FINISH]: '...',
-					byDepartment: {
-						'1': { [TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1) },
-						'2': {},
-						'3': {},
-					},
-				},
-			},
-			loading: false,
-			error: null,
-		};
-		const initialStatev3 = {
-			byJobId: {
-				'1': {
-					byDepartment: {
-						'1': { [TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1) },
-						'2': { [TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1) },
-						'3': { [TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1) },
-					},
-				},
-			},
-			loading: false,
-			error: null,
-		};
-		const expectedv3 = {
-			byJobId: {
-				'1': {
-					[TERM_TYPE.REAL_FINISH]: '...',
-					byDepartment: {
-						'1': {
-							[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-							[TERM_TYPE.REAL_FINISH]: new Date(2020, 1, 1),
-						},
-						'2': {
-							[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-						},
-						'3': {
-							[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-						},
-					},
-				},
-			},
-			loading: false,
-			error: null,
-		};
+	test('should properly dispatch setTermByDepartment action - update exist value', () => {
+		const action4 = setTermByDepartment(TERM_TYPE.REAL_FINISH, new Date(2020, 3, 1), '1', '1');
 		const initialStatev4 = {
-			byJobId: {
+			byDepartment: {
 				'1': {
-					[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-					[TERM_TYPE.REAL_FINISH]: new Date(2020, 1, 1),
-					byDepartment: {
+					name: 'TEST',
+					byJobId: {
 						'1': {
-							[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-							[TERM_TYPE.REAL_FINISH]: new Date(2020, 1, 1),
+							[TERM_TYPE.PLANNED_FINISH]: {
+								value: new Date(2020, 0, 1),
+								permissions: [],
+							},
+							[TERM_TYPE.REAL_FINISH]: {
+								value: new Date(2020, 1, 1),
+								permissions: [],
+							},
 						},
-						'2': {
-							[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-							[TERM_TYPE.REAL_FINISH]: new Date(2020, 1, 1),
-						},
-						'3': {
-							[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-							[TERM_TYPE.REAL_FINISH]: new Date(2020, 1, 1),
-						},
+						'2': {},
 					},
 				},
 			},
@@ -220,23 +158,21 @@ describe('TERMS_REDUCERS TEST', () => {
 			error: null,
 		};
 		const expectedv4 = {
-			byJobId: {
+			byDepartment: {
 				'1': {
-					[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-					[TERM_TYPE.REAL_FINISH]: '...',
-					byDepartment: {
+					name: 'TEST',
+					byJobId: {
 						'1': {
-							[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-							[TERM_TYPE.REAL_FINISH]: new Date(2020, 3, 1),
+							[TERM_TYPE.PLANNED_FINISH]: {
+								value: new Date(2020, 0, 1),
+								permissions: [],
+							},
+							[TERM_TYPE.REAL_FINISH]: {
+								value: new Date(2020, 3, 1),
+								permissions: [],
+							},
 						},
-						'2': {
-							[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-							[TERM_TYPE.REAL_FINISH]: new Date(2020, 1, 1),
-						},
-						'3': {
-							[TERM_TYPE.PLANNED_FINISH]: new Date(2020, 0, 1),
-							[TERM_TYPE.REAL_FINISH]: new Date(2020, 1, 1),
-						},
+						'2': {},
 					},
 				},
 			},
@@ -244,14 +180,6 @@ describe('TERMS_REDUCERS TEST', () => {
 			error: null,
 		};
 
-		expect(
-			TermsReducer(initialStatev2, setTermByDepartment(TERM_TYPE.PLANNED_FINISH, new Date(2020, 0, 1), '1', '1')),
-		).toEqual(expectedv2);
-		expect(
-			TermsReducer(initialStatev3, setTermByDepartment(TERM_TYPE.REAL_FINISH, new Date(2020, 1, 1), '1', '1')),
-		).toEqual(expectedv3);
-		expect(
-			TermsReducer(initialStatev4, setTermByDepartment(TERM_TYPE.REAL_FINISH, new Date(2020, 3, 1), '1', '1')),
-		).toEqual(expectedv4);
+		expect(TermsReducer(initialStatev4, action4)).toEqual(expectedv4);
 	});
 });

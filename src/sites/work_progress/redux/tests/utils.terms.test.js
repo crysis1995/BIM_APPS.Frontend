@@ -6,12 +6,10 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 		expect(normalizeTermsData([])).not.toBeNull();
 		expect(normalizeTermsData([])).not.toBeUndefined();
 	});
-
 	test('should throw error if data is not array type', () => {
 		expect(() => normalizeTermsData([])).not.toThrow();
 		expect(() => normalizeTermsData('')).toThrowError('Data nie jest typu Array');
 	});
-
 	test('', () => {
 		const data = [
 			{
@@ -130,58 +128,154 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 							value: null,
 							permissions: [PERMISSION.VIEW],
 						},
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'2': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'3': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'4': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'5': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'7': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'8': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'10': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'11': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'14': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'16': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 				},
 			},
@@ -189,45 +283,117 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 				name: 'Pow techniczna',
 				byJobId: {
 					'1': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'2': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'4': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'5': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'7': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'8': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 
 					'13': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'14': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 				},
 			},
@@ -235,50 +401,131 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 				name: 'Pow magazynowa',
 				byJobId: {
 					'1': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'2': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'4': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'5': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'7': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'8': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 
 					'13': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'14': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 					'16': {
-						[TERM_TYPE.PLANNED_FINISH]: null,
-						[TERM_TYPE.REAL_FINISH]: null,
-						[TERM_TYPE.REAL_START]: null,
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW],
+						},
 					},
 				},
 			},

@@ -23,7 +23,7 @@ export const setCurrentLevel = (current_level_id) => async (dispatch, getState) 
 		dispatch(_setCurrentLevel(current_level));
 		fetch_all_rooms(dispatch, current_level);
 		dispatch(fetchResultStart(current_level));
-		getDepartmentsWithTerms(dispatch, current_level);
+		getDepartmentsWithTerms(dispatch, getState, current_level);
 	} else {
 		dispatch(initialiseModal('Uwaga!', 'Wygląda na to, że nie ma takiego poziomu'));
 	}

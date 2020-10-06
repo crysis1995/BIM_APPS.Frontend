@@ -52,16 +52,44 @@ function setTermsByDepartment(state, { term_type, term, department_id, job_id, p
 	return { ...state };
 }
 
-function setPermission(state, { term_type, permissions, department_id, job_id }) {
+// to test
+function setPermission(state, { term_type, permissions = null, department_id, job_id }) {
 	const property = 'byJobId';
-	if (!Array.isArray(permissions)) permissions = [permissions];
-	dotProp.set(state, `byDepartment.${department_id}.${property}.${job_id}.${term_type}.permission`, [...permissions]);
+	if (permissions) {
+		if (!Array.isArray(permissions)) permissions = [permissions];
+		dotProp.set(state, `byDepartment.${department_id}.${property}.${job_id}.${term_type}.permissions`, [
+			...permissions,
+		]);
+	} else {
+		dotProp.set(state, `byDepartment.${department_id}.${property}.${job_id}.${term_type}.permissions`, []);
+	}
 	return { ...state };
 }
 
+// to test
 function deletePermission(state, { term_type, permission, department_id, job_id }) {
+	function move(arr, val) {
+		var j = 0;
+		for (var i = 0, l = arr.length; i < l; i++) {
+			if (arr[i] !== val) {
+				arr[j++] = arr[i];
+			}
+		}
+		arr.length = j;
+	}
+
 	const property = 'byJobId';
-	dotProp.set(state, `byDepartment.${department_id}.${property}.${job_id}.${term_type}.permission`, permission);
+	var permission_old = dotProp.get(
+		state,
+		`byDepartment.${department_id}.${property}.${job_id}.${term_type}.permissions`,
+	);
+	if (Array.isArray(permission)) {
+		permission.forEach((item) => move(permission_old, item));
+	} else {
+		move(permission_old, permission);
+	}
+
+	dotProp.set(state, `byDepartment.${department_id}.${property}.${job_id}.${term_type}.permissions`, permission_old);
 	return { ...state };
 }
 
