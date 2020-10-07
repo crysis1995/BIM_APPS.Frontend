@@ -10,12 +10,18 @@ const GET_DEPARTMENTS_WITH_TERMS_QUERY = gql`
 			jobs {
 				id
 			}
+			editors {
+				id
+			}
 			terms(where: { project: $p }) {
 				id
 				REAL_START
 				PLANNED_FINISH
 				REAL_FINISH
 				job {
+					id
+				}
+				user {
 					id
 				}
 			}
@@ -32,6 +38,20 @@ export const fetchDepartmentsWithTerms = (level, project_id) => {
 };
 
 export const normalizeTermsData = (data, user, project) => {
+	function isAdmin(user_role) {
+		return /admin/i.test(user_role);
+	}
+	function isTermOwner(term, user_id) {
+		return term.user.id === user_id;
+	}
+	function isDepartamentEditor(editors, user_id) {
+		let editors_ids = [];
+		if (editors && editors.length > 0) {
+			editors_ids = editors.map((e) => e.id);
+		}
+		return editors_ids.includes(user_id);
+	}
+
 	if (!Array.isArray(data)) {
 		throw new Error('Data nie jest typu Array');
 	}
@@ -51,6 +71,7 @@ export const normalizeTermsData = (data, user, project) => {
 		if (department.jobs.length === 0) continue;
 
 		const dep_id = department.id;
+		const terms_array = department.terms;
 
 		termObject[dep_id] = {
 			name: department.name,
@@ -59,6 +80,7 @@ export const normalizeTermsData = (data, user, project) => {
 
 		for (let job of department.jobs) {
 			const job_id = job.id;
+			const term = terms_array.filter((term) => term.job.id === job_id)[0];
 
 			if (!termObject[dep_id].byJobId.hasOwnProperty(job_id)) {
 				termObject[dep_id].byJobId[job_id] = {};
@@ -70,8 +92,13 @@ export const normalizeTermsData = (data, user, project) => {
 				}
 
 				termObject[dep_id].byJobId[job_id][key] = {
-					value: null,
-					permissions: setPermission(user_id, user_role),
+					value: term[key] && term[key],
+					permissions: setPermission({
+						can_view: !!user_id,
+						can_create:
+							!!user_id && (isDepartamentEditor(department.editors, user_id) || isAdmin(user_role)),
+						can_update: !!user_id && (isTermOwner(term, user_id) || isAdmin(user_role)),
+					}),
 				};
 			});
 		}
@@ -79,15 +106,16 @@ export const normalizeTermsData = (data, user, project) => {
 	return termObject;
 };
 
-export const setPermission = (user_id, user_role) => {
+export const setPermission = ({ can_view = false, can_update = false, can_create = false }) => {
 	let permission_array = [];
-	if (user_id) {
+	if (can_view) {
 		permission_array.push(PERMISSION.VIEW);
-	}
-
-	// jeśli admin to dodaje wszystkie passy
-	if (user_id && user_role && /admin/i.test(user_role)) {
-		permission_array.push(PERMISSION.CREATE, PERMISSION.UPDATE);
+		if (can_create) {
+			permission_array.push(PERMISSION.CREATE);
+			if (can_update) {
+				permission_array.push(PERMISSION.UPDATE);
+			}
+		}
 	}
 
 	return permission_array;
