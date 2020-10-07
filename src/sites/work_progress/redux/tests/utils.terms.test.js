@@ -10,7 +10,7 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 		expect(() => normalizeTermsData([])).not.toThrow();
 		expect(() => normalizeTermsData('')).toThrowError('Data nie jest typu Array');
 	});
-	test('', () => {
+	test('should generate data properly without user info', () => {
 		const data = [
 			{
 				id: '16',
@@ -25,30 +25,6 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 					{
 						id: '3',
 					},
-					{
-						id: '4',
-					},
-					{
-						id: '5',
-					},
-					{
-						id: '7',
-					},
-					{
-						id: '8',
-					},
-					{
-						id: '10',
-					},
-					{
-						id: '11',
-					},
-					{
-						id: '14',
-					},
-					{
-						id: '16',
-					},
 				],
 				terms: [],
 			},
@@ -57,9 +33,6 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 				name: 'Pow techniczna',
 				jobs: [
 					{
-						id: '1',
-					},
-					{
 						id: '2',
 					},
 					{
@@ -67,18 +40,6 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 					},
 					{
 						id: '5',
-					},
-					{
-						id: '7',
-					},
-					{
-						id: '8',
-					},
-					{
-						id: '13',
-					},
-					{
-						id: '14',
 					},
 				],
 				terms: [],
@@ -99,25 +60,233 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 					{
 						id: '5',
 					},
+				],
+				terms: [],
+			},
+		];
+
+		const expected = {
+			'16': {
+				name: 'Kuchnia i Kantyna',
+				byJobId: {
+					'1': {
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [],
+						},
+					},
+					'2': {
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [],
+						},
+					},
+					'3': {
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [],
+						},
+					},
+				},
+			},
+			'17': {
+				name: 'Pow techniczna',
+				byJobId: {
+					'2': {
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [],
+						},
+					},
+					'4': {
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [],
+						},
+					},
+					'5': {
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [],
+						},
+					},
+				},
+			},
+			'18': {
+				name: 'Pow magazynowa',
+				byJobId: {
+					'1': {
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [],
+						},
+					},
+					'2': {
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [],
+						},
+					},
+					'4': {
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [],
+						},
+					},
+					'5': {
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [],
+						},
+					},
+				},
+			},
+		};
+		expect(normalizeTermsData(data)).toEqual(expected);
+	});
+	test('should generate data properly with info when user is not admin', () => {
+		const data = [
+			{
+				id: '16',
+				name: 'Kuchnia i Kantyna',
+				jobs: [
 					{
-						id: '7',
+						id: '1',
 					},
 					{
-						id: '8',
+						id: '2',
 					},
 					{
-						id: '13',
+						id: '3',
+					},
+				],
+				terms: [],
+			},
+			{
+				id: '17',
+				name: 'Pow techniczna',
+				jobs: [
+					{
+						id: '2',
 					},
 					{
-						id: '14',
+						id: '4',
 					},
 					{
-						id: '16',
+						id: '5',
+					},
+				],
+				terms: [],
+			},
+			{
+				id: '18',
+				name: 'Pow magazynowa',
+				jobs: [
+					{
+						id: '1',
+					},
+					{
+						id: '2',
+					},
+					{
+						id: '4',
+					},
+					{
+						id: '5',
 					},
 				],
 				terms: [],
 			},
 		];
+
+		const user = {
+			id: '1',
+			project_roles: [{ project: { id: '1' }, project_role: { name: 'asd' } }],
+		};
+
+		const project = {
+			id: '1',
+		};
 
 		const expected = {
 			'16': {
@@ -165,137 +334,11 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 							permissions: [PERMISSION.VIEW],
 						},
 					},
-					'4': {
-						[TERM_TYPE.PLANNED_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_START]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-					},
-					'5': {
-						[TERM_TYPE.PLANNED_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_START]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-					},
-					'7': {
-						[TERM_TYPE.PLANNED_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_START]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-					},
-					'8': {
-						[TERM_TYPE.PLANNED_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_START]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-					},
-					'10': {
-						[TERM_TYPE.PLANNED_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_START]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-					},
-					'11': {
-						[TERM_TYPE.PLANNED_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_START]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-					},
-					'14': {
-						[TERM_TYPE.PLANNED_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_START]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-					},
-					'16': {
-						[TERM_TYPE.PLANNED_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_START]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-					},
 				},
 			},
 			'17': {
 				name: 'Pow techniczna',
 				byJobId: {
-					'1': {
-						[TERM_TYPE.PLANNED_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_START]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-					},
 					'2': {
 						[TERM_TYPE.PLANNED_FINISH]: {
 							value: null,
@@ -325,63 +368,6 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 						},
 					},
 					'5': {
-						[TERM_TYPE.PLANNED_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_START]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-					},
-					'7': {
-						[TERM_TYPE.PLANNED_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_START]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-					},
-					'8': {
-						[TERM_TYPE.PLANNED_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_START]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-					},
-
-					'13': {
-						[TERM_TYPE.PLANNED_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_START]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-					},
-					'14': {
 						[TERM_TYPE.PLANNED_FINISH]: {
 							value: null,
 							permissions: [PERMISSION.VIEW],
@@ -456,80 +442,232 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 							permissions: [PERMISSION.VIEW],
 						},
 					},
-					'7': {
-						[TERM_TYPE.PLANNED_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_START]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
+				},
+			},
+		};
+		expect(normalizeTermsData(data, user, project)).toEqual(expected);
+	});
+	test('should generate data properly with info when user is admin', () => {
+		const data = [
+			{
+				id: '16',
+				name: 'Kuchnia i Kantyna',
+				jobs: [
+					{
+						id: '1',
 					},
-					'8': {
-						[TERM_TYPE.PLANNED_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_FINISH]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
-						[TERM_TYPE.REAL_START]: {
-							value: null,
-							permissions: [PERMISSION.VIEW],
-						},
+					{
+						id: '2',
 					},
+					{
+						id: '3',
+					},
+				],
+				terms: [],
+			},
+			{
+				id: '17',
+				name: 'Pow techniczna',
+				jobs: [
+					{
+						id: '2',
+					},
+					{
+						id: '4',
+					},
+					{
+						id: '5',
+					},
+				],
+				terms: [],
+			},
+			{
+				id: '18',
+				name: 'Pow magazynowa',
+				jobs: [
+					{
+						id: '1',
+					},
+					{
+						id: '2',
+					},
+					{
+						id: '4',
+					},
+					{
+						id: '5',
+					},
+				],
+				terms: [],
+			},
+		];
 
-					'13': {
+		const user = {
+			id: '1',
+			project_roles: [{ project: { id: '1' }, project_role: { name: 'admin' } }],
+		};
+
+		const project = {
+			id: '1',
+		};
+
+		const expected = {
+			'16': {
+				name: 'Kuchnia i Kantyna',
+				byJobId: {
+					'1': {
 						[TERM_TYPE.PLANNED_FINISH]: {
 							value: null,
-							permissions: [PERMISSION.VIEW],
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
 						},
 						[TERM_TYPE.REAL_FINISH]: {
 							value: null,
-							permissions: [PERMISSION.VIEW],
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
 						},
 						[TERM_TYPE.REAL_START]: {
 							value: null,
-							permissions: [PERMISSION.VIEW],
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
 						},
 					},
-					'14': {
+					'2': {
 						[TERM_TYPE.PLANNED_FINISH]: {
 							value: null,
-							permissions: [PERMISSION.VIEW],
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
 						},
 						[TERM_TYPE.REAL_FINISH]: {
 							value: null,
-							permissions: [PERMISSION.VIEW],
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
 						},
 						[TERM_TYPE.REAL_START]: {
 							value: null,
-							permissions: [PERMISSION.VIEW],
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
 						},
 					},
-					'16': {
+					'3': {
 						[TERM_TYPE.PLANNED_FINISH]: {
 							value: null,
-							permissions: [PERMISSION.VIEW],
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
 						},
 						[TERM_TYPE.REAL_FINISH]: {
 							value: null,
-							permissions: [PERMISSION.VIEW],
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
 						},
 						[TERM_TYPE.REAL_START]: {
 							value: null,
-							permissions: [PERMISSION.VIEW],
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+					},
+				},
+			},
+			'17': {
+				name: 'Pow techniczna',
+				byJobId: {
+					'2': {
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+					},
+					'4': {
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+					},
+					'5': {
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+					},
+				},
+			},
+			'18': {
+				name: 'Pow magazynowa',
+				byJobId: {
+					'1': {
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+					},
+					'2': {
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+					},
+					'4': {
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+					},
+					'5': {
+						[TERM_TYPE.PLANNED_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+						[TERM_TYPE.REAL_FINISH]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
+						},
+						[TERM_TYPE.REAL_START]: {
+							value: null,
+							permissions: [PERMISSION.VIEW, PERMISSION.CREATE, PERMISSION.UPDATE],
 						},
 					},
 				},
 			},
 		};
-		expect(normalizeTermsData(data)).toEqual(expected);
+		expect(normalizeTermsData(data, user, project)).toEqual(expected);
 	});
 });

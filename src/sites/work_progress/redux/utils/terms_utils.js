@@ -71,7 +71,7 @@ export const normalizeTermsData = (data, user, project) => {
 
 				termObject[dep_id].byJobId[job_id][key] = {
 					value: null,
-					permissions: setPermission(),
+					permissions: setPermission(user_id, user_role),
 				};
 			});
 		}
@@ -79,8 +79,18 @@ export const normalizeTermsData = (data, user, project) => {
 	return termObject;
 };
 
-export const setPermission = () => {
-	return [PERMISSION.VIEW];
+export const setPermission = (user_id, user_role) => {
+	let permission_array = [];
+	if (user_id) {
+		permission_array.push(PERMISSION.VIEW);
+	}
+
+	// jeśli admin to dodaje wszystkie passy
+	if (user_id && user_role && /admin/i.test(user_role)) {
+		permission_array.push(PERMISSION.CREATE, PERMISSION.UPDATE);
+	}
+
+	return permission_array;
 };
 
 /**
