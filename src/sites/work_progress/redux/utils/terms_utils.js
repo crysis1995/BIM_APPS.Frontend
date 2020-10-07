@@ -31,30 +31,19 @@ export const fetchDepartmentsWithTerms = (level, project_id) => {
 	});
 };
 
-/**
- * Set user role if any exist to specyfic project
- *
- * @param user {{}}
- * @param project_id {string}
- * @param user_role {string}
- */
-function setUserRole(user, project_id, user_role) {
-	const project_role_component = user.project_roles.filter((item) => item.project.id === project_id)[0];
-	if (project_role_component.hasOwnProperty('project_role')) {
-		user_role = project_role_component.project_role.name;
-	}
-}
-
 export const normalizeTermsData = (data, user, project) => {
-	const user_id = user.id;
-	const project_id = project.id;
-	let user_role;
-	setUserRole(user, project_id, user_role);
-
 	if (!Array.isArray(data)) {
 		throw new Error('Data nie jest typu Array');
 	}
-	let termObject = {};
+	let user_id,
+		project_id,
+		user_role,
+		termObject = {};
+	if (user && project) {
+		user_id = user.id;
+		project_id = project.id;
+		user_role = getUserRole(user, project_id);
+	}
 
 	for (let department of data) {
 		// jeśli departamenty są puste to pomiń roboty
@@ -93,3 +82,17 @@ export const normalizeTermsData = (data, user, project) => {
 export const setPermission = () => {
 	return [PERMISSION.VIEW];
 };
+
+/**
+ * Set user role if any exist to specyfic project
+ *
+ * @param user {{}}
+ * @param project_id {string}
+ * @param user_role {string}
+ */
+function getUserRole(user, project_id) {
+	const project_role_component = user.project_roles.filter((item) => item.project.id === project_id)[0];
+	if (project_role_component.hasOwnProperty('project_role')) {
+		return project_role_component.project_role.name;
+	}
+}
