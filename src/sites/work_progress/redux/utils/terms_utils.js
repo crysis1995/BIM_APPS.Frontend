@@ -36,20 +36,39 @@ export const fetchDepartmentsWithTerms = (level, project_id) => {
 		fetchPolicy: 'no-cache',
 	});
 };
-
+/**
+ *
+ * @param data
+ * @param user
+ * @param project
+ * @returns {{}}
+ */
 export const normalizeTermsData = (data, user, project) => {
 	function isAdmin(user_role) {
-		return /admin/i.test(user_role);
+		if (user_role) {
+			return /admin/i.test(user_role);
+		}
+		return false;
 	}
-	function isTermOwner(term, user_id) {
-		return term.user.id === user_id;
+	function isTermOwner(term, user_id, job_id) {
+		if (user_id && job_id) {
+			if (term && term.job && term.job.id) {
+				if (term.job.id === job_id) {
+					if (term.user && term.user.id) {
+						return term.user.id === user_id;
+					}
+				}
+			}
+		}
+		return false;
 	}
 	function isDepartamentEditor(editors, user_id) {
-		let editors_ids = [];
 		if (editors && editors.length > 0) {
+			let editors_ids = [];
 			editors_ids = editors.map((e) => e.id);
+			return editors_ids.includes(user_id);
 		}
-		return editors_ids.includes(user_id);
+		return false;
 	}
 
 	if (!Array.isArray(data)) {
@@ -92,12 +111,12 @@ export const normalizeTermsData = (data, user, project) => {
 				}
 
 				termObject[dep_id].byJobId[job_id][key] = {
-					value: term[key] && term[key],
+					value: term && term[key] ? term[key] : null,
 					permissions: setPermission({
 						can_view: !!user_id,
 						can_create:
 							!!user_id && (isDepartamentEditor(department.editors, user_id) || isAdmin(user_role)),
-						can_update: !!user_id && (isTermOwner(term, user_id) || isAdmin(user_role)),
+						can_update: !!user_id && (isTermOwner(term, user_id, job_id) || isAdmin(user_role)),
 					}),
 				};
 			});
@@ -106,7 +125,14 @@ export const normalizeTermsData = (data, user, project) => {
 	return termObject;
 };
 
-export const setPermission = ({ can_view = false, can_update = false, can_create = false }) => {
+/**
+ *
+ * @param can_view {boolean}
+ * @param can_update {boolean}
+ * @param can_create {boolean}
+ * @returns {[string]}
+ */
+const setPermission = ({ can_view = false, can_update = false, can_create = false }) => {
 	let permission_array = [];
 	if (can_view) {
 		permission_array.push(PERMISSION.VIEW);
@@ -117,14 +143,13 @@ export const setPermission = ({ can_view = false, can_update = false, can_create
 			}
 		}
 	}
-
 	return permission_array;
 };
 
 /**
  * Set user role if any exist to specyfic project
  *
- * @param user {{}}
+ * @param user {{project_roles:[{project:{id:string}}]}}
  * @param project_id {string}
  * @param user_role {string}
  */

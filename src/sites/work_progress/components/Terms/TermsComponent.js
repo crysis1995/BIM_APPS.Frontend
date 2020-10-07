@@ -1,14 +1,27 @@
 import React from 'react';
-import { Col, Form, Table } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 import { connect } from 'react-redux';
 import { v4 } from 'uuid';
 import { setDepartment, setTermByDepartment } from '../../redux/actions/terms_actions';
-import { TERM_TYPE } from '../../redux/types/constans';
+import { PERMISSION, TERM_TYPE } from '../../redux/types/constans';
 import Selector from '../Selector';
 
 function TermsComponent(props) {
+	/**
+	 *
+	 * @param condition {boolean}
+	 * @param success {Function}
+	 * @param failure {Function}
+	 * @returns {callback}
+	 */
+	const permission = (condition, success = () => {}, failure = () => {}) => {
+		if (condition) {
+			return success();
+		}
+		return failure();
+	};
 	const { jobs, terms, setTermByDepartment, setDepartment } = props;
 	return (
 		<>
@@ -39,29 +52,52 @@ function TermsComponent(props) {
 									<td>{jobs[job_id].name}</td>
 									<td>
 										<DayPickerInput
-											inputProps={{ disabled: true }}
+											inputProps={permission(
+												term_data[TERM_TYPE.REAL_START].permissions.includes(PERMISSION.CREATE),
+												() => ({ disabled: false }),
+												() => ({ disabled: true }),
+											)}
 											onDayChange={(selectedDay) =>
-												setTermByDepartment(
-													TERM_TYPE.REAL_START,
-													selectedDay,
-													props.terms.chosenDepartment,
-													job_id,
+												permission(
+													term_data[TERM_TYPE.REAL_START].permissions.includes(
+														PERMISSION.UPDATE,
+													),
+													() =>
+														setTermByDepartment(
+															TERM_TYPE.REAL_START,
+															selectedDay,
+															props.terms.chosenDepartment,
+															job_id,
+														),
 												)
 											}
-											value={term_data[TERM_TYPE.REAL_START] || ''}
+											value={term_data[TERM_TYPE.REAL_START].value || ''}
 										/>
 									</td>
 									<td>
 										<DayPickerInput
+											inputProps={permission(
+												term_data[TERM_TYPE.PLANNED_FINISH].permissions.includes(
+													PERMISSION.CREATE,
+												),
+												() => ({ disabled: false }),
+												() => ({ disabled: true }),
+											)}
 											onDayChange={(selectedDay) =>
-												setTermByDepartment(
-													TERM_TYPE.PLANNED_FINISH,
-													selectedDay,
-													props.terms.chosenDepartment,
-													job_id,
+												permission(
+													term_data[TERM_TYPE.REAL_START].permissions.includes(
+														PERMISSION.UPDATE,
+													),
+													() =>
+														setTermByDepartment(
+															TERM_TYPE.PLANNED_FINISH,
+															selectedDay,
+															props.terms.chosenDepartment,
+															job_id,
+														),
 												)
 											}
-											value={term_data[TERM_TYPE.PLANNED_FINISH] || ''}
+											value={term_data[TERM_TYPE.PLANNED_FINISH].value || ''}
 										/>
 									</td>
 									<td>
@@ -75,7 +111,7 @@ function TermsComponent(props) {
 													job_id,
 												)
 											}
-											value={term_data[TERM_TYPE.REAL_FINISH] || ''}
+											value={term_data[TERM_TYPE.REAL_FINISH].value || ''}
 										/>
 									</td>
 								</tr>

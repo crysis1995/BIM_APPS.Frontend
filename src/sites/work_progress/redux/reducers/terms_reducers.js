@@ -60,10 +60,8 @@ function setPermission(state, { term_type, permissions = null, department_id, jo
 		dotProp.set(state, `byDepartment.${department_id}.${property}.${job_id}.${term_type}.permissions`, [
 			...permissions,
 		]);
-	} else {
-		dotProp.set(state, `byDepartment.${department_id}.${property}.${job_id}.${term_type}.permissions`, []);
 	}
-	return { ...state };
+	// return { ...state };
 }
 
 // to test
