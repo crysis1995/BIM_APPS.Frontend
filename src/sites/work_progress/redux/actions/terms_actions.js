@@ -1,4 +1,3 @@
-import CMSLogin from '../../../../components/CMSLogin/redux/reducers';
 import {
 	TERMS_DATA_FETCH_END,
 	TERMS_DATA_FETCH_ERROR,
@@ -6,7 +5,6 @@ import {
 	TERMS_SET_BY_DEPARTMENT,
 	TERMS_SET_DEPARTMENT,
 } from '../types';
-import { PERMISSION } from '../types/constans';
 import { fetchDepartmentsWithTerms, normalizeTermsData } from '../utils/terms_utils';
 
 export const termsDataFetchStart = () => ({
@@ -47,21 +45,20 @@ export const setTermByDepartment = (term_type, term, department_id, job_id) => (
 
 /**
  *
- * @param dispatch
- * @param getState
- * @param current_level
- * @returns {Promise<void>}
+ * @param {Function} dispatch
+ * @param {Function} getState
+ * @param {string} current_level
  */
 export const getDepartmentsWithTerms = async (dispatch, getState, current_level) => {
 	dispatch(termsDataFetchStart());
 	const { user, project } = getState().CMSLogin;
 	try {
-		const { data } = await fetchDepartmentsWithTerms(current_level);
-		if (data) {
-			dispatch(termsDataFetchEnd(normalizeTermsData(data.acceptanceDepartments, user, project)));
+		const { data } = await fetchDepartmentsWithTerms(current_level, project.id);
+		if (data && data.hasOwnProperty('acceptanceDepartments')) {
+			return dispatch(termsDataFetchEnd(normalizeTermsData(data.acceptanceDepartments, user, project)));
 		}
 	} catch (e) {
 		console.log(e);
-		dispatch(termsDataFetchError(e.message));
+		return dispatch(termsDataFetchError(e.message));
 	}
 };

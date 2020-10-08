@@ -29,6 +29,12 @@ const GET_DEPARTMENTS_WITH_TERMS_QUERY = gql`
 	}
 `;
 
+/**
+ *
+ * @param level {string}
+ * @param project_id {string}
+ * @returns {Promise<ApolloQueryResult<any>>}
+ */
 export const fetchDepartmentsWithTerms = (level, project_id) => {
 	return graphQLClient().query({
 		query: GET_DEPARTMENTS_WITH_TERMS_QUERY,
@@ -36,11 +42,12 @@ export const fetchDepartmentsWithTerms = (level, project_id) => {
 		fetchPolicy: 'no-cache',
 	});
 };
+
 /**
  *
- * @param data
- * @param user
- * @param project
+ * @param data {Array}
+ * @param user {Object}
+ * @param project {Object}
  * @returns {{}}
  */
 export const normalizeTermsData = (data, user, project) => {
@@ -149,7 +156,7 @@ const setPermission = ({ can_view = false, can_update = false, can_create = fals
 /**
  * Set user role if any exist to specyfic project
  *
- * @param user {{project_roles:[{project:{id:string}}]}}
+ * @param user {object}
  * @param project_id {string}
  * @param user_role {string}
  */

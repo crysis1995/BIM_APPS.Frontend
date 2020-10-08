@@ -7,21 +7,9 @@ import { v4 } from 'uuid';
 import { setDepartment, setTermByDepartment } from '../../redux/actions/terms_actions';
 import { PERMISSION, TERM_TYPE } from '../../redux/types/constans';
 import Selector from '../Selector';
-
+import Permissions from '../../../../components/Permissions';
+import AccessFunction from '../../../../components/Permissions/AccessFunction';
 function TermsComponent(props) {
-	/**
-	 *
-	 * @param condition {boolean}
-	 * @param success {Function}
-	 * @param failure {Function}
-	 * @returns {callback}
-	 */
-	const permission = (condition, success = () => {}, failure = () => {}) => {
-		if (condition) {
-			return success();
-		}
-		return failure();
-	};
 	const { jobs, terms, setTermByDepartment, setDepartment } = props;
 	return (
 		<>
@@ -51,68 +39,85 @@ function TermsComponent(props) {
 								<tr key={v4()}>
 									<td>{jobs[job_id].name}</td>
 									<td>
-										<DayPickerInput
-											inputProps={permission(
-												term_data[TERM_TYPE.REAL_START].permissions.includes(PERMISSION.CREATE),
-												() => ({ disabled: false }),
-												() => ({ disabled: true }),
-											)}
-											onDayChange={(selectedDay) =>
-												permission(
-													term_data[TERM_TYPE.REAL_START].permissions.includes(
-														PERMISSION.UPDATE,
+										<Permissions
+											condition={term_data[TERM_TYPE.REAL_START].permissions.includes(
+												PERMISSION.VIEW,
+											)}>
+											<DayPickerInput
+												inputProps={AccessFunction({
+													condition: term_data[TERM_TYPE.REAL_START].permissions.includes(
+														PERMISSION.CREATE,
 													),
-													() =>
-														setTermByDepartment(
-															TERM_TYPE.REAL_START,
-															selectedDay,
-															props.terms.chosenDepartment,
-															job_id,
+													success_callback: () => ({ disabled: false }),
+													failure_callback: () => ({ disabled: true }),
+												})}
+												onDayChange={(selectedDay) =>
+													AccessFunction({
+														condition: term_data[TERM_TYPE.REAL_START].permissions.includes(
+															PERMISSION.UPDATE,
 														),
-												)
-											}
-											value={term_data[TERM_TYPE.REAL_START].value || ''}
-										/>
+														success_callback: () =>
+															setTermByDepartment(
+																TERM_TYPE.REAL_START,
+																selectedDay,
+																props.terms.chosenDepartment,
+																job_id,
+															),
+													})
+												}
+												value={term_data[TERM_TYPE.REAL_START].value || ''}
+											/>
+										</Permissions>
 									</td>
 									<td>
-										<DayPickerInput
-											inputProps={permission(
-												term_data[TERM_TYPE.PLANNED_FINISH].permissions.includes(
-													PERMISSION.CREATE,
-												),
-												() => ({ disabled: false }),
-												() => ({ disabled: true }),
-											)}
-											onDayChange={(selectedDay) =>
-												permission(
-													term_data[TERM_TYPE.REAL_START].permissions.includes(
-														PERMISSION.UPDATE,
+										<Permissions
+											condition={term_data[TERM_TYPE.PLANNED_FINISH].permissions.includes(
+												PERMISSION.VIEW,
+											)}>
+											<DayPickerInput
+												inputProps={AccessFunction({
+													condition: term_data[TERM_TYPE.PLANNED_FINISH].permissions.includes(
+														PERMISSION.CREATE,
 													),
-													() =>
-														setTermByDepartment(
-															TERM_TYPE.PLANNED_FINISH,
-															selectedDay,
-															props.terms.chosenDepartment,
-															job_id,
+													success_callback: () => ({ disabled: false }),
+													failure_callback: () => ({ disabled: true }),
+												})}
+												onDayChange={(selectedDay) =>
+													AccessFunction({
+														condition: term_data[TERM_TYPE.REAL_START].permissions.includes(
+															PERMISSION.UPDATE,
 														),
-												)
-											}
-											value={term_data[TERM_TYPE.PLANNED_FINISH].value || ''}
-										/>
+														success_callback: () =>
+															setTermByDepartment(
+																TERM_TYPE.PLANNED_FINISH,
+																selectedDay,
+																props.terms.chosenDepartment,
+																job_id,
+															),
+													})
+												}
+												value={term_data[TERM_TYPE.PLANNED_FINISH].value || ''}
+											/>
+										</Permissions>
 									</td>
 									<td>
-										<DayPickerInput
-											inputProps={{ disabled: true }}
-											onDayChange={(selectedDay) =>
-												setTermByDepartment(
-													TERM_TYPE.REAL_FINISH,
-													selectedDay,
-													props.terms.chosenDepartment,
-													job_id,
-												)
-											}
-											value={term_data[TERM_TYPE.REAL_FINISH].value || ''}
-										/>
+										<Permissions
+											condition={term_data[TERM_TYPE.REAL_FINISH].permissions.includes(
+												PERMISSION.VIEW,
+											)}>
+											<DayPickerInput
+												inputProps={{ disabled: true }}
+												onDayChange={(selectedDay) =>
+													setTermByDepartment(
+														TERM_TYPE.REAL_FINISH,
+														selectedDay,
+														props.terms.chosenDepartment,
+														job_id,
+													)
+												}
+												value={term_data[TERM_TYPE.REAL_FINISH].value || ''}
+											/>
+										</Permissions>
 									</td>
 								</tr>
 							),

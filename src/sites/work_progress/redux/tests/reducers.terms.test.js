@@ -60,8 +60,20 @@ describe('TERMS_REDUCERS TEST', () => {
 				'1': {
 					name: 'TEST',
 					byJobId: {
-						'1': {},
-						'2': {},
+						'1': {
+							[TERM_TYPE.PLANNED_FINISH]: {
+								value: null,
+								permissions: [],
+							},
+							[TERM_TYPE.REAL_FINISH]: {
+								value: null,
+								permissions: [],
+							},
+							[TERM_TYPE.REAL_START]: {
+								value: null,
+								permissions: [],
+							},
+						},
 					},
 				},
 			},
@@ -78,8 +90,15 @@ describe('TERMS_REDUCERS TEST', () => {
 								value: new Date(2020, 0, 1),
 								permissions: [],
 							},
+							[TERM_TYPE.REAL_FINISH]: {
+								value: null,
+								permissions: [],
+							},
+							[TERM_TYPE.REAL_START]: {
+								value: null,
+								permissions: [],
+							},
 						},
-						'2': {},
 					},
 				},
 			},
@@ -96,11 +115,32 @@ describe('TERMS_REDUCERS TEST', () => {
 					byJobId: {
 						'1': {
 							[TERM_TYPE.PLANNED_FINISH]: {
-								value: new Date(2020, 0, 1),
+								value: new Date(2020, 1, 1),
+								permissions: [],
+							},
+							[TERM_TYPE.REAL_FINISH]: {
+								value: null,
+								permissions: [],
+							},
+							[TERM_TYPE.REAL_START]: {
+								value: null,
 								permissions: [],
 							},
 						},
-						'2': {},
+						'2': {
+							[TERM_TYPE.PLANNED_FINISH]: {
+								value: null,
+								permissions: [],
+							},
+							[TERM_TYPE.REAL_FINISH]: {
+								value: null,
+								permissions: [],
+							},
+							[TERM_TYPE.REAL_START]: {
+								value: null,
+								permissions: [],
+							},
+						},
 					},
 				},
 			},
@@ -115,15 +155,32 @@ describe('TERMS_REDUCERS TEST', () => {
 					byJobId: {
 						'1': {
 							[TERM_TYPE.PLANNED_FINISH]: {
-								value: new Date(2020, 0, 1),
+								value: new Date(2020, 1, 1),
 								permissions: [],
 							},
 							[TERM_TYPE.REAL_FINISH]: {
 								value: new Date(2020, 1, 1),
 								permissions: [],
 							},
+							[TERM_TYPE.REAL_START]: {
+								value: null,
+								permissions: [],
+							},
 						},
-						'2': {},
+						'2': {
+							[TERM_TYPE.PLANNED_FINISH]: {
+								value: null,
+								permissions: [],
+							},
+							[TERM_TYPE.REAL_FINISH]: {
+								value: null,
+								permissions: [],
+							},
+							[TERM_TYPE.REAL_START]: {
+								value: null,
+								permissions: [],
+							},
+						},
 					},
 				},
 			},
