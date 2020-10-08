@@ -1,4 +1,13 @@
 import { splitJobsByKey, genSingleSelectionFilteredJobs } from '../TableComponentSelector';
+/*
+
+
+				TE TESTY DO PRZEBUDOWANIA NA MNIEJSZE - NIE WIADOMO CO SIE WYPIERDALA
+
+
+
+
+*/
 
 const objects = {
 	results: {

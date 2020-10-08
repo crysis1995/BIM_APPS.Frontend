@@ -12,14 +12,7 @@ import {
 	OBJECT_JOB_FETCH_ERROR,
 	OBJECT_JOB_FETCH_START,
 } from '../types';
-import {
-	addParameterWithValue,
-	createReferenceJob,
-	fetchAllJobsFromAPI,
-	prep_updateResults,
-	prepareDataForJobs,
-	updateObjectJob,
-} from '../utils/jobs_utils';
+import { addParameterWithValue, createReferenceJob, fetchAllJobsFromAPI, updateObjectJob } from '../utils/jobs_utils';
 
 export const jobsLoadingStart = () => ({
 	type: JOBS_LOADING_START,
@@ -68,7 +61,7 @@ export const setJobInitial = () => ({
 export const fetchAllJobs = () => async (dispatch) => {
 	dispatch(jobsFetchStart());
 	try {
-		const { data, errors } = await fetchAllJobsFromAPI();
+		const { data } = await fetchAllJobsFromAPI();
 		if (data) {
 			dispatch(
 				jobsFetchEnd(
@@ -76,37 +69,11 @@ export const fetchAllJobs = () => async (dispatch) => {
 				),
 			);
 		}
-		if (errors) {
-			dispatch(jobsFetchError(errors.message));
-		}
 	} catch (errors) {
 		dispatch(jobsFetchError(errors.message));
 	}
 };
 
-/**
- *
- *      Funkcja przetwarza pobrane obiekty i grupuje dane wg prac do wykonania
- *
- */
-// export const jobsPrepare = () => (dispatch, getState) => {
-// 	const { objects } = getState().Odbiory.Objects;
-// 	const { selected_rooms } = getState().Odbiory.Rooms;
-// 	const { jobs } = getState().Odbiory.Jobs;
-// 	if (Object.keys(jobs).length > 0) {
-// 		let newJobs = { ...jobs };
-// 		for (let job_key in jobs) {
-// 			newJobs[job_key].upgrading = { ...prepareDataForJobs(job_key, objects, selected_rooms) };
-// 		}
-// 		dispatch(setJobsData(newJobs));
-// 	}
-// };
-
-/**
- *
- *
- *
- * */
 export const changeJobPercentageValue = (job_key, value) => async (dispatch, getState) => {
 	const precision = 2;
 	const { jobs, objects_jobs_loading } = getState().Odbiory.Jobs;

@@ -1,4 +1,3 @@
-import { TEST_START } from '../../../sites/work_progress/redux/types';
 import {
 	cleanUserDataInLocalStorage,
 	fetchUserData,
@@ -68,7 +67,6 @@ export const userLogin = ({ identifier, password, checkbox }) => async (dispatch
 			const { jwt, user } = data.login;
 			dispatch(userLoginEnd(user.id, jwt));
 			dispatch(getUserData(checkbox));
-			dispatch(setActiveProject());
 		}
 		if (errors) {
 			dispatch(userLoginError(errors.message));
@@ -88,6 +86,7 @@ const getUserData = (checkbox) => async (dispatch, getState) => {
 		if (data) {
 			dispatch(setUserData({ ...data.user }));
 			if (checkbox) saveUserDataToLocalStorage(data.user, access_token);
+			dispatch(setActiveProject());
 		}
 		if (errors) {
 			console.log(errors.message);

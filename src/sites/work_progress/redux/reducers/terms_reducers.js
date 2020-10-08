@@ -7,6 +7,11 @@ import {
 	TERMS_SET_DEPARTMENT,
 } from '../types';
 
+
+/**
+ *
+ * @type {{byDepartment: {}, chosenDepartment: string, loading: boolean, error: null}}
+ */
 const initialState = {
 	byDepartment: {},
 	loading: false,
@@ -45,6 +50,15 @@ const TermsReducer = (state = initialState, action) => {
 	}
 };
 
+/**
+ *
+ * @param state {Object}
+ * @param term_type {string}
+ * @param term {Date}
+ * @param department_id {string}
+ * @param job_id {string}
+ * @param permissions {Array<string>}
+ */
 function setTermsByDepartment(state, { term_type, term, department_id, job_id, permissions }) {
 	const property = 'byJobId';
 	dotProp.set(state, `byDepartment.${department_id}.${property}.${job_id}.${term_type}.value`, term);
@@ -52,7 +66,14 @@ function setTermsByDepartment(state, { term_type, term, department_id, job_id, p
 	return { ...state };
 }
 
-// to test
+/**
+ *
+ * @param state {Object}
+ * @param term_type {string}
+ * @param permissions {Array<string>}
+ * @param department_id {string}
+ * @param job_id {string}
+ */
 function setPermission(state, { term_type, permissions = null, department_id, job_id }) {
 	const property = 'byJobId';
 	if (permissions) {
@@ -64,7 +85,14 @@ function setPermission(state, { term_type, permissions = null, department_id, jo
 	// return { ...state };
 }
 
-// to test
+/**
+ *
+ * @param state
+ * @param term_type
+ * @param permission
+ * @param department_id
+ * @param job_id
+ */
 function deletePermission(state, { term_type, permission, department_id, job_id }) {
 	function move(arr, val) {
 		var j = 0;

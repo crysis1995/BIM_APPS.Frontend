@@ -1,8 +1,9 @@
 import { createSelector } from 'reselect';
 
+
 /**
  *
- *
+ * @type {OutputSelector<unknown, {equal: *}|{different: *}|{different: *}, (res1: *, res2: *, res3: *) => ({equal: *}|{different: *}|{different: *})>}
  */
 export const getSplitedJobsByKey = createSelector(
 	(state) => state.Odbiory.Jobs.jobs,
@@ -49,12 +50,19 @@ export const splitJobsByKey = (jobs, upgrading, selected_rooms_length, key = 'pe
 	);
 	return data;
 };
-
+/**
+ *
+ * @type {OutputSelector<unknown, *, (res: *) => *>}
+ */
 export const getSingleSelectionFilteredJobs = createSelector(
 	(state) => state.Odbiory.Jobs.jobs,
 	(jobs) => genSingleSelectionFilteredJobs(jobs),
 );
-
+/**
+ *
+ * @param jobs {Object}
+ * @returns {{}|{[p: string]: {}}}
+ */
 export const genSingleSelectionFilteredJobs = (jobs) => {
 	return Object.entries(jobs)
 		.filter(([id, object]) => Object.keys(object.upgrading.summary_value).length > 0)

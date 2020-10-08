@@ -14,7 +14,7 @@ function TermsComponent(props) {
 	return (
 		<>
 			<Selector
-				label="Oddział"
+				label={'Oddział'}
 				options={Object.keys(terms.byDepartment).map((key) => ({
 					id: key,
 					name: terms.byDepartment[key].name,
