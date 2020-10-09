@@ -1,10 +1,10 @@
-import { SET_INITIAL } from '../actions';
+
 import {
 	OBJECTS_LOADING_END,
 	OBJECTS_LOADING_ERROR,
 	OBJECTS_LOADING_START,
 	OBJECTS_SET_DATA,
-	OBJECTS_SET_INITIAL,
+	OBJECTS_SET_INITIAL, SET_INITIAL
 } from '../types';
 
 const initialState = {

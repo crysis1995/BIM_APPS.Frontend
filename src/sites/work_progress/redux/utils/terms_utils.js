@@ -36,11 +36,13 @@ const GET_DEPARTMENTS_WITH_TERMS_QUERY = gql`
  * @returns {Promise<ApolloQueryResult<any>>}
  */
 export const fetchDepartmentsWithTerms = (level, project_id) => {
-	return graphQLClient().query({
-		query: GET_DEPARTMENTS_WITH_TERMS_QUERY,
-		variables: { l: level, p: project_id },
-		fetchPolicy: 'no-cache',
-	});
+	return graphQLClient()
+		.query({
+			query: GET_DEPARTMENTS_WITH_TERMS_QUERY,
+			variables: { l: level, p: project_id },
+			fetchPolicy: 'no-cache',
+		})
+		.then((e) => e.data);
 };
 
 /**

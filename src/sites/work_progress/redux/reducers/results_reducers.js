@@ -1,6 +1,5 @@
 import dotProp from 'dot-prop';
 import { RoundNumber } from '../../../../utils/RoundNumber';
-import { SET_INITIAL } from '../actions';
 import {
 	CLEAN_RESULTS,
 	COLOR_RESULTS,
@@ -9,7 +8,7 @@ import {
 	RESULTS_FETCH_END,
 	RESULTS_FETCH_ERROR,
 	RESULTS_SET_DATA,
-	RESULTS_UPDATE_DATA,
+	RESULTS_UPDATE_DATA, SET_INITIAL
 } from '../types';
 
 const initialState = {

@@ -1,4 +1,3 @@
-import { SET_INITIAL } from '../actions';
 import {
 	ADD_ROOM_TO_SELECTION,
 	ADD_SPECYFIC_ROOM_TO_SELECTION,
@@ -8,7 +7,7 @@ import {
 	ROOMS_LOADING_ERROR,
 	ROOMS_LOADING_START,
 	ROOMS_SET_INITIAL,
-	SELECT_ROOM_BY_ODBIORY,
+	SELECT_ROOM_BY_ODBIORY, SET_INITIAL
 } from '../types';
 
 const initialState = {

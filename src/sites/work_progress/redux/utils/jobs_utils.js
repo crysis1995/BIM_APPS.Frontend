@@ -10,6 +10,10 @@ export const GET_ALL_ACCEPTANCE_JOBS = gql`
 			id
 			name
 			unit
+			# type{
+			#   name
+			# }
+			selection_method
 		}
 	}
 `;
@@ -21,8 +25,8 @@ export const fetchAllJobsFromAPI = () => {
 	});
 };
 
-export const addParameterWithValue = (objects, param_name = '', condition = () => {}) => {
-	if (!param_name) return objects;
+export const addParameterWithValue = (objects, param_name = '', condition) => {
+	if (!param_name || !condition) return objects;
 	let newObj = { ...objects };
 	for (let key in newObj) {
 		newObj[key] = { ...newObj[key], [param_name]: condition(newObj[key]) };
@@ -224,6 +228,6 @@ export const prep_updateResults = ({ results, current_value, percentage_value, r
 };
 
 function calculatePercentValue(x, y, normalized = false) {
-	const multipyBy = normalized ? 1 : 100;
-	return RoundNumber((x / y) * multipyBy);
+	const multiplyBy = normalized ? 1 : 100;
+	return RoundNumber((x / y) * multiplyBy);
 }

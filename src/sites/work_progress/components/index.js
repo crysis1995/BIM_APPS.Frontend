@@ -9,7 +9,6 @@ import ResultsComponent from './Results';
 import TermsComponent from './Terms';
 import Tools from './Tools';
 import { CONSTANTS } from '../redux/types/constans';
-
 class Odbiory extends React.Component {
 	componentDidMount() {
 		const { componentStarted } = this.props;

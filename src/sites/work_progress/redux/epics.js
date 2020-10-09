@@ -1,6 +1,6 @@
 import { ofType } from 'redux-observable';
 import { concat, from, of } from 'rxjs';
-import { catchError, filter, map, mergeMap } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { jobsLoadingEnd, jobsLoadingStart } from './actions/jobs_actions';
 import { fetchObjectsByRoom, fetchObjectsEnd, fetchObjectsSetData, fetchObjectsStart } from './actions/objects_actions';
 import { setResultsByJobId } from './actions/results_actions';
@@ -13,7 +13,7 @@ import { prepUpgradingDataToSet } from './utils/upgrading_utils';
 export const fetchResultsForLevel = (action$, state$) =>
 	action$.pipe(
 		ofType(RESULTS_FETCH_START),
-		mergeMap(({ current_level }) =>
+		switchMap(({ current_level }) =>
 			concat(
 				from(Object.keys(state$.value.Odbiory.Jobs.jobs)).pipe(
 					mergeMap((job_id) => {
@@ -67,7 +67,6 @@ export const getRoomData = (action$, state$) =>
 			} else {
 				return from(fetchObjectsByRoom(state$.value.Odbiory.Rooms.rooms[selectedRoom].id)).pipe(
 					mergeMap((data) => {
-						// console.log(data);
 						return concat(
 							of(fetchObjectsSetData(selectedRoom, data)),
 							of(jobsLoadingStart()),
