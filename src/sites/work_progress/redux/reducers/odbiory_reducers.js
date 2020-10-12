@@ -4,9 +4,10 @@ import {
 	CHANGE_VISIBILITY_UNITED_JOBS,
 	CHANGE_VISIBILITY_DIFFERENTIAL_JOBS,
 	SET_ACTIVE_TAB,
+	CHANGE_UPGRADING_BY_TYPE,
 } from '../types';
 
-import { CONSTANTS } from '../types/constans';
+import { CONSTANTS, UPGRADING_BY } from '../types/constans';
 
 const initialState = {
 	started: false,
@@ -15,6 +16,7 @@ const initialState = {
 		is_active: false,
 		showUnitedJobs: true,
 		showDifferentialJobs: true,
+		by: UPGRADING_BY.ROOMS,
 	},
 	results: {
 		is_active: true,
@@ -57,6 +59,11 @@ const OdbioryComponentReducer = (state = initialState, action) => {
 			return {
 				...state,
 				started: true,
+			};
+		case CHANGE_UPGRADING_BY_TYPE:
+			return {
+				...state,
+				awansowanie: { ...state.awansowanie, by: action.byType },
 			};
 		default:
 			return state;

@@ -1,6 +1,7 @@
 import { gql } from 'apollo-boost';
 
 import { graphQLClient } from '../../../../services';
+import { normalize } from '../../../../utils/normalize';
 
 export const fetchALLAreaJobPerLevel = (job_id, level) => {
 	return graphQLClient().query({
@@ -113,4 +114,8 @@ export const getFilteredObjects = (selected_room) => {
 		variables: { r: selected_room },
 		fetchPolicy: 'no-cache',
 	});
+};
+
+export const fetchObjectsByRoom = (room_id) => {
+	return getFilteredObjects(room_id).then(({ data }) => normalize(data.acceptanceObjects));
 };

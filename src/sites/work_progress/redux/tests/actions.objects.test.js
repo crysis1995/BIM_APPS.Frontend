@@ -1,6 +1,11 @@
-import { fetchObjectsEnd, fetchObjectsError, fetchObjectsSetData, fetchObjectsStart, setObjectInitial } from '../actions/objects_actions';
+import {
+	fetchObjectsEnd,
+	fetchObjectsError,
+	fetchObjectsSetData,
+	fetchObjectsStart,
+	setObjectInitial,
+} from '../actions/objects_actions';
 import * as types from '../types';
-
 
 describe('TEST OBJECTS ACTION', () => {
 	test('should create a fetchObjectsStart action', () => {
@@ -35,9 +40,10 @@ describe('TEST OBJECTS ACTION', () => {
 	test('should create a fetchObjectsSetData action', () => {
 		const expected = {
 			type: types.OBJECTS_SET_DATA,
+			revit_id: '123123',
 			objects: [1, 2, 3],
 		};
 
-		expect(fetchObjectsSetData([1, 2, 3])).toEqual(expected);
+		expect(fetchObjectsSetData('123123', [1, 2, 3])).toEqual(expected);
 	});
 });

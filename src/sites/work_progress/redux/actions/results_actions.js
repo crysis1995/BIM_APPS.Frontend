@@ -32,9 +32,8 @@ export const colorResultByRoom = (job_id) => (dispatch, getState) => {
 	}
 };
 
-export const fetchResultStart = (current_level) => ({
+export const fetchResultStart = () => ({
 	type: RESULTS_FETCH_START,
-	current_level,
 });
 export const fetchResultEnd = () => ({
 	type: RESULTS_FETCH_END,
@@ -56,15 +55,15 @@ export const updateResultsByJobId = (jobId, rooms, value) => ({
 	value,
 });
 
-export const fetchResultsForLevel = async (dispatch, getState, current_level) => {
-	dispatch(fetchResultStart());
-	const { jobs } = getState().Odbiory.Jobs;
-	return Promise.all(
-		Object.keys(jobs).map((job_id) =>
-			fetchSummaryData(job_id, current_level)
-				.then((value) => prepareResultsByJob(value))
-				.then((data) => dispatch(setResultsByJobId(job_id, data)))
-				.catch((error) => dispatch(fetchResultError(error.message))),
-		),
-	);
-};
+// export const fetchResultsForLevel = async (dispatch, getState, current_level) => {
+// 	dispatch(fetchResultStart());
+// 	const { jobs } = getState().Odbiory.Jobs;
+// 	return Promise.all(
+// 		Object.keys(jobs).map((job_id) =>
+// 			fetchSummaryData(job_id, current_level)
+// 				.then((value) => prepareResultsByJob(value))
+// 				.then((data) => dispatch(setResultsByJobId(job_id, data)))
+// 				.catch((error) => dispatch(fetchResultError(error.message))),
+// 		),
+// 	);
+// };

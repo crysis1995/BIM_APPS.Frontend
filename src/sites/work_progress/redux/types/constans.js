@@ -40,3 +40,12 @@ export const ROOM_SELECTION_STATUS = {
 	REMOVE_VALUE: 'remove-value',
 	ADD_SPECYFIC: 'add-specyfic',
 };
+/**
+ * UPGRADING_BY Enum
+ * @readonly
+ * @enum {string}
+ */
+export const UPGRADING_BY = {
+	ROOMS: 'ROOMS',
+	DEPARTMENT: 'DEPARTMENT',
+};

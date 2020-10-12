@@ -1,6 +1,6 @@
 import { ofType } from 'redux-observable';
 import { concat, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, throttleTime,debounceTime } from 'rxjs/operators';
 import { SET_CURRENT_SHEET } from '../../../../components/ForgeViewer/redux/actions';
 import { initialiseModal } from '../../../../components/Modal/redux/actions';
 import { setInitial } from '../actions';
@@ -13,10 +13,11 @@ import { termsDataFetchStart } from '../actions/terms_actions';
 export const selectLevel = (action$, state$) =>
 	action$.pipe(
 		ofType(SET_CURRENT_SHEET),
+		throttleTime(1000),
 		switchMap(({ current_sheet }) => {
 			const sheet = state$.value.ForgeViewer.sheets.filter((e) => e.index === current_sheet)[0];
 			if (sheet) {
-				const current_level = String(sheet.name.match(/.+(poziom.+\d)/i)[1]); // parsuje nazwę levelu wg zadanego wzoru
+				const current_level = String(sheet.name.match(/.*(poziom.+\d)/i)[1]); // parsuje nazwę levelu wg zadanego wzoru
 				return concat(
 					of(setInitial()),
 					of(_setCurrentLevel(current_level)),

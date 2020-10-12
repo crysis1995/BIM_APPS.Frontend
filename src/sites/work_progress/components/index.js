@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Loader from '../../../components/Loader';
 import { componentStarted, changeActiveTab } from '../redux/actions/odbiory_actions';
 import LevelSelectorComponent from './LevelSelectorComponent';
-import OdbioryComponent from './OdbioryComponent';
+import OdbioryComponent from './Upgradings/OdbioryComponent';
 import ResultsComponent from './Results';
 import TermsComponent from './Terms';
 import Tools from './Tools';

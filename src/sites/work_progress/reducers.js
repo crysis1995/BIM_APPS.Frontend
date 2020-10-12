@@ -1,9 +1,10 @@
 import { combineReducers } from 'redux';
 import { combineEpics } from 'redux-observable';
 
-import { fetchResultsForLevel, getRoomData, selectRoom } from './redux/epics';
+import { getRoomData } from './redux/epics';
 import { selectLevel } from './redux/epics/levels_epics';
-import { fetchRoomsData } from './redux/epics/rooms_epics';
+import { fetchResultsForLevel } from './redux/epics/results_epics';
+import { fetchRoomsData, selectRoom } from './redux/epics/rooms_epics';
 import { getDepartmentsWithTerms } from './redux/epics/terms_epics';
 
 import Jobs from './redux/reducers/jobs_reducers';

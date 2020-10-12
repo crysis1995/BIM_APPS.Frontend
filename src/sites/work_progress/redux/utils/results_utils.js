@@ -1,11 +1,16 @@
 import { RoundNumber } from '../../../../utils/RoundNumber';
 import { fetchALLAreaJobPerLevel, fetchSummaryAreaJobPerLevel } from './objects_utils';
 
+/**
+ *
+ * @param response {Object}
+ * @returns {{summary_current_value: number, percentage_value: number, elements: number, summary_all_value: number}}
+ */
 export const prepareResultsByJob = (response) => {
-	var summary_all_value = 0;
-	var summary_current_value = 0;
-	var percentage_value = 0;
-	var elements = 0;
+	let summary_all_value = 0;
+	let summary_current_value = 0;
+	let percentage_value = 0;
+	let elements = 0;
 
 	if (!Array.isArray(response)) throw new Error('data must be an array');
 	if (response[0].data && response[1].data) {
@@ -30,7 +35,12 @@ export const prepareResultsByJob = (response) => {
 	};
 };
 
-
+/**
+ *
+ * @param job_id {string}
+ * @param current_level {string}
+ * @returns {Promise<ApolloQueryResult<any>[]>}
+ */
 export const fetchSummaryData = (job_id, current_level) => {
 	return Promise.all([
 		fetchALLAreaJobPerLevel(job_id, current_level),

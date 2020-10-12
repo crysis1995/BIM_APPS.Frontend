@@ -87,6 +87,4 @@ const fetchObjectsBySelectedRoom = (dispatch, getState) => {
 		);
 };
 
-export const fetchObjectsByRoom = (room_id) => {
-	return getFilteredObjects(room_id).then(({ data }) => normalize(data.acceptanceObjects));
-};
+

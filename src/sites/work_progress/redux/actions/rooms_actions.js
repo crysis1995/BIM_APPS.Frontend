@@ -1,7 +1,3 @@
-import { gql } from 'apollo-boost';
-
-import { graphQLClient } from '../../../../services';
-import { normalize } from '../../../../utils/normalize';
 import {
 	ADD_ROOM_TO_SELECTION,
 	ADD_SPECYFIC_ROOM_TO_SELECTION,
@@ -12,9 +8,10 @@ import {
 	ROOMS_LOADING_START,
 	ROOMS_SET_INITIAL,
 	SELECT_ROOM,
+	SELECT_DEPARTMENT,
+	REMOVE_DEPARTMENT_FROM_SELECTIONS,
 } from '../types';
 import { ROOM_SELECTION_STATUS } from '../types/constans';
-import { fetchAllRooms } from '../utils/rooms_utils';
 
 export const fetchRoomsStart = () => ({
 	type: ROOMS_LOADING_START,
@@ -25,9 +22,10 @@ export const fetchRoomsError = (errors) => ({
 	errors,
 });
 
-export const fetchRoomsEnd = (rooms) => ({
+export const fetchRoomsEnd = (byId, byDepartmentId) => ({
 	type: ROOMS_LOADING_END,
-	rooms,
+	byId,
+	byDepartmentId,
 });
 
 export const addRoomToSelection = (selectedRoom, from_selector = true) => ({
@@ -57,69 +55,20 @@ export const setRoomsInitial = () => ({
 	type: ROOMS_SET_INITIAL,
 });
 
-export const selectRoom = (room, status, from_selector) => ({
+export const selectRoom = (room, status, from_selector = true) => ({
 	type: SELECT_ROOM,
 	room,
 	status,
 	from_selector,
 });
 
-// export const fetch_all_rooms = async (dispatch, level) => {
-// 	fetchAllRooms(level).then(console.log);
-// 	dispatch(fetchRoomsStart());
-// 	const query = gql`
-// 		query getAllRooms($s: Int, $l: String) {
-// 			acceptanceRoomsConnection(where: { department: { level: $l } }, start: $s) {
-// 				values {
-// 					id
-// 					revit_id
-// 					name
-// 					number
-// 				}
-// 				aggregate {
-// 					count
-// 				}
-// 			}
-// 		}
-// 	`;
-// 	var rooms = [];
-// 	var s = 0;
-// 	var max;
-// 	while (true) {
-// 		if (rooms.length === max) {
-// 			break;
-// 		}
-// 		try {
-// 			const { data } = await graphQLClient().query({
-// 				query,
-// 				variables: { s, l: level },
-// 				fetchPolicy: 'no-cache',
-// 			});
-// 			if (data) {
-// 				rooms = rooms.concat(data.acceptanceRoomsConnection.values);
-// 				max = data.acceptanceRoomsConnection.aggregate.count;
-// 				s = s + 100;
-// 			}
-// 		} catch (e) {
-// 			dispatch(fetchRoomsError(e.message));
-// 			break;
-// 		}
-// 	}
-//
-// 	dispatch(fetchRoomsEnd(normalize(rooms, 'revit_id')));
-// };
-
-/**
- *
- * @param room_value {string}
- * @param status {ROOM_SELECTION_STATUS}
- * @param from_selector
- * @returns {function(*): *}
- */
-export const setSelectedRoom = (room_value, status, from_selector = true) => (dispatch) => {
-	return dispatch(selectRoom(room_value, status, from_selector));
-};
-
+export const selectDepartment = (department_id) => ({
+	type: SELECT_DEPARTMENT,
+	department_id,
+});
+export const removeDepartmentFromSelection = () => ({
+	type: REMOVE_DEPARTMENT_FROM_SELECTIONS,
+});
 /**
  *
  * @param room_value {string}

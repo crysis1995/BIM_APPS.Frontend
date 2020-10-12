@@ -1,6 +1,6 @@
 import { ofType } from 'redux-observable';
 import { from, of } from 'rxjs';
-import { catchError, filter, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { termsDataFetchEnd, termsDataFetchError } from '../actions/terms_actions';
 import { TERMS_DATA_FETCH_START } from '../types';
 import { fetchDepartmentsWithTerms, normalizeTermsData } from '../utils/terms_utils';

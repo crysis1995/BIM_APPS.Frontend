@@ -1,5 +1,5 @@
 import { config } from '../../../config';
-import { setSelectedRoom } from '../../../sites/work_progress/redux/actions/rooms_actions';
+// import { setSelectedRoom } from '../../../sites/work_progress/redux/actions/rooms_actions';
 import { hexToRgb } from '../../../utils/hexToRgb';
 import { initialiseModal } from '../../Modal/redux/actions';
 import { initializeViewer, setSheetsSuccess, setViewerRooms } from '../redux/actions';
@@ -184,7 +184,7 @@ class Viewer extends Component {
 											(e) => this.props.Odbiory.Rooms.rooms[e],
 										);
 										if (selectedRoom) {
-											this.props.setSelectedRoom(selectedRoom, 'add-specyfic', false);
+											// this.props.setSelectedRoom(selectedRoom, 'add-specyfic', false);
 										} else {
 											this.viewer.clearSelection();
 											this.props.initialiseModal(
@@ -200,7 +200,7 @@ class Viewer extends Component {
 							},
 						);
 					} else {
-						this.props.setSelectedRoom([], 'clear', false);
+						// this.props.setSelectedRoom([], 'clear', false);
 					}
 				}, 500), // opóźnienie kolekcjonowania i wykonywania akcji zaznaczania roomów
 			);
@@ -251,7 +251,7 @@ const mapDispatchToProps = {
 	setSheetsSuccess,
 	initializeViewer,
 	setViewerRooms,
-	setSelectedRoom,
+	// setSelectedRoom,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Viewer);

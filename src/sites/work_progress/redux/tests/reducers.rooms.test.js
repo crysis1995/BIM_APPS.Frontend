@@ -12,7 +12,8 @@ import RoomsReducer from '../reducers/rooms_reducers';
 
 describe('TEST ROOMS REDUCER', () => {
 	const initial = {
-		rooms: {},
+		byId: {},
+		byDepartmentId: {},
 		rooms_loading: false,
 		rooms_error: {},
 		selected_rooms: [],
@@ -43,24 +44,28 @@ describe('TEST ROOMS REDUCER', () => {
 		});
 	});
 	test('should properly dispatch fetchRoomsEnd action', () => {
-		const action = fetchRoomsEnd({
-			'123': { test: 'test' },
-			'23': { test: 'test' },
-			'1234': { test: 'test' },
-			'4312': { test: 'test' },
-		});
+		const action = fetchRoomsEnd(
+			{
+				'123': { test: 'test' },
+				'23': { test: 'test' },
+				'1234': { test: 'test' },
+				'4312': { test: 'test' },
+			},
+			{},
+		);
 		state = {
 			...initial,
 		};
 		expect(RoomsReducer(state, action)).toEqual({
 			...state,
 			rooms_loading: false,
-			rooms: {
+			byId: {
 				'123': { test: 'test' },
 				'23': { test: 'test' },
 				'1234': { test: 'test' },
 				'4312': { test: 'test' },
 			},
+			byDepartmentId: {},
 		});
 	});
 	test('should properly dispatch addRoomToSelection action - with single value', () => {

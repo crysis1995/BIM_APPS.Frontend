@@ -5,7 +5,6 @@ import {
 	TERMS_SET_BY_DEPARTMENT,
 	TERMS_SET_DEPARTMENT,
 } from '../types';
-import { fetchDepartmentsWithTerms, normalizeTermsData } from '../utils/terms_utils';
 
 export const termsDataFetchStart = () => ({
 	type: TERMS_DATA_FETCH_START,

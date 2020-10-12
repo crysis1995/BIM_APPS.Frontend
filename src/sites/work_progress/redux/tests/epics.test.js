@@ -4,17 +4,15 @@ import configureStore from 'redux-mock-store';
 import { createEpicMiddleware } from 'redux-observable';
 import { of } from 'rxjs';
 import { toArray } from 'rxjs/operators';
-import { fetchResultsForLevel, getRoomData, selectRoom } from '../epics';
-import {
-	ADD_ROOM_TO_SELECTION,
-	ADD_SPECYFIC_ROOM_TO_SELECTION,
-	OBJECTS_LOADING_START,
-	RESULTS_FETCH_END,
-	RESULTS_FETCH_START,
-	RESULTS_SET_DATA,
-	SELECT_ROOM,
-	UPGRADING_SET_DATA,
-} from '../types';
+import { getRoomData } from '../epics';
+import { ADD_ROOM_TO_SELECTION, UPGRADING_SET_DATA } from '../types';
+
+/**
+ *          TODO SET MARBLE TO TEST HOW EPICS BEHAVE WHEN IT CALLS MANY TIMES ETC
+ *
+ *
+ *
+ */
 
 describe('RESULTS EPICS TEST', () => {
 	const server = setupServer(
@@ -400,146 +398,56 @@ describe('RESULTS EPICS TEST', () => {
 		const epicMiddleware = createEpicMiddleware();
 		mockstore = configureStore([epicMiddleware]);
 		store = mockstore({ Odbiory: { Jobs: { jobs: { '1': {}, '2': {} } } } });
-		epicMiddleware.run(fetchResultsForLevel);
+		epicMiddleware.run(getRoomData);
 	});
 	afterAll(() => {
 		server.close();
 	});
-	test('test fetchResultsForLevel epic', async () => {
-		const action$ = of({ type: RESULTS_FETCH_START, current_level: 'Poziom 1' });
-
-		const actual = await fetchResultsForLevel(action$, {
-			value: { Odbiory: { Jobs: { jobs: { '1': {}, '2': {} } } } },
-		})
-			.pipe(toArray())
-			.toPromise();
-
-		expect(actual).toEqual([
-			{
-				type: RESULTS_SET_DATA,
-				jobId: '1',
-				result: {
-					summary_all_value: 100,
-					summary_current_value: 50,
-					percentage_value: 50,
-					elements: {
-						'111111': 0.5,
-						'222222': 1,
-						'333333': 1,
-					},
-				},
-			},
-			{
-				type: RESULTS_SET_DATA,
-				jobId: '2',
-				result: {
-					summary_all_value: 200,
-					summary_current_value: 100,
-					percentage_value: 50,
-					elements: {
-						'111111': 0.5,
-						'222222': 1,
-						'333333': 1,
-					},
-				},
-			},
-			{ type: RESULTS_FETCH_END },
-		]);
-	});
-	test('test selectRoom epic', async () => {
-		const action$ = of({ type: SELECT_ROOM, room: '123456', status: 'add-specyfic', from_selector: true });
-
-		const actual = await selectRoom(action$, {
-			value: {
-				Odbiory: {
-					Jobs: { jobs_loading: false },
-					Objects: { objects_loading: false },
-				},
-				ForgeViewer: { model_rooms_loading: false },
-			},
-		})
-			.pipe(toArray())
-			.toPromise();
-
-		expect(actual).toEqual([
-			{
-				type: OBJECTS_LOADING_START,
-			},
-			{
-				type: ADD_SPECYFIC_ROOM_TO_SELECTION,
-				selectedRooms: '123456',
-				from_selector: true,
-			},
-		]);
-	});
-	test('test selectRoom epic - loading objects', async () => {
-		const action$ = of({ type: SELECT_ROOM, room: '123456', status: 'add-specyfic', from_selector: true });
-
-		const actual = await selectRoom(action$, {
-			value: {
-				Odbiory: {
-					Jobs: { jobs_loading: false },
-					Objects: { objects_loading: true },
-				},
-				ForgeViewer: { model_rooms_loading: false },
-			},
-		})
-			.pipe(toArray())
-			.toPromise();
-
-		expect(actual).toEqual([
-			{
-				type: ADD_SPECYFIC_ROOM_TO_SELECTION,
-				selectedRooms: '123456',
-				from_selector: true,
-			},
-		]);
-	});
-	test('test getRoomData epic', async () => {
-		const action$ = of({ type: ADD_ROOM_TO_SELECTION, selectedRoom: '1325504', from_selector: true });
-
-		const actual = await getRoomData(action$, {
-			value: {
-				Odbiory: {
-					Jobs: {
-						jobs: {
-							'1': {},
-							'2': {},
-						},
-					},
-					Objects: { objects: {} },
-					Rooms: {
-						rooms: { '1325504': { id: '666' } },
-					},
-				},
-			},
-		})
-			.pipe(toArray())
-			.toPromise();
-
-		expect(actual).toEqual([
-			{
-				type: UPGRADING_SET_DATA,
-				job_id: '1',
-				revit_id: '1325504',
-				particular_values: [1.23, 1.97],
-				object_ids: ['7427', '7428'],
-				summary_value: 1.23 + 1.97,
-				percentage_value: 0,
-				reference_job: null,
-				current_value: 0,
-			},
-			{
-				type: UPGRADING_SET_DATA,
-				job_id: '2',
-				revit_id: '1325504',
-				particular_values: [23.13, 4.12, 4.54, 1.51, 1.51, 1.75, 1.85, 6.45, 6.45, 4.91],
-				object_ids: ['7421', '7422', '7423', '7424', '7425', '7426', '7429', '7430', '7431', '7432'],
-				summary_value: 23.13 + 4.12 + 4.54 + 1.51 + 1.51 + 1.75 + 1.85 + 6.45 + 6.45 + 4.91,
-				percentage_value: 0,
-				reference_job: null,   
-				current_value: 0,
-			},
-		]);
-	});
+	// test('test getRoomData epic', async () => {
+	// 	const action$ = of({ type: ADD_ROOM_TO_SELECTION, selectedRoom: '1325504', from_selector: true });
+	//
+	// 	const actual = await getRoomData(action$, {
+	// 		value: {
+	// 			Odbiory: {
+	// 				Jobs: {
+	// 					jobs: {
+	// 						'1': {},
+	// 						'2': {},
+	// 					},
+	// 				},
+	// 				Objects: { objects: {} },
+	// 				Rooms: {
+	// 					rooms: { '1325504': { id: '666' } },
+	// 				},
+	// 			},
+	// 		},
+	// 	})
+	// 		.pipe(toArray())
+	// 		.toPromise();
+	//
+	// 	expect(actual).toEqual([
+	// 		{
+	// 			type: UPGRADING_SET_DATA,
+	// 			job_id: '1',
+	// 			revit_id: '1325504',
+	// 			particular_values: [1.23, 1.97],
+	// 			object_ids: ['7427', '7428'],
+	// 			summary_value: 1.23 + 1.97,
+	// 			percentage_value: 0,
+	// 			reference_job: null,
+	// 			current_value: 0,
+	// 		},
+	// 		{
+	// 			type: UPGRADING_SET_DATA,
+	// 			job_id: '2',
+	// 			revit_id: '1325504',
+	// 			particular_values: [23.13, 4.12, 4.54, 1.51, 1.51, 1.75, 1.85, 6.45, 6.45, 4.91],
+	// 			object_ids: ['7421', '7422', '7423', '7424', '7425', '7426', '7429', '7430', '7431', '7432'],
+	// 			summary_value: 23.13 + 4.12 + 4.54 + 1.51 + 1.51 + 1.75 + 1.85 + 6.45 + 6.45 + 4.91,
+	// 			percentage_value: 0,
+	// 			reference_job: null,
+	// 			current_value: 0,
+	// 		},
+	// 	]);
+	// });
 });

@@ -4,6 +4,7 @@ import {
 	ODBIORY_COMPONENT_ENDED,
 	ODBIORY_COMPONENT_STARTED,
 	SET_ACTIVE_TAB,
+	CHANGE_UPGRADING_BY_TYPE,
 } from '../types';
 
 import { CONSTANTS } from '../types/constans';
@@ -54,3 +55,12 @@ export const changeActiveTab = (tabName) => (dispatch, getState) => {
 	}
 	dispatch(setActiveTab(tabName));
 };
+/**
+ *
+ * @param by {UPGRADING_BY}
+ * @returns {{type: string, byType: UPGRADING_BY}}
+ */
+export const changeUpgradingByType = (by) => ({
+	type: CHANGE_UPGRADING_BY_TYPE,
+	byType: by,
+});

@@ -7,7 +7,6 @@ import {
 	TERMS_SET_DEPARTMENT,
 } from '../types';
 
-
 /**
  *
  * @type {{byDepartment: {}, chosenDepartment: string, loading: boolean, error: null}}
@@ -70,7 +69,7 @@ function setTermsByDepartment(state, { term_type, term, department_id, job_id, p
  *
  * @param state {Object}
  * @param term_type {string}
- * @param permissions {Array<string>}
+ * @param permissions {[string] | string}
  * @param department_id {string}
  * @param job_id {string}
  */

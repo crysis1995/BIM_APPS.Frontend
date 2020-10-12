@@ -32,7 +32,6 @@ function setData(
 	dotProp.set(state, `byJobId.${job_id}.percentage_value.${revit_id}`, percentage_value);
 	dotProp.set(state, `byJobId.${job_id}.reference_job.${revit_id}`, reference_job);
 	dotProp.set(state, `byJobId.${job_id}.current_value.${revit_id}`, current_value);
-
 	return { ...state };
 }
 

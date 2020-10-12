@@ -7,14 +7,19 @@ import {
 	ROOMS_LOADING_ERROR,
 	ROOMS_LOADING_START,
 	ROOMS_SET_INITIAL,
-	SELECT_ROOM_BY_ODBIORY, SET_INITIAL
+	SELECT_ROOM_BY_ODBIORY,
+	SELECT_DEPARTMENT,
+	REMOVE_DEPARTMENT_FROM_SELECTIONS,
+	SET_INITIAL,
 } from '../types';
 
 const initialState = {
-	rooms: {},
+	byId: {},
+	byDepartmentId: {},
 	rooms_loading: false,
 	rooms_error: {},
 	selected_rooms: [],
+	selected_department: null,
 	from_selector: false,
 };
 
@@ -56,7 +61,8 @@ const RoomsReducer = (state = initialState, action) => {
 		case ROOMS_LOADING_END:
 			return {
 				...state,
-				rooms: action.rooms,
+				byId: action.byId,
+				byDepartmentId: action.byDepartmentId,
 				rooms_loading: false,
 			};
 		case SELECT_ROOM_BY_ODBIORY:
@@ -69,6 +75,16 @@ const RoomsReducer = (state = initialState, action) => {
 			return {
 				...state,
 				...initialState,
+			};
+		case SELECT_DEPARTMENT:
+			return {
+				...state,
+				selected_department: action.department_id,
+			};
+		case REMOVE_DEPARTMENT_FROM_SELECTIONS:
+			return {
+				...state,
+				selected_department: null,
 			};
 		default:
 			return state;
