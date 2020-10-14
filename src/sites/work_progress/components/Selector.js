@@ -24,6 +24,7 @@ function Selector({
 					disabled={isDisabled}
 					as="select"
 					value={value}
+					size={'sm'}
 					custom>
 					<option value="">Wybierz...</option>
 					{options.map((e) => (

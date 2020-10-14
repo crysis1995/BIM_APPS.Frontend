@@ -38,7 +38,7 @@ class Odbiory extends React.Component {
 					<div className="d-flex flex-column p-3 w-100">
 						<Tools />
 						<LevelSelectorComponent />
-						<Nav variant="tabs" className="mt-3" defaultActiveKey={'results'}>
+						<Nav variant="tabs" className="mt-2" defaultActiveKey={'results'}>
 							<Nav.Item>
 								<Nav.Link
 									active={CONSTANTS.RESULTS === this.props.active_tab}

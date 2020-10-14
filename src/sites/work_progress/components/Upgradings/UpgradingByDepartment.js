@@ -8,7 +8,6 @@ import { ROOM_SELECTION_STATUS } from '../../redux/types/constans';
 import { getDepartmentOptions, getSelectedDepartment } from './OdbioryComponent.Selector';
 
 function UpgradingByDepartment(props) {
-	console.log(props.departament_options, props.selected_department);
 	const options = {
 		onChange: (data, test) => {
 			if (test.action === ROOM_SELECTION_STATUS.CLEAR) {

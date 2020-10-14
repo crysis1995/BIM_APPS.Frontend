@@ -4,7 +4,7 @@ import {
 	getRoomOptionsByNumber,
 	getSelectedRoomOptionsByName,
 	getSelectedRoomOptionsByNumber,
-} from '../Upgradings/OdbioryComponent.Selector';
+} from './OdbioryComponent.Selector';
 
 describe('TEST getRoomOptionsByNumber selector', () => {
 	test('should properly return options', () => {

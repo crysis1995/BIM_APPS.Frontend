@@ -5,7 +5,7 @@ import JobsSummary from './JobsSummary';
 
 function Tools(props) {
 	return (
-		<Permissions condition={false}>
+		<Permissions condition={false} show_alert={false}>
 			<div className="mb-4">
 				<div>Narzędzia aplikacji</div>
 				<div className="pt-1">

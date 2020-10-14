@@ -2,10 +2,11 @@ import React from 'react';
 import { Form, OverlayTrigger, Popover } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { v4 } from 'uuid';
+import UNITS from '../../../../components/Units';
 
-import { RoundNumber } from '../../../utils/RoundNumber';
-import { sumOfArray } from '../../../utils/sumOfArray';
-import { changeJobPercentageValue } from '../redux/actions/jobs_actions';
+import { RoundNumber } from '../../../../utils/RoundNumber';
+import { sumOfArray } from '../../../../utils/sumOfArray';
+import { changeJobPercentageValue } from '../../redux/actions/jobs_actions';
 import PopoverTable from './PopoverTable';
 import { getSplitedJobsByKey } from './TableComponentSelector';
 
@@ -65,9 +66,7 @@ function PluralJobsComponent(props) {
 									</Popover>
 								}>
 								<td className="">
-									<span>
-										{RoundNumber(sumOfArray(Object.values(job.summary_value)))} m<sup>2</sup>
-									</span>
+									<UNITS.M2>{RoundNumber(sumOfArray(Object.values(job.summary_value)))}</UNITS.M2>
 								</td>
 							</OverlayTrigger>
 							<td>

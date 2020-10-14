@@ -403,6 +403,9 @@ describe('RESULTS EPICS TEST', () => {
 	afterAll(() => {
 		server.close();
 	});
+	test("epics.test.js init test", () => {
+		expect("").toEqual("")
+	})
 	// test('test getRoomData epic', async () => {
 	// 	const action$ = of({ type: ADD_ROOM_TO_SELECTION, selectedRoom: '1325504', from_selector: true });
 	//
