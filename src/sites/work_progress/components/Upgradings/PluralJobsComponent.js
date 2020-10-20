@@ -6,7 +6,6 @@ import UNITS from '../../../../components/Units';
 
 import { RoundNumber } from '../../../../utils/RoundNumber';
 import { sumOfArray } from '../../../../utils/sumOfArray';
-// import { changeJobPercentageValue } from '../../redux/actions/jobs_actions';
 import { upgradeJob } from '../../redux/actions/upgrading_actions';
 import PopoverTable from './PopoverTable';
 import { getSplitedJobsByKey } from './TableComponentSelector';
@@ -74,7 +73,6 @@ function PluralJobsComponent(props) {
 								<Form.Control
 									onChange={(e) => {
 										props.upgradeJob(job_key, parseFloat(e.target.value));
-										// props.changeJobPercentageValue(job_key, parseFloat(e.target.value));
 									}}
 									disabled={props.objects_jobs_loading}
 									size={'sm'}
@@ -205,7 +203,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-	// changeJobPercentageValue,
 	upgradeJob,
 };
 

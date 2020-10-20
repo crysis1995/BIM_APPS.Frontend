@@ -151,6 +151,7 @@ describe('TEST RESULTS EPICS', () => {
 							'1': {},
 							'2': {},
 						},
+						jobs_fetched: true,
 					},
 					Levels: {
 						current_level: 'Poziom 1',
@@ -197,6 +198,7 @@ describe('TEST RESULTS EPICS', () => {
 							'1': {},
 							'3': {},
 						},
+						jobs_fetched: true,
 					},
 					Levels: {
 						current_level: 'Poziom 1',
