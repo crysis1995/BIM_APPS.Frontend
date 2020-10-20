@@ -4,16 +4,16 @@ export const config = {
 	bim_apps_api: {
 		// url: "http://10.104.0.128:2000",
 		url: 'http://bim.warbud.pl/bim_apps/api',
-		// graphql: "http://10.104.0.128:2000/graphql",
+		// graphql: 'http://localhost:2000/graphql',
 		graphql: 'http://bim.warbud.pl/bim_apps/api/graphql',
 	},
 	accountId: 'b.2012a172-f733-426d-847e-b62dda511dcb',
 	units: {
 		area: {
 			color_map: {
-				1: { color: '#C9C9C9', option: '%=0', condition: (x) => x === 0 },
+				1: { color: '#c9c9c9', option: '%=0', condition: (x) => x === 0 },
 				2: {
-					color: '#FF0000',
+					color: '#ff0000',
 					option: '0>%>25',
 					condition: (x) => x > 0 && x < 25,
 				},

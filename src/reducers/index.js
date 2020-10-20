@@ -1,11 +1,13 @@
+// import OdbioryEpics from '../sites/work_progress/epics';
 import { combineReducers } from 'redux';
+import { combineEpics } from 'redux-observable';
 
 import AutodeskBIM360 from '../components/AutodeskBIM360/redux';
 import Autodesk from '../components/AutodeskLogin/redux';
 import CMSLogin from '../components/CMSLogin/redux/reducers';
 import ForgeViewer from '../components/ForgeViewer/redux/reducers';
 import Modal from '../components/Modal/redux/reducers';
-import Odbiory from '../sites/work_progress/reducers';
+import { OdbioryReducer as Odbiory, OdbioryEpics as rootEpic } from '../sites/work_progress/reducers';
 
 const rootReducer = combineReducers({
 	Autodesk,
@@ -16,4 +18,6 @@ const rootReducer = combineReducers({
 	CMSLogin,
 });
 
-export default rootReducer;
+// const rootEpic = combineEpics(OdbioryEpics);
+
+export { rootReducer, rootEpic };

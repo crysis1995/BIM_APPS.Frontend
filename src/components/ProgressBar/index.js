@@ -2,7 +2,6 @@ import React from 'react';
 
 function ProgressBar({ results_percentage_area, binary = false }) {
 	let color;
-
 	switch (true) {
 		case results_percentage_area == 0:
 			color = '#FF0000';

@@ -19,6 +19,8 @@ const Settings = React.lazy(() => import('../components/CMSLogin/components/sett
 
 class Layout extends React.Component {
 	componentDidMount() {
+
+		// console.log(this.props)
 		this.props.logUserIfValid();
 	}
 	render() {

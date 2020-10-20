@@ -20,13 +20,15 @@ function AccountSettings(props) {
 						</Nav.Link>
 					</Nav.Item>
 					<Nav.Item>
+						<Nav.Link onSelect={(e) => setActiveTab(e)} eventKey="permissions_settings">
+							Ustawienia dostępów
+						</Nav.Link>
+					</Nav.Item>
+					<Nav.Item>
 						<Nav.Link onSelect={(e) => setActiveTab(e)} eventKey="password_reset">
 							Reset hasła
 						</Nav.Link>
 					</Nav.Item>
-					{/* <Nav.Item>
-						<Nav.Link eventKey="disabled">Disabled</Nav.Link>
-					</Nav.Item> */}
 				</Nav>
 			</Col>
 			{activeTab === 'password_reset' && (
@@ -50,7 +52,9 @@ function AccountSettings(props) {
 										})}
 									/>
 								</Col>
-								<Form.Text className="text-danger">{errors.password && errors.password.message}</Form.Text>
+								<Form.Text className="text-danger">
+									{errors.password && errors.password.message}
+								</Form.Text>
 							</Form.Group>
 
 							<Form.Group as={Row} controlId="formBasicPassword">
@@ -67,14 +71,19 @@ function AccountSettings(props) {
 												value: true,
 												message: 'Wymagane',
 											},
-											validate: (value) => value === watch('password') || 'Hasła muszą być identyczne',
+											validate: (value) =>
+												value === watch('password') || 'Hasła muszą być identyczne',
 										})}
 									/>
 								</Col>
-								<Form.Text className="text-danger">{errors.passwordConfirmation && errors.passwordConfirmation.message}</Form.Text>
+								<Form.Text className="text-danger">
+									{errors.passwordConfirmation && errors.passwordConfirmation.message}
+								</Form.Text>
 							</Form.Group>
 							<Form.Group as={Row} controlId="errors">
-								<Col sm={7}>{props.fetch_error && <Alert variant={'danger'}>{props.fetch_error}</Alert>}</Col>
+								<Col sm={7}>
+									{props.fetch_error && <Alert variant={'danger'}>{props.fetch_error}</Alert>}
+								</Col>
 								<Col sm={7}>{props.info && <Alert variant={'success'}>{props.info}</Alert>}</Col>
 							</Form.Group>
 
@@ -87,6 +96,7 @@ function AccountSettings(props) {
 			)}
 
 			{activeTab === 'account_settings' && <Col className="p-5">Ustawienia konta</Col>}
+			{activeTab === 'permissions_settings' && <Col className="p-5">Ustawienia dostępów</Col>}
 			{!activeTab && <Col className="p-5">Wybierz akcję</Col>}
 		</>
 	);

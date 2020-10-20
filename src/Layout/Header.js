@@ -11,7 +11,6 @@ function Header() {
 			<NavLink to="/">
 				<Navbar.Brand>BIM APPS</Navbar.Brand>
 			</NavLink>
-			{/* <Navbar.Toggle aria-controls="basic-navbar-nav" /> */}
 			<Navbar.Collapse id="responsive-navbar-nav">
 				<Nav className="mr-auto">
 					<NavLink className="nav-link " to="/work_progress">

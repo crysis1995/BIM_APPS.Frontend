@@ -1,33 +1,19 @@
 import React from 'react';
-import { Col, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { v4 } from 'uuid';
-
-import { setCurrentLevel } from '../redux/levels/actions';
+import { setCurrentSheet } from '../../../components/ForgeViewer/redux/actions';
+import Selector from './Selector';
 
 function LevelSelectorComponent(props) {
 	return (
-		<Form.Row>
-			<Col className="mb-3">
-				<Form.Label>Kondygnacja</Form.Label>
-				<Form.Control
-					onChange={(event) => {
-						props.setCurrentLevel(event.target.value);
-					}}
-					disabled={props.objects_jobs_loading}
-					as="select"
-					value={props.current_sheet}
-					custom>
-					<option value="">Wybierz...</option>
-					{props.sheets_loaded &&
-						props.sheets.map((e) => (
-							<option key={v4()} value={e.index}>
-								{e.name}
-							</option>
-						))}
-				</Form.Control>
-			</Col>
-		</Form.Row>
+		<Selector
+			label={'Kondygnacja'}
+			onChangeValue={props.setCurrentSheet}
+			isDisabled={props.objects_jobs_loading}
+			value={props.current_sheet}
+			options={props.sheets}
+			option_id_property={'index'}
+			classname={'mb-1'}
+		/>
 	);
 }
 
@@ -39,7 +25,7 @@ const mapStateToProps = ({ Odbiory, ForgeViewer }) => ({
 });
 
 const mapDispatchToProps = {
-	setCurrentLevel,
+	setCurrentSheet,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LevelSelectorComponent);
