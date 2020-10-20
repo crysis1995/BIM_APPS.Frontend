@@ -1,20 +1,35 @@
-import { HttpLink } from 'apollo-boost';
-import React, { useState } from 'react';
-import { Button, NavDropdown } from 'react-bootstrap';
+import React from 'react';
+import { Button, Form, NavDropdown } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { v4 } from 'uuid';
+import { getUserProjects } from './components/CMSLogin.Selector';
+import { setActiveProject, userLogout } from './redux/actions';
 
-import { setAccountSettingsActive } from '../../Layout/redux/actions';
-import { userLogout } from './redux/actions';
-
-function CMSLogin(props) {
-	return props.CMSLogin.is_login ? (
+function CMSLogin({ is_login, active_project, projects, username, userLogout, setActiveProject }) {
+	return is_login ? (
 		<>
-			<NavDropdown alignRight title={<span>Witaj, {props.CMSLogin.user.username}</span>} id="nav-dropdown">
+			<Form className="mr-3" inline>
+				<Form.Control
+					value={active_project}
+					onChange={(e) => setActiveProject(e.target.value)}
+					as="select"
+					size={'sm'}>
+					<option>Wybierz...</option>
+					{projects.map((e) => (
+						<option data-testid="options" key={v4()} value={e.id}>
+							{e.name}
+						</option>
+					))}
+				</Form.Control>
+			</Form>
+			<NavDropdown alignRight className="" title={<span>Witaj, {username}</span>} id="nav-dropdown">
 				<NavDropdown.Item>
-					<Link to="/settings">Ustawienia konta</Link>
+					<Link className="" to="/settings">
+						Ustawienia konta
+					</Link>
 				</NavDropdown.Item>
-				<NavDropdown.Item onClick={props.userLogout}>Wyloguj</NavDropdown.Item>
+				<NavDropdown.Item onClick={userLogout}>Wyloguj</NavDropdown.Item>
 			</NavDropdown>
 		</>
 	) : (
@@ -26,13 +41,16 @@ function CMSLogin(props) {
 	);
 }
 
-const mapStateToProps = ({ CMSLogin }) => ({
-	CMSLogin,
+const mapStateToProps = (state) => ({
+	is_login: state.CMSLogin.is_login,
+	username: state.CMSLogin.user.username,
+	active_project: state.CMSLogin.project.id,
+	projects: getUserProjects(state),
 });
 
 const mapDispatchToProps = {
-	setAccountSettingsActive,
 	userLogout,
+	setActiveProject,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CMSLogin);

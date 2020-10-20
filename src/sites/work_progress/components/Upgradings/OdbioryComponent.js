@@ -22,7 +22,6 @@ function OdbioryComponent(props) {
 					paddingRight: 0,
 				}}>
 				<UpgradingType />
-				<UNITS.M2>{123.765662}</UNITS.M2>
 				{props.upgrading_by === UPGRADING_BY.ROOMS && <UpgradingByRooms />}
 				{props.upgrading_by === UPGRADING_BY.DEPARTMENT && <UpgradingByDepartment />}
 				{props.jobs_fetched && props.selected_rooms_length > 0 ? (

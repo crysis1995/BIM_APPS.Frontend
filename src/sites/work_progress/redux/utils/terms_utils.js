@@ -163,7 +163,8 @@ const setPermission = ({ can_view = false, can_update = false, can_create = fals
  * @param user_role {string}
  */
 function getUserRole(user, project_id) {
-	const project_role_component = user.project_roles.filter((item) => item.project.id === project_id)[0];
+	// const project_role_component = user.project_roles.filter((item) => item.project.id === project_id)[0];
+	const project_role_component = user.project_roles[project_id];
 	if (project_role_component.hasOwnProperty('project_role')) {
 		return project_role_component.project_role.name;
 	}

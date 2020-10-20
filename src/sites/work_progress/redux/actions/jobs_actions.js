@@ -12,6 +12,7 @@ import {
 	OBJECT_JOB_FETCH_ERROR,
 	OBJECT_JOB_FETCH_START,
 } from '../types';
+import { JOB_TYPE } from '../types/constans';
 import { addParameterWithValue, createReferenceJob, fetchAllJobsFromAPI, updateObjectJob } from '../utils/jobs_utils';
 
 export const jobsLoadingStart = () => ({
@@ -65,7 +66,9 @@ export const fetchAllJobs = () => async (dispatch) => {
 		if (data) {
 			dispatch(
 				jobsFetchEnd(
-					addParameterWithValue(normalize(data.acceptanceJobs), 'hidden', (val) => val.unit === 'piece'),
+					addParameterWithValue(normalize(data.acceptanceJobs), 'hidden', (val) =>
+						[JOB_TYPE.AMOUNT, JOB_TYPE.OCCURRENCE].includes(val.unit),
+					),
 				),
 			);
 		}

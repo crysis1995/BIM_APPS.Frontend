@@ -48,22 +48,7 @@ export const setResultsByJobId = (jobId, result) => ({
 	result,
 });
 
-export const updateResultsByJobId = (jobId, rooms, value) => ({
+export const updateResultsByJobId = (jobId, summary_value, revit_id, percentage_value) => ({
 	type: RESULTS_UPDATE_DATA,
-	jobId,
-	rooms,
-	value,
+	jobId, summary_value, revit_id, percentage_value
 });
-
-// export const fetchResultsForLevel = async (dispatch, getState, current_level) => {
-// 	dispatch(fetchResultStart());
-// 	const { jobs } = getState().Odbiory.Jobs;
-// 	return Promise.all(
-// 		Object.keys(jobs).map((job_id) =>
-// 			fetchSummaryData(job_id, current_level)
-// 				.then((value) => prepareResultsByJob(value))
-// 				.then((data) => dispatch(setResultsByJobId(job_id, data)))
-// 				.catch((error) => dispatch(fetchResultError(error.message))),
-// 		),
-// 	);
-// };

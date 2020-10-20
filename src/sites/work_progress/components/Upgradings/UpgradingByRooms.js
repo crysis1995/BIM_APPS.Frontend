@@ -4,6 +4,7 @@ import Select from 'react-select';
 import { Col, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { selectRoom } from '../../redux/actions/rooms_actions';
+import { ROOM_SELECTION_STATUS } from '../../redux/types/constans';
 import {
 	getRoomOptionsByName,
 	getRoomOptionsByNumber,
@@ -14,10 +15,10 @@ import {
 function UpgradingByRooms(props) {
 	const options = {
 		onChange: (_, data) => {
-			if (data.action === 'remove-value') {
-				props.selectRoom(data.removedValue && data.removedValue.value, data.action);
+			if (data.action === ROOM_SELECTION_STATUS.CLEAR) {
+				return props.selectRoom(data.removedValue && data.removedValue.value, data.action);
 			} else {
-				props.selectRoom(data.option && data.option.value, data.action);
+				return props.selectRoom(data.option && data.option.value, data.action);
 			}
 		},
 		isSearchable: true,

@@ -1,15 +1,14 @@
 import { createSelector } from 'reselect';
 
-
 /**
  *
  * @type {OutputSelector<unknown, {equal: *}|{different: *}|{different: *}, (res1: *, res2: *, res3: *) => ({equal: *}|{different: *}|{different: *})>}
  */
 export const getSplitedJobsByKey = createSelector(
 	(state) => state.Odbiory.Jobs.jobs,
-	(state) => state.Odbiory.Upgrading.byJobId,
-	(state) => state.Odbiory.Rooms.selected_rooms,
-	(jobs, upgrading, selected_rooms) => splitJobsByKey(jobs, upgrading, selected_rooms.length),
+	(state) => state.Odbiory.Upgrading,
+	(state) => state.Odbiory.Rooms,
+	(jobs, upgrading, rooms) => splitJobsByKey(jobs, upgrading.byJobId, rooms.selected_rooms.length),
 );
 
 /**
@@ -50,21 +49,21 @@ export const splitJobsByKey = (jobs, upgrading, selected_rooms_length, key = 'pe
 	);
 	return data;
 };
-/**
- *
- * @type {OutputSelector<unknown, *, (res: *) => *>}
- */
-export const getSingleSelectionFilteredJobs = createSelector(
-	(state) => state.Odbiory.Jobs.jobs,
-	(jobs) => genSingleSelectionFilteredJobs(jobs),
-);
-/**
- *
- * @param jobs {Object}
- * @returns {{}|{[p: string]: {}}}
- */
-export const genSingleSelectionFilteredJobs = (jobs) => {
-	return Object.entries(jobs)
-		.filter(([id, object]) => Object.keys(object.upgrading.summary_value).length > 0)
-		.reduce((prev, [id, object]) => ({ ...prev, [id]: object }), {});
-};
+// /**
+//  *
+//  * @type {OutputSelector<unknown, *, (res: *) => *>}
+//  */
+// export const getSingleSelectionFilteredJobs = createSelector(
+// 	(state) => state.Odbiory.Jobs.jobs,
+// 	(jobs) => genSingleSelectionFilteredJobs(jobs),
+// );
+// /**
+//  *
+//  * @param jobs {Object}
+//  * @returns {{}|{[p: string]: {}}}
+//  */
+// export const genSingleSelectionFilteredJobs = (jobs) => {
+// 	return Object.entries(jobs)
+// 		.filter(([id, object]) => Object.keys(object.upgrading.summary_value).length > 0)
+// 		.reduce((prev, [id, object]) => ({ ...prev, [id]: object }), {});
+// };

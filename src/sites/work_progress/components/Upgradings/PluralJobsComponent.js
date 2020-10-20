@@ -6,7 +6,8 @@ import UNITS from '../../../../components/Units';
 
 import { RoundNumber } from '../../../../utils/RoundNumber';
 import { sumOfArray } from '../../../../utils/sumOfArray';
-import { changeJobPercentageValue } from '../../redux/actions/jobs_actions';
+// import { changeJobPercentageValue } from '../../redux/actions/jobs_actions';
+import { upgradeJob } from '../../redux/actions/upgrading_actions';
 import PopoverTable from './PopoverTable';
 import { getSplitedJobsByKey } from './TableComponentSelector';
 
@@ -65,14 +66,15 @@ function PluralJobsComponent(props) {
 										</Popover.Content>
 									</Popover>
 								}>
-								<td className="">
-									<UNITS.M2>{RoundNumber(sumOfArray(Object.values(job.summary_value)))}</UNITS.M2>
+								<td>
+									<UNITS.M2>{sumOfArray(Object.values(job.summary_value))}</UNITS.M2>
 								</td>
 							</OverlayTrigger>
 							<td>
 								<Form.Control
 									onChange={(e) => {
-										props.changeJobPercentageValue(job_key, parseFloat(e.target.value));
+										props.upgradeJob(job_key, parseFloat(e.target.value));
+										// props.changeJobPercentageValue(job_key, parseFloat(e.target.value));
 									}}
 									disabled={props.objects_jobs_loading}
 									size={'sm'}
@@ -94,9 +96,7 @@ function PluralJobsComponent(props) {
 								</Form.Control>
 							</td>
 							<td>
-								<span>
-									{RoundNumber(sumOfArray(Object.values(job.current_value)))} m<sup>2</sup>
-								</span>
+								<UNITS.M2>{sumOfArray(Object.values(job.current_value))}</UNITS.M2>
 							</td>
 						</tr>
 					))}
@@ -196,7 +196,7 @@ function PluralJobsComponent(props) {
 }
 
 const mapStateToProps = (state) => ({
-	rooms: state.Odbiory.Rooms.rooms,
+	rooms: state.Odbiory.Rooms.byId,
 	showUnitedJobs: state.Odbiory.OdbioryComponent.awansowanie.showUnitedJobs,
 	showDifferentialJobs: state.Odbiory.OdbioryComponent.awansowanie.showDifferentialJobs,
 	jobs_data: getSplitedJobsByKey(state),
@@ -205,7 +205,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-	changeJobPercentageValue,
+	// changeJobPercentageValue,
+	upgradeJob,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PluralJobsComponent);

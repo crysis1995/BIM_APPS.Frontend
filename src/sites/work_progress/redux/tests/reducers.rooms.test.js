@@ -17,6 +17,7 @@ describe('TEST ROOMS REDUCER', () => {
 		rooms_loading: false,
 		rooms_error: {},
 		selected_rooms: [],
+		selected_department: null,
 		from_selector: false,
 	};
 	let state;

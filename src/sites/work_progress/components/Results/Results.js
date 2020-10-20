@@ -15,7 +15,7 @@ function ResultsListComponent({ jobs_data, colorResultByRoom }) {
 						<OverlayTrigger
 							key={v4()}
 							placement="top"
-							overlay={<Tooltip id={`tooltip-top`}>{`${percentage_value}%`}</Tooltip>}>
+							overlay={<Tooltip id={`tooltip-top`}>{`${percentage_value * 100}%`}</Tooltip>}>
 							<ListGroup.Item
 								action
 								active={isActive}
@@ -27,7 +27,7 @@ function ResultsListComponent({ jobs_data, colorResultByRoom }) {
 										{summary_current_value} m<sup>2</sup> / {summary_all_value} m<sup>2</sup>
 									</span>
 								</div>
-								<ProgressBar results_percentage_area={percentage_value} />
+								<ProgressBar results_percentage_area={percentage_value * 100} />
 							</ListGroup.Item>
 						</OverlayTrigger>
 					),

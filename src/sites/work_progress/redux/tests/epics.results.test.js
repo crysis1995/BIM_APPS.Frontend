@@ -54,7 +54,7 @@ describe('TEST RESULTS EPICS', () => {
 					ctx.data({
 						acceptanceReferenceJobsConnection: {
 							aggregate: {
-								sum: { value_calculated: 50 },
+								sum: { current_value: 50 },
 								count: 3,
 							},
 							values: [
@@ -86,7 +86,7 @@ describe('TEST RESULTS EPICS', () => {
 						acceptanceReferenceJobsConnection: {
 							aggregate: {
 								sum: {
-									value_calculated: 100,
+									current_value: 100,
 								},
 								count: 3,
 							},

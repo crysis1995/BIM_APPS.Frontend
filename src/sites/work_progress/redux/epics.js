@@ -28,7 +28,7 @@ export const getRoomData = (action$, state$) =>
 					of(jobsLoadingEnd()),
 				);
 			} else {
-				return from(fetchObjectsByRoom(state$.value.Odbiory.Rooms.rooms[selectedRoom].id)).pipe(
+				return from(fetchObjectsByRoom(state$.value.Odbiory.Rooms.byId[selectedRoom].id)).pipe(
 					mergeMap((data) =>
 						concat(
 							of(fetchObjectsSetData(selectedRoom, data)),

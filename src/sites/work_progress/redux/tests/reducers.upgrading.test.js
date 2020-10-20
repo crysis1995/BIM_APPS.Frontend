@@ -1,5 +1,5 @@
 import { cleanSelection, removeRoomFromSelection } from '../actions/rooms_actions';
-import { setUpgradingData } from '../actions/upgrading_actions';
+import { setUpgradingData, updateJobInStore } from '../actions/upgrading_actions';
 import UpgradingReducer from '../reducers/upgrading_reducers';
 
 describe('TEST UPGRADING REDUCER', () => {
@@ -465,6 +465,103 @@ describe('TEST UPGRADING REDUCER', () => {
 					},
 					current_value: {
 						'123456': (12 + 325) * 0.1,
+					},
+				},
+				'2': {
+					particular_values: {
+						'123456': [12, 325],
+					},
+					object_ids: {
+						'123456': ['111115', '5416351'],
+					},
+					summary_value: {
+						'123456': 12 + 325,
+					},
+					percentage_value: {
+						'123456': 0.1,
+					},
+					reference_job: {
+						'123456': '555',
+					},
+					current_value: {
+						'123456': (12 + 325) * 0.1,
+					},
+				},
+			},
+		});
+	});
+	test('test updateJobInStore action', () => {
+		const revit_id = '123456';
+		const percentage_value = 0.3;
+		const reference_job = '666';
+		const job_id = '1';
+		const action = updateJobInStore(job_id, revit_id, percentage_value, reference_job);
+		state = {
+			...initialState,
+			byJobId: {
+				'1': {
+					particular_values: {
+						'123456': [12, 325],
+					},
+					object_ids: {
+						'123456': ['111115', '5416351'],
+					},
+					summary_value: {
+						'123456': 12 + 325,
+					},
+					percentage_value: {
+						'123456': 0.1,
+					},
+					reference_job: {
+						'123456': '555',
+					},
+					current_value: {
+						'123456': (12 + 325) * 0.1,
+					},
+				},
+				'2': {
+					particular_values: {
+						'123456': [12, 325],
+					},
+					object_ids: {
+						'123456': ['111115', '5416351'],
+					},
+					summary_value: {
+						'123456': 12 + 325,
+					},
+					percentage_value: {
+						'123456': 0.1,
+					},
+					reference_job: {
+						'123456': '555',
+					},
+					current_value: {
+						'123456': (12 + 325) * 0.1,
+					},
+				},
+			},
+		};
+		expect(UpgradingReducer(state, action)).toEqual({
+			...state,
+			byJobId: {
+				'1': {
+					particular_values: {
+						'123456': [12, 325],
+					},
+					object_ids: {
+						'123456': ['111115', '5416351'],
+					},
+					summary_value: {
+						'123456': 12 + 325,
+					},
+					percentage_value: {
+						'123456': 0.3,
+					},
+					reference_job: {
+						'123456': '666',
+					},
+					current_value: {
+						'123456': (12 + 325) * 0.3,
 					},
 				},
 				'2': {

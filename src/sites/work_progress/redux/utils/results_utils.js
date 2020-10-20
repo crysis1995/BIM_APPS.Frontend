@@ -16,7 +16,7 @@ export const prepareResultsByJob = (response) => {
 	if (response[0].data && response[1].data) {
 		summary_all_value = RoundNumber(response[0].data.acceptanceObjectsConnection.aggregate.sum.area || 0);
 		summary_current_value = RoundNumber(
-			response[1].data.acceptanceReferenceJobsConnection.aggregate.sum.value_calculated || 0,
+			response[1].data.acceptanceReferenceJobsConnection.aggregate.sum.current_value || 0,
 		);
 		elements = response[1].data.acceptanceReferenceJobsConnection.values.reduce(
 			(prev, acc) => ({

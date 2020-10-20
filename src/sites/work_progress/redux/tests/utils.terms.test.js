@@ -281,7 +281,7 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 
 		const user = {
 			id: '1',
-			project_roles: [{ project: { id: '1' }, project_role: { name: 'asd' } }],
+			project_roles: { '1': { project: { id: '1' }, project_role: { name: 'asd' } } },
 		};
 
 		const project = {
@@ -504,7 +504,7 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 
 		const user = {
 			id: '1',
-			project_roles: [{ project: { id: '1' }, project_role: { name: 'admin' } }],
+			project_roles: { '1': { project: { id: '1' }, project_role: { name: 'admin' } } },
 		};
 
 		const project = {
@@ -730,7 +730,7 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 
 		const user = {
 			id: '1',
-			project_roles: [{ project: { id: '1' }, project_role: { name: 'engineer' } }],
+			project_roles: { '1': { project: { id: '1' }, project_role: { name: 'engineer' } } },
 		};
 
 		const project = {
@@ -983,7 +983,7 @@ describe('TEST NORMALIZE_TERMS_DATA FUNCTION', () => {
 
 		const user = {
 			id: '1',
-			project_roles: [{ project: { id: '1' }, project_role: { name: 'engineer' } }],
+			project_roles: { '1': { project: { id: '1' }, project_role: { name: 'engineer' } } },
 		};
 
 		const project = {

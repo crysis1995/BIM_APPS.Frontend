@@ -3,9 +3,10 @@ import { combineEpics } from 'redux-observable';
 
 import { getRoomData } from './redux/epics';
 import { selectLevel } from './redux/epics/levels_epics';
-import { fetchResultsForLevel } from './redux/epics/results_epics';
+import { fetchResultsForLevel, updateResultByUpgrading } from './redux/epics/results_epics';
 import { fetchRoomsData, selectRoom } from './redux/epics/rooms_epics';
 import { getDepartmentsWithTerms } from './redux/epics/terms_epics';
+import { upgradeJobEpic } from './redux/epics/upgrading_epics';
 
 import Jobs from './redux/reducers/jobs_reducers';
 import Levels from './redux/reducers/levels_reducers';
@@ -28,10 +29,12 @@ export const OdbioryReducer = combineReducers({
 });
 
 export const OdbioryEpics = combineEpics(
+	upgradeJobEpic,
 	fetchResultsForLevel,
 	selectRoom,
 	getRoomData,
 	selectLevel,
 	fetchRoomsData,
 	getDepartmentsWithTerms,
+	updateResultByUpgrading,
 );

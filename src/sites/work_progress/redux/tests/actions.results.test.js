@@ -7,11 +7,11 @@ import {
 	colorResultByRoom,
 	fetchResultEnd,
 	fetchResultError,
-	fetchResultsForLevel,
 	fetchResultStart,
 	resetResults,
 	resultsColorByRoom,
 	setResultsByJobId,
+	updateResultsByJobId,
 } from '../actions/results_actions';
 import {
 	CLEAN_RESULTS,
@@ -21,6 +21,7 @@ import {
 	RESULTS_FETCH_ERROR,
 	RESULTS_FETCH_START,
 	RESULTS_SET_DATA,
+	RESULTS_UPDATE_DATA,
 } from '../types';
 import { fetchSummaryData } from '../utils/results_utils';
 
@@ -97,6 +98,16 @@ describe('TEST RESULTS ACTIONS', () => {
 		};
 		expect(setResultsByJobId('1', { asd: 'asd' })).toEqual(expected);
 	});
+	test('updateResultsByJobId', () => {
+		const expected = {
+			type: RESULTS_UPDATE_DATA,
+			jobId: '1',
+			summary_value: 50,
+			revit_id: '111111',
+			percentage_value: 1,
+		};
+		expect(updateResultsByJobId('1', 50, '111111', 1)).toEqual(expected);
+	});
 });
 
 describe('TEST fetchResultsForLevel action', () => {
@@ -144,7 +155,7 @@ describe('TEST fetchResultsForLevel action', () => {
 					ctx.data({
 						acceptanceReferenceJobsConnection: {
 							aggregate: {
-								sum: { value_calculated: 50 },
+								sum: { current_value: 50 },
 								count: 3,
 							},
 							values: [
@@ -185,7 +196,7 @@ describe('TEST fetchResultsForLevel action', () => {
 							acceptanceReferenceJobsConnection: {
 								aggregate: {
 									sum: {
-										value_calculated: 100,
+										current_value: 100,
 									},
 									count: 3,
 								},
@@ -243,7 +254,7 @@ describe('TEST fetchResultsForLevel action', () => {
 				data: {
 					acceptanceReferenceJobsConnection: {
 						aggregate: {
-							sum: { value_calculated: 50 },
+							sum: { current_value: 50 },
 							count: 3,
 						},
 						values: [

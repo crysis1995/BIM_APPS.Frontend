@@ -1,8 +1,3 @@
-import { graphql } from 'msw';
-import { setupServer } from 'msw/node';
-import { createEpicMiddleware } from 'redux-observable';
-import { rootEpic } from '../../../../reducers';
-import { fetchSummaryAreaByLevel, setSummaryValueToJob } from '../actions/jobs_actions';
 import {
 	cleanResults,
 	fetchResultEnd,
@@ -11,6 +6,7 @@ import {
 	resetResults,
 	resultsColorByRoom,
 	setResultsByJobId,
+	updateResultsByJobId,
 } from '../actions/results_actions';
 import Results_reducers from '../reducers/results_reducers';
 
@@ -193,6 +189,64 @@ describe('TEST RESULTS REDUCER', () => {
 		expect(Results_reducers(state, action)).toEqual({
 			...state,
 			byJobId: { '1': { inny_klucz: 'wartość' } },
+		});
+	});
+	test('should dispatch updateResultsByJobId - increse percentage', () => {
+		const action = updateResultsByJobId('1', 60, '111111', 1);
+		state = {
+			...initial,
+			byJobId: {
+				'1': {
+					summary_all_value: 300,
+					summary_current_value: 30,
+					percentage_value: 0.1,
+					elements: {
+						'111111': 0.5,
+					},
+				},
+			},
+		};
+		expect(Results_reducers(state, action)).toEqual({
+			...state,
+			byJobId: {
+				'1': {
+					summary_all_value: 300,
+					summary_current_value: 60,
+					percentage_value: 0.2,
+					elements: {
+						'111111': 1,
+					},
+				},
+			},
+		});
+	});
+	test('should dispatch updateResultsByJobId - decrese percentage', () => {
+		const action = updateResultsByJobId('1', 60, '111111', 0.5);
+		state = {
+			...initial,
+			byJobId: {
+				'1': {
+					summary_all_value: 300,
+					summary_current_value: 60,
+					percentage_value: 0.2,
+					elements: {
+						'111111': 1,
+					},
+				},
+			},
+		};
+		expect(Results_reducers(state, action)).toEqual({
+			...state,
+			byJobId: {
+				'1': {
+					summary_all_value: 300,
+					summary_current_value: 30,
+					percentage_value: 0.1,
+					elements: {
+						'111111': 0.5,
+					},
+				},
+			},
 		});
 	});
 });

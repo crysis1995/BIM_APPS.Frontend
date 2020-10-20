@@ -8,7 +8,8 @@ import {
 	RESULTS_FETCH_END,
 	RESULTS_FETCH_ERROR,
 	RESULTS_SET_DATA,
-	RESULTS_UPDATE_DATA, SET_INITIAL
+	RESULTS_UPDATE_DATA,
+	SET_INITIAL,
 } from '../types';
 
 const initialState = {
@@ -31,8 +32,8 @@ const ResultsReducer = (state = initialState, action) => {
 				...state,
 				loading: false,
 			};
-		// case RESULTS_UPDATE_DATA:
-		// 	return updateResultByJobId(state, action);
+		case RESULTS_UPDATE_DATA:
+			return updateResultByJobId(state, action);
 		case RESULTS_SET_DATA:
 			return setResultByJobId(state, action);
 		case RESULTS_FETCH_ERROR:
@@ -82,33 +83,26 @@ function setResultByJobId(state, { jobId, result }) {
 	return { ...state };
 }
 
-// function updateResultByJobId(state, { jobId, summary_all_value, summary_current_value, percentage_value, elements }) {
-// 	if (!jobId) return state;
-// 	if (dotProp.get(state, `byJobId.${jobId}`)) {
-// 		const old_summary_all_value = dotProp.get(state, `byJobId.${jobId}.summary_all_value`);
-// 		const old_summary_current_value = dotProp.get(state, `byJobId.${jobId}.summary_current_value`);
-// 		const old_elements = dotProp.get(state, `byJobId.${jobId}.elements`);
-// 		if (old_summary_all_value) {
-// 			dotProp.set(
-// 				state,
-// 				`byJobId.${jobId}.summary_all_value`,
-// 				RoundNumber(old_summary_all_value + summary_all_value),
-// 			);
-// 		}
-// 		if (old_summary_current_value) {
-// 			dotProp.set(
-// 				state,
-// 				`byJobId.${jobId}.summary_current_value`,
-// 				RoundNumber(old_summary_current_value + summary_current_value),
-// 			);
-// 		}
-// 		if ( old_elements ){
-// 			dotProp.set(state, `byJobId.${jobId}.elements`)
-// 		}
-// 		dotProp.set(
-// 			state,
-// 			`byJobId.${jobId}.summary_all_value`,
-// 			RoundNumber(old_summary_all_value + summary_all_value),
-// 		);
-// 	}
-// }
+function updateResultByJobId(state, { jobId, summary_value, revit_id, percentage_value }) {
+	let element_percentage = percentage_value;
+	if (dotProp.get(state, `byJobId.${jobId}.elements.${revit_id}`)) {
+		const prev_percentage_value = dotProp.get(state, `byJobId.${jobId}.elements.${revit_id}`);
+		element_percentage = percentage_value - prev_percentage_value;
+	}
+	dotProp.set(state, `byJobId.${jobId}.elements.${revit_id}`, percentage_value);
+
+	dotProp.set(
+		state,
+		`byJobId.${jobId}.summary_current_value`,
+		RoundNumber(dotProp.get(state, `byJobId.${jobId}.summary_current_value`) + summary_value * element_percentage),
+	);
+	dotProp.set(
+		state,
+		`byJobId.${jobId}.percentage_value`,
+		RoundNumber(
+			dotProp.get(state, `byJobId.${jobId}.summary_current_value`) /
+				dotProp.get(state, `byJobId.${jobId}.summary_all_value`),
+		),
+	);
+	return { ...state };
+}

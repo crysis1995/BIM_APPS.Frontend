@@ -1,3 +1,5 @@
+import dotProp from 'dot-prop';
+import { normalize } from '../../../utils/normalize';
 import {
 	USER_FETCH_DATA,
 	USER_LOGIN_END,
@@ -9,30 +11,36 @@ import {
 } from './actions';
 
 const initialState = {
-	user: { id: {} },
+	user: { id: null },
 	error: '',
 	info: '',
 	credentials: {
 		access_token: null,
 		expires_in: null,
 	},
-	project: { id: {} },
+	project: { id: null },
 	is_login: false,
 	loading: false,
 };
 
+/**
+ *
+ * @param state {Object}
+ * @param username {string}
+ * @param email {string}
+ * @param project_roles {Array<Object>}
+ */
+function setUserData(state, { username, email, project_roles }) {
+	dotProp.set(state, 'user.username', username);
+	dotProp.set(state, 'user.email', email);
+	dotProp.set(state, 'user.project_roles', normalize(project_roles, 'project.id'));
+	return { ...state };
+}
+
 const CMSLoginReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case USER_FETCH_DATA:
-			return {
-				...state,
-				user: {
-					...state.user,
-					username: action.username,
-					email: action.email,
-					project_roles: action.project_roles,
-				},
-			};
+			return setUserData(state, action);
 		case USER_SET_CURRENT_PROJECT:
 			return {
 				...state,
@@ -68,14 +76,13 @@ const CMSLoginReducer = (state = initialState, action) => {
 			};
 		case USER_LOGOUT:
 			return {
-				...state,
 				is_login: false,
 				...initialState,
 			};
 		case USER_PASSWORD_RESET:
 			return {
 				...state,
-				isLogin: true,
+				is_login: true,
 				info: action.info,
 			};
 		default:

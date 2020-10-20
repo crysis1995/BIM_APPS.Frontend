@@ -46,32 +46,6 @@ export const fetchUserData = (access_token, user_id) => {
 	});
 };
 
-export const getUserFromLocalStorage = () => {
-	let user = localStorage.getItem('user');
-	let user_token = localStorage.getItem('user_token');
-	let data = {};
-	if (user && user_token) {
-		user = JSON.parse(user);
-		data = { user, user_token };
-	}
-	return data;
-};
-
-export const saveUserDataToLocalStorage = (user, user_token) => {
-	localStorage.setItem('user', JSON.stringify(user));
-	localStorage.setItem('user_token', user_token);
-};
-
-export const cleanUserDataInLocalStorage = () => {
-	localStorage.removeItem('user');
-	localStorage.removeItem('user_token');
-};
-
-export const isExpired = (token) => {
-	const { exp } = jwtDecoder(token);
-	return new Date() > new Date(exp * 1000);
-};
-
 export const resetPasswordAPI = async (password, access_token) => {
 	const { id } = jwtDecoder(access_token);
 	return graphQLClient(access_token).mutate({
@@ -86,4 +60,30 @@ export const resetPasswordAPI = async (password, access_token) => {
 		`,
 		variables: { p: password, u: id },
 	});
+};
+
+export const getUserFromLocalStorage = () => {
+	let user = localStorage.getItem('user');
+	let user_token = localStorage.getItem('user_token');
+	let data = {};
+	if (user && user_token) {
+		user = JSON.parse(user);
+		data = { user, user_token };
+	}
+	return data;
+};
+
+export const saveUserDataToLocalStorage = (user, user_token) => {
+	localStorage.setItem('user', typeof user === 'string' ? user : JSON.stringify(user));
+	localStorage.setItem('user_token', user_token);
+};
+
+export const cleanUserDataInLocalStorage = () => {
+	localStorage.removeItem('user');
+	localStorage.removeItem('user_token');
+};
+
+export const isExpired = (token) => {
+	const { exp } = jwtDecoder(token);
+	return new Date() > new Date(exp * 1000);
 };

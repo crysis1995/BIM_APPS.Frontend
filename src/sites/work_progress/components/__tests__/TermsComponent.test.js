@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, cleanup } from '@testing-library/react';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
@@ -18,6 +18,10 @@ const renderWithRedux = (component, { initialState, store = createStore(rootRedu
 };
 
 describe('TESTING TERMS COMPONENT', () => {
+	afterEach(() => {
+		cleanup();
+	});
+
 	test('should render without creashing', () => {
 		const { getByText, getByRole } = renderWithRedux(<TermsComponent />, {
 			initialState: {},
@@ -28,11 +32,12 @@ describe('TESTING TERMS COMPONENT', () => {
 		const { getByText, getAllByRole } = renderWithRedux(<TermsComponent />, {
 			initialState: {},
 		});
-		expect(getAllByRole('columnheader').length).toBe(4);
+		expect(getAllByRole('columnheader').length).toBe(5);
 		expect(getByText('Nazwa roboty')).toBeInTheDocument();
-		expect(getByText('Data rzeczywistego rozpoczęcia')).toBeInTheDocument();
-		expect(getByText('Data planowanego zakończenia')).toBeInTheDocument();
-		expect(getByText('Data rzeczywistego zakończenia')).toBeInTheDocument();
+		expect(getByText('DRR')).toBeInTheDocument();
+		expect(getByText('DPZ')).toBeInTheDocument();
+		expect(getByText('DPZwPB')).toBeInTheDocument();
+		expect(getByText('DRZ')).toBeInTheDocument();
 	});
 	test('should render properly jobs and their names', () => {
 		const { getByText, getAllByRole } = renderWithRedux(<TermsComponent />, {
@@ -104,7 +109,7 @@ describe('TESTING TERMS COMPONENT', () => {
 				},
 			},
 		});
-		expect(getAllByRole('cell').length).toBe(16);
+		expect(getAllByRole('cell').length).toBe(20);
 		expect(getByText('pierwszy')).toBeInTheDocument();
 		expect(getByText('drugi')).toBeInTheDocument();
 		expect(getByText('malowanie stropów, słupów, ścian nad sufitem podwieszanym')).toBeInTheDocument();
@@ -113,7 +118,7 @@ describe('TESTING TERMS COMPONENT', () => {
 		expect(getByText('Tynk - GK')).toBeInTheDocument();
 	});
 	test('should render jobs with data inputs', () => {
-		const { container } = renderWithRedux(<TermsComponent />, {
+		const { container, getByTestId } = renderWithRedux(<TermsComponent />, {
 			initialState: {
 				Odbiory: {
 					Jobs: {
@@ -157,11 +162,27 @@ describe('TESTING TERMS COMPONENT', () => {
 				},
 			},
 		});
-		expect(container.querySelectorAll('.DayPickerInput').length).toBe(3);
+		const date1 = new Date(2020, 0, 1).toString();
+		const input1 = screen.getByTestId('data-input-1');
+		const date2 = new Date(2020, 1, 1).toString();
+		const input2 = screen.getByTestId('data-input-2');
+
+		const input3 = screen.getByTestId('data-input-3');
+		const date4 = new Date(2020, 2, 1).toString();
+		const input4 = screen.getByTestId('data-input-4');
+
+		expect(container.querySelectorAll('.form-control').length).toBe(4);
 		expect(screen.getByText('test1')).toBeInTheDocument();
-		expect(screen.getAllByDisplayValue('2020-1-1').length).toBe(1);
-		expect(screen.getAllByDisplayValue('2020-2-1').length).toBe(1);
-		expect(screen.getAllByDisplayValue('2020-3-1').length).toBe(1);
+
+		expect(screen.getAllByTestId('data-input-1').length).toBe(1);
+		expect(screen.getAllByTestId('data-input-2').length).toBe(1);
+		expect(screen.getAllByTestId('data-input-3').length).toBe(1);
+		expect(screen.getAllByTestId('data-input-4').length).toBe(1);
+
+		expect(input1).toHaveAttribute('value', date1);
+		expect(input2).toHaveAttribute('value', date2);
+		expect(input3).toHaveAttribute('value', date4);
+		expect(input4).toHaveAttribute('value', date4);
 	});
 	test('should handle change department', () => {
 		const { getByTestId } = renderWithRedux(<TermsComponent />, {

@@ -1,3 +1,4 @@
+import { normalize } from '../../../utils/normalize';
 import {
 	cleanUserDataInLocalStorage,
 	fetchUserData,
@@ -35,11 +36,18 @@ export const userLogoutEnd = () => ({
 	type: USER_LOGOUT,
 });
 
-const userResetPassword = (info) => ({
+export const userResetPassword = (info) => ({
 	type: USER_PASSWORD_RESET,
 	info,
 });
 
+/**
+ *
+ * @param username {String}
+ * @param email {String}
+ * @param project_roles {Array}
+ * @return {{project_roles: *, type: string, email: *, username: *}}
+ */
 export const setUserData = ({ username, email, project_roles }) => ({
 	type: USER_FETCH_DATA,
 	username,
@@ -86,6 +94,12 @@ const getUserData = (checkbox) => async (dispatch, getState) => {
 		if (data) {
 			dispatch(setUserData({ ...data.user }));
 			if (checkbox) saveUserDataToLocalStorage(data.user, access_token);
+			const { project_roles } = getState().CMSLogin.user;
+			if (Object.keys(project_roles).length === 1) {
+				const project_id = Object.keys(project_roles);
+				dispatch(setActiveProject(project_id));
+			}
+
 			dispatch(setActiveProject());
 		}
 		if (errors) {
@@ -96,13 +110,11 @@ const getUserData = (checkbox) => async (dispatch, getState) => {
 	}
 };
 
-const setActiveProject = () => (dispatch, getState) => {
+export const setActiveProject = (project_id) => (dispatch, getState) => {
 	const { project_roles } = getState().CMSLogin.user;
-	if (Array.isArray(project_roles)) {
-		if (project_roles.length === 1) {
-			const { id, name, model_urn } = project_roles[0].project;
-			dispatch(setCurrentProject(id, model_urn, name));
-		}
+	if (!!project_id && project_roles[project_id]) {
+		const { id, name, model_urn } = project_roles[project_id].project;
+		dispatch(setCurrentProject(id, model_urn, name));
 	}
 };
 

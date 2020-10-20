@@ -25,6 +25,13 @@ export const fetchAllJobsFromAPI = () => {
 	});
 };
 
+/**
+ *
+ * @param objects {Object}
+ * @param param_name {string}
+ * @param condition {Function}
+ * @return {*}
+ */
 export const addParameterWithValue = (objects, param_name = '', condition) => {
 	if (!param_name || !condition) return objects;
 	let newObj = { ...objects };

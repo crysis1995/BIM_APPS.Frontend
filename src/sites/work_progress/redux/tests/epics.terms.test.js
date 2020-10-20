@@ -73,7 +73,19 @@ describe('TEST TERMS EPICS - getDepartmentsWithTerms', () => {
 		const actual = await getDepartmentsWithTerms(action$, {
 			value: {
 				CMSLogin: {
-					user: { id: '1', project_roles: [{ project: { id: '1' }, project_role: { name: 'noname' } }] },
+					user: {
+						id: '1',
+						project_roles: {
+							'1': {
+								project: {
+									id: '1',
+								},
+								project_role: {
+									name: 'noname',
+								},
+							},
+						},
+					},
 					project: { id: '1' },
 				},
 				Odbiory: {

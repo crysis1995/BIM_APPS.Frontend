@@ -5,7 +5,7 @@ import JobsSummary from './JobsSummary';
 
 function Tools(props) {
 	return (
-		<Permissions condition={false} show_alert={false}>
+		<Permissions condition={true} show_alert={false}>
 			<div className="mb-4">
 				<div>Narzędzia aplikacji</div>
 				<div className="pt-1">
@@ -16,7 +16,7 @@ function Tools(props) {
 	);
 }
 
-const mapStateToProps = ({ CMSLogin }) => ({ user: CMSLogin.user, project:CMSLogin.project });
+const mapStateToProps = ({ CMSLogin: { user, project } }) => ({ user, project });
 
 const mapDispatchToProps = {};
 

@@ -8,7 +8,7 @@ class AutodeskLogin extends React.Component {
 	}
 	render() {
 		return (
-			<div className="mr-5 my-auto">
+			<div className="mr-4 my-auto">
 				<span className="align-middle mr-2 font-weight-bold">BIM360: </span>
 				{this.props.Autodesk.login_3_legged.access_token ? (
 					<span className="align-middle badge badge-success">ONLINE</span>

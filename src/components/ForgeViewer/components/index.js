@@ -57,16 +57,22 @@ class Viewer extends Component {
 	}
 
 	colorizeResults() {
+		const { active_job_id, status } = this.props.Odbiory.Results;
 		try {
-			const { active_job_id, status } = this.props.Odbiory.Results;
-			const { jobs } = this.props.Odbiory.Jobs;
-			const { model_rooms } = this.props.ForgeViewer;
-			if (status === 'color' && jobs && model_rooms) {
-				this.colorByRoom(jobs[active_job_id], model_rooms);
-			}
-			if (status === 'clean') {
+			if (this.props.color && status === 'color') {
+				this.colorByRoom(this.props.colored_element);
+			} else {
 				this.viewer.clearThemingColors();
 			}
+
+			// const { jobs } = this.props.Odbiory.Jobs;
+			// const { model_rooms } = this.props.ForgeViewer;
+			// if (status === 'color' && jobs && model_rooms) {
+			// 	this.colorByRoom(jobs[active_job_id], model_rooms);
+			// }
+			// if (status === 'clean') {
+			// 	this.viewer.clearThemingColors();
+			// }
 		} catch (e) {
 			console.log(e);
 		}
@@ -154,7 +160,8 @@ class Viewer extends Component {
 
 			this.viewer.addEventListener(
 				Autodesk.Viewing.SELECTION_CHANGED_EVENT,
-				debounce(({ dbIdArray }) => {
+				// debounce(
+				({ dbIdArray }) => {
 					if (dbIdArray.length > 0) {
 						this.viewer.model.getBulkProperties(
 							dbIdArray,
@@ -181,7 +188,7 @@ class Viewer extends Component {
 												selectedElement.toString(),
 										);
 										const selectedRoom = selectedElement.filter(
-											(e) => this.props.Odbiory.Rooms.rooms[e],
+											(e) => this.props.Odbiory.Rooms.byId[e],
 										);
 										if (selectedRoom) {
 											// this.props.setSelectedRoom(selectedRoom, 'add-specyfic', false);
@@ -202,33 +209,34 @@ class Viewer extends Component {
 					} else {
 						// this.props.setSelectedRoom([], 'clear', false);
 					}
-				}, 500), // opóźnienie kolekcjonowania i wykonywania akcji zaznaczania roomów
+				},
+				// , 500), // opóźnienie kolekcjonowania i wykonywania akcji zaznaczania roomów
 			);
 		});
 	}
 
-	colorByRoom(jobData, viewerModelMap) {
-		const {
-			unit,
-			results: { elements },
-		} = jobData;
-		const setting_color_map = config.units['area'].color_map;
-		let elemTable = [];
-		for (let revit_id in viewerModelMap) {
-			const percentage_value = elements[revit_id] * 100;
-			let colorIndex = 1;
-			if (percentage_value) {
-				colorIndex = Object.keys(setting_color_map).filter((id) =>
-					setting_color_map[id].condition(percentage_value),
-				)[0];
-			}
-			const color = hexToRgb(setting_color_map[colorIndex].color, true);
-			elemTable.push({
-				dbID: viewerModelMap[revit_id].dbID,
-				color: new THREE.Vector4(color.r, color.g, color.b, 1),
-			});
-		}
-		elemTable.forEach((e) => {
+	colorByRoom(colored_element) {
+		// const {
+		// 	unit,
+		// 	results: { elements },
+		// } = jobData;
+		// const setting_color_map = config.units['area'].color_map;
+		// let elemTable = [];
+		// for (let revit_id in viewerModelMap) {
+		// 	const percentage_value = elements[revit_id] * 100;
+		// 	let colorIndex = 1;
+		// 	if (percentage_value) {
+		// 		colorIndex = Object.keys(setting_color_map).filter((id) =>
+		// 			setting_color_map[id].condition(percentage_value),
+		// 		)[0];
+		// 	}
+		// 	const color = hexToRgb(setting_color_map[colorIndex].color, true);
+		// 	elemTable.push({
+		// 		dbID: viewerModelMap[revit_id].dbID,
+		// 		color: new THREE.Vector4(color.r, color.g, color.b, 1),
+		// 	});
+		// }
+		colored_element.forEach((e) => {
 			this.viewer.setThemingColor(e.dbID, e.color, this.viewer.model);
 		});
 	}
@@ -240,6 +248,8 @@ class Viewer extends Component {
 
 const mapStateToProps = ({ ForgeViewer, Autodesk, Odbiory, CMSLogin }) => ({
 	rooms_data_loading: ForgeViewer.model_rooms_loading || Odbiory.Rooms.rooms_loading,
+	colored_element: ForgeViewer.colored_element,
+	color: ForgeViewer.color,
 	Autodesk,
 	CMSLogin,
 	ForgeViewer,
@@ -251,7 +261,6 @@ const mapDispatchToProps = {
 	setSheetsSuccess,
 	initializeViewer,
 	setViewerRooms,
-	// setSelectedRoom,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Viewer);

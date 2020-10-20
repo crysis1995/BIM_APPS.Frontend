@@ -1,5 +1,6 @@
 import dotProp from 'dot-prop';
-import * as types from '../types';
+import { RoundNumber } from '../../../../utils/RoundNumber';
+import { CLEAN_SELECTION, REMOVE_ROOM_FROM_SELECTION, UPGRADING_SET_DATA, UPGRADING_UPDATE_JOB } from '../types';
 
 const initialState = {
 	byJobId: {},
@@ -9,11 +10,13 @@ const initialState = {
 
 const UpgradingReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case types.UPGRADING_SET_DATA:
+		case UPGRADING_UPDATE_JOB:
+			return updateJob(state, action);
+		case UPGRADING_SET_DATA:
 			return setData(state, action);
-		case types.REMOVE_ROOM_FROM_SELECTION:
+		case REMOVE_ROOM_FROM_SELECTION:
 			return removeRoomFromUpgrading(state, action);
-		case types.CLEAN_SELECTION:
+		case CLEAN_SELECTION:
 			return removeAllRoomsFromUpgrading(state);
 		default:
 			return state;
@@ -51,6 +54,19 @@ function removeAllRoomsFromUpgrading(state) {
 				dotProp.delete(state, `byJobId.${job_id}.${data_key}.${revit_id}`),
 			),
 		),
+	);
+	return { ...state };
+}
+
+// function updateJob(state, { job_id, revit_id, percentage_value, current_value, reference_job }) {
+function updateJob(state, { job_id, revit_id, percentage_value, reference_job }) {
+	console.log(job_id, revit_id, percentage_value, reference_job);
+	dotProp.set(state, `byJobId.${job_id}.percentage_value.${revit_id}`, percentage_value);
+	dotProp.set(state, `byJobId.${job_id}.reference_job.${revit_id}`, reference_job);
+	dotProp.set(
+		state,
+		`byJobId.${job_id}.current_value.${revit_id}`,
+		RoundNumber(dotProp.get(state, `byJobId.${job_id}.summary_value.${revit_id}`) * percentage_value),
 	);
 	return { ...state };
 }
