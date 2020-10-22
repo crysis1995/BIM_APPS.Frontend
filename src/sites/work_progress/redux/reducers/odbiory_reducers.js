@@ -5,6 +5,7 @@ import {
 	CHANGE_VISIBILITY_DIFFERENTIAL_JOBS,
 	SET_ACTIVE_TAB,
 	CHANGE_UPGRADING_BY_TYPE,
+	ODBIORY_COMPONENT_SET_ACCEPTANCE_TYPE,
 } from '../types';
 
 import { CONSTANTS, UPGRADING_BY } from '../types/constans';
@@ -12,6 +13,7 @@ import { CONSTANTS, UPGRADING_BY } from '../types/constans';
 const initialState = {
 	started: false,
 	active_tab: CONSTANTS.RESULTS,
+	type: null,
 	awansowanie: {
 		is_active: false,
 		showUnitedJobs: true,
@@ -28,6 +30,11 @@ const initialState = {
 
 const OdbioryComponentReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case ODBIORY_COMPONENT_SET_ACCEPTANCE_TYPE:
+			return {
+				...state,
+				type: action.acceptance_type,
+			};
 		case ODBIORY_COMPONENT_STARTED:
 			return {
 				...state,

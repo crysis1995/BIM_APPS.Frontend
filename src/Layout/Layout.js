@@ -19,8 +19,6 @@ const Settings = React.lazy(() => import('../components/CMSLogin/components/sett
 
 class Layout extends React.Component {
 	componentDidMount() {
-
-		// console.log(this.props)
 		this.props.logUserIfValid();
 	}
 	render() {
@@ -35,21 +33,28 @@ class Layout extends React.Component {
 							paddingRight: 0,
 						}}>
 						<Header {...this.props} />
-						<Row noGutters style={{ minHeight: window.innerHeight - 56 }} className="justify-content-md-center">
+						<Row
+							noGutters
+							style={{ minHeight: window.innerHeight - 56 }}
+							className="justify-content-md-center">
 							<Switch>
 								<Route path="/login" component={Login} />
 								<Route path="/settings" component={Settings} />
+
+								<Route
+									path={['/work_progress/:type', '/work_progress']}
+									component={WorkProgressLayout}
+								/>
+								<Route path="/work_acceptance" component={WorkAcceptanceLayout} />
+								<Route path="/schedule" component={ScheduleLayout} />
 								<Route exact path="/">
-									<Col>
+									<Col >
 										<div className="p-5">
 											<h1>Strona główna aplikacji BIM</h1>
 											<p>Na feedback czekamy tu - bimspace@warbud.pl</p>
 										</div>
 									</Col>
 								</Route>
-								<Route path="/work_progress" component={WorkProgressLayout} />
-								<Route path="/work_acceptance" component={WorkAcceptanceLayout} />
-								<Route path="/schedule" component={ScheduleLayout} />
 							</Switch>
 						</Row>
 					</Container>

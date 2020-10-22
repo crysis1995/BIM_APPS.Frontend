@@ -5,13 +5,18 @@ import {
 	ODBIORY_COMPONENT_STARTED,
 	SET_ACTIVE_TAB,
 	CHANGE_UPGRADING_BY_TYPE,
+	ODBIORY_COMPONENT_SET_ACCEPTANCE_TYPE,
 } from '../types';
 
 import { CONSTANTS } from '../types/constans';
 import { fetchAllJobs } from './jobs_actions';
 import { cleanResults } from './results_actions';
 
-//          ACTIONS
+/*
+ *           SIMPLE ACTIONS
+ *
+ *
+ * */
 const componentStart = () => ({
 	type: ODBIORY_COMPONENT_STARTED,
 });
@@ -34,6 +39,22 @@ export const changeVisibilityDifferentialJobs = (value) => ({
 	type: CHANGE_VISIBILITY_DIFFERENTIAL_JOBS,
 	value,
 });
+
+export const setAcceptanceType = (acceptance_type) => ({
+	type: ODBIORY_COMPONENT_SET_ACCEPTANCE_TYPE,
+	acceptance_type,
+});
+
+/*
+ *
+ *
+ *
+ *           COMPLEX ACTIONS
+ *
+ *
+ *
+ *
+ * */
 
 export const componentStarted = () => (dispatch, getState) => {
 	const { started } = getState().Odbiory.OdbioryComponent;
