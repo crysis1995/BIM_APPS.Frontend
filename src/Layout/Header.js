@@ -1,9 +1,10 @@
 import React from 'react';
-import { Nav, Navbar } from 'react-bootstrap';
+import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 
 import AutodeskLogin from '../components/AutodeskLogin';
 import CMSLogin from '../components/CMSLogin';
+import { ACCEPTANCE_TYPE } from '../sites/work_progress/redux/types/constans';
 
 function Header() {
 	return (
@@ -11,11 +12,20 @@ function Header() {
 			<NavLink to="/">
 				<Navbar.Brand>BIM APPS</Navbar.Brand>
 			</NavLink>
-			<Navbar.Collapse id="responsive-navbar-nav">
+			<Navbar.Collapse>
 				<Nav className="mr-auto">
-					<NavLink className="nav-link " to="/work_progress">
-						Awansowanie robót
-					</NavLink>
+					<NavDropdown rootCloseEvent={'mouseover'} title="Awansowanie robót">
+						<NavLink to={`/work_progress/${ACCEPTANCE_TYPE.MONOLITHIC}`} className="dropdown-item">
+							Monolitycznych
+						</NavLink>
+						<NavLink to={`/work_progress/${ACCEPTANCE_TYPE.ARCHITECTURAL}`} className="dropdown-item">
+							Wykończeniowych
+						</NavLink>
+						<NavLink to={`/work_progress/${ACCEPTANCE_TYPE.MEP}`} className="dropdown-item">
+							Instalacyjnych
+						</NavLink>
+					</NavDropdown>
+
 					<NavLink className="nav-link " to="/work_acceptance">
 						Odbiory robót
 					</NavLink>

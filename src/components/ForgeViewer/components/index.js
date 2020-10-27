@@ -216,28 +216,13 @@ class Viewer extends Component {
 	}
 
 	colorByRoom(colored_element) {
-		// const {
-		// 	unit,
-		// 	results: { elements },
-		// } = jobData;
-		// const setting_color_map = config.units['area'].color_map;
-		// let elemTable = [];
-		// for (let revit_id in viewerModelMap) {
-		// 	const percentage_value = elements[revit_id] * 100;
-		// 	let colorIndex = 1;
-		// 	if (percentage_value) {
-		// 		colorIndex = Object.keys(setting_color_map).filter((id) =>
-		// 			setting_color_map[id].condition(percentage_value),
-		// 		)[0];
-		// 	}
-		// 	const color = hexToRgb(setting_color_map[colorIndex].color, true);
-		// 	elemTable.push({
-		// 		dbID: viewerModelMap[revit_id].dbID,
-		// 		color: new THREE.Vector4(color.r, color.g, color.b, 1),
-		// 	});
-		// }
+
 		colored_element.forEach((e) => {
-			this.viewer.setThemingColor(e.dbID, e.color, this.viewer.model);
+			this.viewer.setThemingColor(
+				e.id,
+				new THREE.Vector4(e.color.r, e.color.g, e.color.b, 1),
+				this.viewer.model,
+			);
 		});
 	}
 

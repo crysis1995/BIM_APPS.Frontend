@@ -100,8 +100,9 @@ function updateResultByJobId(state, { jobId, summary_value, revit_id, percentage
 		state,
 		`byJobId.${jobId}.percentage_value`,
 		RoundNumber(
-			dotProp.get(state, `byJobId.${jobId}.summary_current_value`) /
-				dotProp.get(state, `byJobId.${jobId}.summary_all_value`),
+			(dotProp.get(state, `byJobId.${jobId}.summary_current_value`) /
+				dotProp.get(state, `byJobId.${jobId}.summary_all_value`)) *
+				100,
 		),
 	);
 	return { ...state };

@@ -15,24 +15,24 @@ export const config = {
 				2: {
 					color: '#ff0000',
 					option: '0>%>25',
-					condition: (x) => x > 0 && x < 25,
+					condition: (x) => x > 0 && x < 0.25,
 				},
 				3: {
 					color: '#FFFF00',
 					option: '25>=%>50',
-					condition: (x) => x >= 25 && x < 50,
+					condition: (x) => x >= 0.25 && x < 0.5,
 				},
 				4: {
 					color: '#00b0fa',
 					option: '50>=%>75',
-					condition: (x) => x >= 50 && x < 75,
+					condition: (x) => x >= 0.5 && x < 0.75,
 				},
 				5: {
 					color: '#6f30a0',
 					option: '75>=%>100',
-					condition: (x) => x >= 75 && x < 100,
+					condition: (x) => x >= 0.75 && x < 1,
 				},
-				6: { color: '#00B050', option: '%=100', condition: (x) => x === 100 },
+				6: { color: '#00B050', option: '%=100', condition: (x) => x === 1 },
 			},
 		},
 		entity: {

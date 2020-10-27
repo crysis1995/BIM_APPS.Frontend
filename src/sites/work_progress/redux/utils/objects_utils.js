@@ -50,40 +50,6 @@ export const fetchSummaryAreaJobPerLevel = (job_id, level) => {
 	});
 };
 
-// export const fetchReferenceJobToLevel = (level) => {
-// 	return graphQLClient().query({
-// 		query: gql`
-// 			query fetchSummaryAreaJobPerLevel($l: String) {
-// 				acceptanceReferenceJobsConnection(where: { room: { department: { level: $l } }, is_actual: true }) {
-// 					aggregate {
-// 						count
-// 					}
-// 					values {
-// 						percentage_value
-// 						job {
-// 							id
-// 						}
-// 						value_calculated
-// 						room {
-// 							revit_id
-// 						}
-// 					}
-// 				}
-// 			}
-// 		`,
-// 		variables: { l: level },
-// 		fetchPolicy: 'no-cache',
-// 	});
-// };
-//
-//
-// /*
-// *               to wszystko do zmiany
-// *
-// *               musze pobrac rooma i dla niego reszte bajerow a nie na odwrot
-// *
-// *
-// * */
 export const getFilteredObjects = (selected_room) => {
 	return graphQLClient().query({
 		query: gql`

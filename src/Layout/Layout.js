@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Redirect, Switch } from 'react-router-dom';
 
 import { logUserIfValid } from '../components/CMSLogin/redux/actions';
 import Loader from '../components/Loader';
@@ -19,8 +19,6 @@ const Settings = React.lazy(() => import('../components/CMSLogin/components/sett
 
 class Layout extends React.Component {
 	componentDidMount() {
-
-		// console.log(this.props)
 		this.props.logUserIfValid();
 	}
 	render() {
@@ -35,10 +33,45 @@ class Layout extends React.Component {
 							paddingRight: 0,
 						}}>
 						<Header {...this.props} />
-						<Row noGutters style={{ minHeight: window.innerHeight - 56 }} className="justify-content-md-center">
+						<Row
+							noGutters
+							style={{ minHeight: window.innerHeight - 56 }}
+							className="justify-content-md-center">
 							<Switch>
 								<Route path="/login" component={Login} />
 								<Route path="/settings" component={Settings} />
+
+								<Route
+									path={['/work_progress/:type', '/work_progress']}
+									render={(props) => {
+										if (!this.props.CMS_is_login) return <Redirect to="/login" />;
+										else if (!this.props.project.id)
+											return (
+												<Col sm={'auto'} className={'p-3'}>
+													<Alert variant={'warning'}>Wybierz projekt</Alert>
+												</Col>
+											);
+										else if (!this.props.project.urn)
+											return (
+												<Col sm={'auto'} className={'p-3'}>
+													<Alert variant={'warning'}>
+														Model niedostępny dla wybranego projektu
+													</Alert>
+												</Col>
+											);
+										else if (!this.props.Autodesk_is_login)
+											return (
+												<Col sm={'auto'} className={'p-3'}>
+													<Alert variant={'warning'}>
+														Usługa BIM360 niedostępna - odśwież stronę lub wróć później
+													</Alert>
+												</Col>
+											);
+										else return <WorkProgressLayout {...props} />;
+									}}
+								/>
+								<Route path="/work_acceptance" component={WorkAcceptanceLayout} />
+								<Route path="/schedule" component={ScheduleLayout} />
 								<Route exact path="/">
 									<Col>
 										<div className="p-5">
@@ -47,9 +80,6 @@ class Layout extends React.Component {
 										</div>
 									</Col>
 								</Route>
-								<Route path="/work_progress" component={WorkProgressLayout} />
-								<Route path="/work_acceptance" component={WorkAcceptanceLayout} />
-								<Route path="/schedule" component={ScheduleLayout} />
 							</Switch>
 						</Row>
 					</Container>
@@ -60,7 +90,12 @@ class Layout extends React.Component {
 	}
 }
 
-const mapStateToProps = ({}) => ({});
+const mapStateToProps = ({ Autodesk, Odbiory, CMSLogin }) => ({
+	Autodesk_is_login: Autodesk.isLogin,
+	started: Odbiory.OdbioryComponent.started,
+	CMS_is_login: CMSLogin.is_login,
+	project: CMSLogin.project,
+});
 
 const mapDispatchToProps = { logUserIfValid };
 

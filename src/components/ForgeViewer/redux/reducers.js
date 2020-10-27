@@ -1,4 +1,11 @@
-import { INITIALIZE_VIEWER, SET_CURRENT_SHEET, SET_MODEL_ROOMS, SET_SHEETS_ERROR, SET_SHEETS_SUCCESS } from './actions';
+import {
+	INITIALIZE_VIEWER,
+	SET_CURRENT_SHEET,
+	SET_ELEMENT_TO_COLOR,
+	SET_MODEL_ROOMS,
+	SET_SHEETS_ERROR,
+	SET_SHEETS_SUCCESS,
+} from './actions';
 
 const initialState = {
 	model_view: '',
@@ -10,13 +17,19 @@ const initialState = {
 	viewer_isInitialized: false,
 	selected_element: [],
 	colored_element: [],
-	color:false,
+	color: false,
 	model_rooms: null,
 	model_rooms_loading: false,
 };
 
 const ForgeViewerReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case SET_ELEMENT_TO_COLOR:
+			return {
+				...state,
+				colored_element: action.elements,
+				color: true,
+			};
 		case INITIALIZE_VIEWER:
 			return {
 				...state,

@@ -11,6 +11,13 @@ export const CONSTANTS = {
 	TERMS: 'TERMS',
 };
 
+export const ACCEPTANCE_TYPE = {
+	MONOLITHIC:"monolithic",
+	STRUCTURAL: 'structural',
+	MEP: 'mep',
+	ARCHITECTURAL: 'architectural',
+};
+
 /**
  * TERM_TYPE
  * @readonly

@@ -12,8 +12,7 @@ import { CONSTANTS } from '../redux/types/constans';
 
 class Odbiory extends React.Component {
 	componentDidMount() {
-		const { componentStarted } = this.props;
-		componentStarted();
+		this.props.componentStarted();
 	}
 
 	render() {

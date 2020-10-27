@@ -1,8 +1,11 @@
 import { ofType } from 'redux-observable';
 import { concat, from, of } from 'rxjs';
-import { catchError, map, mergeMap, switchMap, filter } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, filter, mapTo } from 'rxjs/operators';
+import { colorElements } from '../../../../components/ForgeViewer/redux/actions';
+import { config } from '../../../../config';
+import { hexToRgb } from '../../../../utils/hexToRgb';
 import { fetchResultError, setResultsByJobId, updateResultsByJobId } from '../actions/results_actions';
-import { RESULTS_FETCH_END, RESULTS_FETCH_START, UPGRADING_UPDATE_JOB } from '../types';
+import { COLOR_RESULTS, RESULTS_FETCH_END, RESULTS_FETCH_START, UPGRADING_UPDATE_JOB } from '../types';
 import { fetchSummaryData, prepareResultsByJob } from '../utils/results_utils';
 
 export const fetchResultsForLevel = (action$, state$) =>
@@ -38,3 +41,37 @@ export const updateResultByUpgrading = (action$, state$) =>
 			return of(updateResultsByJobId(job_id, value, revit_id, percentage_value));
 		}),
 	);
+
+export const colorizeRooms = (action$, state$) =>
+	action$.pipe(
+		ofType(COLOR_RESULTS),
+		map(({ active_job_id }) =>
+			colorElements(
+				Object.entries(state$.value.ForgeViewer.model_rooms).map(([revit_id, { dbID }]) => {
+					if (state$.value.Odbiory.Results.byJobId[active_job_id].elements.hasOwnProperty(revit_id)) {
+						return {
+							id: dbID,
+							color: getColor(state$.value.Odbiory.Results.byJobId[active_job_id].elements[revit_id]),
+						};
+					} else {
+						return {
+							id: dbID,
+							color: getColor(),
+						};
+					}
+				}),
+			),
+		),
+	);
+
+function getColor(percentage_value) {
+	const setting_color_map = config.units['area'].color_map;
+	let colorIndex = 1;
+	if (percentage_value) {
+		colorIndex = Object.keys(setting_color_map).filter((id) =>
+			setting_color_map[id].condition(percentage_value),
+		)[0];
+	}
+	const color = hexToRgb(setting_color_map[colorIndex].color, true);
+	return color;
+}
