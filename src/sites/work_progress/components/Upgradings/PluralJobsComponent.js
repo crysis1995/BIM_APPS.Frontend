@@ -131,7 +131,7 @@ function PluralJobsComponent(props) {
 										</Popover.Content>
 									</Popover>
 								}>
-								<td>{job.name}</td>
+								<td>{props.jobs[job_key].name}</td>
 							</OverlayTrigger>
 							<OverlayTrigger
 								placement={'top'}
