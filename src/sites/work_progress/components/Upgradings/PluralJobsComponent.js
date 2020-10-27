@@ -131,7 +131,7 @@ function PluralJobsComponent(props) {
 										</Popover.Content>
 									</Popover>
 								}>
-								<td>{job.name}</td>
+								<td>{props.jobs[job_key].name}</td>
 							</OverlayTrigger>
 							<OverlayTrigger
 								placement={'top'}
@@ -161,7 +161,7 @@ function PluralJobsComponent(props) {
 									// onChange={(e) => {
 									// 	props.changeJobPercentageValue(job_key, parseFloat(e.target.value));
 									// }}
-									disabled={props.objects_jobs_loading}
+									disabled={true}
 									size={'sm'}
 									as="select"
 									value={Object.values(job.percentage_value)[0]}
