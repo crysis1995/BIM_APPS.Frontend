@@ -161,7 +161,7 @@ function PluralJobsComponent(props) {
 									// onChange={(e) => {
 									// 	props.changeJobPercentageValue(job_key, parseFloat(e.target.value));
 									// }}
-									disabled={props.objects_jobs_loading}
+									disabled={true}
 									size={'sm'}
 									as="select"
 									value={Object.values(job.percentage_value)[0]}
