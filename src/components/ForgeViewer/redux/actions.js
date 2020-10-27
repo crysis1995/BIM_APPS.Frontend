@@ -3,6 +3,7 @@ export const SET_MODEL_ROOMS = 'forgeViewer__SET_MODEL_ROOMS';
 export const SET_SHEETS_SUCCESS = 'forgeViewer__SET_SHEETS_SUCCESS';
 export const SET_SHEETS_ERROR = 'forgeViewer__SET_SHEETS_ERROR';
 export const SET_CURRENT_SHEET = 'forgeViewer__SET_CURRENT_SHEET';
+export const SET_ELEMENT_TO_COLOR = "FORGE_VIEWER_SET_ELEMENT_TO_COLOR"
 
 export const initializeViewer = () => ({
 	type: INITIALIZE_VIEWER,
@@ -28,3 +29,8 @@ export const setViewerRooms = (model_rooms) => ({
 	type: SET_MODEL_ROOMS,
 	model_rooms,
 });
+
+export const colorElements = (elements) =>({
+	type: SET_ELEMENT_TO_COLOR,
+	elements
+})

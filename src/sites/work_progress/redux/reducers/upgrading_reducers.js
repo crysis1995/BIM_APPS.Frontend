@@ -58,9 +58,7 @@ function removeAllRoomsFromUpgrading(state) {
 	return { ...state };
 }
 
-// function updateJob(state, { job_id, revit_id, percentage_value, current_value, reference_job }) {
 function updateJob(state, { job_id, revit_id, percentage_value, reference_job }) {
-	console.log(job_id, revit_id, percentage_value, reference_job);
 	dotProp.set(state, `byJobId.${job_id}.percentage_value.${revit_id}`, percentage_value);
 	dotProp.set(state, `byJobId.${job_id}.reference_job.${revit_id}`, reference_job);
 	dotProp.set(

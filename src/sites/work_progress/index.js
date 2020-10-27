@@ -13,91 +13,72 @@ const Viewer = React.lazy(() => import('../../components/ForgeViewer/components'
 
 function AcceptanceLayout(props) {
 	const acceptance_type = props.match.params.type;
+	console.log(acceptance_type);
 	useEffect(() => {
 		props.setAcceptanceType(acceptance_type);
 	}, [acceptance_type]);
 	if (!acceptance_type) return <Redirect to="/" />;
-	if (!props.CMS_is_login) return <Redirect to="/login" />;
-	else if (!props.project.id)
-		return (
-			<Col sm={'auto'} className={'p-3'}>
-				<Alert variant={'warning'}>Wybierz projekt</Alert>
-			</Col>
-		);
-	else if (!props.project.urn)
-		return (
-			<Col sm={'auto'} className={'p-3'}>
-				<Alert variant={'warning'}>Model niedostępny dla wybranego projektu</Alert>
-			</Col>
-		);
-	else if (!props.Autodesk_is_login)
-		return (
-			<Col sm={'auto'} className={'p-3'}>
-				<Alert variant={'warning'}>Usługa BIM360 niedostępna - odśwież stronę lub wróć później</Alert>
-			</Col>
-		);
-	else
-		return (
-			<React.Suspense fallback={<Loader />}>
-				<Route exact path={`/work_progress/${ACCEPTANCE_TYPE.MONOLITHIC}`}>
-					<Permissions
-						variant={'danger'}
-						Wrapper={Col}
-						className="p-3"
-						message={'Nie masz dostępu do tej zakładki'}
-						condition={true}>
-						<Col>
-							<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
-								{props.started && <Viewer />}
-							</div>
-						</Col>
-						<Col>
-							<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
-								<Layout.MONOLITHIC />
-							</div>
-						</Col>
-					</Permissions>
-				</Route>
-				<Route exact path={`/work_progress/${ACCEPTANCE_TYPE.ARCHITECTURAL}`}>
-					<Permissions
-						variant={'danger'}
-						Wrapper={Col}
-						className="p-3"
-						message={'Nie masz dostępu do tej zakładki'}
-						condition={true}>
-						<Col>
-							<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
-								{props.started && <Viewer />}
-							</div>
-						</Col>
-						<Col>
-							<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
-								<WorkProgress />
-							</div>
-						</Col>
-					</Permissions>
-				</Route>
-				<Route exact path={`/work_progress/${ACCEPTANCE_TYPE.MEP}`}>
-					<Permissions
-						variant={'danger'}
-						Wrapper={Col}
-						className="p-3"
-						message={'Nie masz dostępu do tej zakładki'}
-						condition={true}>
-						<Col>
-							<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
-								{props.started && <Viewer />}
-							</div>
-						</Col>
-						<Col>
-							<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
-								<WorkProgress />
-							</div>
-						</Col>
-					</Permissions>
-				</Route>
-			</React.Suspense>
-		);
+	return (
+		<React.Suspense fallback={<Loader />}>
+			<Route exact path={`/work_progress/${ACCEPTANCE_TYPE.MONOLITHIC}`}>
+				<Permissions
+					variant={'danger'}
+					Wrapper={Col}
+					className="p-3"
+					message={'Nie masz dostępu do tej zakładki'}
+					condition={true}>
+					<Col>
+						<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
+							{props.started && <Viewer />}
+						</div>
+					</Col>
+					<Col>
+						<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
+							<Layout.MONOLITHIC />
+						</div>
+					</Col>
+				</Permissions>
+			</Route>
+			<Route exact path={`/work_progress/${ACCEPTANCE_TYPE.ARCHITECTURAL}`}>
+				<Permissions
+					variant={'danger'}
+					Wrapper={Col}
+					className="p-3"
+					message={'Nie masz dostępu do tej zakładki'}
+					condition={true}>
+					<Col>
+						<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
+							{props.started && <Viewer />}
+						</div>
+					</Col>
+					<Col>
+						<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
+							<WorkProgress />
+						</div>
+					</Col>
+				</Permissions>
+			</Route>
+			<Route exact path={`/work_progress/${ACCEPTANCE_TYPE.MEP}`}>
+				<Permissions
+					variant={'danger'}
+					Wrapper={Col}
+					className="p-3"
+					message={'Nie masz dostępu do tej zakładki'}
+					condition={true}>
+					<Col>
+						<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
+							{props.started && <Viewer />}
+						</div>
+					</Col>
+					<Col>
+						<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
+							<WorkProgress />
+						</div>
+					</Col>
+				</Permissions>
+			</Route>
+		</React.Suspense>
+	);
 }
 
 const mapStateToProps = ({ Autodesk, Odbiory, CMSLogin }) => ({
