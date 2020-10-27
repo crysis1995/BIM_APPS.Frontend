@@ -1,5 +1,6 @@
 import { config } from '../../../config';
-// import { setSelectedRoom } from '../../../sites/work_progress/redux/actions/rooms_actions';
+import { selectRoom } from '../../../sites/work_progress/redux/actions/rooms_actions';
+import { ROOM_SELECTION_STATUS } from '../../../sites/work_progress/redux/types/constans';
 import { hexToRgb } from '../../../utils/hexToRgb';
 import { initialiseModal } from '../../Modal/redux/actions';
 import { initializeViewer, setSheetsSuccess, setViewerRooms } from '../redux/actions';
@@ -179,26 +180,22 @@ class Viewer extends Component {
 										this.props.Odbiory.Rooms.selected_rooms.toString() !==
 											selectedElement.toString()
 									) {
-										console.log(
-											{
-												storage: this.props.Odbiory.Rooms.selected_rooms.toString(),
-												viewer: selectedElement.toString(),
-											},
-											this.props.Odbiory.Rooms.selected_rooms.toString() !==
-												selectedElement.toString(),
-										);
 										const selectedRoom = selectedElement.filter(
 											(e) => this.props.Odbiory.Rooms.byId[e],
 										);
-										if (selectedRoom) {
-											// this.props.setSelectedRoom(selectedRoom, 'add-specyfic', false);
-										} else {
-											this.viewer.clearSelection();
-											this.props.initialiseModal(
-												'Uwaga!',
-												'Nie przewidziano robót dla danego pomieszczenia.',
-											);
+										let difference = selectedRoom.filter(
+											(e) => !this.props.Odbiory.Rooms.selected_rooms.includes(e),
+										)[0];
+										if (difference) {
+											this.props.selectRoom(difference, '', false);
 										}
+										// else {
+										// 	this.viewer.clearSelection();
+										// 	this.props.initialiseModal(
+										// 		'Uwaga!',
+										// 		'Nie przewidziano robót dla danego pomieszczenia.',
+										// 	);
+										// }
 									}
 								}
 							},
@@ -207,7 +204,7 @@ class Viewer extends Component {
 							},
 						);
 					} else {
-						// this.props.setSelectedRoom([], 'clear', false);
+						this.props.selectRoom([], 'clear', false);
 					}
 				},
 				// , 500), // opóźnienie kolekcjonowania i wykonywania akcji zaznaczania roomów
@@ -216,13 +213,8 @@ class Viewer extends Component {
 	}
 
 	colorByRoom(colored_element) {
-
 		colored_element.forEach((e) => {
-			this.viewer.setThemingColor(
-				e.id,
-				new THREE.Vector4(e.color.r, e.color.g, e.color.b, 1),
-				this.viewer.model,
-			);
+			this.viewer.setThemingColor(e.id, new THREE.Vector4(e.color.r, e.color.g, e.color.b, 1), this.viewer.model);
 		});
 	}
 
@@ -246,6 +238,7 @@ const mapDispatchToProps = {
 	setSheetsSuccess,
 	initializeViewer,
 	setViewerRooms,
+	selectRoom,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Viewer);
