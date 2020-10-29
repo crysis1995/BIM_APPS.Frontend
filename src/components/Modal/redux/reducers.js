@@ -4,6 +4,7 @@ const initialState = {
 	modal_visible: false,
 	title: '',
 	body: '',
+	onHideModal: null,
 };
 
 const ModalReducer = (state = initialState, action) => {
@@ -15,7 +16,7 @@ const ModalReducer = (state = initialState, action) => {
 			};
 		case HIDE_MODAL:
 			return {
-				...state,
+				...initialState,
 				modal_visible: false,
 			};
 		case SET_MODAL_DATA:
@@ -23,6 +24,7 @@ const ModalReducer = (state = initialState, action) => {
 				...state,
 				title: action.title,
 				body: action.body,
+				onHideModal: action.onHideModal,
 			};
 		default:
 			return state;

@@ -1,7 +1,10 @@
 import {
+	ADD_VISIBLE_ELEMENTS,
 	INITIALIZE_VIEWER,
+	REMOVE_VISIBLE_ELEMENTS,
 	SET_CURRENT_SHEET,
 	SET_ELEMENT_TO_COLOR,
+	SET_MODEL_ELEMENTS,
 	SET_MODEL_ROOMS,
 	SET_SHEETS_ERROR,
 	SET_SHEETS_SUCCESS,
@@ -16,14 +19,30 @@ const initialState = {
 	current_sheet: '',
 	viewer_isInitialized: false,
 	selected_element: [],
+	visible_element: [],
 	colored_element: [],
 	color: false,
 	model_rooms: null,
 	model_rooms_loading: false,
+	model_elements: null,
+	model_elements_loading: false,
 };
+
+function AddVisibleElement(state, { elements }) {
+	if (!Array.isArray(elements)) elements = [elements];
+	return { ...state, visible_element: [...elements] };
+}
+function RemoveVisibleElement(state, { elements }) {
+	const elementsArray = state.visible_element.filter((item) => !elements.includes(item));
+	return { ...state, visible_element: elementsArray };
+}
 
 const ForgeViewerReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case ADD_VISIBLE_ELEMENTS:
+			return AddVisibleElement(state, action);
+		case REMOVE_VISIBLE_ELEMENTS:
+			return RemoveVisibleElement(state, action);
 		case SET_ELEMENT_TO_COLOR:
 			return {
 				...state,
@@ -35,6 +54,7 @@ const ForgeViewerReducer = (state = initialState, action) => {
 				...state,
 				viewer_isInitialized: action.viewer_isInitialized,
 				model_rooms_loading: true,
+				model_elements_loading: true,
 			};
 		case SET_CURRENT_SHEET:
 			return {
@@ -58,6 +78,12 @@ const ForgeViewerReducer = (state = initialState, action) => {
 				...state,
 				model_rooms: action.model_rooms,
 				model_rooms_loading: false,
+			};
+		case SET_MODEL_ELEMENTS:
+			return {
+				...state,
+				model_elements: action.elements,
+				model_elements_loading: false,
 			};
 		default:
 			return state;

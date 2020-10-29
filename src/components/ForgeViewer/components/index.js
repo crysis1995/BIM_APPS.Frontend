@@ -1,11 +1,8 @@
-import { config } from '../../../config';
 import { selectRoom } from '../../../sites/work_progress/redux/actions/rooms_actions';
-import { ROOM_SELECTION_STATUS } from '../../../sites/work_progress/redux/types/constans';
-import { hexToRgb } from '../../../utils/hexToRgb';
+import { ACCEPTANCE_TYPE } from '../../../sites/work_progress/redux/types/constans';
 import { initialiseModal } from '../../Modal/redux/actions';
-import { initializeViewer, setSheetsSuccess, setViewerRooms } from '../redux/actions';
+import { initializeViewer, setSheetsSuccess, setViewerElements, setViewerRooms } from '../redux/actions';
 import ReactPanelExtension from './extenstions/TestExtension';
-import { debounce } from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
@@ -24,6 +21,10 @@ class Viewer extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
+		if (this.props.CMSLogin.project.urn !== prevProps.CMSLogin.project.urn) {
+			this.launchViewer(this.props.CMSLogin.project.urn);
+		}
+
 		if (!!this.doc && !!this.viewer) {
 			/*
 			 *
@@ -42,7 +43,6 @@ class Viewer extends Component {
 				prevProps.Odbiory.Rooms.selected_rooms.toString() !==
 					this.props.Odbiory.Rooms.selected_rooms.toString() &&
 				Object.keys(this.props.ForgeViewer.model_rooms).length > 0 &&
-				// this.props.Odbiory.Rooms.from_selector &&
 				this.props.Odbiory.Rooms.selected_rooms.length > 0
 			) {
 				this.selectRoomOnViewer();
@@ -53,6 +53,14 @@ class Viewer extends Component {
 			 * */
 			if (this.props.Odbiory.Results.status !== 'initial') {
 				this.colorizeResults();
+			}
+
+			if (this.props.visible_element.length > 0) {
+				console.log(prevProps.visible_element, this.props.visible_element);
+				this.viewer.hide(
+					prevProps.visible_element.filter((item) => !this.props.visible_element.includes(item)),
+				);
+				this.viewer.show(this.props.visible_element);
 			}
 		}
 	}
@@ -65,15 +73,6 @@ class Viewer extends Component {
 			} else {
 				this.viewer.clearThemingColors();
 			}
-
-			// const { jobs } = this.props.Odbiory.Jobs;
-			// const { model_rooms } = this.props.ForgeViewer;
-			// if (status === 'color' && jobs && model_rooms) {
-			// 	this.colorByRoom(jobs[active_job_id], model_rooms);
-			// }
-			// if (status === 'clean') {
-			// 	this.viewer.clearThemingColors();
-			// }
 		} catch (e) {
 			console.log(e);
 		}
@@ -81,7 +80,6 @@ class Viewer extends Component {
 
 	selectRoomOnViewer() {
 		const roomIds = this.props.Odbiory.Rooms.selected_rooms.map((e) => this.props.ForgeViewer.model_rooms[e].dbID);
-		console.log(roomIds);
 		const elementToSelect = roomIds.length > 0 ? roomIds : [];
 		this.viewer.select(elementToSelect);
 		this.viewer.fitToView(elementToSelect, this.viewer.model, true);
@@ -145,18 +143,36 @@ class Viewer extends Component {
 			Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
 
 			this.viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, () => {
-				const tree = this.viewer.model.getInstanceTree();
-				const rootId = tree.getRootId();
-				tree.enumNodeChildren(rootId, (roomCategoryId) => {
-					if (tree.getNodeName(roomCategoryId) === 'Rooms') {
-						var rooms = {};
-						tree.enumNodeChildren(roomCategoryId, (dbID) => {
-							let revit_id = /.+\[(.+)\]/g.exec(tree.getNodeName(dbID))[1];
-							rooms[revit_id] = { dbID };
-						});
+				if (this.viewer) {
+					const tree = this.viewer.model.getInstanceTree();
+					const rootId = tree.getRootId();
+					this.viewer.hide(rootId);
+					var elements = {};
+					var rooms = {};
+
+					if (this.props.Odbiory.OdbioryComponent.active_acceptance_type === ACCEPTANCE_TYPE.MONOLITHIC) {
+						tree.enumNodeChildren(
+							rootId,
+							(dbID) => {
+								if (tree.getChildCount(dbID) === 0) {
+									let revit_id = /.+\[(.+)\]/g.exec(tree.getNodeName(dbID));
+
+									if (revit_id) {
+										if (tree.getNodeName(tree.getNodeParentId(dbID)) === 'Rooms')
+											rooms[revit_id[1]] = { dbID };
+										elements[revit_id[1]] = dbID;
+									}
+								}
+							},
+							true,
+						);
+
+						this.props.setViewerElements(elements);
+					}
+					if (this.props.Odbiory.OdbioryComponent.active_acceptance_type === ACCEPTANCE_TYPE.ARCHITECTURAL) {
 						this.props.setViewerRooms(rooms);
 					}
-				});
+				}
 			});
 
 			this.viewer.addEventListener(
@@ -168,6 +184,7 @@ class Viewer extends Component {
 							dbIdArray,
 							['Category', 'name'],
 							(data) => {
+								console.log(data);
 								// gdy bedzie wybieranych wiecej pomieszczeń to trzeba tutaj zrobić pętle
 								if (
 									data.length > 0 &&
@@ -189,13 +206,6 @@ class Viewer extends Component {
 										if (difference) {
 											this.props.selectRoom(difference, '', false);
 										}
-										// else {
-										// 	this.viewer.clearSelection();
-										// 	this.props.initialiseModal(
-										// 		'Uwaga!',
-										// 		'Nie przewidziano robót dla danego pomieszczenia.',
-										// 	);
-										// }
 									}
 								}
 							},
@@ -207,7 +217,6 @@ class Viewer extends Component {
 						this.props.selectRoom([], 'clear', false);
 					}
 				},
-				// , 500), // opóźnienie kolekcjonowania i wykonywania akcji zaznaczania roomów
 			);
 		});
 	}
@@ -227,6 +236,7 @@ const mapStateToProps = ({ ForgeViewer, Autodesk, Odbiory, CMSLogin }) => ({
 	rooms_data_loading: ForgeViewer.model_rooms_loading || Odbiory.Rooms.rooms_loading,
 	colored_element: ForgeViewer.colored_element,
 	color: ForgeViewer.color,
+	visible_element: ForgeViewer.visible_element,
 	Autodesk,
 	CMSLogin,
 	ForgeViewer,
@@ -239,6 +249,7 @@ const mapDispatchToProps = {
 	initializeViewer,
 	setViewerRooms,
 	selectRoom,
+	setViewerElements,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Viewer);

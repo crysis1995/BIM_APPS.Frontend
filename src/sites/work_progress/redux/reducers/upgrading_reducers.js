@@ -1,11 +1,15 @@
 import dotProp from 'dot-prop';
 import { RoundNumber } from '../../../../utils/RoundNumber';
 import { CLEAN_SELECTION, REMOVE_ROOM_FROM_SELECTION, UPGRADING_SET_DATA, UPGRADING_UPDATE_JOB } from '../types';
+import data from '../__MOCK__/MONOLITHIC.upgrading.json';
 
 const initialState = {
 	byJobId: {},
 	upgrading_loading: false,
 	upgrading_error: null,
+	MONOLITHIC: {
+		byRevitId: data,
+	},
 };
 
 const UpgradingReducer = (state = initialState, action) => {
@@ -18,6 +22,7 @@ const UpgradingReducer = (state = initialState, action) => {
 			return removeRoomFromUpgrading(state, action);
 		case CLEAN_SELECTION:
 			return removeAllRoomsFromUpgrading(state);
+
 		default:
 			return state;
 	}

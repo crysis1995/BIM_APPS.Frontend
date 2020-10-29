@@ -15,12 +15,13 @@ import {
 	ODBIORY_COMPONENT_SET_ROTATION_DAY,
 	ODBIORY_COMPONENT_STARTED,
 	SET_ACTIVE_TAB,
+	ODBIORY_COMPONENT_SET_LEVEL_OPTIONS,
 } from '../types';
 
 import { CONSTANTS, UPGRADING_BY } from '../types/constans';
 
 const initialState = {
-	started: false,
+	started: {},
 	active_tab: CONSTANTS.RESULTS,
 	active_acceptance_type: null,
 	awansowanie: {
@@ -37,12 +38,36 @@ const initialState = {
 		active_level: '',
 		levels_loading: false,
 		date: new Date(),
-		rotation_day: 1,
+		rotation_day: 0,
 	},
 };
 
 const OdbioryComponentReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case ODBIORY_COMPONENT_SET_CRANE:
+			return {
+				...state,
+				MONOLITHIC: {
+					...state.MONOLITHIC,
+					active_crane: action.crane_id,
+				},
+			};
+		case ODBIORY_COMPONENT_SET_LEVEL_OPTIONS:
+			return {
+				...state,
+				MONOLITHIC: {
+					...state.MONOLITHIC,
+					levels: action.levels,
+				},
+			};
+		case ODBIORY_COMPONENT_SET_LEVEL:
+			return {
+				...state,
+				MONOLITHIC: {
+					...state.MONOLITHIC,
+					active_level: action.level_id,
+				},
+			};
 		case ODBIORY_COMPONENT_SET_DATE:
 			return {
 				...state,
@@ -53,18 +78,11 @@ const OdbioryComponentReducer = (state = initialState, action) => {
 			};
 		case ODBIORY_COMPONENT_SET_ROTATION_DAY:
 			return setRotationDay(state, action);
-		case ODBIORY_COMPONENT_INCREMENT_DAY:
-			return incrementDay(state, action);
-		case ODBIORY_COMPONENT_DECREMENT_DAY:
-			return decrementDay(state, action);
-		case ODBIORY_COMPONENT_SET_LEVEL:
-			return {
-				...state,
-				MONOLITHIC: {
-					...state.MONOLITHIC,
-					active_level: action.level_id,
-				},
-			};
+		// case ODBIORY_COMPONENT_INCREMENT_DAY:
+		// 	return incrementDay(state, action);
+		// case ODBIORY_COMPONENT_DECREMENT_DAY:
+		// 	return decrementDay(state, action);
+
 		case ODBIORY_COMPONENT_FETCH_CRANE_START:
 			return {
 				...state,
@@ -82,8 +100,7 @@ const OdbioryComponentReducer = (state = initialState, action) => {
 					cranes_loading: false,
 				},
 			};
-		case ODBIORY_COMPONENT_SET_CRANE:
-			return setLevels(state, action);
+
 		case ODBIORY_COMPONENT_SET_ACCEPTANCE_TYPE:
 			return {
 				...state,
@@ -92,7 +109,7 @@ const OdbioryComponentReducer = (state = initialState, action) => {
 		case ODBIORY_COMPONENT_STARTED:
 			return {
 				...state,
-				started: true,
+				started: { ...state.started, [action.component_type]: action.component_type },
 			};
 		case SET_ACTIVE_TAB:
 			return {
@@ -131,14 +148,6 @@ const OdbioryComponentReducer = (state = initialState, action) => {
 	}
 };
 
-function setLevels(state, { crane_id }) {
-	if (!crane_id) return state;
-	const crane_levels = dotProp.get(state, `MONOLITHIC.cranes.${crane_id}.levels`);
-	dotProp.set(state, `MONOLITHIC.active_crane`, crane_id);
-	dotProp.set(state, `MONOLITHIC.levels`, crane_levels);
-	return { ...state };
-}
-
 function incrementDay(state, action) {
 	dotProp.set(state, `MONOLITHIC.rotation_day`, dotProp.get(state, `MONOLITHIC.rotation_day`) + 1);
 	return { ...state };
@@ -152,8 +161,7 @@ function decrementDay(state, action) {
 }
 
 function setRotationDay(state, { day }) {
-	if (typeof day !== 'number') return { ...state };
-	if (day <= 0) return { ...state };
-	dotProp.set(state, `MONOLITHIC.rotation_day`, day);
+	if (typeof day === 'number' && day > 0) dotProp.set(state, `MONOLITHIC.rotation_day`, day);
+	return { ...state };
 }
 export default OdbioryComponentReducer;

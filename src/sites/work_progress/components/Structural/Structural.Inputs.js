@@ -41,7 +41,7 @@ function Structural_Inputs({
 			<Col xs={3}>
 				<Selector
 					label={'Kondygnacja'}
-					isDisabled={cranes_loading}
+					isDisabled={cranes_loading || !active_crane}
 					value={active_level}
 					options={Object.values(levels)}
 					onChangeValue={(id) => changeLevel(id)}
@@ -51,7 +51,11 @@ function Structural_Inputs({
 				<div className="px-3">
 					<Form.Label>Data / Dzień rotacji</Form.Label>
 					<div className="d-flex flex-row">
-						<Button size={'sm'} onClick={() => decrementDay()} variant={'secondary'}>
+						<Button
+							disabled={cranes_loading || !active_crane || !active_level}
+							size={'sm'}
+							onClick={() => decrementDay()}
+							variant={'secondary'}>
 							<svg
 								width="1em"
 								height="1em"
@@ -71,19 +75,25 @@ function Structural_Inputs({
 						</Button>
 						<input
 							data-testid="data-input-1"
+							disabled={cranes_loading || !active_crane || !active_level}
 							type={'date'}
 							className="form-control form-control-sm ml-2 mr-1"
 							onChange={(selectedDay) => selectDate(selectedDay.target.value)}
 							value={date}
 						/>
 						<input
+							disabled={cranes_loading || !active_crane || !active_level}
 							data-testid="data-input-2"
 							type={'number'}
 							className="form-control form-control-sm ml-1 mr-2"
 							onChange={(selectedDay) => selectRotationDate(parseInt(selectedDay.target.value))}
 							value={rotation_day}
 						/>
-						<Button size={'sm'} onClick={() => incrementDay()} variant={'secondary'}>
+						<Button
+							disabled={cranes_loading || !active_crane || !active_level}
+							size={'sm'}
+							onClick={() => incrementDay()}
+							variant={'secondary'}>
 							<svg
 								width="1em"
 								height="1em"

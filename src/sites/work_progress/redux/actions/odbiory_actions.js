@@ -12,12 +12,13 @@ import {
 	ODBIORY_COMPONENT_SET_CRANE,
 	ODBIORY_COMPONENT_SET_DATE,
 	ODBIORY_COMPONENT_SET_LEVEL,
+	ODBIORY_COMPONENT_SET_LEVEL_OPTIONS,
 	ODBIORY_COMPONENT_SET_ROTATION_DAY,
 	ODBIORY_COMPONENT_STARTED,
-	SET_ACTIVE_TAB
+	SET_ACTIVE_TAB,
 } from '../types';
 
-import { CONSTANTS } from '../types/constans';
+import { ACCEPTANCE_TYPE, CONSTANTS } from '../types/constans';
 import { fetchAllJobs } from './jobs_actions';
 import { cleanResults } from './results_actions';
 
@@ -26,8 +27,9 @@ import { cleanResults } from './results_actions';
  *
  *
  * */
-const componentStart = () => ({
+const componentStart = (component_type) => ({
 	type: ODBIORY_COMPONENT_STARTED,
+	component_type,
 });
 
 export const componentEnd = () => ({
@@ -54,6 +56,11 @@ export const setAcceptanceType = (acceptance_type) => ({
 	acceptance_type,
 });
 
+/*
+ *       MONOLITHIC
+ *
+ * */
+
 export const startFetchCranes = () => ({
 	type: ODBIORY_COMPONENT_FETCH_CRANE_START,
 });
@@ -64,6 +71,11 @@ export const endFetchCranes = (cranes) => ({
 export const errorFetchCranes = (error) => ({
 	type: ODBIORY_COMPONENT_FETCH_CRANE_ERROR,
 	error,
+});
+
+export const setLevelOptions = (levels) => ({
+	type: ODBIORY_COMPONENT_SET_LEVEL_OPTIONS,
+	levels,
 });
 
 export const changeCrane = (crane_id) => ({
@@ -104,10 +116,10 @@ export const decrementDay = () => ({
  *
  * */
 
-export const componentStarted = () => (dispatch, getState) => {
+export const componentStarted = (component_type) => (dispatch, getState) => {
 	const { started } = getState().Odbiory.OdbioryComponent;
-	dispatch(componentStart());
-	if (!started) dispatch(fetchAllJobs());
+	dispatch(componentStart(component_type));
+	if (!started.hasOwnProperty(ACCEPTANCE_TYPE.ARCHITECTURAL)) dispatch(fetchAllJobs());
 };
 
 export const changeActiveTab = (tabName) => (dispatch, getState) => {

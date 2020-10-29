@@ -3,7 +3,7 @@ import { combineEpics } from 'redux-observable';
 
 import { getRoomData } from './redux/epics';
 import { selectLevel } from './redux/epics/levels_epics';
-import { setCranes } from './redux/epics/odbiory_epics';
+import Odbiory_epics from './redux/epics/odbiory_epics';
 import { colorizeRooms, fetchResultsForLevel, updateResultByUpgrading } from './redux/epics/results_epics';
 import { fetchRoomsData, selectRoom } from './redux/epics/rooms_epics';
 import { getDepartmentsWithTerms } from './redux/epics/terms_epics';
@@ -39,5 +39,5 @@ export const OdbioryEpics = combineEpics(
 	getDepartmentsWithTerms,
 	updateResultByUpgrading,
 	colorizeRooms,
-	setCranes,
+	Odbiory_epics,
 );

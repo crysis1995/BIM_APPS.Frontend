@@ -44,6 +44,7 @@
 		"react-scripts": "3.4.1",
 		"react-select": "^3.1.0",
 		"react-simple-tree-menu": "^1.1.17",
+		"react-table": "^7.6.1",
 		"react-treebeard": "^3.2.4",
 		"reduce-reducers": "^1.0.4",
 		"redux": "^4.0.5",
