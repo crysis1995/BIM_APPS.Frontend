@@ -1,16 +1,22 @@
-import { config } from '../../../config';
 import { selectRoom } from '../../../sites/work_progress/redux/actions/rooms_actions';
-import { ROOM_SELECTION_STATUS } from '../../../sites/work_progress/redux/types/constans';
-import { hexToRgb } from '../../../utils/hexToRgb';
+import { handleSelectedElements } from '../../../sites/work_progress/redux/actions/upgrading_actions';
+import { ACCEPTANCE_TYPE } from '../../../sites/work_progress/redux/types/constans';
 import { initialiseModal } from '../../Modal/redux/actions';
-import { initializeViewer, setSheetsSuccess, setViewerRooms } from '../redux/actions';
+import {
+	initializeViewer,
+	selectedElementsAdd,
+	setSheetsSuccess,
+	setViewerElements,
+	setViewerRooms,
+} from '../redux/actions';
 import ReactPanelExtension from './extenstions/TestExtension';
-import { debounce } from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 const Autodesk = window.Autodesk; // import Autodesk Library
 const THREE = window.THREE; // import THREE library
+
+const TESTS = true;
 
 class Viewer extends Component {
 	constructor(props) {
@@ -20,75 +26,91 @@ class Viewer extends Component {
 	}
 
 	componentDidMount() {
-		this.launchViewer(this.props.CMSLogin.project.urn);
+		this.launchViewer(this.props.project_urn);
 	}
 
 	componentDidUpdate(prevProps) {
+		if (this.props.project_urn !== prevProps.project_urn) {
+			this.launchViewer(this.props.project_urn);
+		}
+
 		if (!!this.doc && !!this.viewer) {
 			/*
 			 *
 			 * */
-			if (
-				prevProps.ForgeViewer.current_sheet !== this.props.ForgeViewer.current_sheet &&
-				!!this.props.ForgeViewer.current_sheet
-			) {
+			if (prevProps.current_sheet !== this.props.current_sheet && !!this.props.current_sheet) {
 				this.loadSheet();
 			}
-
-			/*
+			/**
+			 *      ODBIORY WYKOŃCZENIÓWKI
 			 *
-			 * */
-			if (
-				prevProps.Odbiory.Rooms.selected_rooms.toString() !==
-					this.props.Odbiory.Rooms.selected_rooms.toString() &&
-				Object.keys(this.props.ForgeViewer.model_rooms).length > 0 &&
-				// this.props.Odbiory.Rooms.from_selector &&
-				this.props.Odbiory.Rooms.selected_rooms.length > 0
-			) {
-				this.selectRoomOnViewer();
+			 *
+			 */
+			if (this.props.active_acceptance_type === ACCEPTANCE_TYPE.ARCHITECTURAL) {
+				if (this.viewer.contextMenu) this.viewer.setContextMenu(null);
+				if (
+					prevProps.selected_rooms.toString() !== this.props.selected_rooms.toString() &&
+					Object.keys(this.props.model_rooms).length > 0 &&
+					this.props.selected_rooms.length > 0
+				) {
+					this.selectRoomOnViewer();
+				}
+				if (this.props.current_sheet && !this.props.rooms_data_loading) {
+					console.log(this.props.colored_elements);
+					this.handleColorize(
+						Object.entries(prevProps.colored_elements),
+						Object.entries(this.props.colored_elements),
+					);
+				}
 			}
-
-			/*
+			/**
+			 *      ODBIORY KONSTRUKCJI
 			 *
-			 * */
-			if (this.props.Odbiory.Results.status !== 'initial') {
-				this.colorizeResults();
+			 *
+			 */
+			if (this.props.active_acceptance_type === ACCEPTANCE_TYPE.MONOLITHIC) {
+				if (this.viewer.contextMenu) this.viewer.setContextMenu(null);
+				if (TESTS && this.props.current_sheet && !this.props.model_elements_loading) {
+					this.handleVisibility(
+						prevProps.visible_elements,
+						this.props.visible_elements,
+						prevProps.hidden_elements,
+						this.props.hidden_elements,
+					);
+
+					this.handleLock(prevProps.disabled_elements, this.props.disabled_elements);
+					this.handleSelect(prevProps.selected_elements, this.props.selected_elements);
+					this.handleColorize(
+						Object.entries(prevProps.colored_elements),
+						Object.entries(this.props.colored_elements),
+					);
+				}
 			}
 		}
 	}
 
 	colorizeResults() {
-		const { active_job_id, status } = this.props.Odbiory.Results;
+		const { status } = this.props;
 		try {
 			if (this.props.color && status === 'color') {
 				this.colorByRoom(this.props.colored_element);
 			} else {
 				this.viewer.clearThemingColors();
 			}
-
-			// const { jobs } = this.props.Odbiory.Jobs;
-			// const { model_rooms } = this.props.ForgeViewer;
-			// if (status === 'color' && jobs && model_rooms) {
-			// 	this.colorByRoom(jobs[active_job_id], model_rooms);
-			// }
-			// if (status === 'clean') {
-			// 	this.viewer.clearThemingColors();
-			// }
 		} catch (e) {
 			console.log(e);
 		}
 	}
 
 	selectRoomOnViewer() {
-		const roomIds = this.props.Odbiory.Rooms.selected_rooms.map((e) => this.props.ForgeViewer.model_rooms[e].dbID);
-		console.log(roomIds);
+		const roomIds = this.props.selected_rooms.map((e) => this.props.model_rooms[e].dbID);
 		const elementToSelect = roomIds.length > 0 ? roomIds : [];
 		this.viewer.select(elementToSelect);
 		this.viewer.fitToView(elementToSelect, this.viewer.model, true);
 	}
 
 	loadSheet() {
-		this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.ForgeViewer.current_sheet));
+		this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.current_sheet));
 	}
 
 	/**
@@ -99,10 +121,7 @@ class Viewer extends Component {
 		var options = {
 			env: 'AutodeskProduction',
 			getAccessToken: (callback) =>
-				callback(
-					this.props.Autodesk.login_3_legged.access_token,
-					this.props.Autodesk.login_3_legged.expires_in,
-				),
+				callback(this.props.login_3_legged.access_token, this.props.login_3_legged.expires_in),
 		};
 
 		Autodesk.Viewing.Initializer(options, () => {
@@ -117,11 +136,8 @@ class Viewer extends Component {
 				});
 				this.props.setSheetsSuccess(elements);
 				this.props.initializeViewer();
-				if (!!this.props.ForgeViewer.current_sheet) {
-					this.viewer.loadDocumentNode(
-						this.doc,
-						this.doc.getRoot().findByGuid(this.props.ForgeViewer.current_sheet),
-					);
+				if (!!this.props.current_sheet) {
+					this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.current_sheet));
 				}
 			};
 
@@ -145,69 +161,122 @@ class Viewer extends Component {
 			Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
 
 			this.viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, () => {
-				const tree = this.viewer.model.getInstanceTree();
-				const rootId = tree.getRootId();
-				tree.enumNodeChildren(rootId, (roomCategoryId) => {
-					if (tree.getNodeName(roomCategoryId) === 'Rooms') {
-						var rooms = {};
-						tree.enumNodeChildren(roomCategoryId, (dbID) => {
-							let revit_id = /.+\[(.+)\]/g.exec(tree.getNodeName(dbID))[1];
-							rooms[revit_id] = { dbID };
-						});
+				if (this.viewer) {
+					const tree = this.viewer.model.getInstanceTree();
+					const rootId = tree.getRootId();
+
+					var elements = {};
+					var rooms = {};
+
+					if (this.props.active_acceptance_type === ACCEPTANCE_TYPE.MONOLITHIC) {
+						this.viewer.hide(rootId);
+						tree.enumNodeChildren(
+							rootId,
+							(dbID) => {
+								if (tree.getChildCount(dbID) === 0) {
+									let revit_id = /.+\[(.+)\]/g.exec(tree.getNodeName(dbID));
+
+									if (revit_id) {
+										if (tree.getNodeName(tree.getNodeParentId(dbID)) === 'Rooms')
+											rooms[revit_id[1]] = { dbID };
+										elements[revit_id[1]] = dbID;
+									}
+								}
+							},
+							true,
+						);
+
+						this.props.setViewerElements(elements);
+					}
+					if (this.props.active_acceptance_type === ACCEPTANCE_TYPE.ARCHITECTURAL) {
+						tree.enumNodeChildren(
+							rootId,
+							(dbID) => {
+								if (tree.getChildCount(dbID) === 0) {
+									let revit_id = /.+\[(.+)\]/g.exec(tree.getNodeName(dbID));
+
+									if (revit_id) {
+										if (tree.getNodeName(tree.getNodeParentId(dbID)) === 'Rooms')
+											rooms[revit_id[1]] = dbID;
+									}
+								}
+							},
+							true,
+						);
+
 						this.props.setViewerRooms(rooms);
 					}
-				});
+				}
 			});
 
 			this.viewer.addEventListener(
 				Autodesk.Viewing.SELECTION_CHANGED_EVENT,
 				// debounce(
 				({ dbIdArray }) => {
-					if (dbIdArray.length > 0) {
-						this.viewer.model.getBulkProperties(
-							dbIdArray,
-							['Category', 'name'],
-							(data) => {
-								// gdy bedzie wybieranych wiecej pomieszczeń to trzeba tutaj zrobić pętle
-								if (
-									data.length > 0 &&
-									data[0].properties[0].displayValue === 'Revit Rooms' &&
-									!this.props.rooms_data_loading
-								) {
-									const selectedElement = data.map((dat) => dat.name.match(/^.+\[(.+)\]$/)[1]);
+					if (this.props.active_acceptance_type === ACCEPTANCE_TYPE.MONOLITHIC) {
+						if (dbIdArray.length > 0) {
+							this.props.selectedElementsAdd(dbIdArray);
+							// if (dbIdArray.toString() !== this.props.selected_elements.toString()) {
+							// 	const objectsToSelect = dbIdArray.filter(
+							// 		(e) => !this.props.selected_elements.includes(e),
+							// 	);
+							// 	if (objectsToSelect.length > 0) {
+							// 		this.viewer.model.getBulkProperties(
+							// 			objectsToSelect,
+							// 			['name'],
+							// 			(data) => {
+							// 				if (data.length > 0) {
+							// 					const selectedElement = data.map((dat) =>
+							// 						parseInt(dat.name.match(/^.+\[(.+)\]$/)[1]),
+							// 					);
+							// 					this.props.handleSelectedElements(selectedElement);
+							// 				}
+							// 			},
+							// 			(a) => {
+							// 				console.log(a);
+							// 			},
+							// 		);
+							// 	}
+							// }
+						}
+					} else if (this.props.active_acceptance_type === ACCEPTANCE_TYPE.ARCHITECTURAL) {
+						if (dbIdArray.length > 0) {
+							this.viewer.model.getBulkProperties(
+								dbIdArray,
+								['Category', 'name'],
+								(data) => {
+									// gdy bedzie wybieranych wiecej pomieszczeń to trzeba tutaj zrobić pętle
 									if (
-										selectedElement.toString() &&
-										this.props.Odbiory.Rooms.selected_rooms.toString() !==
-											selectedElement.toString()
+										data.length > 0 &&
+										data[0].properties[0].displayValue === 'Revit Rooms' &&
+										!this.props.rooms_data_loading
 									) {
-										const selectedRoom = selectedElement.filter(
-											(e) => this.props.Odbiory.Rooms.byId[e],
-										);
-										let difference = selectedRoom.filter(
-											(e) => !this.props.Odbiory.Rooms.selected_rooms.includes(e),
-										)[0];
-										if (difference) {
-											this.props.selectRoom(difference, '', false);
+										const selectedElement = data.map((dat) => dat.name.match(/^.+\[(.+)\]$/)[1]);
+										if (
+											selectedElement.toString() &&
+											this.props.selected_rooms.toString() !== selectedElement.toString()
+										) {
+											const selectedRoom = selectedElement.filter(
+												(e) => this.props.room_by_Id[e],
+											);
+											let difference = selectedRoom.filter(
+												(e) => !this.props.selected_rooms.includes(e),
+											)[0];
+											if (difference) {
+												this.props.selectRoom(difference, '', false);
+											}
 										}
-										// else {
-										// 	this.viewer.clearSelection();
-										// 	this.props.initialiseModal(
-										// 		'Uwaga!',
-										// 		'Nie przewidziano robót dla danego pomieszczenia.',
-										// 	);
-										// }
 									}
-								}
-							},
-							(a) => {
-								console.log(a);
-							},
-						);
-					} else {
-						this.props.selectRoom([], 'clear', false);
+								},
+								(a) => {
+									console.log(a);
+								},
+							);
+						} else {
+							this.props.selectRoom([], 'clear', false);
+						}
 					}
 				},
-				// , 500), // opóźnienie kolekcjonowania i wykonywania akcji zaznaczania roomów
 			);
 		});
 	}
@@ -218,7 +287,53 @@ class Viewer extends Component {
 		});
 	}
 
+	handleSelect(prev_selected_elements, actual_selected_elements) {
+		if (JSON.stringify(prev_selected_elements) !== JSON.stringify(actual_selected_elements)) {
+			this.viewer.clearSelection();
+			this.viewer.select(actual_selected_elements);
+		}
+	}
+
+	handleColorize(prev_colored_elements, this_colored_elements) {
+		if (JSON.stringify(prev_colored_elements) !== JSON.stringify(this_colored_elements)) {
+			this.viewer.clearThemingColors();
+			if (this_colored_elements.length > 0) {
+				this_colored_elements.forEach(([element, color]) =>
+					this.viewer.setThemingColor(
+						element,
+						new THREE.Vector4(color.r, color.g, color.b, color.a || 1),
+						this.viewer.model,
+					),
+				);
+			}
+		}
+	}
+
+	handleLock(prev_disabled_elements, this_disabled_elements) {
+		if (JSON.stringify(prev_disabled_elements) !== JSON.stringify(this_disabled_elements)) {
+			if (this_disabled_elements.length > 0) {
+				this.viewer.lockSelection(this_disabled_elements, true);
+				if (prev_disabled_elements.length > 0) {
+					this.viewer.unlockSelection(
+						prev_disabled_elements.filter((e) => !this_disabled_elements.includes(e)),
+					);
+				}
+			} else {
+				prev_disabled_elements.length > 0 && this.viewer.unlockSelection(prev_disabled_elements);
+			}
+		}
+	}
+	handleVisibility(prev_visible_elements, actual_visible_elements, prev_hidden_elements, actual_hidden_elements) {
+		if (prev_hidden_elements.toString() !== actual_hidden_elements) {
+			this.viewer.hide(actual_hidden_elements);
+		}
+		if (prev_visible_elements.toString() !== actual_visible_elements) {
+			this.viewer.show(actual_visible_elements);
+		}
+	}
+
 	render() {
+		console.count('RENDER');
 		return <div id="forgeViewer" />;
 	}
 }
@@ -227,10 +342,22 @@ const mapStateToProps = ({ ForgeViewer, Autodesk, Odbiory, CMSLogin }) => ({
 	rooms_data_loading: ForgeViewer.model_rooms_loading || Odbiory.Rooms.rooms_loading,
 	colored_element: ForgeViewer.colored_element,
 	color: ForgeViewer.color,
-	Autodesk,
-	CMSLogin,
-	ForgeViewer,
-	Odbiory,
+	visible_element: ForgeViewer.visible_element,
+	model_elements_loading: ForgeViewer.model_elements_loading,
+	login_3_legged: Autodesk.login_3_legged,
+	project_urn: CMSLogin.project.urn,
+	status: Odbiory.Results.status,
+
+	selected_rooms: Odbiory.Rooms.selected_rooms,
+	room_by_Id: Odbiory.Rooms.byId,
+	model_rooms: ForgeViewer.model_rooms,
+	active_acceptance_type: Odbiory.OdbioryComponent.active_acceptance_type,
+	current_sheet: ForgeViewer.current_sheet,
+	selected_elements: ForgeViewer.selected_elements,
+	colored_elements: ForgeViewer.colored_elements,
+	disabled_elements: ForgeViewer.disabled_elements,
+	hidden_elements: ForgeViewer.hidden_elements,
+	visible_elements: ForgeViewer.visible_elements,
 });
 
 const mapDispatchToProps = {
@@ -239,6 +366,9 @@ const mapDispatchToProps = {
 	initializeViewer,
 	setViewerRooms,
 	selectRoom,
+	setViewerElements,
+	handleSelectedElements,
+	selectedElementsAdd,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Viewer);

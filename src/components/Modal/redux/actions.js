@@ -9,13 +9,21 @@ const showModal = () => ({
 export const hideModal = () => ({
 	type: HIDE_MODAL,
 });
-const setModalData = (title, body) => ({
+const setModalData = (title, body, onHideModal) => ({
 	type: SET_MODAL_DATA,
 	title,
 	body,
+	onHideModal,
 });
 
-export const initialiseModal = (title, body) => (dispatch) => {
-	dispatch(setModalData(title, body));
+/**
+ *
+ * @param title {string}
+ * @param body {string | React.FunctionComponent}
+ * @param onHideModal {function()}
+ * @return {function(...[*]=)}
+ */
+export const initialiseModal = (title, body, onHideModal) => (dispatch) => {
+	dispatch(setModalData(title, body, onHideModal));
 	dispatch(showModal());
 };

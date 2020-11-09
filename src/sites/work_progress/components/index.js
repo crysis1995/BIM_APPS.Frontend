@@ -8,11 +8,11 @@ import OdbioryComponent from './Upgradings/OdbioryComponent';
 import ResultsComponent from './Results';
 import TermsComponent from './Terms';
 import Tools from './Tools';
-import { CONSTANTS } from '../redux/types/constans';
+import { ACCEPTANCE_TYPE, CONSTANTS } from '../redux/types/constans';
 
 class Odbiory extends React.Component {
 	componentDidMount() {
-		this.props.componentStarted();
+		this.props.componentStarted(ACCEPTANCE_TYPE.ARCHITECTURAL);
 	}
 
 	render() {

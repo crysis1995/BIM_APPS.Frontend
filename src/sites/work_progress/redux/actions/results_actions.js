@@ -1,3 +1,6 @@
+import { coloredElementsAdd, coloredElementsClean } from '../../../../components/ForgeViewer/redux/actions';
+import { config } from '../../../../config';
+import { hexToRgb } from '../../../../utils/hexToRgb';
 import {
 	CLEAN_RESULTS,
 	COLOR_RESULTS,
@@ -24,11 +27,28 @@ export const resetResults = () => ({
 });
 
 export const colorResultByRoom = (job_id) => (dispatch, getState) => {
-	const { active_job_id } = getState().Odbiory.Results;
-	if (job_id === active_job_id) {
-		dispatch(cleanResults());
-	} else {
-		dispatch(resultsColorByRoom(job_id));
+	const { active_job_id, byJobId } = getState().Odbiory.Results;
+	const { model_rooms } = getState().ForgeViewer;
+	if (job_id) {
+		if (job_id === active_job_id) {
+			dispatch(cleanResults());
+			dispatch(coloredElementsClean());
+		} else {
+			dispatch(resultsColorByRoom(job_id));
+			const elements = byJobId[job_id].elements;
+			let toColor = {};
+			for (let revit_id in model_rooms) {
+				if (elements.hasOwnProperty(revit_id)) {
+					const filtered = Object.keys(config.units.area.color_map).filter((e) =>
+						config.units.area.color_map[e].condition(elements[revit_id]),
+					)[0];
+					toColor[model_rooms[revit_id]] = hexToRgb(config.units.area.color_map[filtered].color, true);
+				} else {
+					toColor[model_rooms[revit_id]] = hexToRgb(config.units.area.color_map[1].color, true);
+				}
+			}
+			dispatch(coloredElementsAdd(toColor));
+		}
 	}
 };
 
@@ -50,5 +70,8 @@ export const setResultsByJobId = (jobId, result) => ({
 
 export const updateResultsByJobId = (jobId, summary_value, revit_id, percentage_value) => ({
 	type: RESULTS_UPDATE_DATA,
-	jobId, summary_value, revit_id, percentage_value
+	jobId,
+	summary_value,
+	revit_id,
+	percentage_value,
 });

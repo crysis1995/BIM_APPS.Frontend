@@ -29,7 +29,7 @@ function AcceptanceLayout(props) {
 					condition={true}>
 					<Col>
 						<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
-							{props.started && <Viewer />}
+							{props.started.hasOwnProperty(ACCEPTANCE_TYPE.MONOLITHIC) && <Viewer />}
 						</div>
 					</Col>
 					<Col>
@@ -48,7 +48,7 @@ function AcceptanceLayout(props) {
 					condition={true}>
 					<Col>
 						<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
-							{props.started && <Viewer />}
+							{props.started.hasOwnProperty(ACCEPTANCE_TYPE.ARCHITECTURAL) && <Viewer />}
 						</div>
 					</Col>
 					<Col>
@@ -67,7 +67,7 @@ function AcceptanceLayout(props) {
 					condition={true}>
 					<Col>
 						<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
-							{props.started && <Viewer />}
+							{props.started.hasOwnProperty(ACCEPTANCE_TYPE.MEP) && <Viewer />}
 						</div>
 					</Col>
 					<Col>

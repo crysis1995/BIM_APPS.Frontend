@@ -1,6 +1,6 @@
 import { ofType } from 'redux-observable';
 import { concat, from, of } from 'rxjs';
-import { catchError, map, mergeMap, switchMap, filter, mapTo } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { colorElements } from '../../../../components/ForgeViewer/redux/actions';
 import { config } from '../../../../config';
 import { hexToRgb } from '../../../../utils/hexToRgb';
@@ -72,6 +72,5 @@ function getColor(percentage_value) {
 			setting_color_map[id].condition(percentage_value),
 		)[0];
 	}
-	const color = hexToRgb(setting_color_map[colorIndex].color, true);
-	return color;
+	return hexToRgb(setting_color_map[colorIndex].color, true);
 }

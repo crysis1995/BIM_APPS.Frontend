@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { componentStarted } from '../../redux/actions/odbiory_actions';
+import { ACCEPTANCE_TYPE } from '../../redux/types/constans';
 import StructuralComponent from '../Structural';
 
 // const WEEK_DAYS_NUMBER = 7;
@@ -29,6 +31,10 @@ import StructuralComponent from '../Structural';
 // };
 
 function Structural(props) {
+	useEffect(() => {
+		props.componentStarted(ACCEPTANCE_TYPE.MONOLITHIC);
+	}, [...Object.keys(props.started)]);
+
 	return (
 		<div className="d-flex flex-column w-100">
 			<StructuralComponent.Inputs />
@@ -37,8 +43,10 @@ function Structural(props) {
 	);
 }
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = ({ Odbiory }) => ({
+	started: Odbiory.OdbioryComponent.started,
+});
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { componentStarted };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Structural);

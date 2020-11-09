@@ -17,6 +17,10 @@ function M3({ children, precision }) {
 		</span>
 	);
 }
+function CM({ children, precision }) {
+	if (typeof children === 'number') children = RoundNumber(children, precision);
+	return <span>{children} cm</span>;
+}
 function NONE({ children, precision }) {
 	if (typeof children === 'number') children = RoundNumber(children, precision);
 	return <span>{children}</span>;
@@ -25,6 +29,7 @@ const UNITS = {
 	M2,
 	M3,
 	NONE,
+	CM,
 };
 
 export default UNITS;

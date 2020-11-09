@@ -18,7 +18,7 @@ export const config = {
 					condition: (x) => x > 0 && x < 0.25,
 				},
 				3: {
-					color: '#FFFF00',
+					color: '#ffff00',
 					option: '25>=%>50',
 					condition: (x) => x >= 0.25 && x < 0.5,
 				},

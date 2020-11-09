@@ -1,4 +1,10 @@
-import { UPGRADE_BY_JOB, UPGRADING_SET_DATA, UPGRADING_UPDATE_JOB } from '../types';
+import {
+	UPGRADE_BY_JOB,
+	 UPGRADING_HANDLE_SELECTED_ELEMENTS,
+	UPGRADING_SET_ACTUAL_ELEMENTS,
+	UPGRADING_SET_DATA,
+	UPGRADING_UPDATE_JOB
+} from '../types';
 
 export const setUpgradingData = (
 	job_id,
@@ -32,4 +38,14 @@ export const updateJobInStore = (job_id, revit_id, percentage_value, reference_j
 	revit_id,
 	percentage_value,
 	reference_job,
+});
+
+export const setCurrentVisibleElements = (elements) => ({
+	type: UPGRADING_SET_ACTUAL_ELEMENTS,
+	elements,
+});
+
+export const handleSelectedElements = (elements) => ({
+	type: UPGRADING_HANDLE_SELECTED_ELEMENTS,
+	elements,
 });
