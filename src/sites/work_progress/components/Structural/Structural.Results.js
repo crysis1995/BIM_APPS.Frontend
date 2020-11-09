@@ -165,7 +165,7 @@ function StructuralResults(props) {
 }
 
 const mapStateToProps = (state) => ({
-	objects: objectSelector(state),
+	// objects: objectSelector(state),
 });
 
 const mapDispatchToProps = {

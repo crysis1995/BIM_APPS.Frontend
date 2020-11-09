@@ -1,7 +1,14 @@
 import dotProp from 'dot-prop';
 import { RoundNumber } from '../../../../utils/RoundNumber';
-import { CLEAN_SELECTION, REMOVE_ROOM_FROM_SELECTION, UPGRADING_SET_DATA, UPGRADING_UPDATE_JOB } from '../types';
 import data from '../__MOCK__/MONOLITHIC.upgrading.json';
+import {
+	CLEAN_SELECTION,
+	REMOVE_ROOM_FROM_SELECTION,
+	UPGRADING_HANDLE_SELECTED_ELEMENTS,
+	UPGRADING_SET_ACTUAL_ELEMENTS,
+	UPGRADING_SET_DATA,
+	UPGRADING_UPDATE_JOB,
+} from '../types';
 
 const initialState = {
 	byJobId: {},
@@ -9,11 +16,33 @@ const initialState = {
 	upgrading_error: null,
 	MONOLITHIC: {
 		byRevitId: data,
+		actualElements: [],
+		selectedElements: [],
 	},
 };
 
+function handleSelectedElements(state, { elements }) {
+	if (!Array.isArray(elements)) elements = [elements];
+	elements.forEach((e) => {
+		const index = state.MONOLITHIC.selectedElements.indexOf(e);
+		if (index === -1) state.MONOLITHIC.selectedElements.push(e);
+		else state.MONOLITHIC.selectedElements.splice(index, 1);
+	});
+	return { ...state };
+}
+
 const UpgradingReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case UPGRADING_SET_ACTUAL_ELEMENTS:
+			return {
+				...state,
+				MONOLITHIC: {
+					...state.MONOLITHIC,
+					actualElements: action.elements,
+				},
+			};
+		case UPGRADING_HANDLE_SELECTED_ELEMENTS:
+			return handleSelectedElements(state, action);
 		case UPGRADING_UPDATE_JOB:
 			return updateJob(state, action);
 		case UPGRADING_SET_DATA:
@@ -22,7 +51,6 @@ const UpgradingReducer = (state = initialState, action) => {
 			return removeRoomFromUpgrading(state, action);
 		case CLEAN_SELECTION:
 			return removeAllRoomsFromUpgrading(state);
-
 		default:
 			return state;
 	}

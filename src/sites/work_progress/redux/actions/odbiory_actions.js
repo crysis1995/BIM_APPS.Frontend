@@ -10,7 +10,9 @@ import {
 	ODBIORY_COMPONENT_INCREMENT_DAY,
 	ODBIORY_COMPONENT_SET_ACCEPTANCE_TYPE,
 	ODBIORY_COMPONENT_SET_CRANE,
+	ODBIORY_COMPONENT_SET_CURRENT_ELEMENTS,
 	ODBIORY_COMPONENT_SET_DATE,
+	ODBIORY_COMPONENT_SET_INITIAL_ROTATION_DAY,
 	ODBIORY_COMPONENT_SET_LEVEL,
 	ODBIORY_COMPONENT_SET_LEVEL_OPTIONS,
 	ODBIORY_COMPONENT_SET_ROTATION_DAY,
@@ -96,6 +98,10 @@ export const selectRotationDate = (day) => ({
 	type: ODBIORY_COMPONENT_SET_ROTATION_DAY,
 	day,
 });
+export const selectInitialRotationDate = (day) => ({
+	type: ODBIORY_COMPONENT_SET_INITIAL_ROTATION_DAY,
+	day,
+});
 
 export const incrementDay = () => ({
 	type: ODBIORY_COMPONENT_INCREMENT_DAY,
@@ -104,6 +110,8 @@ export const incrementDay = () => ({
 export const decrementDay = () => ({
 	type: ODBIORY_COMPONENT_DECREMENT_DAY,
 });
+
+
 
 /*
  *

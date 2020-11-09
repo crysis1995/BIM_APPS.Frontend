@@ -3,19 +3,18 @@ import {
 	CHANGE_UPGRADING_BY_TYPE,
 	CHANGE_VISIBILITY_DIFFERENTIAL_JOBS,
 	CHANGE_VISIBILITY_UNITED_JOBS,
-	ODBIORY_COMPONENT_DECREMENT_DAY,
 	ODBIORY_COMPONENT_ENDED,
 	ODBIORY_COMPONENT_FETCH_CRANE_END,
 	ODBIORY_COMPONENT_FETCH_CRANE_START,
-	ODBIORY_COMPONENT_INCREMENT_DAY,
 	ODBIORY_COMPONENT_SET_ACCEPTANCE_TYPE,
 	ODBIORY_COMPONENT_SET_CRANE,
 	ODBIORY_COMPONENT_SET_DATE,
+	ODBIORY_COMPONENT_SET_INITIAL_ROTATION_DAY,
 	ODBIORY_COMPONENT_SET_LEVEL,
+	ODBIORY_COMPONENT_SET_LEVEL_OPTIONS,
 	ODBIORY_COMPONENT_SET_ROTATION_DAY,
 	ODBIORY_COMPONENT_STARTED,
 	SET_ACTIVE_TAB,
-	ODBIORY_COMPONENT_SET_LEVEL_OPTIONS,
 } from '../types';
 
 import { CONSTANTS, UPGRADING_BY } from '../types/constans';
@@ -78,10 +77,8 @@ const OdbioryComponentReducer = (state = initialState, action) => {
 			};
 		case ODBIORY_COMPONENT_SET_ROTATION_DAY:
 			return setRotationDay(state, action);
-		// case ODBIORY_COMPONENT_INCREMENT_DAY:
-		// 	return incrementDay(state, action);
-		// case ODBIORY_COMPONENT_DECREMENT_DAY:
-		// 	return decrementDay(state, action);
+		case ODBIORY_COMPONENT_SET_INITIAL_ROTATION_DAY:
+			return setRotationDay(state, action);
 
 		case ODBIORY_COMPONENT_FETCH_CRANE_START:
 			return {
@@ -148,17 +145,17 @@ const OdbioryComponentReducer = (state = initialState, action) => {
 	}
 };
 
-function incrementDay(state, action) {
-	dotProp.set(state, `MONOLITHIC.rotation_day`, dotProp.get(state, `MONOLITHIC.rotation_day`) + 1);
-	return { ...state };
-}
-
-function decrementDay(state, action) {
-	if (dotProp.get(state, `MONOLITHIC.rotation_day`) > 1) {
-		dotProp.set(state, `MONOLITHIC.rotation_day`, dotProp.get(state, `MONOLITHIC.rotation_day`) - 1);
-	}
-	return { ...state };
-}
+// function incrementDay(state, action) {
+// 	dotProp.set(state, `MONOLITHIC.rotation_day`, dotProp.get(state, `MONOLITHIC.rotation_day`) + 1);
+// 	return { ...state };
+// }
+//
+// function decrementDay(state, action) {
+// 	if (dotProp.get(state, `MONOLITHIC.rotation_day`) > 1) {
+// 		dotProp.set(state, `MONOLITHIC.rotation_day`, dotProp.get(state, `MONOLITHIC.rotation_day`) - 1);
+// 	}
+// 	return { ...state };
+// }
 
 function setRotationDay(state, { day }) {
 	if (typeof day === 'number' && day > 0) dotProp.set(state, `MONOLITHIC.rotation_day`, day);
