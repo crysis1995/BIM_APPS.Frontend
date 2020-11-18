@@ -155,7 +155,7 @@ class Viewer extends Component {
 					var rooms = {};
 
 					if (this.props.active_acceptance_type === ACCEPTANCE_TYPE.MONOLITHIC) {
-						// this.viewer.hide(rootId);
+						this.viewer.hide(rootId);
 						tree.enumNodeChildren(
 							rootId,
 							(dbID) => {
