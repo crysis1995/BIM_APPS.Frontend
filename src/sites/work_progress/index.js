@@ -13,7 +13,6 @@ const Viewer = React.lazy(() => import('../../components/ForgeViewer/components'
 
 function AcceptanceLayout(props) {
 	const acceptance_type = props.match.params.type;
-	console.log(acceptance_type);
 	useEffect(() => {
 		props.setAcceptanceType(acceptance_type);
 	}, [acceptance_type]);

@@ -44,4 +44,17 @@ export const config = {
 			},
 		},
 	},
+	ACCEPTANCE: {
+		MONOLITHIC: {
+			legend: {
+				active: { color: '#FFCC1B', alpha: 0.7 },
+				finished: { color: '#00ca43', alpha: 0.9 },
+				finished_earlier: { color: '#3A86FF', alpha: 0.9 },
+				delayed: { color: '#EF233C', alpha: 0.7 },
+				out_of: { color: '#efefef', alpha: 0.85 },
+				inactive: { color: '#efefef', alpha: 0.7 },
+				future: { color: '#818181', alpha: 0.9 },
+			},
+		},
+	},
 };

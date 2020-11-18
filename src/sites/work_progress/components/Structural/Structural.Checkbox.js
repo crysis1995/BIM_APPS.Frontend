@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { connect, useSelector } from 'react-redux';
+import React from 'react';
+import { connect } from 'react-redux';
 import { handleSelectedElements } from '../../redux/actions/upgrading_actions';
-import { selectedItems } from './Structural.Results.Selector';
 
-function Checkbox({ id, isSelected, handleSelectedElements }) {
-	return <input type="checkbox" checked={isSelected} onChange={() => handleSelectedElements(id)} />;
+function Checkbox({ id, selected, handleSelectedElements }) {
+	console.log(id, selected);
+	return <input type="checkbox" checked={false} onChange={() => handleSelectedElements(id)} />;
 }
 
-const mapStateToProps = (state, props) => ({
-	isSelected: selectedItems(state, props),
+const mapStateToProps = ({ Odbiory }) => ({
+	selected: Odbiory.Upgrading.MONOLITHIC.selectedElements,
 });
 
 const mapDispatchToProps = {

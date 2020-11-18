@@ -17,7 +17,6 @@ export const logout_bim360 = () => (dispatch) => {
 
 const startupDependentFunction = (credentials) => (dispatch) => {
 	dispatch(AutodeskLoginActions.LOGIN_3_LEGGED(credentials));
-	// dispatch(fetchProjectDetails());
 	dispatch(runTimer());
 };
 

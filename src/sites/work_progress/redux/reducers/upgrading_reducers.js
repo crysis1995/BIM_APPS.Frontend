@@ -7,6 +7,7 @@ import {
 	UPGRADING_HANDLE_SELECTED_ELEMENTS,
 	UPGRADING_SET_ACTUAL_ELEMENTS,
 	UPGRADING_SET_DATA,
+	UPGRADING_SET_STATUSES,
 	UPGRADING_UPDATE_JOB,
 } from '../types';
 
@@ -22,12 +23,38 @@ const initialState = {
 };
 
 function handleSelectedElements(state, { elements }) {
-	if (!Array.isArray(elements)) elements = [elements];
-	elements.forEach((e) => {
-		const index = state.MONOLITHIC.selectedElements.indexOf(e);
-		if (index === -1) state.MONOLITHIC.selectedElements.push(e);
-		else state.MONOLITHIC.selectedElements.splice(index, 1);
-	});
+	if (!!!elements) {
+		return { ...state, MONOLITHIC: { ...state.MONOLITHIC, selectedElements: [] } };
+	} else if (Array.isArray(elements)) {
+		if (elements.toString() === state.MONOLITHIC.selectedElements.toString()) {
+			return { ...state, MONOLITHIC: { ...state.MONOLITHIC, selectedElements: [] } };
+		} else {
+			return { ...state, MONOLITHIC: { ...state.MONOLITHIC, selectedElements: [...elements] } };
+		}
+	} else {
+		const prev = state.MONOLITHIC.selectedElements;
+		if (prev.includes(elements)) {
+			return {
+				...state,
+				MONOLITHIC: { ...state.MONOLITHIC, selectedElements: [...prev.filter((e) => e !== elements)] },
+			};
+		} else {
+			return {
+				...state,
+				MONOLITHIC: { ...state.MONOLITHIC, selectedElements: [...state.MONOLITHIC.selectedElements, elements] },
+			};
+		}
+	}
+}
+
+function handleSetStatus(state, { selectedElements, status, rotation_day }) {
+	if (Array.isArray(selectedElements) && selectedElements.length > 0) {
+		selectedElements.forEach((revit_id) => {
+			dotProp.set(state, `MONOLITHIC.byRevitId.${revit_id}.Status.id`, status);
+			dotProp.set(state, `MONOLITHIC.byRevitId.${revit_id}.Status.rotation_day`, rotation_day);
+			dotProp.set(state, `MONOLITHIC.byRevitId.${revit_id}.Status.updated_at`, new Date().toJSON());
+		});
+	}
 	return { ...state };
 }
 
@@ -41,6 +68,8 @@ const UpgradingReducer = (state = initialState, action) => {
 					actualElements: action.elements,
 				},
 			};
+		case UPGRADING_SET_STATUSES:
+			return handleSetStatus(state, action);
 		case UPGRADING_HANDLE_SELECTED_ELEMENTS:
 			return handleSelectedElements(state, action);
 		case UPGRADING_UPDATE_JOB:

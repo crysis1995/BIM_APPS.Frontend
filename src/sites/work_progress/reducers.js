@@ -7,7 +7,7 @@ import Odbiory_epics from './redux/epics/odbiory_epics';
 import { colorizeRooms, fetchResultsForLevel, updateResultByUpgrading } from './redux/epics/results_epics';
 import { fetchRoomsData, selectRoom } from './redux/epics/rooms_epics';
 import { getDepartmentsWithTerms } from './redux/epics/terms_epics';
-import { upgradeJobEpic } from './redux/epics/upgrading_epics';
+import Upgrading_epics from './redux/epics/upgrading_epics';
 
 import Jobs from './redux/reducers/jobs_reducers';
 import Levels from './redux/reducers/levels_reducers';
@@ -30,7 +30,7 @@ export const OdbioryReducer = combineReducers({
 });
 
 export const OdbioryEpics = combineEpics(
-	upgradeJobEpic,
+	Upgrading_epics,
 	fetchResultsForLevel,
 	selectRoom,
 	getRoomData,

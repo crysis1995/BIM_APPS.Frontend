@@ -55,8 +55,10 @@
 		"redux-thunk": "^2.3.0",
 		"remote-redux-devtools": "^0.5.16",
 		"reselect": "^4.0.0",
+		"reselect-equality-check-n-parameters": "^0.2.0",
 		"rxjs": "^6.6.3",
 		"set-value": "^3.0.2",
+		"shallow-equal": "^1.2.1",
 		"uuid": "^8.2.0"
 	},
 	"scripts": {

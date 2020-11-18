@@ -56,7 +56,6 @@ class Viewer extends Component {
 					this.selectRoomOnViewer();
 				}
 				if (this.props.current_sheet && !this.props.rooms_data_loading) {
-					console.log(this.props.colored_elements);
 					this.handleColorize(
 						Object.entries(prevProps.colored_elements),
 						Object.entries(this.props.colored_elements),
@@ -86,19 +85,6 @@ class Viewer extends Component {
 					);
 				}
 			}
-		}
-	}
-
-	colorizeResults() {
-		const { status } = this.props;
-		try {
-			if (this.props.color && status === 'color') {
-				this.colorByRoom(this.props.colored_element);
-			} else {
-				this.viewer.clearThemingColors();
-			}
-		} catch (e) {
-			console.log(e);
 		}
 	}
 
@@ -169,7 +155,7 @@ class Viewer extends Component {
 					var rooms = {};
 
 					if (this.props.active_acceptance_type === ACCEPTANCE_TYPE.MONOLITHIC) {
-						this.viewer.hide(rootId);
+						// this.viewer.hide(rootId);
 						tree.enumNodeChildren(
 							rootId,
 							(dbID) => {
@@ -177,8 +163,6 @@ class Viewer extends Component {
 									let revit_id = /.+\[(.+)\]/g.exec(tree.getNodeName(dbID));
 
 									if (revit_id) {
-										if (tree.getNodeName(tree.getNodeParentId(dbID)) === 'Rooms')
-											rooms[revit_id[1]] = { dbID };
 										elements[revit_id[1]] = dbID;
 									}
 								}
@@ -209,63 +193,18 @@ class Viewer extends Component {
 				}
 			});
 
-			this.viewer.addEventListener(
-				Autodesk.Viewing.SELECTION_CHANGED_EVENT,
-				// debounce(
-				({ dbIdArray }) => {
-					if (this.props.active_acceptance_type === ACCEPTANCE_TYPE.MONOLITHIC) {
-						if (dbIdArray.length > 0) {
-							this.props.selectedElementsAdd(dbIdArray);
-							// if (dbIdArray.toString() !== this.props.selected_elements.toString()) {
-							// 	const objectsToSelect = dbIdArray.filter(
-							// 		(e) => !this.props.selected_elements.includes(e),
-							// 	);
-							// 	if (objectsToSelect.length > 0) {
-							// 		this.viewer.model.getBulkProperties(
-							// 			objectsToSelect,
-							// 			['name'],
-							// 			(data) => {
-							// 				if (data.length > 0) {
-							// 					const selectedElement = data.map((dat) =>
-							// 						parseInt(dat.name.match(/^.+\[(.+)\]$/)[1]),
-							// 					);
-							// 					this.props.handleSelectedElements(selectedElement);
-							// 				}
-							// 			},
-							// 			(a) => {
-							// 				console.log(a);
-							// 			},
-							// 		);
-							// 	}
-							// }
-						}
-					} else if (this.props.active_acceptance_type === ACCEPTANCE_TYPE.ARCHITECTURAL) {
+			this.viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, ({ dbIdArray }) => {
+				if (this.props.active_acceptance_type === ACCEPTANCE_TYPE.MONOLITHIC) {
+					if (JSON.stringify(dbIdArray) !== JSON.stringify(this.props.selected_elements)) {
+						this.props.selectedElementsAdd(dbIdArray);
 						if (dbIdArray.length > 0) {
 							this.viewer.model.getBulkProperties(
 								dbIdArray,
-								['Category', 'name'],
+								['name'],
 								(data) => {
-									// gdy bedzie wybieranych wiecej pomieszczeń to trzeba tutaj zrobić pętle
-									if (
-										data.length > 0 &&
-										data[0].properties[0].displayValue === 'Revit Rooms' &&
-										!this.props.rooms_data_loading
-									) {
+									if (data.length > 0) {
 										const selectedElement = data.map((dat) => dat.name.match(/^.+\[(.+)\]$/)[1]);
-										if (
-											selectedElement.toString() &&
-											this.props.selected_rooms.toString() !== selectedElement.toString()
-										) {
-											const selectedRoom = selectedElement.filter(
-												(e) => this.props.room_by_Id[e],
-											);
-											let difference = selectedRoom.filter(
-												(e) => !this.props.selected_rooms.includes(e),
-											)[0];
-											if (difference) {
-												this.props.selectRoom(difference, '', false);
-											}
-										}
+										this.props.handleSelectedElements(selectedElement);
 									}
 								},
 								(a) => {
@@ -273,11 +212,45 @@ class Viewer extends Component {
 								},
 							);
 						} else {
-							this.props.selectRoom([], 'clear', false);
+							this.props.handleSelectedElements([]);
 						}
 					}
-				},
-			);
+				} else if (this.props.active_acceptance_type === ACCEPTANCE_TYPE.ARCHITECTURAL) {
+					if (dbIdArray.length > 0) {
+						this.viewer.model.getBulkProperties(
+							dbIdArray,
+							['Category', 'name'],
+							(data) => {
+								// gdy bedzie wybieranych wiecej pomieszczeń to trzeba tutaj zrobić pętle
+								if (
+									data.length > 0 &&
+									data[0].properties[0].displayValue === 'Revit Rooms' &&
+									!this.props.rooms_data_loading
+								) {
+									const selectedElement = data.map((dat) => dat.name.match(/^.+\[(.+)\]$/)[1]);
+									if (
+										selectedElement.toString() &&
+										this.props.selected_rooms.toString() !== selectedElement.toString()
+									) {
+										const selectedRoom = selectedElement.filter((e) => this.props.room_by_Id[e]);
+										let difference = selectedRoom.filter(
+											(e) => !this.props.selected_rooms.includes(e),
+										)[0];
+										if (difference) {
+											this.props.selectRoom(difference, '', false);
+										}
+									}
+								}
+							},
+							(a) => {
+								console.log(a);
+							},
+						);
+					} else {
+						this.props.selectRoom([], 'clear', false);
+					}
+				}
+			});
 		});
 	}
 
@@ -289,7 +262,6 @@ class Viewer extends Component {
 
 	handleSelect(prev_selected_elements, actual_selected_elements) {
 		if (JSON.stringify(prev_selected_elements) !== JSON.stringify(actual_selected_elements)) {
-			this.viewer.clearSelection();
 			this.viewer.select(actual_selected_elements);
 		}
 	}
