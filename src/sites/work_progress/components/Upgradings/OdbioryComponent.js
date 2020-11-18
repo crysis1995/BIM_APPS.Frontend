@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import ErrorBoundary from '../../../../components/ErrorBoundary';
 import Loader from '../../../../components/Loader';
-import UNITS from '../../../../components/Units';
 import { selectRoom } from '../../redux/actions/rooms_actions';
 import { UPGRADING_BY } from '../../redux/types/constans';
 import TableComponent from './TableComponent';

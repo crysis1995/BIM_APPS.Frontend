@@ -7,6 +7,7 @@ import {
 	ODBIORY_COMPONENT_FETCH_CRANE_END,
 	ODBIORY_COMPONENT_FETCH_CRANE_START,
 	ODBIORY_COMPONENT_SET_ACCEPTANCE_TYPE,
+	ODBIORY_COMPONENT_SET_ACTUAL_TAB,
 	ODBIORY_COMPONENT_SET_CRANE,
 	ODBIORY_COMPONENT_SET_DATE,
 	ODBIORY_COMPONENT_SET_INITIAL_ROTATION_DAY,
@@ -17,7 +18,7 @@ import {
 	SET_ACTIVE_TAB,
 } from '../types';
 
-import { CONSTANTS, UPGRADING_BY } from '../types/constans';
+import { CONSTANTS, MONOLITHIC, UPGRADING_BY } from '../types/constans';
 
 const initialState = {
 	started: {},
@@ -38,11 +39,20 @@ const initialState = {
 		levels_loading: false,
 		date: new Date(),
 		rotation_day: 0,
+		active_tab: MONOLITHIC.TABS.SCHEDULED,
 	},
 };
 
 const OdbioryComponentReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case ODBIORY_COMPONENT_SET_ACTUAL_TAB:
+			return {
+				...state,
+				MONOLITHIC: {
+					...state.MONOLITHIC,
+					active_tab: action.tab,
+				},
+			};
 		case ODBIORY_COMPONENT_SET_CRANE:
 			return {
 				...state,

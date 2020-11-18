@@ -29,13 +29,14 @@ class Layout extends React.Component {
 						fluid
 						style={{
 							minHeight: window.innerHeight,
+							maxHeight: window.innerHeight,
 							paddingLeft: 0,
 							paddingRight: 0,
 						}}>
 						<Header {...this.props} />
 						<Row
 							noGutters
-							style={{ minHeight: window.innerHeight - 56 }}
+							style={{ maxHeight: window.innerHeight - 56, minHeight: window.innerHeight - 56 }}
 							className="justify-content-md-center">
 							<Switch>
 								<Route path="/login" component={Login} />

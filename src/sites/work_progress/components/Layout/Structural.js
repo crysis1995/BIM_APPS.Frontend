@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { componentStarted } from '../../redux/actions/odbiory_actions';
 import { ACCEPTANCE_TYPE } from '../../redux/types/constans';
 import StructuralComponent from '../Structural';
+import {Col} from "react-bootstrap"
 
 // const WEEK_DAYS_NUMBER = 7;
 // const changeDate = (date, increase = true) => {
@@ -36,10 +37,12 @@ function Structural(props) {
 	}, [...Object.keys(props.started)]);
 
 	return (
-		<div className="d-flex flex-column w-100">
+		<Col className="p-3">
 			<StructuralComponent.Inputs />
+			<StructuralComponent.Tabs />
 			<StructuralComponent.Results />
-		</div>
+			<StructuralComponent.SelectedSummary />
+		</Col>
 	);
 }
 

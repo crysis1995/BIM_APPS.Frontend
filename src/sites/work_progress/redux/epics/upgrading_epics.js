@@ -1,10 +1,11 @@
-import { ofType } from 'redux-observable';
+import { combineEpics, ofType } from 'redux-observable';
 import { concat, from, of, EMPTY } from 'rxjs';
-import { catchError, concatAll, filter, map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, concatAll, filter, map, mapTo, mergeMap, switchMap } from 'rxjs/operators';
+import { FORGE_VIEWER_HANDLE_COLORIZE_FORGE } from '../../../../components/ForgeViewer/redux/actions';
 import { RoundNumber } from '../../../../utils/RoundNumber';
 import { objectJobFetchCompleted, objectJobFetchStart } from '../actions/jobs_actions';
 import { updateJobInStore } from '../actions/upgrading_actions';
-import { UPGRADE_BY_JOB } from '../types';
+import { UPGRADE_BY_JOB, UPGRADING_SET_STATUSES } from '../types';
 import { createReferenceJob, updateObjectJob } from '../utils/jobs_utils';
 
 export const upgradeJobEpic = (action$, state$) =>
@@ -65,3 +66,8 @@ export const upgradeJobEpic = (action$, state$) =>
 			),
 		),
 	);
+
+export const MONOLITHIC_handleSetStatus = (action$) =>
+	action$.pipe(ofType(UPGRADING_SET_STATUSES), mapTo({ type: FORGE_VIEWER_HANDLE_COLORIZE_FORGE }));
+
+export default combineEpics(upgradeJobEpic, MONOLITHIC_handleSetStatus);

@@ -1,11 +1,12 @@
 import { combineEpics, ofType } from 'redux-observable';
 import { combineLatest, concat, EMPTY, from, iif, of } from 'rxjs';
-import { filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { filter, map, mapTo, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import {
 	coloredElementsAdd,
 	coloredElementsClean,
 	disabledElementsAdd,
 	disabledElementsClean,
+	FORGE_VIEWER_HANDLE_COLORIZE_FORGE,
 	hiddenElementsAdd,
 	hiddenElementsClean,
 	selectedElementsAdd,
@@ -14,23 +15,29 @@ import {
 	SET_SHEETS_SUCCESS,
 	setCurrentSheet,
 	visibleElementsAdd,
-	visibleElementsClean
+	visibleElementsClean,
 } from '../../../../components/ForgeViewer/redux/actions';
 import { normalize } from '../../../../utils/normalize';
-import { changeLevel, endFetchCranes, selectRotationDate, setLevelOptions, startFetchCranes } from '../actions/odbiory_actions';
-import { setCurrentVisibleElements } from '../actions/upgrading_actions';
+import {
+	changeLevel,
+	endFetchCranes,
+	selectRotationDate,
+	setLevelOptions,
+	startFetchCranes,
+} from '../actions/odbiory_actions';
+import { handleSelectedElements, setCurrentVisibleElements } from '../actions/upgrading_actions';
 import {
 	ODBIORY_COMPONENT_DECREMENT_DAY,
 	ODBIORY_COMPONENT_INCREMENT_DAY,
 	ODBIORY_COMPONENT_SET_ACCEPTANCE_TYPE,
+	ODBIORY_COMPONENT_SET_ACTUAL_TAB,
 	ODBIORY_COMPONENT_SET_CRANE,
 	ODBIORY_COMPONENT_SET_LEVEL,
 	ODBIORY_COMPONENT_SET_ROTATION_DAY,
-	UPGRADING_HANDLE_SELECTED_ELEMENTS
+	UPGRADING_HANDLE_SELECTED_ELEMENTS,
 } from '../types';
 import { ACCEPTANCE_TYPE } from '../types/constans';
-import { filterTree } from '../utils/odbiory_utils';
-
+import { filterTree, findMinAndMaxRotationDay } from '../utils/odbiory_utils';
 
 export const handleChangeAppType = (action$, state$) =>
 	action$.pipe(
@@ -75,15 +82,12 @@ export const handleChangeLevel = (action$, state$) => {
 		filter(([_, { level_id }]) => !!level_id),
 		mergeMap(([_, { level_id }]) =>
 			concat(
-				of(selectedElementsClean()),
-				of(visibleElementsClean()),
-				of(coloredElementsClean()),
-				of(disabledElementsClean()),
-				of(hiddenElementsClean()),
-				iif(
-					() => !!!state$.value.Odbiory.OdbioryComponent.MONOLITHIC.rotation_day,
-					of(selectRotationDate(1)),
-					EMPTY,
+				of(
+					selectedElementsClean(),
+					visibleElementsClean(),
+					coloredElementsClean(),
+					disabledElementsClean(),
+					hiddenElementsClean(),
 				),
 				from([
 					state$.value.ForgeViewer.sheets.filter(
@@ -99,6 +103,42 @@ export const handleChangeLevel = (action$, state$) => {
 	);
 };
 
+export const handleSetRotationDay = (action$, state$) =>
+	combineLatest([
+		action$.pipe(ofType(SET_MODEL_ELEMENTS)),
+		action$.pipe(ofType(ODBIORY_COMPONENT_SET_LEVEL)),
+		action$.pipe(ofType(ODBIORY_COMPONENT_SET_CRANE)),
+	]).pipe(
+		withLatestFrom(state$),
+		mergeMap(
+			([
+				_,
+				{
+					Odbiory: {
+						OdbioryComponent: {
+							MONOLITHIC: { rotation_day, active_level, active_crane, levels },
+						},
+						Upgrading: {
+							MONOLITHIC: { byRevitId },
+						},
+					},
+				},
+			]) => {
+				if (levels.hasOwnProperty(active_level)) {
+					const { min, max } = findMinAndMaxRotationDay(byRevitId, active_crane, levels[active_level].name);
+					console.log(min, max, rotation_day);
+					if (rotation_day < min) {
+						return of(selectRotationDate(min));
+					} else if (rotation_day > max) {
+						return of(selectRotationDate(max));
+					}
+				}
+
+				return EMPTY;
+			},
+		),
+	);
+
 export const handleIncrement = (action$, state$) =>
 	action$.pipe(
 		ofType(ODBIORY_COMPONENT_INCREMENT_DAY),
@@ -110,17 +150,31 @@ export const handleDecrement = (action$, state$) =>
 		switchMap(() => of(selectRotationDate(state$.value.Odbiory.OdbioryComponent.MONOLITHIC.rotation_day - 1))),
 	);
 
-export const handleChangeElementsFilters = (action$, state$) =>
-	combineLatest([
-		action$.pipe(ofType(ODBIORY_COMPONENT_SET_CRANE)),
-		action$.pipe(ofType(ODBIORY_COMPONENT_SET_LEVEL)),
-		action$.pipe(ofType(ODBIORY_COMPONENT_SET_ROTATION_DAY)),
-		action$.pipe(ofType(SET_MODEL_ELEMENTS)),
-	]).pipe(
+export const handleChangeTab = (action$, state$) =>
+	action$.pipe(
+		ofType(ODBIORY_COMPONENT_SET_ACTUAL_TAB),
 		withLatestFrom(state$),
-		filter(([[_, { level_id }], state]) => !state.ForgeViewer.model_elements_loading && level_id !== ''),
+		filter(
+			([_, state]) =>
+				!!state.Odbiory.OdbioryComponent.MONOLITHIC.rotation_day &&
+				!!state.Odbiory.OdbioryComponent.MONOLITHIC.active_crane &&
+				!!state.Odbiory.OdbioryComponent.MONOLITHIC.active_level,
+		),
+		mapTo({ type: FORGE_VIEWER_HANDLE_COLORIZE_FORGE }),
+	);
+
+export const handleColorizeForge = (action$, state$) =>
+	action$.pipe(
+		ofType(FORGE_VIEWER_HANDLE_COLORIZE_FORGE),
+		withLatestFrom(state$),
 		switchMap(([_, state]) => {
-			const { active_level, levels, active_crane, cranes } = state.Odbiory.OdbioryComponent.MONOLITHIC;
+			const {
+				active_level,
+				levels,
+				active_crane,
+				cranes,
+				active_tab,
+			} = state.Odbiory.OdbioryComponent.MONOLITHIC;
 			const level = levels[active_level] && levels[active_level].name;
 			const crane = cranes[active_crane] && cranes[active_crane].name;
 			const rotation_day = state.Odbiory.OdbioryComponent.MONOLITHIC.rotation_day;
@@ -133,7 +187,7 @@ export const handleChangeElementsFilters = (action$, state$) =>
 				hidden_elements,
 				visible_elements,
 				current_elements,
-			} = filterTree(object_values, elements_object, crane, level, rotation_day);
+			} = filterTree(object_values, elements_object, crane, level, rotation_day, active_tab);
 			return concat(
 				of(setCurrentVisibleElements(current_elements)),
 				of(visibleElementsAdd(visible_elements)),
@@ -142,6 +196,25 @@ export const handleChangeElementsFilters = (action$, state$) =>
 				of(hiddenElementsAdd(hidden_elements)),
 			);
 		}),
+	);
+
+export const handleChangeElementsFilters = (action$, state$) =>
+	combineLatest([
+		action$.pipe(ofType(ODBIORY_COMPONENT_SET_CRANE)),
+		action$.pipe(ofType(ODBIORY_COMPONENT_SET_LEVEL)),
+		action$.pipe(ofType(ODBIORY_COMPONENT_SET_ROTATION_DAY)),
+		action$.pipe(ofType(SET_MODEL_ELEMENTS)),
+	]).pipe(
+		withLatestFrom(state$),
+		filter(([[_, { level_id }], state]) => !state.ForgeViewer.model_elements_loading && level_id !== ''),
+		mapTo({ type: FORGE_VIEWER_HANDLE_COLORIZE_FORGE }),
+	);
+
+export const handleCleanSelectionAfterChangeRotationDay = (action$, state$) =>
+	action$.pipe(
+		ofType(ODBIORY_COMPONENT_SET_ROTATION_DAY),
+		filter(() => state$.value.Odbiory.Upgrading.MONOLITHIC.selectedElements.length > 0),
+		map(() => handleSelectedElements('')),
 	);
 
 export const handleForgeSelection = (action$, state$) =>
@@ -159,14 +232,6 @@ export const handleForgeSelection = (action$, state$) =>
 			return of(selectedElementsAdd([...selected_elements]));
 		}),
 	);
-
-// export const handleSelectionOnSheet = (action$, state$) => action$.pipe(
-// 	ofType(FORGE_VIEWER_SELECTED_ELEMENTS_ADD),
-// 	switchMap(({elements}) => {
-//
-// 		return of(handleSelectedElements())
-// 	})
-// )
 
 const fetchCranesFromApi = async (project_id) => {
 	return new Promise((resolve, reject) => {
@@ -197,11 +262,16 @@ const fetchCranesFromApi = async (project_id) => {
 };
 
 export default combineEpics(
+	handleCleanSelectionAfterChangeRotationDay,
+	handleChangeTab,
+	handleSetRotationDay,
 	setCranes,
 	setLevels,
 	handleChangeLevel,
 	handleIncrement,
 	handleDecrement,
 	handleChangeElementsFilters,
-	handleForgeSelection,handleChangeAppType
+	handleForgeSelection,
+	handleChangeAppType,
+	handleColorizeForge,
 );
