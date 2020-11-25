@@ -1,4 +1,3 @@
-import { normalize } from '../../../utils/normalize';
 import {
 	cleanUserDataInLocalStorage,
 	fetchUserData,
@@ -16,6 +15,8 @@ export const USER_LOGOUT = 'cmslogin__USER_LOGOUT';
 export const USER_PASSWORD_RESET = 'cmslogin__USER_PASSWORD_RESET';
 export const USER_FETCH_DATA = 'cmslogin__USER_FETCH_DATA';
 export const USER_SET_CURRENT_PROJECT = 'cmslogin__USER_SET_CURRENT_PROJECT';
+export const USER_ADD_PERMISSIONS = 'cmslogin__USER_ADD_PERMISSIONS';
+export const USER_DELETE_PERMISSIONS = 'cmslogin__USER_DELETE_PERMISSIONS';
 
 export const userLoginStart = () => ({
 	type: USER_LOGIN_START,
@@ -60,6 +61,16 @@ export const setCurrentProject = (project_id, urn, name) => ({
 	project_id,
 	urn,
 	name,
+});
+
+export const addPermissions = (permissions) => ({
+	type: USER_ADD_PERMISSIONS,
+	permissions,
+});
+
+export const deletePermissions = (permissions) => ({
+	type: USER_DELETE_PERMISSIONS,
+	permissions,
 });
 
 export const userLogout = () => (dispatch) => {

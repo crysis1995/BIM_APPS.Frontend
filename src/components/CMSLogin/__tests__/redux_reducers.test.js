@@ -1,4 +1,6 @@
 import {
+	addPermissions,
+	deletePermissions,
 	setCurrentProject,
 	setUserData,
 	userLoginEnd,
@@ -7,21 +9,9 @@ import {
 	userLogoutEnd,
 	userResetPassword,
 } from '../redux/actions';
-import CMSLoginReducer from '../redux/reducers';
+import CMSLoginReducer, { initialState } from '../redux/reducers';
 
 describe('CMS LOGIN REDUCER', () => {
-	const initialState = {
-		user: { id: null },
-		error: '',
-		info: '',
-		credentials: {
-			access_token: null,
-			expires_in: null,
-		},
-		project: { id: null },
-		is_login: false,
-		loading: false,
-	};
 	test('return initial state', () => {
 		expect(CMSLoginReducer(undefined, {})).toEqual(initialState);
 	});
@@ -139,6 +129,99 @@ describe('CMS LOGIN REDUCER', () => {
 				urn,
 				name,
 			},
+		});
+	});
+	describe('USER_ADD_PERMISSIONS', () => {
+		test('single permission', () => {
+			const permissions = 'test.perm';
+			const action = addPermissions(permissions);
+			const state = {
+				...initialState,
+			};
+			expect(CMSLoginReducer(state, action)).toEqual({
+				...state,
+				permissions: [permissions],
+			});
+		});
+		test('multiple permission', () => {
+			const permissions = ['test.perm', 'test.perm.2'];
+			const action = addPermissions(permissions);
+			const state = {
+				...initialState,
+			};
+			expect(CMSLoginReducer(state, action)).toEqual({
+				...state,
+				permissions: [...permissions],
+			});
+		});
+		test('single permission - when exist others', () => {
+			const permissions = 'test.perm';
+			const action = addPermissions(permissions);
+			const state = {
+				...initialState,
+				permissions: ['test'],
+			};
+			expect(CMSLoginReducer(state, action)).toEqual({
+				...state,
+				permissions: ['test', permissions],
+			});
+		});
+		test('multiple permission - when duplicates', () => {
+			const action = addPermissions(['test.perm', 'test.perm.2']);
+			const state = {
+				...initialState,
+				permissions: ['test', 'test.perm'],
+			};
+			expect(CMSLoginReducer(state, action)).toEqual({
+				...state,
+				permissions: ['test', 'test.perm', 'test.perm.2'],
+			});
+		});
+	});
+	describe('USER_DELETE_PERMISSIONS', () => {
+		test('delete single permission', () => {
+			const action = deletePermissions('test.perm');
+			const state = {
+				...initialState,
+				permissions: ['test', 'test.perm'],
+			};
+			expect(CMSLoginReducer(state, action)).toEqual({
+				...state,
+				permissions: ['test'],
+			});
+		});
+		test('delete many permission', () => {
+			const action = deletePermissions(['test.perm', 'test.perms.2']);
+			const state = {
+				...initialState,
+				permissions: ['test', 'test.perm', 'test.perms.2'],
+			};
+			expect(CMSLoginReducer(state, action)).toEqual({
+				...state,
+				permissions: ['test'],
+			});
+		});
+		test('delete many permission - when any exist', () => {
+			const action = deletePermissions(['test.perm', 'test.perms.2']);
+			const state = {
+				...initialState,
+				permissions: ['test'],
+			};
+			expect(CMSLoginReducer(state, action)).toEqual({
+				...state,
+				permissions: ['test'],
+			});
+		});
+		test('delete many permission - when one exist and one not', () => {
+			const action = deletePermissions(['test.perm', 'test.perms.2']);
+			const state = {
+				...initialState,
+				permissions: ['test', 'test.perm'],
+			};
+			expect(CMSLoginReducer(state, action)).toEqual({
+				...state,
+				permissions: ['test'],
+			});
 		});
 	});
 });

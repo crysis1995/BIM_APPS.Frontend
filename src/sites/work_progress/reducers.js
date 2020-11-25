@@ -17,6 +17,7 @@ import Results from './redux/reducers/results_reducers';
 import Rooms from './redux/reducers/rooms_reducers';
 import Terms from './redux/reducers/terms_reducers';
 import Upgrading from './redux/reducers/upgrading_reducers';
+import Delays from './redux/reducers/delays_reducers';
 
 export const OdbioryReducer = combineReducers({
 	OdbioryComponent,
@@ -27,6 +28,7 @@ export const OdbioryReducer = combineReducers({
 	Upgrading,
 	Results,
 	Terms,
+	Delays,
 });
 
 export const OdbioryEpics = combineEpics(

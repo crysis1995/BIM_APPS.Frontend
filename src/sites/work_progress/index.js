@@ -26,12 +26,12 @@ function AcceptanceLayout(props) {
 					className="p-3"
 					message={'Nie masz dostępu do tej zakładki'}
 					condition={true}>
-					<Col>
+					<Col xs={6}>
 						<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
 							{props.started.hasOwnProperty(ACCEPTANCE_TYPE.MONOLITHIC) && <Viewer />}
 						</div>
 					</Col>
-					<Col>
+					<Col xs={6}>
 						<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
 							<Layout.MONOLITHIC />
 						</div>

@@ -17,6 +17,8 @@ import {
 	FORGE_VIEWER_VISIBLE_ELEMENTS_CLEAN,
 	FORGE_VIEWER_VISIBLE_ELEMENTS_REMOVE,
 	INITIALIZE_VIEWER,
+	REACT_PANEL_CHANGE_ACTIVITY,
+	REACT_PANEL_SET_CONTENT,
 	REMOVE_VISIBLE_ELEMENTS,
 	SET_CURRENT_SHEET,
 	SET_ELEMENT_TO_COLOR,
@@ -46,6 +48,9 @@ const initialState = {
 	visible_elements: [],
 	/*
 	 */
+
+	panel_content: null,
+	panel_is_active: false,
 
 	color: false,
 	model_rooms: null,
@@ -113,6 +118,17 @@ const ForgeViewerReducer = (state = initialState, action) => {
 				...state,
 				colored_element: action.elements,
 				color: true,
+			};
+		case REACT_PANEL_SET_CONTENT:
+			return {
+				...state,
+				panel_content: action.content,
+				panel_is_active: true,
+			};
+		case REACT_PANEL_CHANGE_ACTIVITY:
+			return {
+				...state,
+				panel_is_active: !state.panel_is_active,
 			};
 		case INITIALIZE_VIEWER:
 			return {

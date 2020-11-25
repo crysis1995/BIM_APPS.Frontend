@@ -21,7 +21,8 @@ function SetStatus({ selectedItemsParamsSummary, selectedElements, handleSetStat
 			</h5>
 			{selectedElements.length > 0 && (
 				<>
-					<Row className={'border-top border-bottom my-3'}>
+					<hr />
+					<Row>
 						{Object.keys(selectedItemsParamsSummary).map((key) => (
 							<Col className="py-3" xs={6} key={v4()}>
 								<h6>{key}</h6>
@@ -40,6 +41,7 @@ function SetStatus({ selectedItemsParamsSummary, selectedElements, handleSetStat
 							</Col>
 						))}
 					</Row>
+					<hr />
 					<Row>
 						<Col>
 							<Selector

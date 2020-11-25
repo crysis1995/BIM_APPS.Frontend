@@ -103,7 +103,7 @@ export function filterTree(
 						if (
 							object[revit_id].hasOwnProperty(status_key) &&
 							object[revit_id][status_key].hasOwnProperty('id') &&
-							object[revit_id][status_key].id === MONOLITHIC.STATUS['2'].id
+							object[revit_id][status_key].id === MONOLITHIC.STATUS.Finished.id
 						) {
 							//
 							//      OBIEKT POSIADA WLASCIWOSC STATUS I JEST ONA ROWNA 2

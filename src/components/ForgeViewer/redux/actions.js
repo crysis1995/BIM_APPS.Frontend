@@ -7,6 +7,8 @@ export const SET_CURRENT_SHEET = 'forgeViewer__SET_CURRENT_SHEET';
 export const SET_ELEMENT_TO_COLOR = 'FORGE_VIEWER_SET_ELEMENT_TO_COLOR';
 export const ADD_VISIBLE_ELEMENTS = 'forge_viewer_ADD_VISIBLE_ELEMENTS';
 export const REMOVE_VISIBLE_ELEMENTS = 'forge_viewer_REMOVE_VISIBLE_ELEMENTS';
+export const REACT_PANEL_SET_CONTENT = 'REACT_PANEL_SET_CONTENT';
+export const REACT_PANEL_CHANGE_ACTIVITY = 'REACT_PANEL_CHANGE_ACTIVITY';
 
 export const FORGE_VIEWER_SELECTED_ELEMENTS_ADD = 'FORGE_VIEWER_SELECTED_ELEMENTS_ADD';
 export const FORGE_VIEWER_SELECTED_ELEMENTS_REMOVE = 'FORGE_VIEWER_SELECTED_ELEMENTS_REMOVE';
@@ -68,6 +70,14 @@ export const addVisibleElements = (elements) => ({
 export const removeVisibleElements = (elements) => ({
 	type: REMOVE_VISIBLE_ELEMENTS,
 	elements,
+});
+
+export const setContentToReactPanel = (content) => ({
+	type: REACT_PANEL_SET_CONTENT,
+	content,
+});
+export const changeActivityToReactPanel = () => ({
+	type: REACT_PANEL_CHANGE_ACTIVITY,
 });
 
 export const selectedElementsAdd = (elements) => ({

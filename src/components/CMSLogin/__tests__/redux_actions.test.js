@@ -2,8 +2,10 @@ import fetchMock from 'fetch-mock';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {
+	addPermissions, deletePermissions,
 	setCurrentProject,
 	setUserData,
+	USER_ADD_PERMISSIONS, USER_DELETE_PERMISSIONS,
 	USER_FETCH_DATA,
 	USER_LOGIN_END,
 	USER_LOGIN_ERROR,
@@ -15,13 +17,13 @@ import {
 	userLoginError,
 	userLoginStart,
 	userLogoutEnd,
-	userResetPassword,
+	userResetPassword
 } from '../redux/actions';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('CMS LOGIN\tREDUX ACTIONS\tSIMPLE ACTIONS', () => {
+describe('CMS LOGIN REDUX ACTIONS SIMPLE ACTIONS', () => {
 	afterEach(() => {
 		fetchMock.restore();
 	});
@@ -95,10 +97,21 @@ describe('CMS LOGIN\tREDUX ACTIONS\tSIMPLE ACTIONS', () => {
 
 		expect(setCurrentProject(project_id, urn, name)).toEqual(expectedAction);
 	});
-});
+	test('addPermissions', () => {
+		const permissions = 'test.perm';
+		const expected = {
+			type: USER_ADD_PERMISSIONS,
+			permissions,
+		};
+		expect(addPermissions(permissions)).toEqual(expected);
+	});
+	test('deletePermissions', () => {
+		const permissions = 'test.perm';
+		const expected = {
+			type: USER_DELETE_PERMISSIONS,
+			permissions,
+		};
+		expect(deletePermissions(permissions)).toEqual(expected);
+	});
 
-// describe('CMS LOGIN\tREDUX ACTIONS\tMANY ACTIONS', () => {
-// 	test('', () => {
-// 		expect('').toEqual('');
-// 	});
-// });
+});

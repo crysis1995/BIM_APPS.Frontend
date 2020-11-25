@@ -1,59 +1,21 @@
-import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect';
+import { createSelector } from 'reselect';
 import { MONOLITHIC } from '../../redux/types/constans';
-import { shallowEqualArrays } from 'shallow-equal';
-import _ from 'lodash';
-
-// // START STUFF TAKEN DIRECTLY FROM RESELECT SOURCE
-// function defaultEqualityCheck(a, b) {
-// 	return _.isEqual(a, b);
-// }
-//
-// function areArgumentsShallowlyEqual(equalityCheck, prev, next) {
-// 	if (prev === null || next === null || prev.length !== next.length) {
-// 		return false;
-// 	}
-//
-// 	// Do this in a for loop (and not a `forEach` or an `every`) so we can determine equality as fast as possible.
-// 	const length = prev.length;
-// 	let toReRender = false;
-// 	for (let i = 0; i < length; i++) {
-// 		toReRender = toReRender || !equalityCheck(prev[i], next[i]);
-// 		// if (!equalityCheck(prev[i], next[i])) {
-// 		// 	return false;
-// 		// }
-// 	}
-// 	return toReRender;
-// 	// return true;
-// }
-// // END STUFF TAKEN DIRECTLY FROM RESELECT SOURCE
-//
-// function customMemoize(func, resultEqualityCheck = defaultEqualityCheck, equalityCheck = defaultEqualityCheck) {
-// 	let lastArgs = null;
-// 	let lastResult = null;
-// 	// we reference arguments instead of spreading them for performance reasons
-// 	return function (...args) {
-// 		if (!areArgumentsShallowlyEqual(equalityCheck, lastArgs, args)) {
-// 			// apply arguments instead of spreading for performance.
-// 			// lastResult = func.apply(null, arguments)
-//
-// 			// BEGIN CUSTOMIZATION OF MEMOIZE FUNCTION TO ALSO MEMOIZE RESULT
-// 			const result = func.apply(null, args);
-// 			if (!resultEqualityCheck(lastResult, result)) {
-// 				lastResult = result;
-// 			}
-// 			// END CUSTOMIZATION OF MEMOIZE FUNCTION TO ALSO MEMOIZE RESULT
-// 		}
-//
-// 		lastArgs = args;
-// 		return lastResult;
-// 	};
-// }
-//
-// const createArrayResultSelector = createSelectorCreator(customMemoize);
 
 export const ElementStatusSelector = createSelector(
 	(state, revit_id) => state.Odbiory.Upgrading.MONOLITHIC.byRevitId[revit_id],
-	(object) => (object.hasOwnProperty('Status') ? object.Status.id : ''),
+	(state) => state.Odbiory.OdbioryComponent.MONOLITHIC.rotation_day,
+	(object, rotation_day) => {
+		if (
+			object.hasOwnProperty('Status') &&
+			object.Status.hasOwnProperty('id') &&
+			object.Status.id === MONOLITHIC.STATUS.Finished.id
+		) {
+			return MONOLITHIC.STATUS.Finished;
+		} else {
+			if (object.Day === rotation_day) return MONOLITHIC.STATUS.Planned;
+			else return MONOLITHIC.STATUS.Delayed;
+		}
+	},
 );
 
 export const objectSelector = createSelector(
