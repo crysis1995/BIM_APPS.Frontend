@@ -6,8 +6,8 @@ import { ElementStatusSelector } from './Structural.Results.Selector';
 
 function Status({ status }) {
 	return (
-		<Badge className={'p-1 small'} style={{ backgroundColor: MONOLITHIC.STATUS[status].color, color: '#ffffff' }}>
-			{MONOLITHIC.STATUS[status].name}
+		<Badge className={'p-1 small'} style={{ backgroundColor: status.color, color: '#ffffff' }}>
+			{status.name}
 		</Badge>
 	);
 }

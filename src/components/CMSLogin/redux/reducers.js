@@ -1,6 +1,8 @@
 import dotProp from 'dot-prop';
 import { normalize } from '../../../utils/normalize';
 import {
+	USER_ADD_PERMISSIONS,
+	USER_DELETE_PERMISSIONS,
 	USER_FETCH_DATA,
 	USER_LOGIN_END,
 	USER_LOGIN_ERROR,
@@ -10,7 +12,7 @@ import {
 	USER_SET_CURRENT_PROJECT,
 } from './actions';
 
-const initialState = {
+export const initialState = {
 	user: { id: null },
 	error: '',
 	info: '',
@@ -21,6 +23,7 @@ const initialState = {
 	project: { id: null },
 	is_login: false,
 	loading: false,
+	permissions: [],
 };
 
 /**
@@ -35,6 +38,18 @@ function setUserData(state, { username, email, project_roles }) {
 	dotProp.set(state, 'user.email', email);
 	dotProp.set(state, 'user.project_roles', normalize(project_roles, 'project.id'));
 	return { ...state };
+}
+
+function addPermissions(state, { permissions }) {
+	if (!Array.isArray(permissions)) permissions = [permissions];
+	const filteredPermissions = permissions.filter((perm) => !state.permissions.includes(perm));
+	return { ...state, permissions: [...state.permissions, ...filteredPermissions] };
+}
+
+function deletePermissions(state, { permissions }) {
+	if (!Array.isArray(permissions)) permissions = [permissions];
+	const filteredPermissions = state.permissions.filter((perm) => !permissions.includes(perm));
+	return { ...state, permissions: filteredPermissions };
 }
 
 const CMSLoginReducer = (state = initialState, action) => {
@@ -85,6 +100,10 @@ const CMSLoginReducer = (state = initialState, action) => {
 				is_login: true,
 				info: action.info,
 			};
+		case USER_ADD_PERMISSIONS:
+			return addPermissions(state, action);
+		case USER_DELETE_PERMISSIONS:
+			return deletePermissions(state, action);
 		default:
 			return state;
 	}

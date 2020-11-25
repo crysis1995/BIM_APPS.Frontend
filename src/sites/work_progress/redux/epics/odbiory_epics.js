@@ -1,3 +1,4 @@
+import React from 'react';
 import { combineEpics, ofType } from 'redux-observable';
 import { combineLatest, concat, EMPTY, from, iif, of } from 'rxjs';
 import { filter, map, mapTo, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
@@ -13,11 +14,13 @@ import {
 	selectedElementsClean,
 	SET_MODEL_ELEMENTS,
 	SET_SHEETS_SUCCESS,
+	setContentToReactPanel,
 	setCurrentSheet,
 	visibleElementsAdd,
 	visibleElementsClean,
 } from '../../../../components/ForgeViewer/redux/actions';
 import { normalize } from '../../../../utils/normalize';
+import Legend from '../../components/Structural/Legend';
 import {
 	changeLevel,
 	endFetchCranes,
@@ -189,6 +192,7 @@ export const handleColorizeForge = (action$, state$) =>
 				current_elements,
 			} = filterTree(object_values, elements_object, crane, level, rotation_day, active_tab);
 			return concat(
+				of(setContentToReactPanel(<Legend />)),
 				of(setCurrentVisibleElements(current_elements)),
 				of(visibleElementsAdd(visible_elements)),
 				of(coloredElementsAdd(colored_elements)),

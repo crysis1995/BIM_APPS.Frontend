@@ -1,10 +1,11 @@
 import React from 'react';
-import { Table, Col } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { v4 } from 'uuid';
 import UNITS from '../../../../components/Units';
 import { MONOLITHIC } from '../../redux/types/constans';
 import { selectedItemsParamsSummary } from './Structural.Results.Selector';
+
 
 function SelectedSummary({ selectedItemsParamsSummary, selectedElements_length }) {
 	if (selectedElements_length === 0) return null;

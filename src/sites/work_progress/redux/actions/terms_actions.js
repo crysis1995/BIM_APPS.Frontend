@@ -2,6 +2,7 @@ import {
 	TERMS_DATA_FETCH_END,
 	TERMS_DATA_FETCH_ERROR,
 	TERMS_DATA_FETCH_START,
+	TERMS_MONOLITHIC_SET_BY_GROUP,
 	TERMS_SET_BY_DEPARTMENT,
 	TERMS_SET_DEPARTMENT,
 } from '../types';
@@ -42,22 +43,11 @@ export const setTermByDepartment = (term_type, term, department_id, job_id) => (
 	job_id,
 });
 
-/**
- *
- * @param {Function} dispatch
- * @param {Function} getState
- * @param {string} current_level
- */
-// export const getDepartmentsWithTerms = async (dispatch, getState, current_level) => {
-// 	dispatch(termsDataFetchStart());
-// 	const { user, project } = getState().CMSLogin;
-// 	try {
-// 		const { data } = await fetchDepartmentsWithTerms(current_level, project.id);
-// 		if (data && data.hasOwnProperty('acceptanceDepartments')) {
-// 			return dispatch(termsDataFetchEnd(normalizeTermsData(data.acceptanceDepartments, user, project)));
-// 		}
-// 	} catch (e) {
-// 		console.log(e);
-// 		return dispatch(termsDataFetchError(e.message));
-// 	}
-// };
+export const setTermByGroup = (crane_id, level_id, group_id, term_type, term) => ({
+	type: TERMS_MONOLITHIC_SET_BY_GROUP,
+	crane_id,
+	level_id,
+	group_id,
+	term_type,
+	term,
+});

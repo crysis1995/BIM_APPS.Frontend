@@ -3,8 +3,7 @@ import { Button, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { hideModal } from '../redux/actions';
 
-function ModalComponent(props) {
-	const { hideModal, title, body, modal_visible, onHideModal } = props;
+function ModalComponent({ hideModal, title, body, modal_visible, onHideModal }) {
 	return (
 		<Modal show={modal_visible} onHide={hideModal}>
 			<Modal.Header closeButton>

@@ -1,6 +1,7 @@
 import { gql } from 'apollo-boost';
+import dotProp from 'dot-prop';
 import { graphQLClient } from '../../../../services';
-import { PERMISSION, TERM_TYPE } from '../types/constans';
+import { MONOLITHIC, PERMISSION, TERM_TYPE } from '../types/constans';
 
 const GET_DEPARTMENTS_WITH_TERMS_QUERY = gql`
 	query getDepartmentsWithTerms($l: String, $p: ID) {
@@ -168,4 +169,21 @@ function getUserRole(user, project_id) {
 	if (project_role_component.hasOwnProperty('project_role')) {
 		return project_role_component.project_role.name;
 	}
+}
+
+export function parseTermsToMonolithic(array) {
+	if (!Array.isArray(array)) array = JSON.parse(array);
+	let state = {};
+	array.forEach((item) => {
+		Object.keys(MONOLITHIC.TERM_TYPE).forEach((term_key) => {
+			dotProp.set(
+				state,
+				`byCrane.${item['655059']}.byLevel.${item['655056']}.byGroup.${item['655057']}.${term_key}`,
+				[MONOLITHIC.TERM_TYPE.PLANNED_FINISH_BP.id, MONOLITHIC.TERM_TYPE.PLANNED_START_BP.id].includes(term_key)
+					? item[MONOLITHIC.TERM_TYPE[term_key].dbKey]
+					: '',
+			);
+		});
+	});
+	return state;
 }

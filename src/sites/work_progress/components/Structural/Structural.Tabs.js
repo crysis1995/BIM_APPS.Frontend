@@ -1,6 +1,8 @@
+import { faCogs, faHourglassEnd } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as classnames from 'classnames';
 import React from 'react';
-import { Button, ButtonGroup, Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
+import { Button, ButtonGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { setActualTab } from '../../redux/actions/odbiory_actions';
 import { MONOLITHIC } from '../../redux/types/constans';
@@ -19,13 +21,13 @@ function Tabs({ setActualTab, active_tab }) {
 							width="1em"
 							height="1em"
 							viewBox="0 0 16 16"
-							className="bi bi-calendar-date-fill"
+							className="bi bi-bar-chart-steps"
 							fill="currentColor"
 							xmlns="http://www.w3.org/2000/svg">
-							<path
-								fill-rule="evenodd"
-								d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4V.5zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2zm-6.664-1.21c-1.11 0-1.656-.767-1.703-1.407h.683c.043.37.387.82 1.051.82.844 0 1.301-.848 1.305-2.164h-.027c-.153.414-.637.79-1.383.79-.852 0-1.676-.61-1.676-1.77 0-1.137.871-1.809 1.797-1.809 1.172 0 1.953.734 1.953 2.668 0 1.805-.742 2.871-2 2.871zm.066-2.544c.625 0 1.184-.484 1.184-1.18 0-.832-.527-1.23-1.16-1.23-.586 0-1.168.387-1.168 1.21 0 .817.543 1.2 1.144 1.2zm-2.957-2.89v5.332H5.77v-4.61h-.012c-.29.156-.883.52-1.258.777V8.16a12.6 12.6 0 0 1 1.313-.805h.632z"
-							/>
+							<path fill-rule="evenodd" d="M.5 0a.5.5 0 0 1 .5.5v15a.5.5 0 0 1-1 0V.5A.5.5 0 0 1 .5 0z" />
+							<rect width="5" height="2" x="2" y="1" rx=".5" />
+							<rect width="8" height="2" x="4" y="5" rx=".5" />
+							<path d="M6 9.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1-.5-.5v-1zm2 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1z" />
 						</svg>
 						{'   '}Plan Bazowy
 					</Button>
@@ -36,18 +38,7 @@ function Tabs({ setActualTab, active_tab }) {
 						variant={variant}
 						className={classnames({ active: active_tab === MONOLITHIC.TABS.ACTUAL })}
 						onClick={() => setActualTab(MONOLITHIC.TABS.ACTUAL)}>
-						<svg
-							width="1em"
-							height="1em"
-							viewBox="0 0 16 16"
-							className="bi bi-clock-fill"
-							fill="currentColor"
-							xmlns="http://www.w3.org/2000/svg">
-							<path
-								fill-rule="evenodd"
-								d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"
-							/>
-						</svg>
+						<FontAwesomeIcon icon={faCogs} />
 						{'   '}Realizacja
 					</Button>
 				</OverlayTrigger>
@@ -60,15 +51,49 @@ function Tabs({ setActualTab, active_tab }) {
 							width="1em"
 							height="1em"
 							viewBox="0 0 16 16"
-							className="bi bi-clock-fill"
+							className="bi bi-calendar-date"
 							fill="currentColor"
 							xmlns="http://www.w3.org/2000/svg">
 							<path
 								fill-rule="evenodd"
-								d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"
+								d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"
 							/>
+							<path d="M6.445 11.688V6.354h-.633A12.6 12.6 0 0 0 4.5 7.16v.695c.375-.257.969-.62 1.258-.777h.012v4.61h.675zm1.188-1.305c.047.64.594 1.406 1.703 1.406 1.258 0 2-1.066 2-2.871 0-1.934-.781-2.668-1.953-2.668-.926 0-1.797.672-1.797 1.809 0 1.16.824 1.77 1.676 1.77.746 0 1.23-.376 1.383-.79h.027c-.004 1.316-.461 2.164-1.305 2.164-.664 0-1.008-.45-1.05-.82h-.684zm2.953-2.317c0 .696-.559 1.18-1.184 1.18-.601 0-1.144-.383-1.144-1.2 0-.823.582-1.21 1.168-1.21.633 0 1.16.398 1.16 1.23z" />
 						</svg>
 						{'   '}Terminy
+					</Button>
+				</OverlayTrigger>
+				<OverlayTrigger
+					placement={'top'}
+					overlay={<Tooltip>Pokaż widok raportowania powodów opóźnień</Tooltip>}>
+					<Button
+						variant={variant}
+						className={classnames({ active: active_tab === MONOLITHIC.TABS.DELAY })}
+						onClick={() => setActualTab(MONOLITHIC.TABS.DELAY)}>
+						<FontAwesomeIcon icon={faHourglassEnd} />
+						{'   '}Opóźnienia - raporty
+					</Button>
+				</OverlayTrigger>
+				<OverlayTrigger placement={'top'} overlay={<Tooltip>Pokaż dziennik brygadzisty</Tooltip>}>
+					<Button
+						variant={variant}
+						className={classnames({ active: active_tab === MONOLITHIC.TABS.LOG })}
+						onClick={() => setActualTab(MONOLITHIC.TABS.LOG)}>
+						<svg
+							width="1em"
+							height="1em"
+							viewBox="0 0 16 16"
+							className="bi bi-journal-text"
+							fill="currentColor"
+							xmlns="http://www.w3.org/2000/svg">
+							<path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z" />
+							<path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z" />
+							<path
+								fill-rule="evenodd"
+								d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"
+							/>
+						</svg>
+						{'   '}Dzienniki
 					</Button>
 				</OverlayTrigger>
 			</ButtonGroup>

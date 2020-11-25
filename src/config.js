@@ -47,13 +47,13 @@ export const config = {
 	ACCEPTANCE: {
 		MONOLITHIC: {
 			legend: {
-				active: { color: '#FFCC1B', alpha: 0.7 },
-				finished: { color: '#00ca43', alpha: 0.9 },
-				finished_earlier: { color: '#3A86FF', alpha: 0.9 },
-				delayed: { color: '#EF233C', alpha: 0.7 },
-				out_of: { color: '#efefef', alpha: 0.85 },
-				inactive: { color: '#efefef', alpha: 0.7 },
-				future: { color: '#818181', alpha: 0.9 },
+				active: { color: '#FFCC1B', alpha: 0.7, option: 'Bieżący' },
+				finished: { color: '#858585', alpha: 0.9, option: 'Zakończony' },
+				finished_earlier: { color: '#3A86FF', alpha: 0.9, option: 'Zakończony przed czasem' },
+				delayed: { color: '#EF233C', alpha: 0.7, option: 'Opóźniony' },
+				out_of: { color: '#efefef', alpha: 0.85, option: 'Poza zakresem' },
+				inactive: { color: '#efefef', alpha: 0.7, option: 'Nieaktywny' },
+				future: { color: '#bababa', alpha: 0.9, option: 'Element planowane' },
 			},
 		},
 	},

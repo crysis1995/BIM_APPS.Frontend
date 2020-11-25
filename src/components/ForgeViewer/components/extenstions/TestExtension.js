@@ -1,3 +1,4 @@
+import { ACCEPTANCE_TYPE } from '../../../../sites/work_progress/redux/types/constans';
 import Store from '../../../../store';
 import ReactPanel from './ReactPanel';
 
@@ -17,12 +18,17 @@ class ReactPanelExtension extends Autodesk.Viewing.Extension {
 			title: 'Legenda',
 		});
 		Store.subscribe(() => {
+			// let isActive;
 			if (this.panel) {
-				const { status } = Store.getState().Odbiory.Results;
-				let isActive;
-				if (status === 'color') isActive = true;
-				if (status === 'clean') isActive = false;
-				this.panel.setVisible(isActive);
+				const { active_acceptance_type } = Store.getState().Odbiory.OdbioryComponent;
+				const { panel_is_active } = Store.getState().ForgeViewer;
+				if (active_acceptance_type === ACCEPTANCE_TYPE.MONOLITHIC) {
+					this.panel.setVisible(panel_is_active);
+				}
+
+				// if (status === 'color') isActive = true;
+				// if (status === 'clean') isActive = false;
+				// this.panel.setVisible(isActive);
 			}
 		});
 	}
