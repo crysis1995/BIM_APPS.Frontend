@@ -1,4 +1,5 @@
 import dotProp from 'dot-prop';
+import { SET_INITIAL } from '../../../sites/work_progress/redux/types';
 import { normalize } from '../../../utils/normalize';
 import {
 	USER_ADD_PERMISSIONS,
@@ -54,6 +55,8 @@ function deletePermissions(state, { permissions }) {
 
 const CMSLoginReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case SET_INITIAL:
+			return initialState;
 		case USER_FETCH_DATA:
 			return setUserData(state, action);
 		case USER_SET_CURRENT_PROJECT:

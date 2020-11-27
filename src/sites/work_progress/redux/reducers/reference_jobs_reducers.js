@@ -1,5 +1,5 @@
 import dotProp from 'dot-prop';
-import { ADD_REFERENCE_JOB, DELETE_REFERENCE_JOB } from '../types';
+import { ADD_REFERENCE_JOB, DELETE_REFERENCE_JOB, SET_INITIAL } from '../types';
 
 const initialState = {
 	byRevitId: {},
@@ -7,6 +7,8 @@ const initialState = {
 
 const ReferenceJobsReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case SET_INITIAL:
+			return initialState;
 		case ADD_REFERENCE_JOB:
 			return addReferenceJob(state, action);
 		case DELETE_REFERENCE_JOB:

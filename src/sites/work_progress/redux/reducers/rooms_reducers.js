@@ -25,6 +25,8 @@ const initialState = {
 
 const RoomsReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case SET_INITIAL:
+			return initialState;
 		case ADD_ROOM_TO_SELECTION:
 			return addRoomToSelection(state, action);
 		case ADD_SPECYFIC_ROOM_TO_SELECTION:
@@ -43,11 +45,6 @@ const RoomsReducer = (state = initialState, action) => {
 				],
 			};
 		}
-		case SET_INITIAL:
-			return {
-				...state,
-				...initialState,
-			};
 		case ROOMS_LOADING_START:
 			return {
 				...state,

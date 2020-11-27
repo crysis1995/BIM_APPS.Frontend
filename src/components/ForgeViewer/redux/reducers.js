@@ -1,4 +1,5 @@
 import dotProp from 'dot-prop';
+import { SET_INITIAL } from '../../../sites/work_progress/redux/types';
 import {
 	ADD_VISIBLE_ELEMENTS,
 	FORGE_VIEWER_COLORED_ELEMENTS_ADD,
@@ -70,6 +71,8 @@ function RemoveVisibleElement(state, { elements }) {
 
 const ForgeViewerReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case SET_INITIAL:
+			return initialState;
 		case FORGE_VIEWER_SELECTED_ELEMENTS_ADD:
 			// return add(state, action, 'selected_elements');
 			return {

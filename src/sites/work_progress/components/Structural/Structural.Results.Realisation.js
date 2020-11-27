@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, OverlayTrigger, Tooltip, Col, Row } from 'react-bootstrap';
+import { Button, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { initialiseModal } from '../../../../components/Modal/redux/actions';
 import { handleSelectedElements } from '../../redux/actions/upgrading_actions';
@@ -17,11 +17,7 @@ function Realisation({ initialiseModal, handleSelectedElements }) {
 					overlay={<Tooltip>Pokaż okno ustawiania widoczności parametrów</Tooltip>}>
 					<Button
 						variant={variant}
-						onClick={() =>
-							initialiseModal('Widoczność parametrów', <ShowParameters />, () =>
-								console.log('zamknięto parametry'),
-							)
-						}>
+						onClick={() => initialiseModal('Widoczność parametrów', <ShowParameters />)}>
 						<svg
 							width="1em"
 							height="1em"
@@ -64,9 +60,7 @@ function Realisation({ initialiseModal, handleSelectedElements }) {
 				<Button
 					className={'float-right'}
 					variant={'success'}
-					onClick={() =>
-						initialiseModal('Awansowanie', <SetStatus />, () => console.log('zamknięto awansowanie'))
-					}>
+					onClick={() => initialiseModal('Awansowanie', <SetStatus />)}>
 					<svg
 						width="1em"
 						height="1em"

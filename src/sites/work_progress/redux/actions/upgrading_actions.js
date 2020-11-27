@@ -4,6 +4,7 @@ import {
 	UPGRADING_SET_ACTUAL_ELEMENTS,
 	UPGRADING_SET_DATA,
 	UPGRADING_SET_STATUSES,
+	UPGRADING_SET_STATUSES_INITIALIZER,
 	UPGRADING_UPDATE_JOB,
 } from '../types';
 
@@ -56,9 +57,17 @@ export const handleSelectedElements = (elements) => ({
 	elements,
 });
 
-export const handleSetStatus = (selectedElements, status, rotation_day) => ({
+export const storeSetStatus = (selectedElements, status, rotation_day) => ({
 	type: UPGRADING_SET_STATUSES,
 	selectedElements,
 	status,
 	rotation_day,
+});
+
+export const initSetStatus = (selectedElements, status, rotation_day) => ({
+	type: UPGRADING_SET_STATUSES_INITIALIZER,
+	selectedElements,
+	status,
+	rotation_day,
+	updated_at: new Date().toISOString(),
 });

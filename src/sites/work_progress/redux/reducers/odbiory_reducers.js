@@ -16,6 +16,7 @@ import {
 	ODBIORY_COMPONENT_SET_ROTATION_DAY,
 	ODBIORY_COMPONENT_STARTED,
 	SET_ACTIVE_TAB,
+	SET_INITIAL,
 } from '../types';
 
 import { CONSTANTS, MONOLITHIC, UPGRADING_BY } from '../types/constans';
@@ -45,6 +46,8 @@ const initialState = {
 
 const OdbioryComponentReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case SET_INITIAL:
+			return initialState;
 		case ODBIORY_COMPONENT_SET_ACTUAL_TAB:
 			return {
 				...state,

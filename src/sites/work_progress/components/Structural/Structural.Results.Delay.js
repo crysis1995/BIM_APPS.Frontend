@@ -7,7 +7,6 @@ import { MONOLITHIC } from '../../redux/types/constans';
 const baseMargin = 25;
 
 function Delay({ createNewDelay, updateExistDelay, delays, active_crane, active_level, rotation_day }) {
-	// delays.byCrane?[active_crane]?.byLevel?[active_level]?.byRotationDay?[rotation_day]
 	const { selected_cases, commentary } =
 		delays.hasOwnProperty('byCrane') &&
 		delays.byCrane.hasOwnProperty(active_crane) &&
@@ -19,7 +18,6 @@ function Delay({ createNewDelay, updateExistDelay, delays, active_crane, active_
 
 	const [active, setActive] = useState(selected_cases || []);
 	const [text, setText] = useState(commentary || '');
-	console.log(active, text);
 	function ChildCheck({ object, margin, parentId }) {
 		if (object.hasOwnProperty('children')) {
 			return (

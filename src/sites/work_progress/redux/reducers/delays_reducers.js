@@ -1,5 +1,5 @@
 import dotProp from 'dot-prop';
-import { DELAYS_CREATE_NEW, DELAYS_UPDATE_EXIST } from '../types';
+import { DELAYS_CREATE_NEW, DELAYS_UPDATE_EXIST, SET_INITIAL } from '../types';
 
 export const initialState = {
 	MONOLITHIC: {},
@@ -7,6 +7,8 @@ export const initialState = {
 
 const DelaysReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case SET_INITIAL:
+			return initialState;
 		case DELAYS_CREATE_NEW:
 			return createNewDelay(state, action);
 		case DELAYS_UPDATE_EXIST:

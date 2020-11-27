@@ -1,3 +1,4 @@
+import { setInitial } from '../../../sites/work_progress/redux/actions';
 import {
 	cleanUserDataInLocalStorage,
 	fetchUserData,
@@ -76,6 +77,7 @@ export const deletePermissions = (permissions) => ({
 export const userLogout = () => (dispatch) => {
 	cleanUserDataInLocalStorage();
 	dispatch(userLogoutEnd());
+	dispatch(setInitial());
 };
 
 export const userLogin = ({ identifier, password, checkbox }) => async (dispatch, getState) => {

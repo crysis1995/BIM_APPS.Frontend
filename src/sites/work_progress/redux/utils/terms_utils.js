@@ -170,7 +170,10 @@ function getUserRole(user, project_id) {
 		return project_role_component.project_role.name;
 	}
 }
-
+/*
+ *           TYMCZASOWA FUNKCJA!!!
+ *
+ * */
 export function parseTermsToMonolithic(array) {
 	if (!Array.isArray(array)) array = JSON.parse(array);
 	let state = {};
@@ -186,4 +189,10 @@ export function parseTermsToMonolithic(array) {
 		});
 	});
 	return state;
+}
+
+export const asd = (items,crane_id, level_id) => {
+	items.filter(e => e.Crane === crane_id && e.Level === level_id)
+
+	return Boolean
 }

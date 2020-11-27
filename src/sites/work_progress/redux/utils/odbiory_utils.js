@@ -36,12 +36,12 @@ export function filterTree(
 		delayed,
 		future,
 	} = config.ACCEPTANCE.MONOLITHIC.legend;
-	let current_elements = new Set();
-	let colored_elements = new Map();
-	let disabled_elements = new Set();
-	let hidden_elements = new Set();
-	let visible_elements = new Set();
-	const memoized_hexToRgba = memoize(hexToRgba);
+	let current_elements = new Set(),
+		colored_elements = new Map(),
+		disabled_elements = new Set(),
+		hidden_elements = new Set(),
+		visible_elements = new Set();
+	let memoized_hexToRgba = memoize(hexToRgba);
 	for (const revit_id in object) {
 		const forge_id = forge_elements.hasOwnProperty(revit_id) && forge_elements[revit_id];
 

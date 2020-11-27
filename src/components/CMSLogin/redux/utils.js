@@ -2,64 +2,68 @@ import { gql } from 'apollo-boost';
 import jwtDecoder from 'jwt-decode';
 
 import { graphQLClient } from '../../../services';
+import GraphQLAPIService from '../../../services/graphql.api.service';
 
 export const login = async (identifier, password) => {
-	return graphQLClient().mutate({
-		mutation: gql`
-			mutation login($i: String!, $p: String!) {
-				login(input: { identifier: $i, password: $p }) {
-					jwt
-					user {
-						id
-					}
-				}
-			}
-		`,
-		variables: { i: identifier, p: password },
-		fetchPolicy: 'no-cache',
-	});
+	return new GraphQLAPIService().login(identifier, password);
+	// return graphQLClient().mutate({
+	// 	mutation: gql`
+	// 		mutation login($i: String!, $p: String!) {
+	// 			login(input: { identifier: $i, password: $p }) {
+	// 				jwt
+	// 				user {
+	// 					id
+	// 				}
+	// 			}
+	// 		}
+	// 	`,
+	// 	variables: { i: identifier, p: password },
+	// 	fetchPolicy: 'no-cache',
+	// });
 };
 
 export const fetchUserData = (access_token, user_id) => {
-	return graphQLClient(access_token).query({
-		query: gql`
-			query getUserData($i: ID!) {
-				user(id: $i) {
-					id
-					username
-					email
-					project_roles {
-						project_role {
-							name
-						}
-						project {
-							id
-							name
-							model_urn
-						}
-					}
-				}
-			}
-		`,
-		variables: { i: user_id },
-		fetchPolicy: 'no-cache',
-	});
+	return new GraphQLAPIService(access_token).userData(user_id);
+	// return graphQLClient(access_token).query({
+	// 	query: gql`
+	// 		query getUserData($i: ID!) {
+	// 			user(id: $i) {
+	// 				id
+	// 				username
+	// 				email
+	// 				project_roles {
+	// 					project_role {
+	// 						name
+	// 					}
+	// 					project {
+	// 						id
+	// 						name
+	// 						model_urn
+	// 					}
+	// 				}
+	// 			}
+	// 		}
+	// 	`,
+	// 	variables: { i: user_id },
+	// 	fetchPolicy: 'no-cache',
+	// });
 };
 
 export const resetPasswordAPI = async (password, access_token) => {
 	const { id } = jwtDecoder(access_token);
-	return graphQLClient(access_token).mutate({
-		mutation: gql`
-			mutation resetPassword($u: ID!, $p: String) {
-				updateUser(input: { where: { id: $u }, data: { password: $p } }) {
-					user {
-						id
-					}
-				}
-			}
-		`,
-		variables: { p: password, u: id },
-	});
+	return new GraphQLAPIService(access_token).resetPassword(id, password);
+	// return graphQLClient(access_token).mutate({
+	// 	mutation: gql`
+	// 		mutation resetPassword($u: ID!, $p: String) {
+	// 			updateUser(input: { where: { id: $u }, data: { password: $p } }) {
+	// 				user {
+	// 					id
+	// 				}
+	// 			}
+	// 		}
+	// 	`,
+	// 	variables: { p: password, u: id },
+	// });
 };
 
 export const getUserFromLocalStorage = () => {

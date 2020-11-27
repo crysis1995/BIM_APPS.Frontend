@@ -1,12 +1,18 @@
 import { combineEpics, ofType } from 'redux-observable';
-import { concat, from, of, EMPTY } from 'rxjs';
-import { catchError, concatAll, filter, map, mapTo, mergeMap, switchMap } from 'rxjs/operators';
+import { concat, from, of, EMPTY, iif, forkJoin } from 'rxjs';
+import { catchError, concatAll, filter, map, mapTo, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { FORGE_VIEWER_HANDLE_COLORIZE_FORGE } from '../../../../components/ForgeViewer/redux/actions';
 import { RoundNumber } from '../../../../utils/RoundNumber';
 import { objectJobFetchCompleted, objectJobFetchStart } from '../actions/jobs_actions';
 import { updateJobInStore } from '../actions/upgrading_actions';
-import { UPGRADE_BY_JOB, UPGRADING_SET_STATUSES } from '../types';
+import {
+	UPGRADE_BY_JOB,
+	UPGRADING_SET_STATUSES,
+	UPGRADING_SET_STATUSES_INITIALIZER,
+	UPGRADING_SET_STATUSES_START,
+} from '../types';
 import { createReferenceJob, updateObjectJob } from '../utils/jobs_utils';
+import { checkIfUpgradingIsCorrect } from '../utils/upgrading_utils';
 
 export const upgradeJobEpic = (action$, state$) =>
 	action$.pipe(
@@ -67,7 +73,27 @@ export const upgradeJobEpic = (action$, state$) =>
 		),
 	);
 
-export const MONOLITHIC_handleSetStatus = (action$) =>
+const MONOLITHIC_handleSetStatus = (action$, state$) =>
 	action$.pipe(ofType(UPGRADING_SET_STATUSES), mapTo({ type: FORGE_VIEWER_HANDLE_COLORIZE_FORGE }));
 
-export default combineEpics(upgradeJobEpic, MONOLITHIC_handleSetStatus);
+const handleInitSetStatus = (action$, state$) =>
+	action$.pipe(
+		ofType(UPGRADING_SET_STATUSES_INITIALIZER),
+		withLatestFrom(state$),
+		mergeMap(([action, state]) =>
+			iif(() => checkIfUpgradingIsCorrect(action, state), of({ type: UPGRADING_SET_STATUSES_START })),
+		),
+	);
+
+const handleSendStatusData = (action$, state$) =>
+	action$.pipe(
+		ofType(UPGRADING_SET_STATUSES_START),
+		withLatestFrom(state$),
+		mergeMap(([action, state]) => {
+			of(action.selectedElements).pipe(
+				mergeMap(() => forkJoin([]))
+			);
+		}),
+	);
+
+export default combineEpics(upgradeJobEpic, MONOLITHIC_handleSetStatus, handleInitSetStatus, handleSendStatusData);
