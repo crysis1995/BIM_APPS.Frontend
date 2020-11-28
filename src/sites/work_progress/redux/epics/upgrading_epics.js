@@ -9,7 +9,7 @@ import {
 	UPGRADE_BY_JOB,
 	UPGRADING_SET_STATUSES,
 	UPGRADING_SET_STATUSES_INITIALIZER,
-	UPGRADING_SET_STATUSES_START,
+	UPGRADING_SET_STATUSES_START, UPGRADING_SET_STATUSES_SUCCESS
 } from '../types';
 import { createReferenceJob, updateObjectJob } from '../utils/jobs_utils';
 import { checkIfUpgradingIsCorrect } from '../utils/upgrading_utils';
@@ -81,7 +81,10 @@ const handleInitSetStatus = (action$, state$) =>
 		ofType(UPGRADING_SET_STATUSES_INITIALIZER),
 		withLatestFrom(state$),
 		mergeMap(([action, state]) =>
-			iif(() => checkIfUpgradingIsCorrect(action, state), of({ type: UPGRADING_SET_STATUSES_START })),
+			concat(
+				iif(() => checkIfUpgradingIsCorrect(action, state), of({ type: UPGRADING_SET_STATUSES_START })),
+				of({ type: UPGRADING_SET_STATUSES_SUCCESS }),
+			),
 		),
 	);
 
@@ -90,9 +93,7 @@ const handleSendStatusData = (action$, state$) =>
 		ofType(UPGRADING_SET_STATUSES_START),
 		withLatestFrom(state$),
 		mergeMap(([action, state]) => {
-			of(action.selectedElements).pipe(
-				mergeMap(() => forkJoin([]))
-			);
+			of(action.selectedElements).pipe(mergeMap(() => forkJoin([])));
 		}),
 	);
 
