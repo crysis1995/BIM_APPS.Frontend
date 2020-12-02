@@ -1,5 +1,6 @@
 import { gql } from 'apollo-boost';
 import { graphQLClient } from '../../../../services';
+import GraphQLAPIService from '../../../../services/graphql.api.service';
 
 export const GET_ALL_ACCEPTANCE_JOBS = gql`
 	query getAllAcceptanceJobs {
@@ -14,13 +15,11 @@ export const GET_ALL_ACCEPTANCE_JOBS = gql`
 		}
 	}
 `;
-
-export const fetchAllJobsFromAPI = () => {
-	return graphQLClient().query({
-		query: GET_ALL_ACCEPTANCE_JOBS,
-		fetchPolicy: 'no-cache',
-	});
-};
+export const fetchAllJobsFromAPI = () => new GraphQLAPIService().getAllJobs();
+// return graphQLClient().query({
+// 	query: GET_ALL_ACCEPTANCE_JOBS,
+// 	fetchPolicy: 'no-cache',
+// });
 
 /**
  *

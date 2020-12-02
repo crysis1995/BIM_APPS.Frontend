@@ -19,18 +19,32 @@ import {
 	visibleElementsAdd,
 	visibleElementsClean,
 } from '../../../../components/ForgeViewer/redux/actions';
+import GraphQLAPIService from '../../../../services/graphql.api.service';
+import RestAPIService from '../../../../services/rest.api.service';
 import { normalize } from '../../../../utils/normalize';
 import Legend from '../../components/Structural/Legend';
 import {
 	changeLevel,
 	endFetchCranes,
+	fetchCalendarEnd,
+	fetchCalendarStart,
+	fetchStatusesEnd,
+	fetchStatusesStart,
 	selectRotationDate,
 	setLevelOptions,
 	startFetchCranes,
 } from '../actions/odbiory_actions';
-import { handleSelectedElements, setCurrentVisibleElements } from '../actions/upgrading_actions';
+import { fetchTermsEnd, fetchTermsStart } from '../actions/terms_actions';
 import {
+	endFetchingUpgradingData,
+	handleSelectedElements,
+	setCurrentVisibleElements,
+	startFetchingUpgradingData,
+} from '../actions/upgrading_actions';
+import {
+	ACCEPTANCE_MONOLITHIC_INIT,
 	ODBIORY_COMPONENT_DECREMENT_DAY,
+	ODBIORY_COMPONENT_FETCH_CALENDAR_END,
 	ODBIORY_COMPONENT_INCREMENT_DAY,
 	ODBIORY_COMPONENT_SET_ACCEPTANCE_TYPE,
 	ODBIORY_COMPONENT_SET_ACTUAL_TAB,
@@ -41,6 +55,7 @@ import {
 } from '../types';
 import { ACCEPTANCE_TYPE } from '../types/constans';
 import { filterTree, findMinAndMaxRotationDay } from '../utils/odbiory_utils';
+import { parseTermsToMonolithic } from '../utils/terms_utils';
 
 export const handleChangeAppType = (action$, state$) =>
 	action$.pipe(
@@ -52,12 +67,35 @@ export const setCranes = (action$, state$) =>
 	action$.pipe(
 		ofType(ODBIORY_COMPONENT_SET_ACCEPTANCE_TYPE),
 		filter(({ acceptance_type }) => acceptance_type === ACCEPTANCE_TYPE.MONOLITHIC),
-		mergeMap(() =>
-			concat(
+		mergeMap(() => {
+			const GRAPHQL = new GraphQLAPIService();
+			const REST = new RestAPIService();
+			// const project = state$.value.CMSLogin.project.id
+			const project = 1;
+			return concat(
+				of({ type: ACCEPTANCE_MONOLITHIC_INIT }),
+				of(fetchStatusesStart()),
 				of(startFetchCranes()),
-				from(fetchCranesFromApi(state$.value)).pipe(map((value) => endFetchCranes(normalize(value)))),
-			),
-		),
+				of(startFetchingUpgradingData()),
+				of(fetchCalendarStart()),
+				of(fetchTermsStart()),
+				from(REST.MONOLITHIC.getAllCranes(project)).pipe(map((value) => endFetchCranes(normalize(value)))),
+				from(REST.MONOLITHIC.getAllRotationDays(project)).pipe(
+					map((value) => fetchCalendarEnd(normalize(value, 'rotation_day'))),
+				),
+				from(REST.MONOLITHIC.initializeTerms(project)).pipe(
+					mergeMap(() =>
+						from(REST.MONOLITHIC.getAccepntaceTerms(project)).pipe(
+							map((data) => fetchTermsEnd(parseTermsToMonolithic(data))),
+						),
+					),
+				),
+				from(GRAPHQL.MONOLITHIC.getStatuses()).pipe(map((value) => fetchStatusesEnd(normalize(value)))),
+				from(REST.MONOLITHIC.getAllObjects(project)).pipe(
+					map((e) => endFetchingUpgradingData(normalize(e, 'revit_id'))),
+				),
+			);
+		}),
 	);
 
 export const setLevels = (action$, state$) =>
@@ -111,6 +149,7 @@ export const handleSetRotationDay = (action$, state$) =>
 		action$.pipe(ofType(SET_MODEL_ELEMENTS)),
 		action$.pipe(ofType(ODBIORY_COMPONENT_SET_LEVEL)),
 		action$.pipe(ofType(ODBIORY_COMPONENT_SET_CRANE)),
+		action$.pipe(ofType(ODBIORY_COMPONENT_FETCH_CALENDAR_END)),
 	]).pipe(
 		withLatestFrom(state$),
 		mergeMap(
@@ -119,7 +158,7 @@ export const handleSetRotationDay = (action$, state$) =>
 				{
 					Odbiory: {
 						OdbioryComponent: {
-							MONOLITHIC: { rotation_day, active_level, active_crane, levels },
+							MONOLITHIC: { rotation_day, active_level, cranes, active_crane, levels, calendar },
 						},
 						Upgrading: {
 							MONOLITHIC: { byRevitId },
@@ -127,15 +166,22 @@ export const handleSetRotationDay = (action$, state$) =>
 					},
 				},
 			]) => {
+				// if (rotation_day < 1) {
+				// 	Object.keys(calendar).
+				// } else {
 				if (levels.hasOwnProperty(active_level)) {
-					const { min, max } = findMinAndMaxRotationDay(byRevitId, active_crane, levels[active_level].name);
-					console.log(min, max, rotation_day);
+					const { min, max } = findMinAndMaxRotationDay(
+						byRevitId,
+						cranes[active_crane].name,
+						levels[active_level].name,
+					);
 					if (rotation_day < min) {
 						return of(selectRotationDate(min));
 					} else if (rotation_day > max) {
 						return of(selectRotationDate(max));
 					}
 				}
+				// }
 
 				return EMPTY;
 			},
@@ -183,16 +229,17 @@ export const handleColorizeForge = (action$, state$) =>
 			const rotation_day = state.Odbiory.OdbioryComponent.MONOLITHIC.rotation_day;
 			const object_values = state.Odbiory.Upgrading.MONOLITHIC.byRevitId;
 			const elements_object = state.ForgeViewer.model_elements;
-
+			const statuses = state.Odbiory.OdbioryComponent.MONOLITHIC.statuses;
+			const panel_content = state.ForgeViewer;
 			const {
 				colored_elements,
 				disabled_elements,
 				hidden_elements,
 				visible_elements,
 				current_elements,
-			} = filterTree(object_values, elements_object, crane, level, rotation_day, active_tab);
+			} = filterTree(object_values, elements_object, crane, level, rotation_day, statuses, active_tab);
 			return concat(
-				of(setContentToReactPanel(<Legend />)),
+				iif(() => !panel_content, setContentToReactPanel(<Legend />)),
 				of(setCurrentVisibleElements(current_elements)),
 				of(visibleElementsAdd(visible_elements)),
 				of(coloredElementsAdd(colored_elements)),
@@ -236,34 +283,6 @@ export const handleForgeSelection = (action$, state$) =>
 			return of(selectedElementsAdd([...selected_elements]));
 		}),
 	);
-
-const fetchCranesFromApi = async (project_id) => {
-	return new Promise((resolve, reject) => {
-		setTimeout(
-			() =>
-				resolve([
-					{
-						id: '1',
-						name: '01',
-						levels: [
-							{ name: 'B03', id: '1' },
-							{ name: 'B02', id: '2' },
-						],
-					},
-					{
-						id: '2',
-						name: '02',
-						levels: [
-							{ name: 'B03', id: '1' },
-							{ name: 'B02', id: '2' },
-							{ name: 'B01', id: '3' },
-						],
-					},
-				]),
-			300,
-		);
-	});
-};
 
 export default combineEpics(
 	handleCleanSelectionAfterChangeRotationDay,

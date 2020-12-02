@@ -1,4 +1,9 @@
-import { DELAYS_CREATE_NEW, DELAYS_UPDATE_EXIST } from '../types';
+import {
+	DELAYS_CREATE_NEW,
+	DELAYS_CREATE_NEW_INIT,
+	DELAYS_FETCH_CAUSES_END,
+	DELAYS_FETCH_CAUSES_START,
+} from '../types';
 
 /**
  *
@@ -19,21 +24,20 @@ export function createNewDelay(crane_id, level_id, rotation_day, selected_cases,
 		commentary,
 	};
 }
+export function initCreateNewDelay(crane_id, level_id, rotation_day, selected_cases, commentary) {
+	return {
+		type: DELAYS_CREATE_NEW_INIT,
+		crane_id,
+		level_id,
+		rotation_day,
+		selected_cases,
+		commentary,
+	};
+}
 
-/**
- *
- * @param crane_id
- * @param level_id
- * @param rotation_day
- * @param selected_cases
- * @param commentary
- * @return {{selected_cases: *, level_id: *, type: string, rotation_day: *, commentary: *, crane_id: *}}
- */
-export const updateExistDelay = (crane_id, level_id, rotation_day, selected_cases, commentary) => ({
-	type: DELAYS_UPDATE_EXIST,
-	crane_id,
-	level_id,
-	rotation_day,
-	selected_cases,
-	commentary,
-});
+export function delaysFetchStart() {
+	return { type: DELAYS_FETCH_CAUSES_START };
+}
+export function delaysFetchEnd(data) {
+	return { type: DELAYS_FETCH_CAUSES_END, data };
+}

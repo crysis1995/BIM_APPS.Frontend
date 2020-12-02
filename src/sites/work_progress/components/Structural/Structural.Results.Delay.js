@@ -1,38 +1,31 @@
 import React, { useState } from 'react';
-import { Col, Form, Row, Tab, ListGroup, Button } from 'react-bootstrap';
+import { Button, Col, Form, ListGroup, Row, Tab } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { createNewDelay, updateExistDelay } from '../../redux/actions/delays_actions';
+import Loader from '../../../../components/Loader';
+import { initCreateNewDelay } from '../../redux/actions/delays_actions';
 import { MONOLITHIC } from '../../redux/types/constans';
 
 const baseMargin = 25;
 
-function Delay({ createNewDelay, updateExistDelay, delays, active_crane, active_level, rotation_day }) {
-	// delays.byCrane?[active_crane]?.byLevel?[active_level]?.byRotationDay?[rotation_day]
-	const { selected_cases, commentary } =
-		delays.hasOwnProperty('byCrane') &&
-		delays.byCrane.hasOwnProperty(active_crane) &&
-		delays.byCrane[active_crane].hasOwnProperty('byLevel') &&
-		delays.byCrane[active_crane].byLevel.hasOwnProperty(active_level) &&
-		delays.byCrane[active_crane].byLevel[active_level].hasOwnProperty('byRotationDay') &&
-		delays.byCrane[active_crane].byLevel[active_level].byRotationDay.hasOwnProperty(rotation_day) &&
-		delays.byCrane[active_crane].byLevel[active_level].byRotationDay[rotation_day];
+function Delay({ initCreateNewDelay, delay_causes_loading, delay_causes, active_crane, active_level, rotation_day }) {
+	const [active, setActive] = useState([]);
+	const [text, setText] = useState('');
+	if (!active_crane || !active_level || !rotation_day) return null;
+	if (delay_causes_loading) return <Loader />;
 
-	const [active, setActive] = useState(selected_cases || []);
-	const [text, setText] = useState(commentary || '');
-	console.log(active, text);
-	function ChildCheck({ object, margin, parentId }) {
+	function ChildCheck({ object, margin }) {
 		if (object.hasOwnProperty('children')) {
 			return (
 				<>
 					<Form.Check
-						checked={active.includes(parentId)}
+						checked={active.includes(object.id)}
 						style={{ marginLeft: margin }}
 						onClick={(e) =>
 							setActive((prevState) =>
-								prevState.includes(parentId)
-									? prevState.filter((e) => e !== parentId)
+								prevState.includes(object.id)
+									? prevState.filter((e) => e !== object.id)
 									: prevState.length < 3
-									? [...prevState, parentId]
+									? [...prevState, object.id]
 									: prevState,
 							)
 						}
@@ -40,20 +33,20 @@ function Delay({ createNewDelay, updateExistDelay, delays, active_crane, active_
 						label={<small>{object.label}</small>}
 					/>
 					{object.children.map((child) => (
-						<ChildCheck object={child} margin={margin + baseMargin} parentId={`${parentId}.${child.id}`} />
+						<ChildCheck object={child} margin={margin + baseMargin} />
 					))}
 				</>
 			);
 		} else {
 			return (
 				<Form.Check
-					checked={active.includes(parentId)}
+					checked={active.includes(object.id)}
 					onClick={(e) =>
 						setActive((prevState) =>
-							prevState.includes(parentId)
-								? prevState.filter((e) => e !== parentId)
+							prevState.includes(object.id)
+								? prevState.filter((e) => e !== object.id)
 								: prevState.length < 3
-								? [...prevState, parentId]
+								? [...prevState, object.id]
 								: prevState,
 						)
 					}
@@ -75,7 +68,7 @@ function Delay({ createNewDelay, updateExistDelay, delays, active_crane, active_
 				<Row>
 					<Col sm={4}>
 						<ListGroup variant={'flush'}>
-							{MONOLITHIC.DELAY.map((obj, index) => (
+							{delay_causes.map((obj, index) => (
 								<ListGroup.Item key={index} className={'btn-sm p-2 m-0'} action eventKey={index}>
 									{obj.label}
 								</ListGroup.Item>
@@ -84,7 +77,7 @@ function Delay({ createNewDelay, updateExistDelay, delays, active_crane, active_
 					</Col>
 					<Col sm={8}>
 						<Tab.Content>
-							{MONOLITHIC.DELAY.map((obj, index) => (
+							{delay_causes.map((obj, index) => (
 								<Tab.Pane key={index} eventKey={index}>
 									<ChildCheck object={obj} margin={0} parentId={obj.id} />
 								</Tab.Pane>
@@ -105,11 +98,7 @@ function Delay({ createNewDelay, updateExistDelay, delays, active_crane, active_
 				<Col>
 					<Button
 						onClick={() => {
-							if (!selected_cases && !commentary) {
-								createNewDelay(active_crane, active_level, rotation_day, active, text);
-							} else {
-								updateExistDelay(active_crane, active_level, rotation_day, active, text);
-							}
+							initCreateNewDelay(active_crane, active_level, rotation_day, active, text);
 							setActive([]);
 							setText('');
 						}}
@@ -126,9 +115,11 @@ const mapStateToProps = (state) => ({
 	active_crane: state.Odbiory.OdbioryComponent.MONOLITHIC.active_crane,
 	active_level: state.Odbiory.OdbioryComponent.MONOLITHIC.active_level,
 	rotation_day: state.Odbiory.OdbioryComponent.MONOLITHIC.rotation_day,
-	delays: state.Odbiory.Delays.MONOLITHIC,
+	delays: state.Odbiory.Delays.MONOLITHIC.byCrane,
+	delay_causes_loading: state.Odbiory.Delays.MONOLITHIC.delay_causes_loading,
+	delay_causes: state.Odbiory.Delays.MONOLITHIC.delay_causes,
 });
 
-const mapDispatchToProps = { createNewDelay, updateExistDelay };
+const mapDispatchToProps = { initCreateNewDelay };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Delay);

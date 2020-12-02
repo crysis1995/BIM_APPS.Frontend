@@ -1,12 +1,40 @@
 import dotProp from 'dot-prop';
-import { DELAYS_CREATE_NEW, DELAYS_UPDATE_EXIST } from '../types';
+import {
+	DELAYS_CREATE_NEW,
+	DELAYS_FETCH_CAUSES_END,
+	DELAYS_FETCH_CAUSES_START,
+	DELAYS_UPDATE_EXIST,
+	SET_INITIAL,
+} from '../types';
 
 export const initialState = {
-	MONOLITHIC: {},
+	MONOLITHIC: {
+		delay_causes: {},
+		delay_causes_loading: false,
+	},
 };
 
 const DelaysReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case DELAYS_FETCH_CAUSES_START:
+			return {
+				...state,
+				MONOLITHIC: {
+					...state.MONOLITHIC,
+					delay_causes_loading: true,
+				},
+			};
+		case DELAYS_FETCH_CAUSES_END:
+			return {
+				...state,
+				MONOLITHIC: {
+					...state.MONOLITHIC,
+					delay_causes_loading: false,
+					delay_causes: action.data,
+				},
+			};
+		case SET_INITIAL:
+			return initialState;
 		case DELAYS_CREATE_NEW:
 			return createNewDelay(state, action);
 		case DELAYS_UPDATE_EXIST:

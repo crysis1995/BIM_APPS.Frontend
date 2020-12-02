@@ -22,6 +22,8 @@ const initialState = {
 
 const ResultsReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case SET_INITIAL:
+			return initialState;
 		case RESULTS_FETCH_START:
 			return {
 				...state,
@@ -41,11 +43,6 @@ const ResultsReducer = (state = initialState, action) => {
 				...state,
 				loading: false,
 				errors: [...state.errors, action.error],
-			};
-		case SET_INITIAL:
-			return {
-				...state,
-				...initialState,
 			};
 		case CLEAN_RESULTS:
 			return {

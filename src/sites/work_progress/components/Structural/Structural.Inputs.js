@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Col, Form, Row } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import {
 	changeCrane,
@@ -9,7 +9,9 @@ import {
 	selectDate,
 	selectRotationDate,
 } from '../../redux/actions/odbiory_actions';
+import { parseDate } from '../../redux/utils/terms_utils';
 import Selector from '../Selector';
+import { dateSelector } from './Structural.Inputs.Selector';
 
 function Structural_Inputs({
 	cranes_loading,
@@ -65,11 +67,11 @@ function Structural_Inputs({
 							fill="currentColor"
 							xmlns="http://www.w3.org/2000/svg">
 							<path
-								fill-rule="evenodd"
+								fillRule="evenodd"
 								d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
 							/>
 							<path
-								fill-rule="evenodd"
+								fillRule="evenodd"
 								d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
 							/>
 						</svg>
@@ -82,11 +84,11 @@ function Structural_Inputs({
 							type={'date'}
 							className="form-control form-control-sm "
 							onChange={(selectedDay) => selectDate(selectedDay.target.value)}
-							value={date}
+							value={parseDate(date)}
 						/>
 					</div>
 					<div className="form-group ml-1 mr-2">
-						<label>Dzień rotacji</label>
+						<label>Dzień rotacji </label>
 						<input
 							disabled={cranes_loading || !active_crane || !active_level}
 							data-testid="data-input-2"
@@ -110,11 +112,11 @@ function Structural_Inputs({
 							fill="currentColor"
 							xmlns="http://www.w3.org/2000/svg">
 							<path
-								fill-rule="evenodd"
+								fillRule="evenodd"
 								d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z"
 							/>
 							<path
-								fill-rule="evenodd"
+								fillRule="evenodd"
 								d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"
 							/>
 						</svg>
@@ -125,14 +127,14 @@ function Structural_Inputs({
 	);
 }
 
-const mapStateToProps = ({ Odbiory }) => ({
-	cranes: Odbiory.OdbioryComponent.MONOLITHIC.cranes,
-	active_crane: Odbiory.OdbioryComponent.MONOLITHIC.active_crane,
-	levels: Odbiory.OdbioryComponent.MONOLITHIC.levels,
-	active_level: Odbiory.OdbioryComponent.MONOLITHIC.active_level,
-	cranes_loading: Odbiory.OdbioryComponent.MONOLITHIC.cranes_loading,
-	date: Odbiory.OdbioryComponent.MONOLITHIC.date,
-	rotation_day: Odbiory.OdbioryComponent.MONOLITHIC.rotation_day,
+const mapStateToProps = (state) => ({
+	cranes: state.Odbiory.OdbioryComponent.MONOLITHIC.cranes,
+	active_crane: state.Odbiory.OdbioryComponent.MONOLITHIC.active_crane,
+	levels: state.Odbiory.OdbioryComponent.MONOLITHIC.levels,
+	active_level: state.Odbiory.OdbioryComponent.MONOLITHIC.active_level,
+	cranes_loading: state.Odbiory.OdbioryComponent.MONOLITHIC.cranes_loading,
+	date: dateSelector(state),
+	rotation_day: state.Odbiory.OdbioryComponent.MONOLITHIC.rotation_day,
 });
 
 const mapDispatchToProps = {

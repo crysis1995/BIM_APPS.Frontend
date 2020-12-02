@@ -16,10 +16,7 @@ const initialState = {
 const ObjectsReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_INITIAL:
-			return {
-				...state,
-				...initialState,
-			};
+			return initialState
 		case OBJECTS_LOADING_START:
 			return {
 				...state,

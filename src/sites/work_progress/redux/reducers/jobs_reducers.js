@@ -9,6 +9,7 @@ import {
 	OBJECT_JOB_FETCH_COMPLETED,
 	OBJECT_JOB_FETCH_ERROR,
 	OBJECT_JOB_FETCH_START,
+	SET_INITIAL,
 } from '../types';
 
 const initialState = {
@@ -22,6 +23,8 @@ const initialState = {
 
 const JobsReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case SET_INITIAL:
+			return initialState;
 		case JOBS_LOADING_START:
 			return {
 				...state,

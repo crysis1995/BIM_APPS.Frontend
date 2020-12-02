@@ -1,3 +1,4 @@
+import { SET_INITIAL } from '../../../sites/work_progress/redux/types';
 import types from './types';
 
 const INITIAL_STATE = {
@@ -16,6 +17,8 @@ const INITIAL_STATE = {
 
 const AutodeskLoginReducer = (state = INITIAL_STATE, action) => {
 	switch (action.type) {
+		case SET_INITIAL:
+			return INITIAL_STATE;
 		case types.LOGIN_2_LEGGED:
 			return {
 				...state,

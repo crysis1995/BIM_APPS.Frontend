@@ -1,10 +1,15 @@
+import { SET_INITIAL } from '../../../sites/work_progress/redux/types';
 import types from './types';
 
-const INITIAL_STATE = {};
+const initialState = {};
 
-const projectListReducer = (state = INITIAL_STATE, action) => {
+const projectListReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case SET_INITIAL:
+			return initialState;
 		case types.GET_TOKEN:
 			return;
+		default:
+			return state;
 	}
 };

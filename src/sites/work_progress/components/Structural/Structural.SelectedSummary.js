@@ -20,11 +20,11 @@ function SelectedSummary({ selectedItemsParamsSummary, selectedElements_length }
 						{Object.keys(selectedItemsParamsSummary[key]).map((e) => (
 							<div key={v4()} className="font-weight-bold">
 								<span className="mr-3">{MONOLITHIC.PARAMETERS[e]}</span>
-								{'Volume' === e ? (
+								{'volume' === e ? (
 									<UNITS.M3>{selectedItemsParamsSummary[key][e]}</UNITS.M3>
-								) : 'Area' === e ? (
+								) : 'area' === e ? (
 									<UNITS.M2>{selectedItemsParamsSummary[key][e]}</UNITS.M2>
-								) : 'Length' === e ? (
+								) : 'running_meter' === e ? (
 									<UNITS.CM>{selectedItemsParamsSummary[key][e]}</UNITS.CM>
 								) : null}
 							</div>

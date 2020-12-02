@@ -1,4 +1,4 @@
-import { SET_CURRENT_LEVEL } from '../types';
+import { SET_CURRENT_LEVEL, SET_INITIAL } from '../types';
 
 const initialState = {
 	current_level: '',
@@ -6,6 +6,8 @@ const initialState = {
 
 const LevelReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case SET_INITIAL:
+			return initialState;
 		case SET_CURRENT_LEVEL:
 			return {
 				...state,

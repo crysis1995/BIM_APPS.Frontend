@@ -1,10 +1,14 @@
 import {
 	UPGRADE_BY_JOB,
+	UPGRADING_FETCH_END,
+	UPGRADING_FETCH_ERROR,
+	UPGRADING_FETCH_START,
 	UPGRADING_HANDLE_SELECTED_ELEMENTS,
 	UPGRADING_SET_ACTUAL_ELEMENTS,
 	UPGRADING_SET_DATA,
 	UPGRADING_SET_STATUSES,
-	UPGRADING_UPDATE_JOB,
+	UPGRADING_SET_STATUSES_INITIALIZER, UPGRADING_SET_STATUSES_START, UPGRADING_SET_STATUSES_SUCCESS,
+	UPGRADING_UPDATE_JOB
 } from '../types';
 
 export const setUpgradingData = (
@@ -45,6 +49,16 @@ export const setCurrentVisibleElements = (elements) => ({
 	type: UPGRADING_SET_ACTUAL_ELEMENTS,
 	elements,
 });
+export const startFetchingUpgradingData = () => ({
+	type: UPGRADING_FETCH_START,
+});
+export const endFetchingUpgradingData = (data) => ({
+	type: UPGRADING_FETCH_END,
+	data,
+});
+export const errorFetchingUpgradingData = () => ({
+	type: UPGRADING_FETCH_ERROR,
+});
 
 /**
  *
@@ -56,9 +70,25 @@ export const handleSelectedElements = (elements) => ({
 	elements,
 });
 
-export const handleSetStatus = (selectedElements, status, rotation_day) => ({
+export const storeSetStatus = (selectedElements, status, rotation_day) => ({
 	type: UPGRADING_SET_STATUSES,
 	selectedElements,
 	status,
 	rotation_day,
+});
+
+export const startSetStatus = () => ({
+	type:UPGRADING_SET_STATUSES_START
+})
+
+export const endSetStatus = () => ({
+	type:UPGRADING_SET_STATUSES_SUCCESS
+})
+
+export const initSetStatus = (selectedElements, status, rotation_day) => ({
+	type: UPGRADING_SET_STATUSES_INITIALIZER,
+	selectedElements,
+	status,
+	rotation_day,
+	updated_at: new Date().toISOString(),
 });

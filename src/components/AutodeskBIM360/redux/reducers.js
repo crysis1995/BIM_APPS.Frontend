@@ -1,4 +1,5 @@
 import { config } from '../../../config';
+import { SET_INITIAL } from '../../../sites/work_progress/redux/types';
 import types from './types';
 
 const initialState = {
@@ -10,6 +11,8 @@ const initialState = {
 
 const AutodeskBIM360Reducer = (state = initialState, action) => {
 	switch (action.type) {
+		case SET_INITIAL:
+			return initialState;
 		case types.FETCH_ALL_PROJECTS:
 			return {
 				...state,
