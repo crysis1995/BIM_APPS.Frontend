@@ -1,6 +1,4 @@
-import dotProp from 'dot-prop';
 import { SET_INITIAL } from '../../../sites/work_progress/redux/types';
-import { normalize } from '../../../utils/normalize';
 import {
 	USER_ADD_PERMISSIONS,
 	USER_DELETE_PERMISSIONS,
