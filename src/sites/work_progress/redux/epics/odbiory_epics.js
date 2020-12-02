@@ -70,8 +70,7 @@ export const setCranes = (action$, state$) =>
 		mergeMap(() => {
 			const GRAPHQL = new GraphQLAPIService();
 			const REST = new RestAPIService();
-			// const project = state$.value.CMSLogin.project.id
-			const project = 1;
+			const project = state$.value.CMSLogin.project.id;
 			return concat(
 				of({ type: ACCEPTANCE_MONOLITHIC_INIT }),
 				of(fetchStatusesStart()),
