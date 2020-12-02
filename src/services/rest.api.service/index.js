@@ -21,7 +21,7 @@ export default class RestAPIService {
 			return this.fetchClient(`/warbud-cranes/?_where[project]=${project_id}`);
 		},
 		getAllRotationDays: (project_id) => {
-			return this.fetchClient(`/warbud-project-rotation-days/?_where[project]=${project_id}`);
+			return this.fetchClient(`/warbud-project-rotation-days/?_limit=1000&_where[project]=${project_id}`);
 		},
 		getDelayCauses: () => {
 			return this.fetchClient(`/acceptance-delay-causes`);
