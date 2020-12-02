@@ -14,7 +14,7 @@ import {
 } from './actions';
 
 export const initialState = {
-	user: { id: null },
+	user: { id: null, username: null, email: null, projects: {}, project_roles: {} },
 	error: '',
 	info: '',
 	credentials: {
@@ -34,11 +34,25 @@ export const initialState = {
  * @param email {string}
  * @param project_roles {Array<Object>}
  */
-function setUserData(state, { username, email, project_roles }) {
-	dotProp.set(state, 'user.username', username);
-	dotProp.set(state, 'user.email', email);
-	dotProp.set(state, 'user.project_roles', normalize(project_roles, 'project.id'));
-	return { ...state };
+function setUserData(state, { user: { username, email }, projects }) {
+	const { _project, project_roles } = projects.reduce(
+		(prev, acc) => {
+			prev._project[acc.project.id] = acc.project;
+			prev.project_roles[acc.project.id] = acc.project_role;
+			return prev;
+		},
+		{ _project: {}, project_roles: {} },
+	);
+	return {
+		...state,
+		user: {
+			...state.user,
+			username,
+			email,
+			projects: _project,
+			project_roles,
+		},
+	};
 }
 
 function addPermissions(state, { permissions }) {

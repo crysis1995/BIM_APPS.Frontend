@@ -4,9 +4,11 @@ import {
 	TERMS_DATA_FETCH_END,
 	TERMS_DATA_FETCH_ERROR,
 	TERMS_DATA_FETCH_START,
+	TERMS_FETCH_END,
+	TERMS_FETCH_START,
 	TERMS_MONOLITHIC_SET_BY_GROUP,
 	TERMS_SET_BY_DEPARTMENT,
-	TERMS_SET_DEPARTMENT
+	TERMS_SET_DEPARTMENT,
 } from '../types';
 import { parseTermsToMonolithic } from '../utils/terms_utils';
 import MONOLITHIC_terms from '../__MOCK__/MONOLITHIC.terms.json';
@@ -21,7 +23,7 @@ export const initialState = {
 	chosenDepartment: '',
 	MONOLITHIC: {
 		loading: false,
-		terms: parseTermsToMonolithic(MONOLITHIC_terms),
+		terms: {},
 	},
 };
 
@@ -65,6 +67,23 @@ const TermsReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_INITIAL:
 			return initialState;
+		case TERMS_FETCH_START:
+			return {
+				...state,
+				MONOLITHIC: {
+					...state.MONOLITHIC,
+					loading: true,
+				},
+			};
+		case TERMS_FETCH_END:
+			return {
+				...state,
+				MONOLITHIC: {
+					...state.MONOLITHIC,
+					loading: false,
+					terms: action.data,
+				},
+			};
 		case TERMS_MONOLITHIC_SET_BY_GROUP:
 			return MonolithicSetByGroup(state, action);
 		case TERMS_SET_DEPARTMENT:

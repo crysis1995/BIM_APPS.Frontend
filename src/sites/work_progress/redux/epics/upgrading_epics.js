@@ -1,18 +1,13 @@
 import { combineEpics, ofType } from 'redux-observable';
-import { concat, from, of, EMPTY, iif, forkJoin } from 'rxjs';
-import { catchError, concatAll, filter, map, mapTo, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { concat, EMPTY, from, of } from 'rxjs';
+import { catchError, filter, map, mapTo, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { FORGE_VIEWER_HANDLE_COLORIZE_FORGE } from '../../../../components/ForgeViewer/redux/actions';
+import GraphQLAPIService from '../../../../services/graphql.api.service';
 import { RoundNumber } from '../../../../utils/RoundNumber';
 import { objectJobFetchCompleted, objectJobFetchStart } from '../actions/jobs_actions';
-import { updateJobInStore } from '../actions/upgrading_actions';
-import {
-	UPGRADE_BY_JOB,
-	UPGRADING_SET_STATUSES,
-	UPGRADING_SET_STATUSES_INITIALIZER,
-	UPGRADING_SET_STATUSES_START, UPGRADING_SET_STATUSES_SUCCESS
-} from '../types';
+import { handleSelectedElements, storeSetStatus, updateJobInStore } from '../actions/upgrading_actions';
+import { UPGRADE_BY_JOB, UPGRADING_SET_STATUSES, UPGRADING_SET_STATUSES_INITIALIZER } from '../types';
 import { createReferenceJob, updateObjectJob } from '../utils/jobs_utils';
-import { checkIfUpgradingIsCorrect } from '../utils/upgrading_utils';
 
 export const upgradeJobEpic = (action$, state$) =>
 	action$.pipe(
@@ -80,21 +75,39 @@ const handleInitSetStatus = (action$, state$) =>
 	action$.pipe(
 		ofType(UPGRADING_SET_STATUSES_INITIALIZER),
 		withLatestFrom(state$),
-		mergeMap(([action, state]) =>
-			concat(
-				iif(() => checkIfUpgradingIsCorrect(action, state), of({ type: UPGRADING_SET_STATUSES_START })),
-				of({ type: UPGRADING_SET_STATUSES_SUCCESS }),
-			),
-		),
+		mergeMap(([{ selectedElements, status, rotation_day }, state]) => {
+			const api = new GraphQLAPIService();
+			const objects = state.Odbiory.Upgrading.MONOLITHIC.byRevitId;
+			const new_status = Object.values(state.Odbiory.OdbioryComponent.MONOLITHIC.statuses).filter(
+				(e) => e.name === status,
+			)[0];
+			const user = state.CMSLogin.user.id.id;
+			if (new_status) {
+				return concat(
+					from(selectedElements).pipe(
+						mergeMap((revit_id) =>
+							from(
+								api.MONOLITHIC.createStatus(
+									objects[revit_id].id,
+									new Date().toISOString(),
+									user,
+									new_status.id,
+								),
+							).pipe(map((e) => storeSetStatus(selectedElements, new_status.id, rotation_day))),
+						),
+					),
+				);
+			} else {
+				return of({ type: '' });
+			}
+		}),
 	);
 
 const handleSendStatusData = (action$, state$) =>
 	action$.pipe(
-		ofType(UPGRADING_SET_STATUSES_START),
+		ofType(UPGRADING_SET_STATUSES),
 		withLatestFrom(state$),
-		mergeMap(([action, state]) => {
-			of(action.selectedElements).pipe(mergeMap(() => forkJoin([])));
-		}),
+		map(() => handleSelectedElements('')),
 	);
 
 export default combineEpics(upgradeJobEpic, MONOLITHIC_handleSetStatus, handleInitSetStatus, handleSendStatusData);

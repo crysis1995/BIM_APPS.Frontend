@@ -1,11 +1,12 @@
 import React from 'react';
 import { Button, OverlayTrigger, Tooltip, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import Loader from '../../../../components/Loader';
 import { initialiseModal } from '../../../../components/Modal/redux/actions';
 import ShowParameters from './Structural.Results.Modal.ShowParameters';
 import ResultTable from './Structural.Results.Table';
 
-function BasePlan({ initialiseModal }) {
+function BasePlan({ initialiseModal, data_loading }) {
 	const variant = 'light';
 	return (
 		<>
@@ -40,13 +41,15 @@ function BasePlan({ initialiseModal }) {
 				</OverlayTrigger>
 			</Col>
 			<Col xs={12} className="h-100" style={{ overflowY: 'auto', maxHeight: '500px' }}>
-				<ResultTable allowSelection={false} />
+				{data_loading ? <Loader height={"100px"}/> : <ResultTable allowSelection={false} />}
 			</Col>
 		</>
 	);
 }
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+	data_loading: state.Odbiory.Upgrading.MONOLITHIC.loading,
+});
 
 const mapDispatchToProps = {
 	initialiseModal,

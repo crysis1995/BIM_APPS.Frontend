@@ -1,11 +1,13 @@
-import { ofType } from 'redux-observable';
+import dotProp from 'dot-prop';
+import { combineEpics, ofType } from 'redux-observable';
 import { from, of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
-import { termsDataFetchEnd, termsDataFetchError } from '../actions/terms_actions';
-import { TERMS_DATA_FETCH_START } from '../types';
+import { catchError, map, switchMap, withLatestFrom } from 'rxjs/operators';
+import GraphQLAPIService from '../../../../services/graphql.api.service';
+import { setTermByGroup, termsDataFetchEnd, termsDataFetchError } from '../actions/terms_actions';
+import { TERMS_DATA_FETCH_START, TERMS_MONOLITHIC_SET_BY_GROUP_INIT } from '../types';
 import { fetchDepartmentsWithTerms, normalizeTermsData } from '../utils/terms_utils';
 
-export const getDepartmentsWithTerms = (action$, state$) =>
+const getDepartmentsWithTerms = (action$, state$) =>
 	action$.pipe(
 		ofType(TERMS_DATA_FETCH_START),
 		switchMap(() => {
@@ -21,3 +23,21 @@ export const getDepartmentsWithTerms = (action$, state$) =>
 			);
 		}),
 	);
+
+const handleSetTerms = (action$, state$) =>
+	action$.pipe(
+		ofType(TERMS_MONOLITHIC_SET_BY_GROUP_INIT),
+		withLatestFrom(state$),
+		switchMap(([{ crane_id, level_id, group_id, term_type, term }, state]) => {
+			const term_id = dotProp.get(
+				state,
+				`Odbiory.Terms.MONOLITHIC.terms.byCrane.${crane_id}.byLevel.${level_id}.byGroup.${group_id}.id`,
+			);
+			const GRAPHQL = new GraphQLAPIService();
+			return from(GRAPHQL.MONOLITHIC.updateTerm(term_id, { [term_type]: term })).pipe(
+				map(() => setTermByGroup(crane_id, level_id, group_id, term_type, term)),
+			);
+		}),
+	);
+
+export default combineEpics(getDepartmentsWithTerms, handleSetTerms);

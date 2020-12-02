@@ -1,8 +1,8 @@
 export const config = {
-	// api_url: "http://10.104.0.128:2000",
+	// api_url: "http://localhost:2000",
 	api_url: 'http://bim.warbud.pl/bim_apps/api',
 	bim_apps_api: {
-		// url: "http://10.104.0.128:2000",
+		// url: 'http://localhost:2000',
 		url: 'http://bim.warbud.pl/bim_apps/api',
 		// graphql: 'http://localhost:2000/graphql',
 		graphql: 'http://bim.warbud.pl/bim_apps/api/graphql',

@@ -25,8 +25,9 @@ export const ACCEPTANCE_TYPE = {
  */
 export const TERM_TYPE = {
 	REAL_START: { id: 'REAL_START', name: 'Rzeczywista data rozpoczęcia' },
-	PLANNED_START_BP: { id: 'PLANNED_START_BP', name: 'Data planowanego rozpoczęcia wg. PB', dbKey :"StartDate" },
-	PLANNED_FINISH_BP: { id: 'PLANNED_FINISH_BP', name: 'Data planowanego zakończenia wg. PB' ,dbKey :"EndDate"},
+	PLANNED_START_BP: { id: 'PLANNED_START_BP', name: 'Data planowanego rozpoczęcia wg. PB', dbKey: 'StartDate' },
+	PLANNED_FINISH_BP: { id: 'PLANNED_FINISH_BP', name: 'Data planowanego zakończenia wg. PB', dbKey: 'EndDate' },
+	PLANNED_START: { id: 'PLANNED_START', name: 'Planowana data rozpoczęcia' },
 	PLANNED_FINISH: { id: 'PLANNED_FINISH', name: 'Planowana data zakończenia' },
 	REAL_FINISH: { id: 'REAL_FINISH', name: 'Rzeczywista data zakończenia' },
 };
@@ -96,6 +97,28 @@ const VCF_REALISATION = {
 	ConsoleCourte: 'Console courte',
 };
 
+const PL_Description = {
+	'External wall': 'Ściana zewnętrzna',
+	'Internal wall': 'Ściana wewnętrzna',
+	Acroterion: 'Attyka',
+	'Cast in situ beam': 'Belka monolityczna',
+	'One side wall': 'Bareta',
+	'Cast in situ slab': 'Strop monolityczny',
+	'Foundation wall': 'Ściana fundamentowa',
+	'Curve wall': 'Ściana łukowa',
+	'Rectangular column': 'Słup prostokątny',
+	'Head of pile': 'Oczep',
+	'Beam keyway': 'Belka monolityczna',
+	'Particular beam': 'Belka monolityczna',
+	'Rectangular high column': 'Słup prostokątny wysoki',
+	Ramp: 'Rampa',
+	raft: 'Płyta fundamentowa',
+	'Specific column': 'Słupki prostokątne',
+	'High wall': 'Ściana dociskowa',
+	Stairs: 'Schody',
+	'Console courte': 'Strop wspornikowy',
+};
+
 const ELEMENT_TYPE = {
 	V: {
 		id: 'V',
@@ -111,19 +134,19 @@ const ELEMENT_TYPE = {
 };
 
 const PARAMETERS = {
-	Volume: 'Objętość',
-	Area: 'Powierzchnia',
-	Length: 'Długość',
+	volume: 'Objętość',
+	area: 'Powierzchnia',
+	running_meter: 'Długość',
 };
 const STATUS = {
-	Delayed: { id: '0', name: 'Opóźniony', color: '#f05454' },
+	Delayed: { id: 'Delayed', name: 'Opóźniony', color: '#f05454' },
 	Planned: {
-		id: '1',
+		id: 'Planned',
 		name: 'Planowany',
 		color: '#FFCC1B',
 	},
 	Finished: {
-		id: '2',
+		id: 'Finished',
 		name: 'Wykonano',
 		color: '#00ca43',
 	},
@@ -248,6 +271,7 @@ const DELAY = [
 const sum = (a, b) => RoundNumber(a + b);
 
 export const MONOLITHIC = {
+	PL_Description,
 	PARAMETERS,
 	VCF_REALISATION,
 	ELEMENT_TYPE,
@@ -266,9 +290,9 @@ export const MONOLITHIC = {
 			// element_type: ELEMENT_TYPE.V,
 			name: 'Ściany',
 			parameters: {
-				Volume: sum,
-				Area: sum,
-				Length: sum,
+				volume: sum,
+				area: sum,
+				running_meter: sum,
 			},
 			conditions: {
 				keys: [
@@ -285,7 +309,7 @@ export const MONOLITHIC = {
 			// element_type: ELEMENT_TYPE.V,
 			name: 'Słupy',
 			parameters: {
-				Volume: sum,
+				volume: sum,
 			},
 			conditions: {
 				keys: [
@@ -300,8 +324,8 @@ export const MONOLITHIC = {
 			// element_type: ELEMENT_TYPE.H,
 			name: 'Belki',
 			parameters: {
-				Volume: sum,
-				Length: sum,
+				volume: sum,
+				running_meter: sum,
 			},
 			conditions: {
 				keys: [VCF_REALISATION.CastInSituBeam, VCF_REALISATION.ParticularBeam],
@@ -312,11 +336,23 @@ export const MONOLITHIC = {
 			// element_type: ELEMENT_TYPE.H,
 			name: 'Stropy',
 			parameters: {
-				Volume: sum,
-				Area: sum,
+				volume: sum,
+				area: sum,
 			},
 			conditions: {
 				keys: [VCF_REALISATION.CastInSituSlab, VCF_REALISATION.ConsoleCourte],
+				specyfic: {},
+			},
+		},
+		{
+			// element_type: ELEMENT_TYPE.H,
+			name: 'Rampy',
+			parameters: {
+				volume: sum,
+				area: sum,
+			},
+			conditions: {
+				keys: [VCF_REALISATION.Ramp],
 				specyfic: {},
 			},
 		},

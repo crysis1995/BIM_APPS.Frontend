@@ -8,7 +8,7 @@ import { MONOLITHIC } from '../../redux/types/constans';
 import Selector from '../Selector';
 import { selectedItemsParamsSummary } from './Structural.Results.Selector';
 
-function SetStatus({ selectedItemsParamsSummary, selectedElements, initSetStatus, rotation_day }) {
+function SetStatus({ selectedItemsParamsSummary, selectedElements, initSetStatus, rotation_day, statuses_options }) {
 	return (
 		<div className="p-2">
 			<h5>
@@ -29,11 +29,11 @@ function SetStatus({ selectedItemsParamsSummary, selectedElements, initSetStatus
 								{Object.keys(selectedItemsParamsSummary[key]).map((e) => (
 									<div key={v4()} className="">
 										<span className="mr-3">{MONOLITHIC.PARAMETERS[e]}</span>
-										{'Volume' === e ? (
+										{'volume' === e ? (
 											<UNITS.M3>{selectedItemsParamsSummary[key][e]}</UNITS.M3>
-										) : 'Area' === e ? (
+										) : 'area' === e ? (
 											<UNITS.M2>{selectedItemsParamsSummary[key][e]}</UNITS.M2>
-										) : 'Length' === e ? (
+										) : 'running_meter' === e ? (
 											<UNITS.CM>{selectedItemsParamsSummary[key][e]}</UNITS.CM>
 										) : null}
 									</div>
@@ -48,10 +48,10 @@ function SetStatus({ selectedItemsParamsSummary, selectedElements, initSetStatus
 								classname={''}
 								isDisabled={false}
 								label={'Ustaw status wybranych elementów'}
-								options={[
-									{ id: 1, name: 'Nie wykonano' },
-									{ id: 2, name: 'Wykonano' },
-								]}
+								options={statuses_options.map((e) => ({
+									id: e.name,
+									name: MONOLITHIC.STATUS[e.name].name,
+								}))}
 								value={undefined}
 								onChangeValue={(e) => initSetStatus(selectedElements, e, rotation_day)}
 							/>
@@ -67,6 +67,7 @@ const mapStateToProps = (state) => ({
 	selectedItemsParamsSummary: selectedItemsParamsSummary(state, undefined, { isFiltered: false }),
 	selectedElements: state.Odbiory.Upgrading.MONOLITHIC.selectedElements,
 	rotation_day: state.Odbiory.OdbioryComponent.MONOLITHIC.rotation_day,
+	statuses_options: Object.values(state.Odbiory.OdbioryComponent.MONOLITHIC.statuses),
 });
 
 const mapDispatchToProps = { initSetStatus };

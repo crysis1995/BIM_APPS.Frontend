@@ -1,22 +1,26 @@
 import dotProp from 'dot-prop';
 import { RoundNumber } from '../../../../utils/RoundNumber';
-import data from '../__MOCK__/MONOLITHIC.upgrading.json';
 import {
 	CLEAN_SELECTION,
-	REMOVE_ROOM_FROM_SELECTION, SET_INITIAL,
+	REMOVE_ROOM_FROM_SELECTION,
+	SET_INITIAL,
+	UPGRADING_FETCH_END,
+	UPGRADING_FETCH_ERROR,
+	UPGRADING_FETCH_START,
 	UPGRADING_HANDLE_SELECTED_ELEMENTS,
 	UPGRADING_SET_ACTUAL_ELEMENTS,
 	UPGRADING_SET_DATA,
 	UPGRADING_SET_STATUSES,
-	UPGRADING_UPDATE_JOB
+	UPGRADING_UPDATE_JOB,
 } from '../types';
 
-const initialState = {
+export const initialState = {
 	byJobId: {},
 	upgrading_loading: false,
 	upgrading_error: null,
 	MONOLITHIC: {
-		byRevitId: data,
+		loading: false,
+		byRevitId: [],
 		actualElements: [],
 		selectedElements: [],
 	},
@@ -26,6 +30,24 @@ const UpgradingReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_INITIAL:
 			return initialState;
+		case UPGRADING_FETCH_START:
+			return {
+				...state,
+				MONOLITHIC: {
+					...state.MONOLITHIC,
+					loading: true,
+				},
+			};
+		case UPGRADING_FETCH_END:
+			return {
+				...state,
+				MONOLITHIC: {
+					...state.MONOLITHIC,
+					loading: false,
+					byRevitId: action.data,
+				},
+			};
+		case UPGRADING_FETCH_ERROR:
 		case UPGRADING_SET_ACTUAL_ELEMENTS:
 			return {
 				...state,
@@ -122,12 +144,10 @@ function handleSelectedElements(state, { elements }) {
 	}
 }
 
-function handleSetStatus(state, { selectedElements, status, rotation_day,updated_at }) {
+function handleSetStatus(state, { selectedElements, status, rotation_day, updated_at }) {
 	if (Array.isArray(selectedElements) && selectedElements.length > 0) {
 		selectedElements.forEach((revit_id) => {
-			dotProp.set(state, `MONOLITHIC.byRevitId.${revit_id}.Status.id`, status);
-			dotProp.set(state, `MONOLITHIC.byRevitId.${revit_id}.Status.rotation_day`, rotation_day);
-			dotProp.set(state, `MONOLITHIC.byRevitId.${revit_id}.Status.updated_at`, updated_at);
+			dotProp.set(state, `MONOLITHIC.byRevitId.${revit_id}.statuses`, [{ status, rotation_day, updated_at }]);
 		});
 	}
 	return { ...state };

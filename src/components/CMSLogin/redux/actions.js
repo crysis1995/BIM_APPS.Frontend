@@ -1,7 +1,7 @@
+import GraphQLAPIService from '../../../services/graphql.api.service';
 import { setInitial } from '../../../sites/work_progress/redux/actions';
 import {
 	cleanUserDataInLocalStorage,
-	fetchUserData,
 	getUserFromLocalStorage,
 	isExpired,
 	login,
@@ -50,11 +50,10 @@ export const userResetPassword = (info) => ({
  * @param project_roles {Array}
  * @return {{project_roles: *, type: string, email: *, username: *}}
  */
-export const setUserData = ({ username, email, project_roles }) => ({
+export const setUserData = ({ user, projects }) => ({
 	type: USER_FETCH_DATA,
-	username,
-	email,
-	project_roles,
+	user,
+	projects,
 });
 
 export const setCurrentProject = (project_id, urn, name) => ({
@@ -103,20 +102,20 @@ const getUserData = (checkbox) => async (dispatch, getState) => {
 		credentials: { access_token },
 	} = getState().CMSLogin;
 	try {
-		const { data, errors } = await fetchUserData(access_token, id);
-		if (data) {
-			dispatch(setUserData({ ...data.user }));
-			if (checkbox) saveUserDataToLocalStorage(data.user, access_token);
-			const { project_roles } = getState().CMSLogin.user;
-			if (Object.keys(project_roles).length === 1) {
-				const project_id = Object.keys(project_roles);
+		const [user, projects] = await Promise.all([
+			new GraphQLAPIService(access_token).userData(id),
+			new GraphQLAPIService(access_token).getUserProjectRoles(id),
+		]);
+		dispatch(setUserData({ user, projects }));
+		if (checkbox) saveUserDataToLocalStorage(user, access_token, projects);
+		{
+			const { projects } = getState().CMSLogin.user;
+			if (Object.keys(projects).length === 1) {
+				const project_id = Object.keys(projects);
 				dispatch(setActiveProject(project_id));
+			} else {
+				dispatch(setActiveProject());
 			}
-
-			dispatch(setActiveProject());
-		}
-		if (errors) {
-			console.log(errors.message);
 		}
 	} catch (e) {
 		console.log(e.message);
@@ -124,19 +123,21 @@ const getUserData = (checkbox) => async (dispatch, getState) => {
 };
 
 export const setActiveProject = (project_id) => (dispatch, getState) => {
-	const { project_roles } = getState().CMSLogin.user;
-	if (!!project_id && project_roles[project_id]) {
-		const { id, name, model_urn } = project_roles[project_id].project;
-		dispatch(setCurrentProject(id, model_urn, name));
+	const { projects } = getState().CMSLogin.user;
+	if (!!project_id && projects[project_id]) {
+		const { id, name, bim_models } = projects[project_id];
+		dispatch(setCurrentProject(id, bim_models[0].model_urn, name));
 	}
 };
 
 export const logUserIfValid = () => async (dispatch) => {
 	const data = getUserFromLocalStorage();
-	if (data.user && data.user_token) {
+
+	if (data.user && data.user_token && data.projects) {
 		if (!isExpired(data.user_token)) {
-			dispatch(userLoginEnd(data.user, data.user_token));
-			dispatch(setUserData(data.user));
+			const { user, projects, user_token } = data;
+			dispatch(userLoginEnd(user, user_token));
+			dispatch(setUserData({ user, projects }));
 			dispatch(setActiveProject());
 		}
 	}

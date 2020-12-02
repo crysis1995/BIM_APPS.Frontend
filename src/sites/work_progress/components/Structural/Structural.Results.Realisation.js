@@ -1,13 +1,14 @@
 import React from 'react';
 import { Button, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import Loader from '../../../../components/Loader';
 import { initialiseModal } from '../../../../components/Modal/redux/actions';
 import { handleSelectedElements } from '../../redux/actions/upgrading_actions';
 import SetStatus from './Structural.Results.Modal.SetStatus';
 import ShowParameters from './Structural.Results.Modal.ShowParameters';
 import ResultTable from './Structural.Results.Table';
 
-function Realisation({ initialiseModal, handleSelectedElements }) {
+function Realisation({ initialiseModal, handleSelectedElements, data_loading }) {
 	const variant = 'light';
 	return (
 		<>
@@ -82,13 +83,15 @@ function Realisation({ initialiseModal, handleSelectedElements }) {
 				</Button>
 			</Col>
 			<Col xs={12} className="h-100" style={{ overflowY: 'auto', maxHeight: 500 }}>
-				<ResultTable />
+				{data_loading ? <Loader height={'100px'} /> : <ResultTable />}
 			</Col>
 		</>
 	);
 }
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+	data_loading: state.Odbiory.Upgrading.MONOLITHIC.loading,
+});
 
 const mapDispatchToProps = {
 	initialiseModal,

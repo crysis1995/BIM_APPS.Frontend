@@ -4,8 +4,12 @@ import {
 	CHANGE_VISIBILITY_DIFFERENTIAL_JOBS,
 	CHANGE_VISIBILITY_UNITED_JOBS,
 	ODBIORY_COMPONENT_ENDED,
+	ODBIORY_COMPONENT_FETCH_CALENDAR_END,
+	ODBIORY_COMPONENT_FETCH_CALENDAR_START,
 	ODBIORY_COMPONENT_FETCH_CRANE_END,
 	ODBIORY_COMPONENT_FETCH_CRANE_START,
+	ODBIORY_COMPONENT_FETCH_STATUSES_END,
+	ODBIORY_COMPONENT_FETCH_STATUSES_START,
 	ODBIORY_COMPONENT_SET_ACCEPTANCE_TYPE,
 	ODBIORY_COMPONENT_SET_ACTUAL_TAB,
 	ODBIORY_COMPONENT_SET_CRANE,
@@ -41,6 +45,10 @@ const initialState = {
 		date: new Date(),
 		rotation_day: 0,
 		active_tab: MONOLITHIC.TABS.SCHEDULED,
+		statuses: [],
+		statuses_loading: false,
+		calendar: {},
+		calendar_loading: false,
 	},
 };
 
@@ -48,6 +56,27 @@ const OdbioryComponentReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_INITIAL:
 			return initialState;
+		case ODBIORY_COMPONENT_FETCH_CALENDAR_START:
+			return { ...state, MONOLITHIC: { ...state.MONOLITHIC, calendar_loading: true } };
+		case ODBIORY_COMPONENT_FETCH_CALENDAR_END:
+			return { ...state, MONOLITHIC: { ...state.MONOLITHIC, calendar: action.data, calendar_loading: false } };
+		case ODBIORY_COMPONENT_FETCH_STATUSES_START:
+			return {
+				...state,
+				MONOLITHIC: {
+					...state.MONOLITHIC,
+					statuses_loading: true,
+				},
+			};
+		case ODBIORY_COMPONENT_FETCH_STATUSES_END:
+			return {
+				...state,
+				MONOLITHIC: {
+					...state.MONOLITHIC,
+					statuses: action.data,
+					statuses_loading: false,
+				},
+			};
 		case ODBIORY_COMPONENT_SET_ACTUAL_TAB:
 			return {
 				...state,

@@ -1,18 +1,18 @@
 import { createSelector } from 'reselect';
 import { MONOLITHIC } from '../../redux/types/constans';
+import { getNewestStatus } from '../../redux/utils/odbiory_utils';
 
 export const ElementStatusSelector = createSelector(
 	(state, revit_id) => state.Odbiory.Upgrading.MONOLITHIC.byRevitId[revit_id],
 	(state) => state.Odbiory.OdbioryComponent.MONOLITHIC.rotation_day,
-	(object, rotation_day) => {
-		if (
-			object.hasOwnProperty('Status') &&
-			object.Status.hasOwnProperty('id') &&
-			object.Status.id === MONOLITHIC.STATUS.Finished.id
-		) {
+	(state) => state.Odbiory.OdbioryComponent.MONOLITHIC.statuses,
+	(object, rotation_day, statuses) => {
+		const status = getNewestStatus(object, 'statuses');
+		if (status && statuses[status.status].name === MONOLITHIC.STATUS.Finished.id) {
 			return MONOLITHIC.STATUS.Finished;
 		} else {
-			if (object.Day === rotation_day) return MONOLITHIC.STATUS.Planned;
+			if (object.rotation_day && object.rotation_day.rotation_day === rotation_day)
+				return MONOLITHIC.STATUS.Planned;
 			else return MONOLITHIC.STATUS.Delayed;
 		}
 	},

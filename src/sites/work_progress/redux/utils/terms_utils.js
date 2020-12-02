@@ -175,24 +175,16 @@ function getUserRole(user, project_id) {
  *
  * */
 export function parseTermsToMonolithic(array) {
-	if (!Array.isArray(array)) array = JSON.parse(array);
 	let state = {};
 	array.forEach((item) => {
-		Object.keys(MONOLITHIC.TERM_TYPE).forEach((term_key) => {
-			dotProp.set(
-				state,
-				`byCrane.${item['655059']}.byLevel.${item['655056']}.byGroup.${item['655057']}.${term_key}`,
-				[MONOLITHIC.TERM_TYPE.PLANNED_FINISH_BP.id, MONOLITHIC.TERM_TYPE.PLANNED_START_BP.id].includes(term_key)
-					? item[MONOLITHIC.TERM_TYPE[term_key].dbKey]
-					: '',
-			);
-		});
+		// Object.keys(MONOLITHIC.TERM_TYPE).forEach((term_key) => {
+		dotProp.set(state, `byCrane.${item.crane.name}.byLevel.${item.level.name}.byGroup.${item.vertical}`, item);
+		// });
 	});
 	return state;
 }
 
-export const asd = (items,crane_id, level_id) => {
-	items.filter(e => e.Crane === crane_id && e.Level === level_id)
-
-	return Boolean
-}
+export const parseDate = (date) => {
+	if (!date) return '';
+	return new Date(date).toLocaleDateString('en-CA');
+};

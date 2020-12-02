@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
 export const getUserProjects = createSelector(
-	(state) => state.CMSLogin.user.project_roles,
+	(state) => state.CMSLogin.user.projects,
 	/**
 	 *
 	 * @param projects {Object | null}
@@ -9,6 +9,6 @@ export const getUserProjects = createSelector(
 	 */
 	(projects) =>
 		projects
-			? Object.keys(projects).map((project_id) => ({ id: project_id, name: projects[project_id].project.name }))
+			? Object.keys(projects).map((project_id) => ({ id: project_id, name: projects[project_id].name }))
 			: [],
 );
