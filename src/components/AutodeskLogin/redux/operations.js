@@ -3,7 +3,7 @@ import { config } from '../../../config';
 import { AutodeskLoginActions } from './index';
 
 export const fetchAccessToken = () => (dispatch) => {
-	fetch(`${config.api_url}/Forge/threeLegged/getToken`)
+	fetch(`${config.api_url}/api/token/autodesk-authorization`)
 		.then((e) => e.json())
 		.then((resp) => dispatch(startupDependentFunction(resp)));
 };

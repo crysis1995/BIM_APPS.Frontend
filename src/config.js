@@ -1,6 +1,6 @@
 export const config = {
 	// api_url: "http://localhost:2000",
-	api_url: 'http://bim.warbud.pl/bim_apps/api',
+	api_url: 'http://bim.warbud.pl',
 	bim_apps_api: {
 		// url: 'http://localhost:2000',
 		url: 'http://bim.warbud.pl/bim_apps/api',
