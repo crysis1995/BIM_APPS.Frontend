@@ -1,19 +1,25 @@
 import { config } from '../../config';
 
+
 export default class RestAPIService {
 	constructor(accessToken) {
 		this.accessToken = accessToken;
 	}
 
-	fetchClient(url) {
+	fetchClient(url, baseUrl = config.bim_apps_api.url) {
 		let options = {};
 		if (this.accessToken) {
 			options.headers = {
 				Authorization: `Bearer ${this.accessToken}`,
 			};
 		}
-		return fetch(`${config.bim_apps_api.url}${url}`, options).then((e) => e.json());
+		return fetch(`${baseUrl}${url}`, options).then((e) => e.json());
 	}
+	GENERAL = {
+		getAccessToken: () => {
+			return this.fetchClient('/api/token/', config.api_url);
+		},
+	};
 
 	MONOLITHIC = {
 		initializeTerms: (project_id) => {

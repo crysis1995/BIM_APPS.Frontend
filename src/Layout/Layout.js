@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Col, Container, Row, Alert } from 'react-bootstrap';
+import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { Route, Redirect, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 import { logUserIfValid } from '../components/CMSLogin/redux/actions';
 import Loader from '../components/Loader';
@@ -34,6 +34,7 @@ class Layout extends React.Component {
 							paddingRight: 0,
 						}}>
 						<Header {...this.props} />
+						<ModalComponent />
 						<Row
 							noGutters
 							style={{ maxHeight: window.innerHeight - 56, minHeight: window.innerHeight - 56 }}
@@ -84,7 +85,6 @@ class Layout extends React.Component {
 							</Switch>
 						</Row>
 					</Container>
-					<ModalComponent />
 				</React.Suspense>
 			</>
 		);

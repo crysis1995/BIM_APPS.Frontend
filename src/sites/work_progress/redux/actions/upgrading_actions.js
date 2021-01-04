@@ -1,5 +1,8 @@
 import {
 	UPGRADE_BY_JOB,
+	UPGRADING_CHECK_IF_GROUP_FINISHED,
+	UPGRADING_CHECK_IF_GROUP_STARTED,
+	UPGRADING_CHECK_OBJECT_GROUP_TERMS,
 	UPGRADING_FETCH_END,
 	UPGRADING_FETCH_ERROR,
 	UPGRADING_FETCH_START,
@@ -7,8 +10,10 @@ import {
 	UPGRADING_SET_ACTUAL_ELEMENTS,
 	UPGRADING_SET_DATA,
 	UPGRADING_SET_STATUSES,
-	UPGRADING_SET_STATUSES_INITIALIZER, UPGRADING_SET_STATUSES_START, UPGRADING_SET_STATUSES_SUCCESS,
-	UPGRADING_UPDATE_JOB
+	UPGRADING_SET_STATUSES_INITIALIZER,
+	UPGRADING_SET_STATUSES_START,
+	UPGRADING_SET_STATUSES_SUCCESS,
+	UPGRADING_UPDATE_JOB,
 } from '../types';
 
 export const setUpgradingData = (
@@ -52,9 +57,10 @@ export const setCurrentVisibleElements = (elements) => ({
 export const startFetchingUpgradingData = () => ({
 	type: UPGRADING_FETCH_START,
 });
-export const endFetchingUpgradingData = (data) => ({
+export const endFetchingUpgradingData = (data, groupedByCranesAndLevels = {}) => ({
 	type: UPGRADING_FETCH_END,
 	data,
+	groupedByCranesAndLevels,
 });
 export const errorFetchingUpgradingData = () => ({
 	type: UPGRADING_FETCH_ERROR,
@@ -78,12 +84,12 @@ export const storeSetStatus = (selectedElements, status, rotation_day) => ({
 });
 
 export const startSetStatus = () => ({
-	type:UPGRADING_SET_STATUSES_START
-})
+	type: UPGRADING_SET_STATUSES_START,
+});
 
 export const endSetStatus = () => ({
-	type:UPGRADING_SET_STATUSES_SUCCESS
-})
+	type: UPGRADING_SET_STATUSES_SUCCESS,
+});
 
 export const initSetStatus = (selectedElements, status, rotation_day) => ({
 	type: UPGRADING_SET_STATUSES_INITIALIZER,
@@ -91,4 +97,9 @@ export const initSetStatus = (selectedElements, status, rotation_day) => ({
 	status,
 	rotation_day,
 	updated_at: new Date().toISOString(),
+});
+
+export const checkObjectsGroupTerms = (selectedElements) => ({
+	type: UPGRADING_CHECK_OBJECT_GROUP_TERMS,
+	selectedElements,
 });

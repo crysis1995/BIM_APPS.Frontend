@@ -21,6 +21,7 @@ import {
 } from '../../../../components/ForgeViewer/redux/actions';
 import GraphQLAPIService from '../../../../services/graphql.api.service';
 import RestAPIService from '../../../../services/rest.api.service';
+import groupBy from '../../../../utils/groupBy';
 import { normalize } from '../../../../utils/normalize';
 import Legend from '../../components/Structural/Legend';
 import {
@@ -80,7 +81,9 @@ export const setCranes = (action$, state$) =>
 				of(fetchTermsStart()),
 				from(REST.MONOLITHIC.getAllCranes(project)).pipe(map((value) => endFetchCranes(normalize(value)))),
 				from(REST.MONOLITHIC.getAllRotationDays(project)).pipe(
-					map((value) => fetchCalendarEnd(normalize(value, 'rotation_day'))),
+					map((value) =>
+						fetchCalendarEnd(normalize(value, 'rotation_day'), normalize(value, 'date_id.data')),
+					),
 				),
 				from(REST.MONOLITHIC.initializeTerms(project)).pipe(
 					mergeMap(() =>
@@ -91,7 +94,12 @@ export const setCranes = (action$, state$) =>
 				),
 				from(GRAPHQL.MONOLITHIC.getStatuses()).pipe(map((value) => fetchStatusesEnd(normalize(value)))),
 				from(REST.MONOLITHIC.getAllObjects(project)).pipe(
-					map((e) => endFetchingUpgradingData(normalize(e, 'revit_id'))),
+					map((e) =>
+						endFetchingUpgradingData(
+							normalize(e, 'revit_id'),
+							groupBy(e, ['crane.id', 'level.id', 'vertical'], ['byCrane', 'byLevel']),
+						),
+					),
 				),
 			);
 		}),
@@ -169,11 +177,7 @@ export const handleSetRotationDay = (action$, state$) =>
 				// 	Object.keys(calendar).
 				// } else {
 				if (levels.hasOwnProperty(active_level)) {
-					const { min, max } = findMinAndMaxRotationDay(
-						byRevitId,
-						cranes[active_crane].name,
-						levels[active_level].name,
-					);
+					const { min, max } = findMinAndMaxRotationDay(byRevitId, active_crane, active_level);
 					if (rotation_day < min) {
 						return of(selectRotationDate(min));
 					} else if (rotation_day > max) {
@@ -226,19 +230,29 @@ export const handleColorizeForge = (action$, state$) =>
 			const level = levels[active_level] && levels[active_level].name;
 			const crane = cranes[active_crane] && cranes[active_crane].name;
 			const rotation_day = state.Odbiory.OdbioryComponent.MONOLITHIC.rotation_day;
+			const normalized_calendar = state.Odbiory.OdbioryComponent.MONOLITHIC.calendar_normalizedByDate;
 			const object_values = state.Odbiory.Upgrading.MONOLITHIC.byRevitId;
 			const elements_object = state.ForgeViewer.model_elements;
 			const statuses = state.Odbiory.OdbioryComponent.MONOLITHIC.statuses;
-			const panel_content = state.ForgeViewer;
+			const panel_content = state.ForgeViewer.panel_content;
 			const {
 				colored_elements,
 				disabled_elements,
 				hidden_elements,
 				visible_elements,
 				current_elements,
-			} = filterTree(object_values, elements_object, crane, level, rotation_day, statuses, active_tab);
+			} = filterTree(
+				object_values,
+				elements_object,
+				crane,
+				level,
+				rotation_day,
+				statuses,
+				normalized_calendar,
+				active_tab,
+			);
 			return concat(
-				iif(() => !panel_content, setContentToReactPanel(<Legend />)),
+				iif(() => !panel_content, of(setContentToReactPanel(<Legend />))),
 				of(setCurrentVisibleElements(current_elements)),
 				of(visibleElementsAdd(visible_elements)),
 				of(coloredElementsAdd(colored_elements)),

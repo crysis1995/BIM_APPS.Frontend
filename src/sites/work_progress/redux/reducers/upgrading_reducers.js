@@ -23,6 +23,7 @@ export const initialState = {
 		byRevitId: [],
 		actualElements: [],
 		selectedElements: [],
+		byCrane: {},
 	},
 };
 
@@ -45,6 +46,7 @@ const UpgradingReducer = (state = initialState, action) => {
 					...state.MONOLITHIC,
 					loading: false,
 					byRevitId: action.data,
+					...action.groupedByCranesAndLevels,
 				},
 			};
 		case UPGRADING_FETCH_ERROR:

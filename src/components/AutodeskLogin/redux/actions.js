@@ -2,10 +2,7 @@ import types from './types';
 
 const LOGIN_2_LEGGED = ({ access_token, expires_in }) => ({
 	type: types.LOGIN_2_LEGGED,
-	data: {
-		access_token,
-		expires_in,
-	},
+	data: { access_token, expires_in },
 });
 
 const LOGIN_3_LEGGED = ({ access_token, refresh_token, expires_in }) => ({
@@ -24,9 +21,14 @@ const FETCH_USER_INFO = (user) => ({
 	user,
 });
 
+const handleFetchAccessToken = () => ({
+	type: types.HANDLE_FETCH_ACCESS_TOKEN,
+});
+
 export default {
 	LOGIN_2_LEGGED,
 	LOGOUT_3_LEGGED,
 	LOGIN_3_LEGGED,
 	FETCH_USER_INFO,
+	handleFetchAccessToken,
 };

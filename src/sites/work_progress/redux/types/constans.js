@@ -277,9 +277,11 @@ export const MONOLITHIC = {
 	ELEMENT_TYPE,
 	STATUS,
 	TERM_TYPE,
+	WORKERS: [{ name: 'Cieśle' }, { name: 'Zbrojarze' }],
 	TABS: {
 		SCHEDULED: 'SCHEDULED',
 		ACTUAL: 'ACTUAL',
+		HISTORICAL: 'HISTORICAL',
 		TERMS: 'TERMS',
 		DELAY: 'DELAY',
 		LOG: 'LOG',
