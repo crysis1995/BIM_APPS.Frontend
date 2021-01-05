@@ -2,6 +2,7 @@ import { config } from '../../../../config';
 import { hexToRgba } from '../../../../utils/hexToRgb';
 import { memoize } from '../../../../utils/memoize';
 import { MONOLITHIC } from '../types/constans';
+import { parseDate } from './terms_utils';
 /**
  *
  * @param object {{}}
@@ -10,6 +11,7 @@ import { MONOLITHIC } from '../types/constans';
  * @param actual_level {string}
  * @param actual_day {number | string}
  * @param statuses
+ * @param normalized_calendar
  * @param mode {MONOLITHIC.TABS}
  * @param crane_key {string}
  * @param level_key {string}
@@ -23,6 +25,7 @@ export function filterTree(
 	actual_level,
 	actual_day,
 	statuses,
+	normalized_calendar,
 	mode = MONOLITHIC.TABS.SCHEDULED,
 	crane_key = 'crane',
 	level_key = 'level',
@@ -32,6 +35,7 @@ export function filterTree(
 	const {
 		active,
 		finished,
+		finished_historical,
 		out_of,
 		inactive,
 		finished_earlier,
@@ -47,11 +51,11 @@ export function filterTree(
 	for (const revit_id in object) {
 		const forge_id = forge_elements.hasOwnProperty(revit_id) && forge_elements[revit_id];
 
-		if (object[revit_id][level_key].name === actual_level) {
+		if (object[revit_id][level_key] && object[revit_id][level_key].name === actual_level) {
 			/*
 			 *       OBIEKT ZAWIERA ODPOWIEDNI LEVEL
 			 */
-			if (object[revit_id][crane_key].name === actual_crane) {
+			if (object[revit_id][crane_key] && object[revit_id][crane_key].name === actual_crane) {
 				/*
 				 *       OBIEKT ZAWIERA ODPOWIEDNI ŻURAW
 				 */
@@ -102,6 +106,39 @@ export function filterTree(
 									);
 								current_elements.add(revit_id);
 							}
+						}
+					} else if ([MONOLITHIC.TABS.HISTORICAL].includes(mode)) {
+						const status = getNewestStatus(object[revit_id], status_key);
+						if (status && statuses[status.status].name === MONOLITHIC.STATUS.Finished.id) {
+							if (
+								normalized_calendar[parseDate(new Date(status.date).toDateString())].rotation_day ===
+								actual_day
+							) {
+								forge_id && visible_elements.add(forge_id);
+								// dzień zaklikania równy dniu aktualnej rotacji
+								forge_id &&
+									disabled_elements.add(forge_id) &&
+									colored_elements.set(
+										forge_id,
+										memoized_hexToRgba(finished_historical.color, finished_historical.alpha, true),
+									);
+								current_elements.add(revit_id);
+							} else if (
+								normalized_calendar[parseDate(new Date(status.date).toDateString())].rotation_day <
+								actual_day
+							) {
+								forge_id && visible_elements.add(forge_id);
+								forge_id &&
+									disabled_elements.add(forge_id) &&
+									colored_elements.set(
+										forge_id,
+										memoized_hexToRgba(finished.color, finished.alpha, true),
+									);
+							} else {
+								forge_id && hidden_elements.add(forge_id);
+							}
+						} else {
+							forge_id && hidden_elements.add(forge_id);
 						}
 					} else if (
 						[
@@ -205,8 +242,8 @@ export const findMinAndMaxRotationDay = (elements, active_crane, active_level) =
 	const days_array = Object.values(elements)
 		.filter(
 			(e) =>
-				e.crane.name === active_crane &&
-				e.level.name === active_level &&
+				e?.crane?.id?.toString() === active_crane &&
+				e?.level?.id?.toString() === active_level &&
 				e.rotation_day &&
 				e.rotation_day.rotation_day &&
 				typeof e.rotation_day.rotation_day === 'number',
@@ -229,3 +266,20 @@ export function getNewestStatus(status, status_key) {
 	}
 	return null;
 }
+
+// export function getRangeByCraneAndLevel(objects, active_crane, active_level) {
+// 	return Object.values(objects)
+// 		.filter((e) => e?.crane?.id.toString() === active_crane && e?.level?.id.toString() === active_level)
+// 		.reduce(
+// 			(prev, actual) => {
+// 				if (actual?.vertical === 'H') {
+// 					prev.H.push(actual.revit_id);
+// 				} else if (actual?.vertical === 'V') {
+// 					prev.V.push(actual.revit_id);
+// 				}
+// 				return prev;
+// 			},
+// 			{ V: [], H: [] },
+// 		);
+// }
+//

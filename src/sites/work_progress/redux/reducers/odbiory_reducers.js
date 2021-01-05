@@ -59,7 +59,15 @@ const OdbioryComponentReducer = (state = initialState, action) => {
 		case ODBIORY_COMPONENT_FETCH_CALENDAR_START:
 			return { ...state, MONOLITHIC: { ...state.MONOLITHIC, calendar_loading: true } };
 		case ODBIORY_COMPONENT_FETCH_CALENDAR_END:
-			return { ...state, MONOLITHIC: { ...state.MONOLITHIC, calendar: action.data, calendar_loading: false } };
+			return {
+				...state,
+				MONOLITHIC: {
+					...state.MONOLITHIC,
+					calendar: action.data,
+					calendar_normalizedByDate: action.normalizedByDate,
+					calendar_loading: false,
+				},
+			};
 		case ODBIORY_COMPONENT_FETCH_STATUSES_START:
 			return {
 				...state,

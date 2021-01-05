@@ -131,9 +131,10 @@ export const fetchStatusesEnd = (data) => ({
 export const fetchCalendarStart = () => ({
 	type: ODBIORY_COMPONENT_FETCH_CALENDAR_START,
 });
-export const fetchCalendarEnd = (data) => ({
+export const fetchCalendarEnd = (data, normalizedByDate) => ({
 	type: ODBIORY_COMPONENT_FETCH_CALENDAR_END,
 	data,
+	normalizedByDate,
 });
 /*
  *

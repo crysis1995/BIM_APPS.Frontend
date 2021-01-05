@@ -7,7 +7,6 @@ export const config = {
 		// graphql: 'http://localhost:2000/graphql',
 		graphql: 'http://bim.warbud.pl/bim_apps/api/graphql',
 	},
-	accountId: 'b.2012a172-f733-426d-847e-b62dda511dcb',
 	units: {
 		area: {
 			color_map: {
@@ -49,6 +48,7 @@ export const config = {
 			legend: {
 				active: { color: '#FFCC1B', alpha: 0.7, option: 'Bieżący' },
 				finished: { color: '#858585', alpha: 0.9, option: 'Zakończony' },
+				finished_historical: { color: '#009b03', alpha: 0.9, option: 'Zakończony / Dzień' },
 				finished_earlier: { color: '#3A86FF', alpha: 0.9, option: 'Zakończony przed czasem' },
 				delayed: { color: '#EF233C', alpha: 0.7, option: 'Opóźniony' },
 				out_of: { color: '#efefef', alpha: 0.85, option: 'Poza zakresem' },
