@@ -6,7 +6,7 @@ import UNITS from '../../../../components/Units';
 import { sumOfArray } from '../../../../utils/sumOfArray';
 import { handleSelectedElements } from '../../redux/actions/upgrading_actions';
 import { MONOLITHIC } from '../../redux/types/constans';
-import { byRevitId, objectSelector, selectedElements } from './Structural.Results.Selector';
+import { objectSelector, selectedElements } from './Structural.Results.Selector';
 import Status from './Structural.Results.Status';
 
 function ResultsTable({ objects, selected, handleSelectedElements, actualElements_length, allowSelection = true }) {

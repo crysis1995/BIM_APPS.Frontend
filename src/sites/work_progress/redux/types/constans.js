@@ -77,6 +77,12 @@ export const JOB_TYPE = {
 
 const VCF_REALISATION = {
 	ExternalWall: 'External wall',
+	Pilaster: 'Pilaster',
+	Filar: 'Filar',
+	HighColumn: 'High column',
+	CircularColumn: 'Circular column',
+	KeelDrag: 'Przeglebienie',
+	HollowCoreSlab: 'Hollow core slab',
 	InternalWall: 'Internal wall',
 	Acroterion: 'Acroterion',
 	CastInSituBeam: 'Cast in situ beam',
@@ -100,6 +106,12 @@ const VCF_REALISATION = {
 const PL_Description = {
 	'External wall': 'Ściana zewnętrzna',
 	'Internal wall': 'Ściana wewnętrzna',
+	'Circular column': 'Słup okrągły',
+	'Hollow core slab': 'Strop HC',
+	'High column': 'Słup okrągły',
+	Przeglebienie: 'Przegłębienie',
+	Pilaster: 'Pilaster',
+	Filar: 'Filar',
 	Acroterion: 'Attyka',
 	'Cast in situ beam': 'Belka monolityczna',
 	'One side wall': 'Bareta',
@@ -140,16 +152,8 @@ const PARAMETERS = {
 };
 const STATUS = {
 	Delayed: { id: 'Delayed', name: 'Opóźniony', color: '#f05454' },
-	Planned: {
-		id: 'Planned',
-		name: 'Planowany',
-		color: '#FFCC1B',
-	},
-	Finished: {
-		id: 'Finished',
-		name: 'Wykonano',
-		color: '#00ca43',
-	},
+	Planned: { id: 'Planned', name: 'Planowany', color: '#FFCC1B' },
+	Finished: { id: 'Finished', name: 'Wykonano', color: '#00ca43' },
 };
 
 const DELAY = [
@@ -289,7 +293,6 @@ export const MONOLITHIC = {
 	DELAY,
 	GROUP_BY: [
 		{
-			// element_type: ELEMENT_TYPE.V,
 			name: 'Ściany',
 			parameters: {
 				volume: sum,
@@ -318,6 +321,7 @@ export const MONOLITHIC = {
 					VCF_REALISATION.RectangularHighColumn,
 					VCF_REALISATION.RectangularColumn,
 					VCF_REALISATION.SpecificColumn,
+					VCF_REALISATION.Pilaster,
 				],
 				specyfic: {},
 			},
@@ -347,7 +351,6 @@ export const MONOLITHIC = {
 			},
 		},
 		{
-			// element_type: ELEMENT_TYPE.H,
 			name: 'Rampy',
 			parameters: {
 				volume: sum,

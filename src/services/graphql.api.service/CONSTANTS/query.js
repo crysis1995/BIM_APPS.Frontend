@@ -10,22 +10,20 @@ const USER_PROJECTS = gql`
 			project {
 				id
 				name
-				cranes {
-					id
-				}
-				levels {
-					id
-				}
 				bim_models {
 					model_urn
 				}
+				crane_ranges {
+					crane {
+						id
+						name
+					}
+					levels {
+						id
+						name
+					}
+				}
 			}
-#			levels {
-#				id
-#			}
-#			cranes {
-#				id
-#			}
 		}
 	}
 `;
@@ -46,9 +44,6 @@ const GET_ALL_ACCEPTANCE_JOBS = gql`
 			id
 			name
 			unit
-			# type{
-			#   name
-			# }
 			selection_method
 		}
 	}

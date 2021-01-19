@@ -1,5 +1,7 @@
 import GraphQLAPIService from '../../../services/graphql.api.service';
 import { setInitial } from '../../../sites/work_progress/redux/actions';
+import { endFetchCranes } from '../../../sites/work_progress/redux/actions/odbiory_actions';
+import { normalize } from '../../../utils/normalize';
 import {
 	cleanUserDataInLocalStorage,
 	getUserFromLocalStorage,
@@ -102,10 +104,8 @@ const getUserData = (checkbox) => async (dispatch, getState) => {
 		credentials: { access_token },
 	} = getState().CMSLogin;
 	try {
-		const [user, projects] = await Promise.all([
-			new GraphQLAPIService(access_token).userData(id),
-			new GraphQLAPIService(access_token).getUserProjectRoles(id),
-		]);
+		const API = new GraphQLAPIService(access_token);
+		const [user, projects] = await Promise.all([API.userData(id), API.getUserProjectRoles(id)]);
 		dispatch(setUserData({ user, projects }));
 		if (checkbox) saveUserDataToLocalStorage(user, access_token, projects);
 		{
@@ -118,7 +118,7 @@ const getUserData = (checkbox) => async (dispatch, getState) => {
 			}
 		}
 	} catch (e) {
-		console.log(e.message);
+		console.log(e);
 	}
 };
 

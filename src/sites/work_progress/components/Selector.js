@@ -1,3 +1,4 @@
+import dotProp from 'dot-prop';
 import React from 'react';
 import { Col, Form } from 'react-bootstrap';
 import { v4 } from 'uuid';
@@ -28,8 +29,8 @@ function Selector({
 					custom>
 					<option value="">Wybierz...</option>
 					{options.map((e) => (
-						<option data-testid="options" key={v4()} value={e[option_id_property]}>
-							{e[option_name_property]}
+						<option data-testid="options" key={v4()} value={dotProp.get(e, option_id_property)}>
+							{dotProp.get(e, option_name_property)}
 						</option>
 					))}
 				</Form.Control>

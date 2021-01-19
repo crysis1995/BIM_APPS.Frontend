@@ -25,12 +25,6 @@ function Header() {
 						{/*	Instalacyjnych*/}
 						{/*</NavLink>*/}
 					</NavDropdown>
-					{/*<NavLink className="nav-link " to="/work_acceptance">*/}
-					{/*	Odbiory robót*/}
-					{/*</NavLink>*/}
-					{/*<NavLink className="nav-link " to="/schedule">*/}
-					{/*	Harmonogramy*/}
-					{/*</NavLink>*/}
 				</Nav>
 
 				<Nav className="align-right">

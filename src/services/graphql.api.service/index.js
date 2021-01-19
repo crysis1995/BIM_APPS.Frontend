@@ -34,34 +34,18 @@ export default class GraphQLAPIService {
 		});
 	}
 
-	/**
-	 *  Funkcja resetująca hasło
-	 * @param id {string}
-	 * @param password {string}
-	 * @return {Promise<FetchResult<any>>}
-	 */
 	resetPassword(id, password) {
 		const { RESET_PASSWORD } = this.mutation;
 		return this.mutateClient(RESET_PASSWORD, { p: password, u: id });
 	}
 
-	/**
-	 *  Funkcja pobiera informacje o użytkowniku
-	 * @param user_id {string}
-	 * @return {Promise<ApolloQueryResult<any>>}
-	 */
 	userData(user_id) {
 		const { USER_DATA } = this.query;
-		return this.queryClient(USER_DATA, { i: user_id }).then(e => e.data.user)
+		return this.queryClient(USER_DATA, { i: user_id }).then((e) => e.data.user);
 	}
-	/**
-	 *  Funkcja pobiera informacje o projektach i rolach usera
-	 * @param user_id {string}
-	 * @return {Promise<ApolloQueryResult<any>>}
-	 */
 	getUserProjectRoles(user_id) {
 		const { USER_PROJECTS } = this.query;
-		return this.queryClient(USER_PROJECTS, { i: user_id }).then(e => e.data.warbudProjUserRoles)
+		return this.queryClient(USER_PROJECTS, { i: user_id }).then((e) => e.data.warbudProjUserRoles);
 	}
 
 	ARCHITECTURAL = {
@@ -88,16 +72,6 @@ export default class GraphQLAPIService {
 			const { GET_STATUSES } = this.query;
 			return this.queryClient(GET_STATUSES).then((e) => e.data.acceptanceStatuses);
 		},
-		/**
-		 *
-		 * @param user {number}
-		 * @param commentary {string}
-		 * @param rotation_day_id {number}
-		 * @param causes_array {[number]}
-		 * @param level {number}
-		 * @param crane {number}
-		 * @return {Promise<FetchResult<any>>}
-		 */
 		createDelay: (user, commentary, rotation_day_id, causes_array, level, crane) => {
 			const { CREATE_DELAY } = this.mutation;
 			return this.mutateClient(CREATE_DELAY, {
@@ -109,15 +83,6 @@ export default class GraphQLAPIService {
 				cr: crane,
 			});
 		},
-		/**
-		 *
-		 * @param term_id {number}
-		 * @param REAL_START {Date}
-		 * @param PLANNED_FINISH {Date}
-		 * @param REAL_FINISH {Date}
-		 * @param PLANNED_START {Date}
-		 * @return {Promise<FetchResult<any>>}
-		 */
 		updateTerm: (term_id, { REAL_START, PLANNED_FINISH, REAL_FINISH, PLANNED_START }) => {
 			const { UPDATE_TERM } = this.mutation;
 			let variables = { i: term_id };
@@ -130,11 +95,6 @@ export default class GraphQLAPIService {
 	};
 }
 
-/**
- *
- * @param total{number}
- * @param N{number}
- */
 function generateRanges(total, N = 100) {
 	const ranges = Math.ceil(total / N);
 	let arr = [];

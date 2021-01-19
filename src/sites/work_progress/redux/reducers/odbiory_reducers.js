@@ -55,7 +55,7 @@ const initialState = {
 const OdbioryComponentReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_INITIAL:
-			return initialState;
+			return { ...initialState };
 		case ODBIORY_COMPONENT_FETCH_CALENDAR_START:
 			return { ...state, MONOLITHIC: { ...state.MONOLITHIC, calendar_loading: true } };
 		case ODBIORY_COMPONENT_FETCH_CALENDAR_END:

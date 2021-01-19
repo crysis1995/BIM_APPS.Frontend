@@ -74,7 +74,6 @@ const ForgeViewerReducer = (state = initialState, action) => {
 		case SET_INITIAL:
 			return initialState;
 		case FORGE_VIEWER_SELECTED_ELEMENTS_ADD:
-			// return add(state, action, 'selected_elements');
 			return {
 				...state,
 				selected_elements: action.elements,

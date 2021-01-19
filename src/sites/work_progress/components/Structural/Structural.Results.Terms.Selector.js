@@ -12,7 +12,15 @@ export const selectTermsForParams = createSelector(
 		if (!active_crane || !active_level) {
 			return {};
 		} else {
-			return terms.byCrane[cranes[active_crane].name].byLevel[levels[active_level].name].byGroup;
+			return (
+				terms.byCrane &&
+				cranes[active_crane].name &&
+				terms.byCrane[cranes[active_crane].name] &&
+				terms.byCrane[cranes[active_crane].name].byLevel &&
+				levels[active_level].name &&
+				terms.byCrane[cranes[active_crane].name].byLevel[levels[active_level].name] &&
+				terms.byCrane[cranes[active_crane].name].byLevel[levels[active_level].name].byGroup
+			);
 		}
 	},
 );

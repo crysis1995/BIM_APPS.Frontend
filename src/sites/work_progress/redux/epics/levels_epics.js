@@ -1,6 +1,6 @@
 import { ofType } from 'redux-observable';
 import { concat, of } from 'rxjs';
-import { switchMap, throttleTime, debounceTime, filter } from 'rxjs/operators';
+import { filter, switchMap, throttleTime } from 'rxjs/operators';
 import { SET_CURRENT_SHEET } from '../../../../components/ForgeViewer/redux/actions';
 import { initialiseModal } from '../../../../components/Modal/redux/actions';
 import { setInitial } from '../actions';

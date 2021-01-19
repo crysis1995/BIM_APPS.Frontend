@@ -31,9 +31,6 @@ export default class RestAPIService {
 		getAccepntaceTerms: (project_id) => {
 			return this.fetchClient(`/acceptance-terms?project=${project_id}`);
 		},
-		getAllCranes: (project_id) => {
-			return this.fetchClient(`/warbud-cranes/?_where[project]=${project_id}`);
-		},
 		getAllRotationDays: (project_id) => {
 			return this.fetchClient(`/warbud-project-rotation-days/?_limit=1000&_where[project]=${project_id}`);
 		},
