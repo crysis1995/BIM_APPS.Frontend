@@ -28,3 +28,4 @@ yarn-error.log*
 .vscode/launch.json
 .idea/fileColors.xml
 .idea/inspectionProfiles/Project_Default.xml
+*.log
