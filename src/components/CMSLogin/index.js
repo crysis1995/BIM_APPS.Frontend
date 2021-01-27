@@ -18,7 +18,7 @@ function CMSLogin({ is_login, active_project, projects, username, userLogout, se
 					<option>Wybierz...</option>
 					{projects.map((e) => (
 						<option data-testid="options" key={v4()} value={e.id}>
-							{e.name}
+							{e.webcon_code ? e.webcon_code + ' - ' + e.name : e.name}
 						</option>
 					))}
 				</Form.Control>

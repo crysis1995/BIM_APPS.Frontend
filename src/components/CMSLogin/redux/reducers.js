@@ -71,6 +71,7 @@ const CMSLoginReducer = (state = initialState, action) => {
 					id: action.project_id,
 					urn: action.urn,
 					name: action.name,
+					webcon_code: action.webcon_code,
 				},
 			};
 		case USER_LOGIN_ERROR:

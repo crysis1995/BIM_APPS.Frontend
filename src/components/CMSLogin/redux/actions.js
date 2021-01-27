@@ -58,11 +58,12 @@ export const setUserData = ({ user, projects }) => ({
 	projects,
 });
 
-export const setCurrentProject = (project_id, urn, name) => ({
+export const setCurrentProject = (project_id, urn, name, webcon_code) => ({
 	type: USER_SET_CURRENT_PROJECT,
 	project_id,
 	urn,
 	name,
+	webcon_code,
 });
 
 export const addPermissions = (permissions) => ({
@@ -125,8 +126,8 @@ const getUserData = (checkbox) => async (dispatch, getState) => {
 export const setActiveProject = (project_id) => (dispatch, getState) => {
 	const { projects } = getState().CMSLogin.user;
 	if (!!project_id && projects[project_id]) {
-		const { id, name, bim_models } = projects[project_id];
-		dispatch(setCurrentProject(id, bim_models[0].model_urn, name));
+		const { id, name, bim_models, webcon_code } = projects[project_id];
+		dispatch(setCurrentProject(id, bim_models[0].model_urn, name, webcon_code));
 	}
 };
 

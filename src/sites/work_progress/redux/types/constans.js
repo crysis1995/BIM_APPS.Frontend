@@ -361,5 +361,16 @@ export const MONOLITHIC = {
 				specyfic: {},
 			},
 		},
+		{
+			name: 'Inne',
+			parameters: {
+				volume: sum,
+				running_meter: sum,
+			},
+			conditions: {
+				keys: [VCF_REALISATION.BeamKeyway],
+				specyfic: {},
+			},
+		},
 	],
 };
