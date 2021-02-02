@@ -14,8 +14,8 @@ const Terms = ({ active_crane, cranes, active_level, levels, terms, initSetTerms
 	let level = '';
 	let terms_data;
 	if (!!active_crane && !!active_level && !terms_loading) {
-		terms_data = terms.byCrane[cranes[active_crane].name].byLevel[levels[active_level].name].byGroup;
-		crane = cranes[active_crane].name;
+		terms_data = terms.byCrane[cranes[active_crane].crane.name].byLevel[levels[active_level].name].byGroup;
+		crane = cranes[active_crane].crane.name;
 		level = levels[active_level].name;
 	} else terms_data = {};
 	return (
