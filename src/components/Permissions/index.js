@@ -1,12 +1,6 @@
 import React from 'react';
-import { Alert, Col } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 
-/**
- *
- * @param condition {Boolean}
- * @param children {JSX.Element}
- * @returns {JSX.Element}
- */
 export default function ({
 	condition = false,
 	children,

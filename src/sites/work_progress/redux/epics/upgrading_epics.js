@@ -79,7 +79,7 @@ export const upgradeJobEpic = (action$, state$) =>
 		),
 	);
 
-const MONOLITHIC_handleSetStatus = (action$, state$) =>
+const MONOLITHIC_handleSetStatus = (action$) =>
 	action$.pipe(ofType(UPGRADING_SET_STATUSES), mapTo({ type: FORGE_VIEWER_HANDLE_COLORIZE_FORGE }));
 
 const handleInitSetStatus = (action$, state$) =>
@@ -93,26 +93,27 @@ const handleInitSetStatus = (action$, state$) =>
 				(e) => e.name === status,
 			)[0];
 			const user = state.CMSLogin.user.id.id;
-			if (new_status) {
-				return concat(
-					from(selectedElements).pipe(
-						mergeMap((revit_id) =>
-							from(
-								api.MONOLITHIC.createStatus(
-									objects[revit_id].id,
-									new Date().toISOString(),
-									user,
-									new_status.id,
-								),
-							).pipe(map((e) => storeSetStatus(selectedElements, new_status.id, rotation_day))),
+			// if (new_status) {
+			return !!new_status
+				? concat(
+						from(selectedElements).pipe(
+							mergeMap((revit_id) =>
+								from(
+									api.MONOLITHIC.createStatus(
+										objects[revit_id].id,
+										new Date().toISOString(),
+										user,
+										new_status.id,
+									),
+								).pipe(map((e) => storeSetStatus(selectedElements, new_status.id, rotation_day))),
+							),
 						),
-					),
-					of(checkObjectsGroupTerms(selectedElements)),
-				);
-			} else {
-				// return of({ type: '' });
-				return EMPTY;
-			}
+						of(checkObjectsGroupTerms(selectedElements)),
+				  )
+				: EMPTY;
+			// } else {
+			// 	return EMPTY;
+			// }
 		}),
 	);
 

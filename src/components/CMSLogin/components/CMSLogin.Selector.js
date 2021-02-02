@@ -9,6 +9,10 @@ export const getUserProjects = createSelector(
 	 */
 	(projects) =>
 		projects
-			? Object.keys(projects).map((project_id) => ({ id: project_id, name: projects[project_id].name }))
+			? Object.keys(projects).map((project_id) => ({
+					id: project_id,
+					name: projects[project_id].name,
+					webcon_code: projects[project_id].webcon_code,
+			  }))
 			: [],
 );

@@ -38,6 +38,8 @@ function Structural_Inputs({
 					label={'Żuraw'}
 					options={Object.values(cranes)}
 					value={active_crane}
+					option_id_property={'crane.id'}
+					option_name_property={'crane.name'}
 					onChangeValue={changeCrane}
 				/>
 			</div>

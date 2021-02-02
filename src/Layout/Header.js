@@ -10,7 +10,7 @@ function Header() {
 	return (
 		<Navbar bg="light" expand="lg" className="flex-shrink-0">
 			<NavLink to="/">
-				<Navbar.Brand>BIM APPS</Navbar.Brand>
+				<Navbar.Brand>WSPro</Navbar.Brand>
 			</NavLink>
 			<Navbar.Collapse>
 				<Nav className="mr-auto">
@@ -25,12 +25,6 @@ function Header() {
 						{/*	Instalacyjnych*/}
 						{/*</NavLink>*/}
 					</NavDropdown>
-					{/*<NavLink className="nav-link " to="/work_acceptance">*/}
-					{/*	Odbiory robót*/}
-					{/*</NavLink>*/}
-					{/*<NavLink className="nav-link " to="/schedule">*/}
-					{/*	Harmonogramy*/}
-					{/*</NavLink>*/}
 				</Nav>
 
 				<Nav className="align-right">

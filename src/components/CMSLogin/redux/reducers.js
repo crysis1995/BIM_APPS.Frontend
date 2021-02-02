@@ -25,13 +25,6 @@ export const initialState = {
 	permissions: [],
 };
 
-/**
- *
- * @param state {Object}
- * @param username {string}
- * @param email {string}
- * @param project_roles {Array<Object>}
- */
 function setUserData(state, { user: { username, email }, projects }) {
 	const { _project, project_roles } = projects.reduce(
 		(prev, acc) => {
@@ -78,6 +71,7 @@ const CMSLoginReducer = (state = initialState, action) => {
 					id: action.project_id,
 					urn: action.urn,
 					name: action.name,
+					webcon_code: action.webcon_code,
 				},
 			};
 		case USER_LOGIN_ERROR:

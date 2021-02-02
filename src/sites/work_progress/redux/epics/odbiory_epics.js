@@ -58,10 +58,10 @@ import { ACCEPTANCE_TYPE } from '../types/constans';
 import { filterTree, findMinAndMaxRotationDay } from '../utils/odbiory_utils';
 import { parseTermsToMonolithic } from '../utils/terms_utils';
 
-export const handleChangeAppType = (action$, state$) =>
+export const handleChangeAppType = (action$) =>
 	action$.pipe(
 		ofType(ODBIORY_COMPONENT_SET_ACCEPTANCE_TYPE),
-		mergeMap(() => concat(of(coloredElementsClean()))),
+		map(() => coloredElementsClean()),
 	);
 
 export const setCranes = (action$, state$) =>
@@ -72,14 +72,15 @@ export const setCranes = (action$, state$) =>
 			const GRAPHQL = new GraphQLAPIService();
 			const REST = new RestAPIService();
 			const project = state$.value.CMSLogin.project.id;
+			const cranes = state$.value.CMSLogin.user.projects[project].crane_ranges;
 			return concat(
 				of({ type: ACCEPTANCE_MONOLITHIC_INIT }),
 				of(fetchStatusesStart()),
 				of(startFetchCranes()),
+				of(endFetchCranes(normalize(cranes, 'crane.id'))),
 				of(startFetchingUpgradingData()),
 				of(fetchCalendarStart()),
 				of(fetchTermsStart()),
-				from(REST.MONOLITHIC.getAllCranes(project)).pipe(map((value) => endFetchCranes(normalize(value)))),
 				from(REST.MONOLITHIC.getAllRotationDays(project)).pipe(
 					map((value) =>
 						fetchCalendarEnd(normalize(value, 'rotation_day'), normalize(value, 'date_id.data')),
@@ -114,8 +115,7 @@ export const setLevels = (action$, state$) =>
 			return concat(
 				iif(
 					() => !!active_level,
-					iif(() => !!!level_options[active_level], of(changeLevel('')), EMPTY),
-					EMPTY,
+					iif(() => !!!level_options[active_level], of(changeLevel(''))),
 				),
 				of(setLevelOptions(level_options)),
 			);
@@ -141,7 +141,8 @@ export const handleChangeLevel = (action$, state$) => {
 					state$.value.ForgeViewer.sheets.filter(
 						/**@param name {string}*/
 						({ name }) =>
-							name.includes(state$.value.Odbiory.OdbioryComponent.MONOLITHIC.levels[level_id].name),
+							name.includes(state$.value.Odbiory.OdbioryComponent.MONOLITHIC.levels[level_id].name) &&
+							name.includes('WSPro'),
 					),
 				]).pipe(
 					switchMap((sheet) => (sheet.length === 1 ? of(setCurrentSheet(sheet[0].index)) : of({ type: '' }))),
@@ -228,13 +229,14 @@ export const handleColorizeForge = (action$, state$) =>
 				active_tab,
 			} = state.Odbiory.OdbioryComponent.MONOLITHIC;
 			const level = levels[active_level] && levels[active_level].name;
-			const crane = cranes[active_crane] && cranes[active_crane].name;
+			const crane = cranes[active_crane] && cranes[active_crane].crane.name;
 			const rotation_day = state.Odbiory.OdbioryComponent.MONOLITHIC.rotation_day;
 			const normalized_calendar = state.Odbiory.OdbioryComponent.MONOLITHIC.calendar_normalizedByDate;
 			const object_values = state.Odbiory.Upgrading.MONOLITHIC.byRevitId;
 			const elements_object = state.ForgeViewer.model_elements;
 			const statuses = state.Odbiory.OdbioryComponent.MONOLITHIC.statuses;
 			const panel_content = state.ForgeViewer.panel_content;
+
 			const {
 				colored_elements,
 				disabled_elements,

@@ -51,4 +51,6 @@ const handleObjectFinishListener = (action$, state$) =>
 		}),
 	);
 
-export default combineEpics(getDepartmentsWithTerms, handleSetTerms, handleObjectFinishListener);
+export default combineEpics(getDepartmentsWithTerms, handleSetTerms,
+	// handleObjectFinishListener
+);

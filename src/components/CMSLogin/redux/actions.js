@@ -1,5 +1,7 @@
 import GraphQLAPIService from '../../../services/graphql.api.service';
 import { setInitial } from '../../../sites/work_progress/redux/actions';
+import { endFetchCranes } from '../../../sites/work_progress/redux/actions/odbiory_actions';
+import { normalize } from '../../../utils/normalize';
 import {
 	cleanUserDataInLocalStorage,
 	getUserFromLocalStorage,
@@ -56,11 +58,12 @@ export const setUserData = ({ user, projects }) => ({
 	projects,
 });
 
-export const setCurrentProject = (project_id, urn, name) => ({
+export const setCurrentProject = (project_id, urn, name, webcon_code) => ({
 	type: USER_SET_CURRENT_PROJECT,
 	project_id,
 	urn,
 	name,
+	webcon_code,
 });
 
 export const addPermissions = (permissions) => ({
@@ -102,10 +105,8 @@ const getUserData = (checkbox) => async (dispatch, getState) => {
 		credentials: { access_token },
 	} = getState().CMSLogin;
 	try {
-		const [user, projects] = await Promise.all([
-			new GraphQLAPIService(access_token).userData(id),
-			new GraphQLAPIService(access_token).getUserProjectRoles(id),
-		]);
+		const API = new GraphQLAPIService(access_token);
+		const [user, projects] = await Promise.all([API.userData(id), API.getUserProjectRoles(id)]);
 		dispatch(setUserData({ user, projects }));
 		if (checkbox) saveUserDataToLocalStorage(user, access_token, projects);
 		{
@@ -118,15 +119,15 @@ const getUserData = (checkbox) => async (dispatch, getState) => {
 			}
 		}
 	} catch (e) {
-		console.log(e.message);
+		console.log(e);
 	}
 };
 
 export const setActiveProject = (project_id) => (dispatch, getState) => {
 	const { projects } = getState().CMSLogin.user;
 	if (!!project_id && projects[project_id]) {
-		const { id, name, bim_models } = projects[project_id];
-		dispatch(setCurrentProject(id, bim_models[0].model_urn, name));
+		const { id, name, bim_models, webcon_code } = projects[project_id];
+		dispatch(setCurrentProject(id, bim_models[0].model_urn, name, webcon_code));
 	}
 };
 

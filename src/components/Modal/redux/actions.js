@@ -16,13 +16,6 @@ const setModalData = (title, body, onHideModal) => ({
 	onHideModal,
 });
 
-/**
- *
- * @param title {string}
- * @param body {string | React.FunctionComponent}
- * @param onHideModal {function()}
- * @return {function(...[*]=)}
- */
 export const initialiseModal = (title, body, onHideModal) => (dispatch) => {
 	dispatch(setModalData(title, body, onHideModal));
 	dispatch(showModal());
