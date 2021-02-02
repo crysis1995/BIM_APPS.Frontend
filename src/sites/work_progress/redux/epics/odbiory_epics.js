@@ -141,7 +141,8 @@ export const handleChangeLevel = (action$, state$) => {
 					state$.value.ForgeViewer.sheets.filter(
 						/**@param name {string}*/
 						({ name }) =>
-							name.includes(state$.value.Odbiory.OdbioryComponent.MONOLITHIC.levels[level_id].name),
+							name.includes(state$.value.Odbiory.OdbioryComponent.MONOLITHIC.levels[level_id].name) &&
+							name.includes('WSPro'),
 					),
 				]).pipe(
 					switchMap((sheet) => (sheet.length === 1 ? of(setCurrentSheet(sheet[0].index)) : of({ type: '' }))),
