@@ -1,11 +1,12 @@
+const DEV_URI = 'http://localhost:2000';
+const PROD_URI = 'http://bim.warbud.pl';
+
 export const config = {
 	// api_url: "http://localhost:2000",
-	api_url: 'http://bim.warbud.pl',
+	api_url: PROD_URI,
 	bim_apps_api: {
-		url: 'http://localhost:2000',
-		// url: 'http://bim.warbud.pl/bim_apps/api',
-		graphql: 'http://localhost:2000/graphql',
-		// graphql: 'http://bim.warbud.pl/bim_apps/api/graphql',
+		url: process.env.NODE_ENV === 'development' ? DEV_URI : PROD_URI + '/bim_apps/api',
+		graphql: process.env.NODE_ENV === 'development' ? DEV_URI + '/graphql' : PROD_URI + '/bim_apps/api/graphql',
 	},
 	units: {
 		area: {
