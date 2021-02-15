@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
 import Loader from '../../components/Loader';
 import Permissions from '../../components/Permissions';
-
 import Layout from './components/Layout';
 import { setAcceptanceType } from './redux/actions/odbiory_actions';
 import { ACCEPTANCE_TYPE } from './redux/types/constans';
@@ -16,7 +15,7 @@ function AcceptanceLayout(props) {
 	const acceptance_type = props.match.params.type;
 	useEffect(() => {
 		props.setAcceptanceType(acceptance_type);
-	}, [acceptance_type]);
+	}, [acceptance_type, props]);
 	if (!acceptance_type) return <Redirect to="/" />;
 	return (
 		<React.Suspense fallback={<Loader />}>
