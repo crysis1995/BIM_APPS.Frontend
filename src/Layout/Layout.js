@@ -14,6 +14,7 @@ const Header = React.lazy(() => import('./Header'));
 const WorkProgressLayout = React.lazy(() => import('../sites/work_progress'));
 const WorkAcceptanceLayout = React.lazy(() => import('../sites/work_acceptance'));
 const ScheduleLayout = React.lazy(() => import('../sites/schedule'));
+const WorkersLogLayout = React.lazy(() => import('../sites/workers_log'));
 const Login = React.lazy(() => import('../components/CMSLogin/components/login'));
 const Settings = React.lazy(() => import('../components/CMSLogin/components/settings'));
 
@@ -74,6 +75,7 @@ class Layout extends React.Component {
 								/>
 								<Route path="/work_acceptance" component={WorkAcceptanceLayout} />
 								<Route path="/schedule" component={ScheduleLayout} />
+								<Route path="/workers_log" component={WorkersLogLayout} />
 								<Route exact path="/">
 									<Col>
 										<div className="p-5">

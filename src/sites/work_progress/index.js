@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
-import { Alert, Col } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
 import Loader from '../../components/Loader';
-import { setAcceptanceType } from './redux/actions/odbiory_actions';
-import { ACCEPTANCE_TYPE } from './redux/types/constans';
 import Permissions from '../../components/Permissions';
 
 import Layout from './components/Layout';
+import { setAcceptanceType } from './redux/actions/odbiory_actions';
+import { ACCEPTANCE_TYPE } from './redux/types/constans';
+
 const WorkProgress = React.lazy(() => import('./components'));
 const Viewer = React.lazy(() => import('../../components/ForgeViewer/components'));
 

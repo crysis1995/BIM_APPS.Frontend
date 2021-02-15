@@ -25,6 +25,14 @@ function Header() {
 						{/*	Instalacyjnych*/}
 						{/*</NavLink>*/}
 					</NavDropdown>
+					<NavDropdown rootCloseEvent={'mouseover'} title="Dzienniki brygadzistowskie">
+						<NavLink to={`/workers_log/${WORKERS_LOG.WORK_TIME_EVIDENCE}`} className="dropdown-item">
+							Ewidencja czasu pracy
+						</NavLink>
+						<NavLink to={`/workers_log/${WORKERS_LOG.LABOUR_INPUT}`} className="dropdown-item">
+							Nakłady pracy
+						</NavLink>
+					</NavDropdown>
 				</Nav>
 
 				<Nav className="align-right">
