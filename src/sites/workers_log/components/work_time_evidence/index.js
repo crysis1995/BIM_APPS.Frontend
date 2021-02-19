@@ -12,6 +12,7 @@ const CALENDAR_VIEW_OPTION = {
 
 function WorkTimeEvidence(props) {
 	const [calendarViewOption, setCalendarViewOption] = useState(CALENDAR_VIEW_OPTION.DAY);
+	const [crewOption, setCrewOption] = useState(null);
 	const products = [
 		{ id: '09868990', brygada: 'Brygada Dziadka', name: 'Jan Kowalski', workHours: 8 },
 		{ id: '09868990', brygada: 'Brygada Dziadka', name: 'Jan Kowalski', workHours: 8 },
@@ -45,6 +46,11 @@ function WorkTimeEvidence(props) {
 			// footer: (columnData) => columnData.reduce((acc, item) => acc + item, 0),
 		},
 	];
+	const crewOptions = [
+		{ id: 1, name: 'Brygada 1' },
+		{ id: 2, name: 'Brygada 2' },
+		{ id: 3, name: 'Podwykonawca' },
+	];
 
 	return (
 		<>
@@ -53,15 +59,12 @@ function WorkTimeEvidence(props) {
 					Dodaj brygadę / podwykonawcę
 				</Button>
 				<ListGroup>
-					<ListGroup.Item active={true} action>
-						Brygada 1
-					</ListGroup.Item>
-					<ListGroup.Item action>Brygada 2</ListGroup.Item>
-					<ListGroup.Item action onClick={() => console.log('clicked')}>
-						Podwykonawca XYZ
-					</ListGroup.Item>
+					{crewOptions.map((crew) => (
+						<ListGroup.Item active={crew.id === crewOption} action onClick={() => setCrewOption(crew.id)}>
+							{crew.name}
+						</ListGroup.Item>
+					))}
 				</ListGroup>
-				,
 			</Col>
 			<Col className={'p-3'}>
 				<Row className="" noGutters={true}>

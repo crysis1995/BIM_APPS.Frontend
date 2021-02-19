@@ -3,7 +3,7 @@ import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import Loader from '../../components/Loader';
-import Layout from './components/layout';
+import Components from './components';
 import { WORKERS_LOG } from './redux/constants';
 
 function WorkersLog(props) {
@@ -13,7 +13,7 @@ function WorkersLog(props) {
 			<Route exact path={`/workers_log/${WORKERS_LOG.WORK_TIME_EVIDENCE}`}>
 				{/*<Col xs={6}>*/}
 				{/*	<div className="d-flex align-items-stretch" style={{ height: '100%' }}>*/}
-				<Layout.WorkTimeEvidence />
+				<Components.Layout.WorkTimeEvidence />
 				{/*	</div>*/}
 				{/*</Col>*/}
 			</Route>
@@ -25,7 +25,7 @@ function WorkersLog(props) {
 				</Col>
 				<Col xs={6}>
 					<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
-						<Layout.LabourInput />
+						<Components.Layout.LabourInput />
 					</div>
 				</Col>
 			</Route>
