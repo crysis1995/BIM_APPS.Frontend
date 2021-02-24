@@ -7,7 +7,7 @@ import Components from './components';
 import { WORKERS_LOG } from './redux/constants';
 
 function WorkersLog(props) {
-	console.log(props);
+	// console.log(props);
 	return (
 		<React.Suspense fallback={<Loader />}>
 			<Route exact path={`/workers_log/${WORKERS_LOG.WORK_TIME_EVIDENCE}`}>

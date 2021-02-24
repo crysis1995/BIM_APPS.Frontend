@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col } from 'react-bootstrap';
-import Selector from '../../../work_progress/components/Selector';
+import Selector from '../../../../components/Selector';
 
 function LabourInput(props) {
 	return (

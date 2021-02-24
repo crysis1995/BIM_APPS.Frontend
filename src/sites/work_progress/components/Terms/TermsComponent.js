@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { v4 } from 'uuid';
 import { setDepartment, setTermByDepartment } from '../../redux/actions/terms_actions';
 import { PERMISSION, TERM_TYPE } from '../../redux/types/constans';
-import Selector from '../Selector';
+import Selector from '../../../../components/Selector';
 import Permissions from '../../../../components/Permissions';
 import AccessFunction from '../../../../components/Permissions/AccessFunction';
 function TermsComponent(props) {
