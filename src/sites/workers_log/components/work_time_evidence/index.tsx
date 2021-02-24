@@ -1,6 +1,7 @@
 import classNames from 'classnames';
-import * as dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/pl';
+import arraySupport from 'dayjs/plugin/arraySupport';
 import localeData from 'dayjs/plugin/localeData';
 import isToday from 'dayjs/plugin/isToday';
 import React, { useState } from 'react';
@@ -11,14 +12,15 @@ import { connect } from 'react-redux';
 import { initialiseModal } from '../../../../components/Modal/redux/actions';
 import Selector from '../../../../components/Selector';
 
+dayjs.extend(arraySupport);
 dayjs.extend(localeData);
 dayjs.locale('pl');
 dayjs.extend(isToday);
 
-const CALENDAR_VIEW_OPTION = {
-	DAY: 'date',
-	MONTH: 'month',
-};
+enum CALENDAR_VIEW_OPTION {
+	DAY = 'date',
+	MONTH = 'month',
+}
 
 const PL = {
 	[CALENDAR_VIEW_OPTION.DAY]: 'dzień',
@@ -30,48 +32,59 @@ const PL = {
  * */
 
 function isHoliday(day: dayjs.Dayjs) {
-	return day.format('d') > 5 || day.format('d') < 1;
+	return parseInt(day.format('d')) > 5 || parseInt(day.format('d')) < 1;
 }
-
-const DatesComponent = React.memo(({ calendarViewOption, chooseDays, chooseMonths }) => {
-	return calendarViewOption === CALENDAR_VIEW_OPTION.DAY ? (
-		<th
-			className={classNames({
-				'table-danger': isHoliday(chooseDays),
-				'table-secondary': true,
-				'text-center': true,
-			})}>
-			{chooseDays.format('D')}
-			<br />
-			{chooseDays.format('ddd')}
-		</th>
-	) : (
-		chooseMonths.map((day: dayjs.Dayjs) => (
-			<th
-				className={classNames({
-					'table-secondary': dayjs(day).isToday(),
-					'table-danger': isHoliday(day),
-					'text-center': true,
-				})}>
-				{day.format('D')}
-				<br />
-				{day.format('ddd')}
+type DatesComponentProps = {
+	calendarViewOption: CALENDAR_VIEW_OPTION;
+	chooseDays: dayjs.Dayjs;
+	chooseMonths: dayjs.Dayjs[];
+};
+const DatesComponent = ({ calendarViewOption, chooseDays, chooseMonths }: DatesComponentProps) => {
+	return (
+		<>
+			<th colSpan={2} className={'text-right'}>
+				Dzień miesiąca
 			</th>
-		))
+			{calendarViewOption === CALENDAR_VIEW_OPTION.DAY ? (
+				<th
+					className={classNames({
+						'table-danger': isHoliday(chooseDays),
+						'table-secondary': true,
+						'text-center': true,
+					})}>
+					{chooseDays.format('D')}
+					<br />
+					{chooseDays.format('ddd')}
+				</th>
+			) : (
+				chooseMonths.map((day) => (
+					<th
+						className={classNames({
+							'table-secondary': dayjs(day).isToday(),
+							'table-danger': isHoliday(day),
+							'text-center': true,
+						})}>
+						{day.format('D')}
+						<br />
+						{day.format('ddd')}
+					</th>
+				))
+			)}
+		</>
 	);
-});
+};
 
-function getRangeDays(date: dayjs.Dayjs) {
-	let outArr = [];
+function getRangeDays(date: Dayjs) {
+	let outArr: Array<Dayjs> = [];
 	const startMonth = date.startOf('month');
 	const endMonth = startMonth.endOf('month');
 	for (let i = startMonth.date(); i <= endMonth.date(); i++) {
-		outArr.push(dayjs([startMonth.year(), startMonth.month() + 1, i]));
+		outArr.push(dayjs(`${startMonth.year()}-${startMonth.month() + 1}-${i}`));
 	}
 	return outArr;
 }
-
-const EditableCell = function ({ isEditable = false, value }) {
+type EditableCellProps = { isEditable?: boolean; value: number };
+const EditableCell = function ({ isEditable = false, value }: EditableCellProps) {
 	return isEditable ? (
 		<td style={{ maxWidth: 60, minWidth: 40, margin: 0 }}>
 			<Form.Control
@@ -88,7 +101,15 @@ const EditableCell = function ({ isEditable = false, value }) {
 	);
 };
 
-function WorkTimeEvidence(props) {
+const mapStateToProps = (state: any) => ({});
+
+const mapDispatchToProps = {
+	initialiseModal,
+};
+
+type WorkTimeEvidenceProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+
+function WorkTimeEvidence(props: WorkTimeEvidenceProps) {
 	const [calendarViewOption, setCalendarViewOption] = useState(CALENDAR_VIEW_OPTION.DAY);
 	const [chooseDays, setChooseDays] = useState(dayjs());
 	const [chooseMonths, setChooseMonths] = useState(getRangeDays(dayjs()));
@@ -113,6 +134,7 @@ function WorkTimeEvidence(props) {
 							onClick={(e) => props.initialiseModal('title', 'body')}>
 							+
 						</Button>
+						{/*@ts-ignore*/}
 						<Selector classname={''} options={crewOptions} onChangeValue={(id) => console.log(id)} />
 					</Col>
 					<Col xs={'auto'} className={'ml-5'}>
@@ -169,9 +191,6 @@ function WorkTimeEvidence(props) {
 					<Table size={'sm'} hover={true} borderless={true}>
 						<thead>
 							<tr>
-								<th colSpan={2} className={'text-right'}>
-									Dzień miesiąca
-								</th>
 								<DatesComponent
 									calendarViewOption={calendarViewOption}
 									chooseDays={chooseDays}
@@ -227,10 +246,5 @@ function WorkTimeEvidence(props) {
 	);
 }
 
-const mapStateToProps = (state) => ({});
-
-const mapDispatchToProps = {
-	initialiseModal,
-};
-
+// @ts-ignore
 export default connect(mapStateToProps, mapDispatchToProps)(WorkTimeEvidence);

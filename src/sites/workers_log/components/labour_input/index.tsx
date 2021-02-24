@@ -2,11 +2,12 @@ import React from 'react';
 import { Button, Col } from 'react-bootstrap';
 import Selector from '../../../../components/Selector';
 
-function LabourInput(props) {
+function LabourInput() {
 	return (
-		<Col className={"p-3"}>
+		<Col className={'p-3'}>
 			<div className="d-flex flex-row w-100">
 				<div className="w-50">
+					{/*@ts-ignore*/}
 					<Selector
 						classname={'mr-3'}
 						label={'Kondygnacja'}

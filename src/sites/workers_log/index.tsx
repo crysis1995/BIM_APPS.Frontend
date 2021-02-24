@@ -6,7 +6,7 @@ import Loader from '../../components/Loader';
 import Components from './components';
 import { WORKERS_LOG } from './redux/constants';
 
-function WorkersLog(props) {
+function WorkersLog() {
 	// console.log(props);
 	return (
 		<React.Suspense fallback={<Loader />}>
