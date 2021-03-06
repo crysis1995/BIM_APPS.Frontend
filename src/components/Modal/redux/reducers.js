@@ -5,6 +5,7 @@ const initialState = {
 	title: '',
 	body: '',
 	onHideModal: null,
+	application: null,
 };
 
 const ModalReducer = (state = initialState, action) => {
@@ -25,6 +26,7 @@ const ModalReducer = (state = initialState, action) => {
 				title: action.title,
 				body: action.body,
 				onHideModal: action.onHideModal,
+				application: action.application,
 			};
 		default:
 			return state;

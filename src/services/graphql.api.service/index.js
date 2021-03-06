@@ -93,6 +93,26 @@ export default class GraphQLAPIService {
 			return this.mutateClient(UPDATE_TERM, variables);
 		},
 	};
+
+	WorkersLog = {
+		WorkTimeEvidence: {
+			GetAllCrews: async (project_id, user_id) => {
+				const { GET_ALL_CREWS } = this.query;
+				return this.queryClient(GET_ALL_CREWS, { proj: project_id, user: user_id }).then(
+					(e) => e.data.workersLogCrews,
+				);
+			},
+			GetAllWorkers:async () => {
+				const {GET_ALL_WORKERS} = this.query;
+				return this.queryClient(GET_ALL_WORKERS).then(e => e.data.workersLogWorkers)
+			},
+			CreateHouseCrew: async (project_id, user_id, crew_name) => {
+				const { CREATE_HOUSE_CREW } = this.mutation;
+				return this.mutateClient(CREATE_HOUSE_CREW, { name: crew_name, user: user_id, proj: project_id });
+			},
+
+		},
+	};
 }
 
 function generateRanges(total, N = 100) {

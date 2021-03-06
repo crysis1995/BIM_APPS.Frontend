@@ -3,12 +3,14 @@ export enum WORKERS_LOG {
 	LABOUR_INPUT = 'labour_input',
 }
 
-export enum CREW_TYPES {
+export enum WORKER_TYPES {
 	STEEL_FIXER = 'steel_fixer',
 	CARPENTER = 'carpenter',
+	GENERAL_CONSTRUCTION = 'general_construction',
 }
 
 export const PL_DICTIONARY = {
-	[CREW_TYPES.STEEL_FIXER]: 'Zbrojarz',
-	[CREW_TYPES.CARPENTER]: 'Cieśla',
+	[WORKER_TYPES.STEEL_FIXER]: 'Zbrojarze',
+	[WORKER_TYPES.CARPENTER]: 'Cieśle',
+	[WORKER_TYPES.GENERAL_CONSTRUCTION]: 'Pracownicy ogólnobudowlani',
 };

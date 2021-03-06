@@ -57,10 +57,21 @@ const UPDATE_TERM = gql`
 	}
 `;
 
+const CREATE_HOUSE_CREW = gql`
+	mutation CreateHouseCrew($name: String, $user: ID, $proj: ID) {
+		createWorkersLogCrew(input: { data: { name: $name, owner: $user, project: $proj, is_subcontractor: false } }) {
+			workersLogCrew {
+				id
+			}
+		}
+	}
+`;
+
 export default {
 	LOGIN,
 	RESET_PASSWORD,
 	CREATE_STATUS,
 	CREATE_DELAY,
 	UPDATE_TERM,
+	CREATE_HOUSE_CREW,
 };

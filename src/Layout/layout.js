@@ -75,7 +75,35 @@ class Layout extends React.Component {
 								/>
 								<Route path="/work_acceptance" component={WorkAcceptanceLayout} />
 								<Route path="/schedule" component={ScheduleLayout} />
-								<Route path={['/workers_log/:module', '/workers_log']} component={WorkersLogLayout} />
+								<Route
+									path={['/workers_log/:module', '/workers_log']}
+									render={() => {
+										if (!this.props.CMS_is_login) return <Redirect to="/login" />;
+										else if (!this.props.project.id)
+											return (
+												<Col sm={'auto'} className={'p-3'}>
+													<Alert variant={'warning'}>Wybierz projekt</Alert>
+												</Col>
+											);
+										else if (!this.props.project.urn)
+											return (
+												<Col sm={'auto'} className={'p-3'}>
+													<Alert variant={'warning'}>
+														Model niedostępny dla wybranego projektu
+													</Alert>
+												</Col>
+											);
+										else if (!this.props.Autodesk_is_login)
+											return (
+												<Col sm={'auto'} className={'p-3'}>
+													<Alert variant={'warning'}>
+														Usługa BIM360 niedostępna - odśwież stronę lub wróć później
+													</Alert>
+												</Col>
+											);
+										else return <WorkersLogLayout />;
+									}}
+								/>
 								<Route exact path="/">
 									<Col>
 										<div className="p-5">
