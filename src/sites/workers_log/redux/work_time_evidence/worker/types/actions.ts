@@ -1,10 +1,10 @@
-import WorkersLogActions from "../../../types";
-import { WorkerPayload } from "./payload";
+import WorkersLogActions from '../../../types';
+import { WorkerPayload } from './payload';
 
 export interface IWorkersAction {
-	setAllWorkers: (
-		workers: WorkerPayload[],
-	) => {
+	setAllWorkers: (workers: {
+		[key: string]: WorkerPayload;
+	}) => {
 		type: typeof WorkersLogActions.WorkTimeEvidence.Workers.SET_ALL;
 		payload: { workers: typeof workers };
 	};
@@ -26,7 +26,6 @@ export interface IWorkersAction {
 		type: typeof WorkersLogActions.WorkTimeEvidence.Workers.DELETE;
 		payload: { worker: WorkerPayload };
 	};
-
 }
 
 export type ReturnTypeFromInterface<T> = {

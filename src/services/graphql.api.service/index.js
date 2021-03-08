@@ -83,13 +83,14 @@ export default class GraphQLAPIService {
 				cr: crane,
 			});
 		},
-		updateTerm: (term_id, { REAL_START, PLANNED_FINISH, REAL_FINISH, PLANNED_START }) => {
+		updateTerm: (term_id, { REAL_START, PLANNED_FINISH, REAL_FINISH, PLANNED_START, objects }) => {
 			const { UPDATE_TERM } = this.mutation;
 			let variables = { i: term_id };
 			if (REAL_START) variables.RS = REAL_START;
 			if (PLANNED_FINISH) variables.PF = PLANNED_FINISH;
 			if (REAL_FINISH) variables.RF = REAL_FINISH;
 			if (PLANNED_START) variables.PS = PLANNED_START;
+			if (objects) variables.obj = objects;
 			return this.mutateClient(UPDATE_TERM, variables);
 		},
 	};
@@ -102,15 +103,14 @@ export default class GraphQLAPIService {
 					(e) => e.data.workersLogCrews,
 				);
 			},
-			GetAllWorkers:async () => {
-				const {GET_ALL_WORKERS} = this.query;
-				return this.queryClient(GET_ALL_WORKERS).then(e => e.data.workersLogWorkers)
+			GetAllWorkers: async () => {
+				const { GET_ALL_WORKERS } = this.query;
+				return this.queryClient(GET_ALL_WORKERS).then((e) => e.data.workersLogWorkers);
 			},
 			CreateHouseCrew: async (project_id, user_id, crew_name) => {
 				const { CREATE_HOUSE_CREW } = this.mutation;
 				return this.mutateClient(CREATE_HOUSE_CREW, { name: crew_name, user: user_id, proj: project_id });
 			},
-
 		},
 	};
 }

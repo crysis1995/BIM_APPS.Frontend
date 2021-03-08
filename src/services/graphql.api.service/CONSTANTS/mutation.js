@@ -43,15 +43,33 @@ const CREATE_DELAY = gql`
 	}
 `;
 const UPDATE_TERM = gql`
-	mutation updateTerms($i: ID!, $RS: DateTime, $PF: DateTime, $RF: DateTime, $PS: DateTime) {
+	mutation updateTerms($i: ID!, $RS: DateTime, $PF: DateTime, $RF: DateTime, $PS: DateTime, $obj: [ID]) {
 		updateAcceptanceTerm(
 			input: {
-				data: { REAL_START: $RS, PLANNED_FINISH: $PF, REAL_FINISH: $RF, PLANNED_START: $PS }
+				data: { REAL_START: $RS, PLANNED_FINISH: $PF, REAL_FINISH: $RF, PLANNED_START: $PS, objects: $obj }
 				where: { id: $i }
 			}
 		) {
 			acceptanceTerm {
 				id
+				objects {
+					id
+				}
+				level {
+					id
+					name
+				}
+				crane {
+					id
+					name
+				}
+				vertical
+				REAL_START
+				PLANNED_FINISH
+				REAL_FINISH
+				PLANNED_START_BP
+				PLANNED_FINISH_BP
+				PLANNED_START
 			}
 		}
 	}

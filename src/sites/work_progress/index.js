@@ -15,7 +15,7 @@ function AcceptanceLayout(props) {
 	const acceptance_type = props.match.params.type;
 	useEffect(() => {
 		props.setAcceptanceType(acceptance_type);
-	}, [acceptance_type, props]);
+	}, [acceptance_type]);
 	if (!acceptance_type) return <Redirect to="/" />;
 	return (
 		<React.Suspense fallback={<Loader />}>

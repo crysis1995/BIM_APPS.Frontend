@@ -6,6 +6,8 @@ import {
 	TERMS_FETCH_START,
 	TERMS_MONOLITHIC_SET_BY_GROUP,
 	TERMS_MONOLITHIC_SET_BY_GROUP_INIT,
+	TERMS_MONOLITHIC_UPDATE_BY_GROUP,
+	TERMS_MONOLITHIC_UPDATE_BY_GROUP_INIT,
 	TERMS_SET_BY_DEPARTMENT,
 	TERMS_SET_DEPARTMENT,
 } from '../types';
@@ -71,4 +73,17 @@ export const setTermByGroup = (crane_id, level_id, group_id, term_type, term) =>
 	group_id,
 	term_type,
 	term,
+});
+
+export const initUpdateTermsByGroup = (term) => ({
+	type: TERMS_MONOLITHIC_UPDATE_BY_GROUP_INIT,
+	payload: {
+		term,
+	},
+});
+export const updateTermsByGroup = (updatedTerm) => ({
+	type: TERMS_MONOLITHIC_UPDATE_BY_GROUP,
+	payload: {
+		updatedTerm,
+	},
 });

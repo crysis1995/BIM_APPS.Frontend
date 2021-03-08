@@ -68,7 +68,7 @@ export const setCranes = (action$, state$) =>
 	action$.pipe(
 		ofType(ODBIORY_COMPONENT_SET_ACCEPTANCE_TYPE),
 		filter(({ acceptance_type }) => acceptance_type === ACCEPTANCE_TYPE.MONOLITHIC),
-		mergeMap(() => {
+		switchMap(() => {
 			const GRAPHQL = new GraphQLAPIService();
 			const REST = new RestAPIService();
 			const project = state$.value.CMSLogin.project.id;
@@ -87,7 +87,7 @@ export const setCranes = (action$, state$) =>
 					),
 				),
 				from(REST.MONOLITHIC.initializeTerms(project)).pipe(
-					mergeMap(() =>
+					switchMap(() =>
 						from(REST.MONOLITHIC.getAccepntaceTerms(project)).pipe(
 							map((data) => fetchTermsEnd(parseTermsToMonolithic(data))),
 						),
