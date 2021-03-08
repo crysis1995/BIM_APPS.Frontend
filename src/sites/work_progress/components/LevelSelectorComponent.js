@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { setCurrentSheet } from '../../../components/ForgeViewer/redux/actions';
-import Selector from './Selector';
+import Selector from '../../../components/Selector';
 
 function LevelSelectorComponent(props) {
 	return (

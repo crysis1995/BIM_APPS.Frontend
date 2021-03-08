@@ -5,7 +5,7 @@ import { v4 } from 'uuid';
 import UNITS from '../../../../components/Units';
 import { initSetStatus } from '../../redux/actions/upgrading_actions';
 import { MONOLITHIC } from '../../redux/types/constans';
-import Selector from '../Selector';
+import Selector from '../../../../components/Selector';
 import { selectedItemsParamsSummary } from './Structural.Results.Selector';
 
 function SetStatus({ selectedItemsParamsSummary, selectedElements, initSetStatus, rotation_day, statuses_options }) {

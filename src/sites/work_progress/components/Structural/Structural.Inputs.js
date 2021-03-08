@@ -10,7 +10,7 @@ import {
 	selectRotationDate,
 } from '../../redux/actions/odbiory_actions';
 import { parseDate } from '../../redux/utils/terms_utils';
-import Selector from '../Selector';
+import Selector from '../../../../components/Selector';
 import { dateSelector } from './Structural.Inputs.Selector';
 
 function Structural_Inputs({

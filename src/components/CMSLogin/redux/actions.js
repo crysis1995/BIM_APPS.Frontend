@@ -1,15 +1,7 @@
-import GraphQLAPIService from '../../../services/graphql.api.service';
-import { setInitial } from '../../../sites/work_progress/redux/actions';
-import { endFetchCranes } from '../../../sites/work_progress/redux/actions/odbiory_actions';
-import { normalize } from '../../../utils/normalize';
-import {
-	cleanUserDataInLocalStorage,
-	getUserFromLocalStorage,
-	isExpired,
-	login,
-	resetPasswordAPI,
-	saveUserDataToLocalStorage,
-} from './utils';
+import GraphQLAPIService from "../../../services/graphql.api.service";
+import { setInitial } from "../../../sites/work_progress/redux/actions";
+import { cleanUserDataInLocalStorage, getUserFromLocalStorage, isExpired, login, resetPasswordAPI, saveUserDataToLocalStorage } from "./utils";
+
 
 export const USER_LOGIN_START = 'cmslogin__USER_LOGIN_START';
 export const USER_LOGIN_END = 'cmslogin__USER_LOGIN_END';

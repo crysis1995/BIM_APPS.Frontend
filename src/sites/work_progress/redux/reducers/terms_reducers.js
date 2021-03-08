@@ -7,6 +7,7 @@ import {
 	TERMS_FETCH_END,
 	TERMS_FETCH_START,
 	TERMS_MONOLITHIC_SET_BY_GROUP,
+	TERMS_MONOLITHIC_UPDATE_BY_GROUP,
 	TERMS_SET_BY_DEPARTMENT,
 	TERMS_SET_DEPARTMENT,
 } from '../types';
@@ -84,6 +85,8 @@ const TermsReducer = (state = initialState, action) => {
 					terms: action.data,
 				},
 			};
+		case TERMS_MONOLITHIC_UPDATE_BY_GROUP:
+			return UpdateTerm(state, action);
 		case TERMS_MONOLITHIC_SET_BY_GROUP:
 			return MonolithicSetByGroup(state, action);
 		case TERMS_SET_DEPARTMENT:
@@ -115,73 +118,44 @@ const TermsReducer = (state = initialState, action) => {
 	}
 };
 
-/**
- *
- * @param state {Object}
- * @param term_type {string}
- * @param term {Date}
- * @param department_id {string}
- * @param job_id {string}
- * @param permissions {Array<string>}
- */
 function setTermsByDepartment(state, { term_type, term, department_id, job_id, permissions }) {
 	const property = 'byJobId';
 	dotProp.set(state, `byDepartment.${department_id}.${property}.${job_id}.${term_type}.value`, term);
-	// setPermission(state, { term_type, department_id, job_id, permissions });
 	return { ...state };
 }
 
-// /**
-//  *
-//  * @param state {Object}
-//  * @param term_type {string}
-//  * @param permissions {[string] | string}
-//  * @param department_id {string}
-//  * @param job_id {string}
-//  */
-// function setPermission(state, { term_type, permissions = null, department_id, job_id }) {
-// 	const property = 'byJobId';
-// 	if (permissions) {
-// 		if (!Array.isArray(permissions)) permissions = [permissions];
-// 		dotProp.set(state, `byDepartment.${department_id}.${property}.${job_id}.${term_type}.permissions`, [
-// 			...permissions,
-// 		]);
-// 	}
-// 	// return { ...state };
-// }
-
-// /**
-//  *
-//  * @param state
-//  * @param term_type
-//  * @param permission
-//  * @param department_id
-//  * @param job_id
-//  */
-// function deletePermission(state, { term_type, permission, department_id, job_id }) {
-// 	function move(arr, val) {
-// 		var j = 0;
-// 		for (var i = 0, l = arr.length; i < l; i++) {
-// 			if (arr[i] !== val) {
-// 				arr[j++] = arr[i];
-// 			}
-// 		}
-// 		arr.length = j;
-// 	}
-//
-// 	const property = 'byJobId';
-// 	var permission_old = dotProp.get(
-// 		state,
-// 		`byDepartment.${department_id}.${property}.${job_id}.${term_type}.permissions`,
-// 	);
-// 	if (Array.isArray(permission)) {
-// 		permission.forEach((item) => move(permission_old, item));
-// 	} else {
-// 		move(permission_old, permission);
-// 	}
-//
-// 	dotProp.set(state, `byDepartment.${department_id}.${property}.${job_id}.${term_type}.permissions`, permission_old);
-// 	return { ...state };
-// }
+function UpdateTerm(state, { payload: { updatedTerm } }) {
+	const crane_id = updatedTerm.crane.name;
+	const level_id = updatedTerm.level.name;
+	const group_id = updatedTerm.vertical;
+	return {
+		...state,
+		MONOLITHIC: {
+			...state.MONOLITHIC,
+			terms: {
+				...state.MONOLITHIC.terms,
+				byCrane: {
+					...state.MONOLITHIC.terms.byCrane,
+					[crane_id]: {
+						...state.MONOLITHIC.terms.byCrane[crane_id],
+						byLevel: {
+							...state.MONOLITHIC.terms.byCrane[crane_id].byLevel,
+							[level_id]: {
+								...state.MONOLITHIC.terms.byCrane[crane_id].byLevel[level_id],
+								byGroup: {
+									...state.MONOLITHIC.terms.byCrane[crane_id].byLevel[level_id].byGroup,
+									[group_id]: {
+										...state.MONOLITHIC.terms.byCrane[crane_id].byLevel[level_id].byGroup[group_id],
+										...updatedTerm,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	};
+}
 
 export default TermsReducer;

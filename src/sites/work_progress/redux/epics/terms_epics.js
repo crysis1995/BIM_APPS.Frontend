@@ -3,8 +3,12 @@ import { combineEpics, ofType } from 'redux-observable';
 import { EMPTY, from, of } from 'rxjs';
 import { catchError, map, switchMap, withLatestFrom, mergeMap } from 'rxjs/operators';
 import GraphQLAPIService from '../../../../services/graphql.api.service';
-import { setTermByGroup, termsDataFetchEnd, termsDataFetchError } from '../actions/terms_actions';
-import { TERMS_DATA_FETCH_START, TERMS_MONOLITHIC_SET_BY_GROUP_INIT } from '../types';
+import { setTermByGroup, termsDataFetchEnd, termsDataFetchError, updateTermsByGroup } from '../actions/terms_actions';
+import {
+	TERMS_DATA_FETCH_START,
+	TERMS_MONOLITHIC_SET_BY_GROUP_INIT,
+	TERMS_MONOLITHIC_UPDATE_BY_GROUP_INIT,
+} from '../types';
 import { fetchDepartmentsWithTerms, normalizeTermsData } from '../utils/terms_utils';
 
 const getDepartmentsWithTerms = (action$, state$) =>
@@ -40,17 +44,31 @@ const handleSetTerms = (action$, state$) =>
 		}),
 	);
 
-const handleObjectFinishListener = (action$, state$) =>
+const handleUpdateTermObject = (action$) =>
 	action$.pipe(
-		ofType(),
-		withLatestFrom(state$),
-		mergeMap(([_, state]) => {
-			const { active_crane, active_level } = state.Odbiory.OdbioryComponent.MONOLITHIC;
-			const groupObjects = state.Odbiory.Upgrading.MONOLITHIC?.byCrane?.[active_crane]?.byLevel?.[active_level];
-			return EMPTY;
+		ofType(TERMS_MONOLITHIC_UPDATE_BY_GROUP_INIT),
+		mergeMap(({ payload: { term } }) => {
+			const GRAPHQL = new GraphQLAPIService();
+			return from(GRAPHQL.MONOLITHIC.updateTerm(term.id, term)).pipe(
+				map((response) => updateTermsByGroup(term,response.data.updateAcceptanceTerm)),
+			);
 		}),
 	);
 
-export default combineEpics(getDepartmentsWithTerms, handleSetTerms,
+// const handleObjectFinishListener = (action$, state$) =>
+// 	action$.pipe(
+// 		ofType(),
+// 		withLatestFrom(state$),
+// 		mergeMap(([_, state]) => {
+// 			const { active_crane, active_level } = state.Odbiory.OdbioryComponent.MONOLITHIC;
+// 			const groupObjects = state.Odbiory.Upgrading.MONOLITHIC?.byCrane?.[active_crane]?.byLevel?.[active_level];
+// 			return EMPTY;
+// 		}),
+// 	);
+
+export default combineEpics(
+	getDepartmentsWithTerms,
+	handleSetTerms,
+	handleUpdateTermObject,
 	// handleObjectFinishListener
 );

@@ -10,10 +10,11 @@ import ModalComponent from '../components/Modal/component';
 // todo zrobić sidebar
 
 //components
-const Header = React.lazy(() => import('./Header'));
+const Header = React.lazy(() => import('./header'));
 const WorkProgressLayout = React.lazy(() => import('../sites/work_progress'));
 const WorkAcceptanceLayout = React.lazy(() => import('../sites/work_acceptance'));
 const ScheduleLayout = React.lazy(() => import('../sites/schedule'));
+const WorkersLogLayout = React.lazy(() => import('../sites/workers_log'));
 const Login = React.lazy(() => import('../components/CMSLogin/components/login'));
 const Settings = React.lazy(() => import('../components/CMSLogin/components/settings'));
 
@@ -74,6 +75,35 @@ class Layout extends React.Component {
 								/>
 								<Route path="/work_acceptance" component={WorkAcceptanceLayout} />
 								<Route path="/schedule" component={ScheduleLayout} />
+								<Route
+									path={['/workers_log/:module', '/workers_log']}
+									render={() => {
+										if (!this.props.CMS_is_login) return <Redirect to="/login" />;
+										else if (!this.props.project.id)
+											return (
+												<Col sm={'auto'} className={'p-3'}>
+													<Alert variant={'warning'}>Wybierz projekt</Alert>
+												</Col>
+											);
+										else if (!this.props.project.urn)
+											return (
+												<Col sm={'auto'} className={'p-3'}>
+													<Alert variant={'warning'}>
+														Model niedostępny dla wybranego projektu
+													</Alert>
+												</Col>
+											);
+										else if (!this.props.Autodesk_is_login)
+											return (
+												<Col sm={'auto'} className={'p-3'}>
+													<Alert variant={'warning'}>
+														Usługa BIM360 niedostępna - odśwież stronę lub wróć później
+													</Alert>
+												</Col>
+											);
+										else return <WorkersLogLayout />;
+									}}
+								/>
 								<Route exact path="/">
 									<Col>
 										<div className="p-5">

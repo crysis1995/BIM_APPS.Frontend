@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import Selector from '../Selector';
+import Selector from '../../../../components/Selector';
 
 describe('SELECTOR TEST', () => {
 	test('render SELECTOR without crashing', () => {

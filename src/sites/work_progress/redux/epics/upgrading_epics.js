@@ -5,7 +5,7 @@ import { FORGE_VIEWER_HANDLE_COLORIZE_FORGE } from '../../../../components/Forge
 import GraphQLAPIService from '../../../../services/graphql.api.service';
 import { RoundNumber } from '../../../../utils/RoundNumber';
 import { objectJobFetchCompleted, objectJobFetchStart } from '../actions/jobs_actions';
-import { initSetTermsByGroup } from '../actions/terms_actions';
+import { initSetTermsByGroup, initUpdateTermsByGroup } from '../actions/terms_actions';
 import {
 	checkObjectsGroupTerms,
 	handleSelectedElements,
@@ -18,7 +18,7 @@ import {
 	UPGRADING_SET_STATUSES,
 	UPGRADING_SET_STATUSES_INITIALIZER,
 } from '../types';
-import { MONOLITHIC } from '../types/constans';
+import { MONOLITHIC, TERM_TYPE } from '../types/constans';
 import { createReferenceJob, updateObjectJob } from '../utils/jobs_utils';
 
 export const upgradeJobEpic = (action$, state$) =>
@@ -86,14 +86,13 @@ const handleInitSetStatus = (action$, state$) =>
 	action$.pipe(
 		ofType(UPGRADING_SET_STATUSES_INITIALIZER),
 		withLatestFrom(state$),
-		mergeMap(([{ selectedElements, status, rotation_day }, state]) => {
+		switchMap(([{ selectedElements, status, rotation_day }, state]) => {
 			const api = new GraphQLAPIService();
 			const objects = state.Odbiory.Upgrading.MONOLITHIC.byRevitId;
 			const new_status = Object.values(state.Odbiory.OdbioryComponent.MONOLITHIC.statuses).filter(
 				(e) => e.name === status,
 			)[0];
 			const user = state.CMSLogin.user.id.id;
-			// if (new_status) {
 			return !!new_status
 				? concat(
 						from(selectedElements).pipe(
@@ -124,68 +123,60 @@ const handleSendStatusData = (action$, state$) =>
 		map(() => handleSelectedElements('')),
 	);
 
+function getStateData(state) {
+	const { active_crane, cranes, active_level, levels } = state.Odbiory.OdbioryComponent.MONOLITHIC;
+	const { byRevitId } = state.Odbiory.Upgrading.MONOLITHIC;
+
+	// terms object
+	const { byGroup } = state.Odbiory.Terms.MONOLITHIC?.terms?.byCrane?.[cranes[active_crane].crane.name]?.byLevel?.[
+		levels[active_level].name
+	];
+
+	const groupObjects = state.Odbiory.Upgrading.MONOLITHIC?.byCrane?.[active_crane]?.byLevel?.[active_level];
+	return { groupObjects, byRevitId, groupedTerms: byGroup };
+}
 const checkObjectsGroupTermsEpic = (action$, state$) =>
 	action$.pipe(
 		ofType(UPGRADING_CHECK_OBJECT_GROUP_TERMS),
 		withLatestFrom(state$),
-		mergeMap(([{ selectedElements }, state]) => {
-			const { active_crane, active_level } = state.Odbiory.OdbioryComponent.MONOLITHIC;
-			const { byRevitId } = state.Odbiory.Upgrading.MONOLITHIC;
-			const groupObjects = state.Odbiory.Upgrading.MONOLITHIC?.byCrane?.[active_crane]?.byLevel?.[active_level];
+		switchMap(([{ selectedElements }, state]) => {
+			const { groupObjects, groupedTerms, byRevitId } = getStateData(state);
 			if (!groupObjects) return EMPTY;
 			else {
 				return from(Object.keys(groupObjects)).pipe(
 					mergeMap((group_key) => {
-						const { needUpgradeFinishDate, needUpgradeStartDate } = checkObjectsTerms(
-							groupObjects[group_key].filter((e) => !selectedElements.includes(e)),
+						const { needUpgradeTermState, termsObject } = checkObjectsTerms(
+							selectedElements.filter((revit_id) => groupObjects[group_key].includes(parseInt(revit_id))),
 							byRevitId,
+							groupObjects[group_key],
+							groupedTerms[group_key],
 						);
-						return concat(
-							iif(
-								needUpgradeFinishDate,
-								initSetTermsByGroup(
-									active_crane,
-									active_level,
-									group_key,
-									MONOLITHIC.TERM_TYPE.REAL_FINISH.id,
-									new Date().toISOString(),
-								),
-							),
-							iif(
-								needUpgradeStartDate,
-								initSetTermsByGroup(
-									active_crane,
-									active_level,
-									group_key,
-									MONOLITHIC.TERM_TYPE.REAL_START.id,
-									new Date().toISOString(),
-								),
-							),
-						);
+						return iif(() => needUpgradeTermState, of(initUpdateTermsByGroup(termsObject)));
 					}),
 				);
 			}
 		}),
 	);
-function checkObjectsTerms(filtered_revit_ids, normalized_revit_objects) {
-	return filtered_revit_ids.reduce(
-		(prev, actual_revit_id) => {
-			const obj = normalized_revit_objects[actual_revit_id];
-			if (obj?.statuses && obj?.statuses?.length > 0) {
-				// sa statusy czyli finishDate na true
-				prev.needUpgradeFinishDate = prev.needUpgradeFinishDate && true;
-				prev.needUpgradeStartDate = prev.needUpgradeStartDate && false;
-			} else {
-				// nie ma statusow czyli klikam pierwszy element (startDate na true)
-				prev.needUpgradeFinishDate = prev.needUpgradeFinishDate && false;
-				prev.needUpgradeStartDate = prev.needUpgradeStartDate && true;
-			}
-		},
-		{
-			needUpgradeFinishDate: true,
-			needUpgradeStartDate: true,
-		},
-	);
+export function checkObjectsTerms(actualGroupedRevitIds, byRevitId, allElementsInGroup, termsObject) {
+	termsObject = { ...termsObject }; // must copy object
+
+	let needUpgradeTermState = false;
+	if (actualGroupedRevitIds.length > 0) {
+		needUpgradeTermState = true;
+		const dbElements = actualGroupedRevitIds.map((revitId) => byRevitId[revitId].id);
+
+		if (termsObject.objects.length === 0) {
+			termsObject[TERM_TYPE.REAL_START.id] = new Date().toISOString();
+		}
+		termsObject.objects = termsObject.objects.map((obj) => obj.id);
+		termsObject.objects = termsObject.objects.concat(dbElements);
+		const isComplete = termsObject.objects.length === allElementsInGroup.length;
+		if (isComplete) {
+			termsObject[TERM_TYPE.REAL_FINISH.id] = new Date().toISOString();
+		}
+	}
+
+	return { needUpgradeTermState, termsObject };
 }
 
 export default combineEpics(

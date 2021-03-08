@@ -7,10 +7,13 @@ const USER_PROJECTS = gql`
 				id
 				name
 			}
+            warbud_apps{
+                name
+            }
 			project {
 				id
 				name
-                webcon_code
+				webcon_code
 				bim_models {
 					model_urn
 				}
@@ -148,6 +151,27 @@ const GET_DELAY_CAUSES = gql`
 	}
 `;
 
+const GET_ALL_CREWS = gql`
+	query GetAllCrews($user: ID, $proj: ID) {
+		workersLogCrews(where: { owner: $user, is_subcontractor: false, project: $proj }) {
+			id
+			name
+			workers_type
+		}
+	}
+`;
+
+const GET_ALL_WORKERS = gql`
+	query GetAllWorkers {
+		workersLogWorkers {
+			id
+			warbud_id
+			is_house_worker
+			name
+		}
+	}
+`;
+
 export default {
 	USER_DATA,
 	GET_ALL_ACCEPTANCE_JOBS,
@@ -158,4 +182,6 @@ export default {
 	GET_ACCEPTANCE_TERMS,
 	GET_DELAY_CAUSES,
 	USER_PROJECTS,
+	GET_ALL_CREWS,
+	GET_ALL_WORKERS,
 };
