@@ -26,13 +26,14 @@ export const initialState = {
 };
 
 function setUserData(state, { user: { username, email }, projects }) {
-	const { _project, project_roles } = projects.reduce(
+	const { _project, project_roles, warbud_apps } = projects.reduce(
 		(prev, acc) => {
 			prev._project[acc.project.id] = acc.project;
 			prev.project_roles[acc.project.id] = acc.project_role;
+			prev.warbud_apps[acc.project.id] = acc.warbud_apps.map((e) => e.name);
 			return prev;
 		},
-		{ _project: {}, project_roles: {} },
+		{ _project: {}, project_roles: {}, warbud_apps: {} },
 	);
 	return {
 		...state,
@@ -42,6 +43,7 @@ function setUserData(state, { user: { username, email }, projects }) {
 			email,
 			projects: _project,
 			project_roles,
+			warbud_apps,
 		},
 	};
 }

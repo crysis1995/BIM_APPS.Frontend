@@ -7,6 +7,9 @@ const USER_PROJECTS = gql`
 				id
 				name
 			}
+            warbud_apps{
+                name
+            }
 			project {
 				id
 				name
