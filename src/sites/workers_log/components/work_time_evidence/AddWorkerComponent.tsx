@@ -20,7 +20,7 @@ const mapDispatchToProps = {
 	// chooseCrew: CrewActions.chooseCrew,
 	addWorker: WorkersAction.addWorker,
 };
-type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & { show: boolean };
 
 function ModalComponent({
 	show,
@@ -51,7 +51,8 @@ function ModalComponent({
 						<Modal.Title>Dodawanie pracownika</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						Czy na pewno chcesz dodać pracownika <strong>{worker.name || worker.warbud_id || worker.id}</strong>?
+						Czy na pewno chcesz dodać pracownika{' '}
+						<strong>{worker.name || worker.warbud_id || worker.id}</strong>?
 					</Modal.Body>
 					<Modal.Footer>
 						<Button variant="secondary" onClick={handleCloseButton}>
@@ -101,32 +102,33 @@ function AddWorkerComponent(props: Props) {
 	const handleCancelAdd = () => {
 		setSelectedWorker(null);
 	};
-
-	return (
-		<tr>
-			<td>
-				<Select
-					value={selectedWorker}
-					isClearable
-					onChange={(e) => {
-						setSelectedWorker(e);
-						if (e && e !== selectedWorker) setModal(true);
-					}}
-					isSearchable
-					options={workers}
-				/>
-				{selectedWorker && (
-					<ModalComponent
-						show={modal}
-						setShow={setModal}
-						worker={workersData?.[selectedWorker.value]}
-						handleAddWorker={handleAddWorker}
-						handleCancelAdd={handleCancelAdd}
+	if (props.show)
+		return (
+			<tr>
+				<td>
+					<Select
+						value={selectedWorker}
+						isClearable
+						onChange={(e) => {
+							setSelectedWorker(e);
+							if (e && e !== selectedWorker) setModal(true);
+						}}
+						isSearchable
+						options={workers}
 					/>
-				)}
-			</td>
-		</tr>
-	);
+					{selectedWorker && (
+						<ModalComponent
+							show={modal}
+							setShow={setModal}
+							worker={workersData?.[selectedWorker.value]}
+							handleAddWorker={handleAddWorker}
+							handleCancelAdd={handleCancelAdd}
+						/>
+					)}
+				</td>
+			</tr>
+		);
+	return <></>;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddWorkerComponent);

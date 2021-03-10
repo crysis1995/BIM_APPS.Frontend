@@ -1,6 +1,6 @@
-import WorkersLogActions from '../../../types';
-import { CrewPayload } from './payload';
-import { ReturnTypeFromInterface } from '../../worker/types/actions';
+import WorkersLogActions from "../../../types";
+import { CrewPayload } from "./payload";
+import { ReturnTypeFromInterface } from "../../worker/types/actions";
 
 export interface ICrewActions {
 	addCrew: () => {

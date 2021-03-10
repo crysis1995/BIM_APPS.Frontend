@@ -1,4 +1,4 @@
-import { WorkerPayload } from "./payload";
+import { IWarbudWorkerMapData, WorkerPayload } from './payload';
 
 export interface WorkersState {
 	all: null | { [key: string]: WorkerPayload };
@@ -12,4 +12,7 @@ export interface WorkersState {
 			};
 		};
 	} | null;
+	warbud_workers_map: null | {
+		[key: string]: IWarbudWorkerMapData;
+	};
 }

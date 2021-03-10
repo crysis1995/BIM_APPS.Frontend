@@ -1,6 +1,5 @@
 import { config } from '../../config';
 
-
 export default class RestAPIService {
 	constructor(accessToken) {
 		this.accessToken = accessToken;
@@ -36,6 +35,13 @@ export default class RestAPIService {
 		},
 		getDelayCauses: () => {
 			return this.fetchClient(`/acceptance-delay-causes`);
+		},
+	};
+	WORKERS_LOG = {
+		GENERAL: {
+			fetchWorkersMap: () => {
+				return this.fetchClient(`/ax-synchro`);
+			},
 		},
 	};
 }

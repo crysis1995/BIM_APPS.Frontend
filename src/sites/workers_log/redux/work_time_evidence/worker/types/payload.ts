@@ -1,5 +1,4 @@
 import { CrewPayload } from '../../crew/types/payload';
-import { WORKER_TYPES } from '../../../constants';
 
 export interface WorkerPayload {
 	id: string;
@@ -8,4 +7,13 @@ export interface WorkerPayload {
 	// worker_type: WORKER_TYPES;
 	is_house_worker: boolean;
 	warbud_id: string | null;
+}
+
+export interface IWarbudWorkersMap {
+	data: IWarbudWorkerMapData[];
+	count: number;
+}
+export interface IWarbudWorkerMapData {
+	EmplId: string;
+	Nazwa: string;
 }

@@ -6,6 +6,7 @@ const INITIAL_STATE: WorkersState = {
 	loading: false,
 	all: null,
 	labour_input: null,
+	warbud_workers_map: null,
 };
 
 function WorkersReducer(state = INITIAL_STATE, action: WorkersActionTypes): WorkersState {
@@ -16,7 +17,10 @@ function WorkersReducer(state = INITIAL_STATE, action: WorkersActionTypes): Work
 			return { ...state, all: { ...state.all, [action.payload.worker.id]: action.payload.worker } };
 		case WorkersLogActions.WorkTimeEvidence.Workers.SET_ALL:
 			return { ...state, all: action.payload.workers };
-
+		case WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_MAP_START:
+			return { ...state, loading: true };
+		case WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_MAP_END:
+			return { ...state, loading: false, warbud_workers_map: action.payload.workers };
 		default:
 			return state;
 	}

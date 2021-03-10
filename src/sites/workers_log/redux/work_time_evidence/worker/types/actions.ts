@@ -1,5 +1,5 @@
 import WorkersLogActions from '../../../types';
-import { WorkerPayload } from './payload';
+import { IWarbudWorkerMapData, IWarbudWorkersMap, WorkerPayload } from "./payload";
 
 export interface IWorkersAction {
 	setAllWorkers: (workers: {
@@ -25,6 +25,17 @@ export interface IWorkersAction {
 	) => {
 		type: typeof WorkersLogActions.WorkTimeEvidence.Workers.DELETE;
 		payload: { worker: WorkerPayload };
+	};
+	fetchWorkersMapStart: () => {
+		type: typeof WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_MAP_START;
+	};
+	fetchWorkersMapEnd: (
+		data: IWarbudWorkersMap,
+	) => {
+		type: typeof WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_MAP_END;
+		payload: {
+			workers: { [key: string]: IWarbudWorkerMapData };
+		};
 	};
 }
 
