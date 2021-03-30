@@ -14,6 +14,22 @@ export default class RestAPIService {
 		}
 		return fetch(`${baseUrl}${url}`, options).then((e) => e.json());
 	}
+	fetchClientPost(url, body, baseUrl = config.bim_apps_api.url) {
+		let options = {
+			method: 'POST',
+			body: JSON.stringify(body),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+		if (this.accessToken) {
+			options.headers = {
+				...options.headers,
+				Authorization: `Bearer ${this.accessToken}`,
+			};
+		}
+		return fetch(`${baseUrl}${url}`, options).then((e) => e.json());
+	}
 	GENERAL = {
 		getAccessToken: () => {
 			return this.fetchClient('/api/token/', config.api_url);
@@ -41,6 +57,11 @@ export default class RestAPIService {
 		GENERAL: {
 			fetchWorkersMap: () => {
 				return this.fetchClient(`/ax-synchro`);
+			},
+		},
+		WORK_TIME_EVIDENCE: {
+			CreateOrUpdate: (body) => {
+				return this.fetchClientPost('/workers-log-work-time-evidences/create_or_update', body);
 			},
 		},
 	};

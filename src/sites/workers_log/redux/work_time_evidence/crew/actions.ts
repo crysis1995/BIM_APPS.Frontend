@@ -1,5 +1,5 @@
-import WorkersLogActions from "../../types";
-import { ICrewActions } from "./types/actions";
+import WorkersLogActions from '../../types';
+import { ICrewActions } from './types/actions';
 
 const CrewActions: ICrewActions = {
 	addCrew: () => ({ type: WorkersLogActions.WorkTimeEvidence.Crew.ADD }),
@@ -10,7 +10,18 @@ const CrewActions: ICrewActions = {
 	fetchCrewStart: () => ({ type: WorkersLogActions.WorkTimeEvidence.Crew.FETCH_START }),
 	fetchCrewEnd: (crews) => ({ type: WorkersLogActions.WorkTimeEvidence.Crew.FETCH_END, payload: { crews } }),
 	fetchCrewError: (error) => ({ type: WorkersLogActions.WorkTimeEvidence.Crew.FETCH_ERROR, payload: { error } }),
-
+	fetchCrewSummariesStart: (data) => ({
+		type: WorkersLogActions.WorkTimeEvidence.Crew.FETCH_CREW_SUMMARIES_START,
+		payload: { data },
+	}),
+	fetchCrewSummariesEnd: (crew_summary) => ({
+		type: WorkersLogActions.WorkTimeEvidence.Crew.FETCH_CREW_SUMMARIES_END,
+		payload: { crew_summary },
+	}),
+	updateCrewSummary: (crew_summary) => ({
+		type: WorkersLogActions.WorkTimeEvidence.Crew.UPDATE_CREW_SUMMARY,
+		payload: { crew_summary },
+	}),
 };
 
 export default CrewActions;

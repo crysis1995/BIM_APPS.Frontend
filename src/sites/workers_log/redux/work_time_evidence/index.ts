@@ -1,9 +1,16 @@
 import { combineReducers } from 'redux';
-import CrewsReducer from './crew/reducers';
-import WorkersReducer from './worker/reducers';
-import GeneralReducer from './general/reducers';
+import Crews from './crew';
+import Workers from './worker';
+import General from './general';
+import TimeEvidence from './time_evidence';
 import { combineEpics } from 'redux-observable';
+
 export default {
-	reducer: combineReducers({ Crews: CrewsReducer, Workers: WorkersReducer, General: GeneralReducer }),
-	epics: combineEpics([]),
+	reducer: combineReducers({
+		Crews: Crews.reducer,
+		Workers: Workers.reducer,
+		General: General.reducer,
+		TimeEvidence: TimeEvidence.reducer,
+	}),
+	epics: combineEpics(Crews.epics, Workers.epics, TimeEvidence.epics),
 };

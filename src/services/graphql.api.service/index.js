@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { graphQLClient } from '../index';
 import MUTATION from './CONSTANTS/mutation';
 import QUERY from './CONSTANTS/query';
@@ -99,17 +100,42 @@ export default class GraphQLAPIService {
 		WorkTimeEvidence: {
 			GetAllCrews: async (project_id, user_id) => {
 				const { GET_ALL_CREWS } = this.query;
-				return this.queryClient(GET_ALL_CREWS, { proj: project_id, user: user_id }).then(
-					(e) => e.data.workersLogCrews,
-				);
+				return this.queryClient(GET_ALL_CREWS, { proj: project_id, user: user_id });
 			},
 			GetAllWorkers: async () => {
 				const { GET_ALL_WORKERS } = this.query;
-				return this.queryClient(GET_ALL_WORKERS).then((e) => e.data.workersLogWorkers);
+				return this.queryClient(GET_ALL_WORKERS);
 			},
-			CreateHouseCrew: async (project_id, user_id, crew_name) => {
+			CreateHouseCrew: async (project_id, user_id, crew_name, work_type) => {
 				const { CREATE_HOUSE_CREW } = this.mutation;
-				return this.mutateClient(CREATE_HOUSE_CREW, { name: crew_name, user: user_id, proj: project_id });
+				return this.mutateClient(CREATE_HOUSE_CREW, {
+					name: crew_name,
+					user: user_id,
+					proj: project_id,
+					work_type,
+				});
+			},
+			GetAllCrewSummaries: async ({ crew_id, start_date, end_date, user_id, project_id }) => {
+				const { GET_ALL_CREW_SUMMARIES } = this.query;
+				return this.queryClient(GET_ALL_CREW_SUMMARIES, {
+					crw: crew_id,
+					start: start_date,
+					end: end_date,
+					own: user_id,
+					proj: project_id,
+				});
+			},
+			GetWorkerTimeEvidence: async ({ worker_id, start_date, end_date }) => {
+				const { GET_WORK_TIME_EVIDENCE } = this.query;
+				return this.queryClient(GET_WORK_TIME_EVIDENCE, {
+					worker: worker_id,
+					start: start_date,
+					end: end_date,
+				});
+			},
+			UpdateCrewSummary: async ({ crew_summary, workers }) => {
+				const { UPDATE_CREW_SUMMARY } = this.mutation;
+				return this.mutateClient(UPDATE_CREW_SUMMARY, { crewSummary: crew_summary, work: workers });
 			},
 		},
 	};

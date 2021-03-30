@@ -1,9 +1,9 @@
-import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import GraphQLAPIService from '../../../../../services/graphql.api.service';
-import { connect } from 'react-redux';
-import { PL_DICTIONARY, WORKER_TYPES } from '../../../../../sites/workers_log/redux/constants';
+import { Alert, Button, Col, Form, Row } from "react-bootstrap";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import GraphQLAPIService from "../../../../../../services/graphql.api.service";
+import { connect } from "react-redux";
+import { PL_DICTIONARY, WORKER_TYPES } from "../../../../redux/constants";
 
 type RootState = {
 	CMSLogin: {
@@ -30,7 +30,7 @@ type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 type Inputs = { crewName: string; crewType: string };
 
-function DBCrewCreator(props: Props) {
+function HouseCrewDBCreator(props: Props) {
 	const [valid, setValid] = useState<boolean | null>(null);
 	const { register, handleSubmit, errors, reset } = useForm<Inputs>();
 	const onSubmit = async (data: Inputs) => {
@@ -39,6 +39,7 @@ function DBCrewCreator(props: Props) {
 			props.project_id,
 			props.user_id,
 			data.crewName,
+			data.crewType,
 		);
 		console.log(data);
 		if (crew) {
@@ -109,7 +110,9 @@ function DBCrewCreator(props: Props) {
 			{valid !== null && (
 				<Row>
 					<Col>
-						<Alert variant={valid ? 'success' : 'danger'}>{valid ? 'Poprawnie utworzono brygadę!' : 'Coś poszło nie tak ;('}</Alert>
+						<Alert variant={valid ? 'success' : 'danger'}>
+							{valid ? 'Poprawnie utworzono brygadę!' : 'Coś poszło nie tak ;('}
+						</Alert>
 					</Col>
 				</Row>
 			)}
@@ -117,4 +120,4 @@ function DBCrewCreator(props: Props) {
 	);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DBCrewCreator);
+export default connect(mapStateToProps, mapDispatchToProps)(HouseCrewDBCreator);

@@ -8,8 +8,5 @@ export default {
 		General: General.reducer,
 		WorkTimeEvidence: WorkTimeEvidence.reducer,
 	}),
-	epics: combineEpics(
-		General.epics,
-		// WorkTimeEvidence.epics
-	),
+	epics: combineEpics(General.epics, WorkTimeEvidence.epics),
 };

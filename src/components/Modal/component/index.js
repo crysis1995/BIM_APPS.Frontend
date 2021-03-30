@@ -2,17 +2,14 @@ import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { hideModal } from '../redux/actions';
-import Application from '../applications';
 
-function ModalComponent({ hideModal, title, body, modal_visible, onHideModal, application }) {
-	const BodyComponent = application && Application[application] && Application[application][body];
-
+function ModalComponent({ hideModal, title, body, modal_visible, onHideModal }) {
 	return (
 		<Modal show={modal_visible} onHide={hideModal}>
 			<Modal.Header closeButton>
 				<Modal.Title>{title}</Modal.Title>
 			</Modal.Header>
-			<Modal.Body>{application ? <BodyComponent /> : body}</Modal.Body>
+			<Modal.Body>{body}</Modal.Body>
 			<Modal.Footer>
 				<Button
 					variant="secondary"

@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
-import { CrewState } from '../../redux/work_time_evidence/crew/types/state';
-import { WorkersState } from '../../redux/work_time_evidence/worker/types/state';
-import { CrewPayload } from '../../redux/work_time_evidence/crew/types/payload';
-import { GeneralState } from '../../redux/work_time_evidence/general/types/state';
+import { CrewState } from '../../../redux/work_time_evidence/crew/types/state';
+import { WorkersState } from '../../../redux/work_time_evidence/worker/types/state';
+import { CrewPayload } from '../../../redux/work_time_evidence/crew/types/payload';
+import { GeneralState } from '../../../redux/work_time_evidence/general/types/state';
 
 export const filterCrewsByWorkerTypes = createSelector(
 	(state: { WorkersLog: { WorkTimeEvidence: { Crews: CrewState; Workers: WorkersState } } }) =>
