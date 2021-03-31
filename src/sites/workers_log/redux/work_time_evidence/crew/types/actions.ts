@@ -1,6 +1,7 @@
 import WorkersLogActions from '../../../types';
-import { CrewPayload } from './payload';
+import { CrewPayload, CrewSummary } from './payload';
 import { ReturnTypeFromInterface } from '../../worker/types/actions';
+import { CrewSummariesData } from '../utils/ExtractRequestData';
 
 export interface ICrewActions {
 	addCrew: () => {
@@ -28,6 +29,24 @@ export interface ICrewActions {
 	) => {
 		type: typeof WorkersLogActions.WorkTimeEvidence.Crew.FETCH_ERROR;
 		payload: { error: typeof error };
+	};
+	fetchCrewSummariesStart: (
+		data: CrewSummariesData,
+	) => {
+		type: typeof WorkersLogActions.WorkTimeEvidence.Crew.FETCH_CREW_SUMMARIES_START;
+		payload: { data: typeof data };
+	};
+	fetchCrewSummariesEnd: (
+		crew_summary: CrewSummary | null,
+	) => {
+		type: typeof WorkersLogActions.WorkTimeEvidence.Crew.FETCH_CREW_SUMMARIES_END;
+		payload: { crew_summary: typeof crew_summary };
+	};
+	updateCrewSummary: (
+		crew_summary: CrewSummary | null,
+	) => {
+		type: typeof WorkersLogActions.WorkTimeEvidence.Crew.UPDATE_CREW_SUMMARY;
+		payload: { crew_summary: typeof crew_summary };
 	};
 }
 

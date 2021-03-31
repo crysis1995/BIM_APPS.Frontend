@@ -76,8 +76,12 @@ const UPDATE_TERM = gql`
 `;
 
 const CREATE_HOUSE_CREW = gql`
-	mutation CreateHouseCrew($name: String, $user: ID, $proj: ID) {
-		createWorkersLogCrew(input: { data: { name: $name, owner: $user, project: $proj, is_subcontractor: false } }) {
+	mutation CreateHouseCrew($name: String, $user: ID, $proj: ID, $work_type: ENUM_WORKERSLOGCREW_WORKERS_TYPE) {
+		createWorkersLogCrew(
+			input: {
+				data: { name: $name, owner: $user, project: $proj, is_subcontractor: false, workers_type: $work_type }
+			}
+		) {
 			workersLogCrew {
 				id
 			}
@@ -85,6 +89,104 @@ const CREATE_HOUSE_CREW = gql`
 	}
 `;
 
+const CREATE_WORK_TIME_EVIDENCE = gql`
+    mutation CreateWorkTimeEvidence(
+        $date: Date
+        $workedFor: Int
+        $engineer: ID
+        $proj: ID
+        $work: ID
+    ) {
+        createWorkersLogWorkTimeEvidence(
+            input: {
+                data: {
+                    date: $date
+                    worked_time: $workedFor
+                    filling_engineer: $engineer
+                    project: $proj
+                    worker: $work
+                }
+            }
+        ) {
+            workersLogWorkTimeEvidence {
+                id
+                date
+                worker {
+                    id
+                }
+                worked_time
+                project {
+                    id
+                }
+            }
+        }
+    }
+
+`;
+
+const UPDATE_WORK_TIME_EVIDENCE = gql`
+	mutation UpdateWorkTimeEvidence(
+		$workTimeEvidence: ID!
+		$date: Date
+		$workedFor: Int
+		$engineer: ID
+		$proj: ID
+		$work: ID
+	) {
+		updateWorkersLogWorkTimeEvidence(
+			input: {
+				where: { id: $workTimeEvidence }
+				data: {
+					date: $date
+					worked_time: $workedFor
+					filling_engineer: $engineer
+					project: $proj
+					worker: $work
+				}
+			}
+		) {
+			workersLogWorkTimeEvidence {
+				id
+			}
+		}
+	}
+`;
+
+const CREATE_CREW_SUMMARY = gql`
+	mutation CreateCrewSummary($crw: ID, $start: Date, $end: Date, $own: ID, $work: [ID], $proj: ID) {
+		createWorkersLogCrewSummary(
+			input: {
+				data: { crew: $crw, startDate: $start, endDate: $end, owner: $own, workers: $work, project: $proj }
+			}
+		) {
+			workersLogCrewSummary {
+				id
+			}
+		}
+	}
+`;
+
+const UPDATE_CREW_SUMMARY = gql`
+	mutation UpdateCrewSummary(
+		$crewSummary: ID!
+		$work: [ID]
+	) {
+		updateWorkersLogCrewSummary(
+			input: {
+				where: { id: $crewSummary }
+#				data: { crew: $crw, startDate: $start, endDate: $end, owner: $own, workers: $work, project: $proj }
+				data: {  workers: $work }
+			}
+		) {
+			workersLogCrewSummary {
+                id
+                workers {
+                    id
+                }
+			}
+		}
+	}
+`;
 export default {
 	LOGIN,
 	RESET_PASSWORD,
@@ -92,4 +194,8 @@ export default {
 	CREATE_DELAY,
 	UPDATE_TERM,
 	CREATE_HOUSE_CREW,
+	CREATE_WORK_TIME_EVIDENCE,
+	UPDATE_WORK_TIME_EVIDENCE,
+	CREATE_CREW_SUMMARY,
+	UPDATE_CREW_SUMMARY,
 };
