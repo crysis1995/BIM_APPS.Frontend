@@ -1,4 +1,5 @@
 import dotProp from 'dot-prop';
+import { normalize } from '../../../../utils/normalize';
 import {
 	DELAYS_CREATE_NEW,
 	DELAYS_FETCH_CAUSES_END,
@@ -6,6 +7,7 @@ import {
 	DELAYS_UPDATE_EXIST,
 	SET_INITIAL,
 } from '../types';
+import { delaysGenerateTree } from '../utils/delay_utils';
 
 export const initialState = {
 	MONOLITHIC: {
@@ -30,7 +32,8 @@ const DelaysReducer = (state = initialState, action) => {
 				MONOLITHIC: {
 					...state.MONOLITHIC,
 					delay_causes_loading: false,
-					delay_causes: action.data,
+					delay_causes_all: normalize(action.data),
+					delay_causes: delaysGenerateTree(action.data),
 				},
 			};
 		case SET_INITIAL:

@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import Select from 'react-select';
-import { connect } from 'react-redux';
-import { CrewState } from '../../redux/work_time_evidence/crew/types/state';
-import { WorkersState } from '../../redux/work_time_evidence/worker/types/state';
-import WorkersAction from '../../redux/work_time_evidence/worker/actions';
-import { CombineWorkerIdWithName } from './Selectors/AddWorkerComponent.Selector';
-import ModalComponent from './Modal/AddWorkerApproval/';
-import { Form } from 'react-bootstrap';
+import React, { useState } from "react";
+import Select from "react-select";
+import { connect } from "react-redux";
+import { CrewState } from "../../redux/work_time_evidence/crew/types/state";
+import { WorkersState } from "../../redux/work_time_evidence/worker/types/state";
+import WorkersAction from "../../redux/work_time_evidence/worker/actions";
+import { CombineWorkerIdWithName } from "./Selectors/AddWorkerComponent.Selector";
+import ModalComponent from "./Modal/AddWorkerApproval/";
 
 const mapStateToProps = (state: { WorkersLog: { WorkTimeEvidence: { Crews: CrewState; Workers: WorkersState } } }) => ({
 	workersData: CombineWorkerIdWithName(state),

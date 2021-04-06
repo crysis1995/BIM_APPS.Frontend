@@ -7,7 +7,7 @@ import Historical from './Structural.Results.Historical';
 import Log from './Structural.Results.Log';
 import Realisation from './Structural.Results.Realisation';
 import Terms from './Structural.Results.Terms';
-import Delay from './Structural.Results.Delay';
+import Delay from './Delay';
 
 function StructuralResults({ active_tab }) {
 	return (
@@ -16,7 +16,8 @@ function StructuralResults({ active_tab }) {
 				(active_tab === MONOLITHIC.TABS.ACTUAL && <Realisation />) ||
 				(active_tab === MONOLITHIC.TABS.HISTORICAL && <Historical />) ||
 				(active_tab === MONOLITHIC.TABS.TERMS && <Terms />) ||
-				(active_tab === MONOLITHIC.TABS.DELAY && <Delay />) ||
+				(active_tab === MONOLITHIC.TABS.DELAY_CREATE && <Delay.CreateDelay />) ||
+				(active_tab === MONOLITHIC.TABS.DELAY_LIST && <Delay.ListDelay />) ||
 				(active_tab === MONOLITHIC.TABS.LOG && <Log />)}
 		</Row>
 	);

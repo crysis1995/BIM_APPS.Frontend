@@ -118,6 +118,29 @@ const GET_STATUSES = gql`
 	}
 `;
 
+const GET_DELAYS = gql`
+	query getAllAcceptanceDalays($us: ID) {
+		acceptanceDelays(where: { user: $us }) {
+			id
+			commentary
+			level {
+				name
+			}
+			crane {
+				name
+			}
+			user {
+                email
+			}
+			date
+			created_at
+			causes {
+				id
+			}
+		}
+	}
+`;
+
 const GET_ACCEPTANCE_TERMS = gql`
 	query getAcceptanceTerms($p: ID!) {
 		acceptanceTerms(where: { project: $p }) {
@@ -203,6 +226,7 @@ export default {
 	ACCEPTANCE_OBJECTS_COUNT,
 	WARBUD_CRANES,
 	GET_STATUSES,
+	GET_DELAYS,
 	GET_ACCEPTANCE_TERMS,
 	GET_DELAY_CAUSES,
 	USER_PROJECTS,

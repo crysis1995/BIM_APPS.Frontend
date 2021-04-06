@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import {
 	UPGRADE_BY_JOB,
 	UPGRADING_CHECK_IF_GROUP_FINISHED,
@@ -91,12 +92,13 @@ export const endSetStatus = () => ({
 	type: UPGRADING_SET_STATUSES_SUCCESS,
 });
 
-export const initSetStatus = (selectedElements, status, rotation_day) => ({
+export const initSetStatus = (selectedElements, status, rotation_day,choose_date) => ({
 	type: UPGRADING_SET_STATUSES_INITIALIZER,
 	selectedElements,
 	status,
 	rotation_day,
-	updated_at: new Date().toISOString(),
+	choose_date,
+	updated_at: dayjs().format('YYYY-MM-DD'),
 });
 
 export const checkObjectsGroupTerms = (selectedElements) => ({
