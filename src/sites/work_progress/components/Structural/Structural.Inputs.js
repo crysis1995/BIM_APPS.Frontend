@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import Selector from '../../../../components/Selector';
 import {
 	changeCrane,
 	changeLevel,
@@ -10,7 +11,6 @@ import {
 	selectRotationDate,
 } from '../../redux/actions/odbiory_actions';
 import { parseDate } from '../../redux/utils/terms_utils';
-import Selector from '../../../../components/Selector';
 import { dateSelector } from './Structural.Inputs.Selector';
 
 function Structural_Inputs({
