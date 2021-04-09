@@ -1,5 +1,5 @@
 import { WorkersLogGeneralActionsTypes } from './types/actions';
-import { IWorkersLogGeneralState } from './types/state';
+import { IWorkersLogGeneralState } from './types/store';
 import WorkersLogActions from '../types';
 
 const INITIAL_STATE: IWorkersLogGeneralState = {
