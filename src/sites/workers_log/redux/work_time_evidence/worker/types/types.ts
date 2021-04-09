@@ -1,7 +1,14 @@
 export enum Workers {
-	SET_ALL = 'set_all_workers',
-	ADD = 'add_worker',
-	ADD_NEW = 'add_new_worker',
-	DELETE = 'delete_worker',
-	SET_WORK_TIME = 'set_worker_work_time',
+	FETCH_WORKERS_START = 'workers_log__FETCH_WORKERS_START',
+	FETCH_WORKERS_END = 'workers_log__FETCH_WORKERS_END',
+
+	SET_ALL = 'workers_log__SET_ALL_WORKERS',
+	ADD = 'workers_log__ADD_WORKER',
+	ADD_NEW = 'workers_log__ADD_NEW_WORKER',
+	DELETE = 'workers_log__DELETE_WORKER',
+	SET_WORK_TIME = 'workers_log__SET_WORKER_WORK_TIME',
+
+	FETCH_WORKERS_MAP_START = 'workers_log__FETCH_WORKERS_MAP_START',
+	FETCH_WORKERS_MAP_END = 'workers_log__FETCH_WORKERS_MAP_END',
+	FETCH_WORKERS_MAP_ERROR = 'workers_log__FETCH_WORKERS_MAP_ERROR',
 }

@@ -1,5 +1,7 @@
-import { combineReducers } from 'redux';
+import WorkersLogGeneralReducer from './reducers';
+import GeneralEpics from './epic';
 
 export default {
-	// reducer: combineReducers({}),
+	reducer: WorkersLogGeneralReducer,
+	epics: GeneralEpics,
 };

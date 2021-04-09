@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import Selector from '../../../../components/Selector';
 import {
 	changeCrane,
 	changeLevel,
@@ -9,9 +10,14 @@ import {
 	selectDate,
 	selectRotationDate,
 } from '../../redux/actions/odbiory_actions';
+import { MONOLITHIC } from '../../redux/types/constans';
 import { parseDate } from '../../redux/utils/terms_utils';
-import Selector from '../../../../components/Selector';
 import { dateSelector } from './Structural.Inputs.Selector';
+
+function Hidden({ when, children }) {
+	if (!when) return children;
+	return null;
+}
 
 function Structural_Inputs({
 	cranes_loading,
@@ -21,6 +27,7 @@ function Structural_Inputs({
 	active_level,
 	rotation_day,
 	date,
+	active_tab,
 	//  actions
 	changeCrane,
 	changeLevel,
@@ -30,7 +37,7 @@ function Structural_Inputs({
 	selectRotationDate,
 }) {
 	return (
-		<div className="d-flex flex-row w-100">
+		<div className="d-flex flex-row w-100 pb-2">
 			<div className="w-25">
 				<Selector
 					classname={'mr-3'}
@@ -53,10 +60,17 @@ function Structural_Inputs({
 					onChangeValue={(id) => changeLevel(id)}
 				/>
 			</div>
+
 			<div className="w-50">
 				<div className="d-flex justify-content-between">
 					<Button
-						disabled={cranes_loading || !active_crane || !active_level}
+						disabled={
+							cranes_loading ||
+							!active_crane ||
+							!active_level ||
+							active_tab === MONOLITHIC.TABS.DELAY_LIST ||
+							active_tab === MONOLITHIC.TABS.DELAY_CREATE
+						}
 						size={'sm'}
 						onClick={() => decrementDay()}
 						variant={'secondary'}
@@ -78,30 +92,52 @@ function Structural_Inputs({
 							/>
 						</svg>
 					</Button>
-					<div className="form-group ml-2 mr-1">
-						<label>Data rotacji</label>
-						<input
-							data-testid="data-input-1"
-							disabled={cranes_loading || !active_crane || !active_level}
-							type={'date'}
-							className="form-control form-control-sm "
-							onChange={(selectedDay) => selectDate(selectedDay.target.value)}
-							value={parseDate(date)}
-						/>
-					</div>
-					<div className="form-group ml-1 mr-2">
-						<label>Dzień rotacji </label>
-						<input
-							disabled={cranes_loading || !active_crane || !active_level}
-							data-testid="data-input-2"
-							type={'number'}
-							className="form-control form-control-sm "
-							onChange={(selectedDay) => selectRotationDate(parseInt(selectedDay.target.value))}
-							value={rotation_day}
-						/>
-					</div>
+					<Hidden when={active_tab === MONOLITHIC.TABS.ACTUAL}>
+						<div className="form-group ml-2 mr-1 w-100">
+							<label>Data rotacji</label>
+							<input
+								data-testid="data-input-1"
+								disabled={
+									cranes_loading ||
+									!active_crane ||
+									!active_level ||
+									active_tab === MONOLITHIC.TABS.DELAY_LIST ||
+									active_tab === MONOLITHIC.TABS.DELAY_CREATE
+								}
+								type={'date'}
+								className="form-control form-control-sm "
+								onChange={(selectedDay) => selectDate(selectedDay.target.value)}
+								value={parseDate(date)}
+							/>
+						</div>
+					</Hidden>
+					<Hidden when={active_tab === MONOLITHIC.TABS.HISTORICAL}>
+						<div className="form-group ml-1 mr-2 w-100">
+							<label>Dzień rotacji </label>
+							<input
+								disabled={
+									cranes_loading ||
+									!active_crane ||
+									!active_level ||
+									active_tab === MONOLITHIC.TABS.DELAY_LIST ||
+									active_tab === MONOLITHIC.TABS.DELAY_CREATE
+								}
+								data-testid="data-input-2"
+								type={'number'}
+								className="form-control form-control-sm "
+								onChange={(selectedDay) => selectRotationDate(parseInt(selectedDay.target.value))}
+								value={rotation_day}
+							/>
+						</div>
+					</Hidden>
 					<Button
-						disabled={cranes_loading || !active_crane || !active_level}
+						disabled={
+							cranes_loading ||
+							!active_crane ||
+							!active_level ||
+							active_tab === MONOLITHIC.TABS.DELAY_LIST ||
+							active_tab === MONOLITHIC.TABS.DELAY_CREATE
+						}
 						size={'sm'}
 						onClick={() => incrementDay()}
 						className={'mb-3'}
@@ -131,6 +167,7 @@ function Structural_Inputs({
 
 const mapStateToProps = (state) => ({
 	cranes: state.Odbiory.OdbioryComponent.MONOLITHIC.cranes,
+	active_tab: state.Odbiory.OdbioryComponent.MONOLITHIC.active_tab,
 	active_crane: state.Odbiory.OdbioryComponent.MONOLITHIC.active_crane,
 	levels: state.Odbiory.OdbioryComponent.MONOLITHIC.levels,
 	active_level: state.Odbiory.OdbioryComponent.MONOLITHIC.active_level,

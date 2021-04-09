@@ -7,9 +7,9 @@ const USER_PROJECTS = gql`
 				id
 				name
 			}
-            warbud_apps{
-                name
-            }
+			warbud_apps {
+				name
+			}
 			project {
 				id
 				name
@@ -118,6 +118,29 @@ const GET_STATUSES = gql`
 	}
 `;
 
+const GET_DELAYS = gql`
+	query getAllAcceptanceDalays($us: ID) {
+		acceptanceDelays(where: { user: $us }) {
+			id
+			commentary
+			level {
+				name
+			}
+			crane {
+				name
+			}
+			user {
+                email
+			}
+			date
+			created_at
+			causes {
+				id
+			}
+		}
+	}
+`;
+
 const GET_ACCEPTANCE_TERMS = gql`
 	query getAcceptanceTerms($p: ID!) {
 		acceptanceTerms(where: { project: $p }) {
@@ -172,6 +195,30 @@ const GET_ALL_WORKERS = gql`
 	}
 `;
 
+const GET_WORK_TIME_EVIDENCE = gql`
+	query GetWorkTimeEvidence($worker: ID, $start: Date, $end: Date) {
+		workersLogWorkTimeEvidences(where: { worker: $worker, date_gte: $start, date_lte: $end }) {
+			id
+			date
+			worked_time
+			project {
+				id
+			}
+		}
+	}
+`;
+
+const GET_ALL_CREW_SUMMARIES = gql`
+	query GetAllCrewSummaries($crw: ID, $start: Date, $end: Date, $own: ID, $proj: ID) {
+		workersLogCrewSummaries(where: { crew: $crw, startDate: $start, endDate: $end, owner: $own, project: $proj }) {
+			id
+			workers {
+				id
+			}
+		}
+	}
+`;
+
 export default {
 	USER_DATA,
 	GET_ALL_ACCEPTANCE_JOBS,
@@ -179,9 +226,12 @@ export default {
 	ACCEPTANCE_OBJECTS_COUNT,
 	WARBUD_CRANES,
 	GET_STATUSES,
+	GET_DELAYS,
 	GET_ACCEPTANCE_TERMS,
 	GET_DELAY_CAUSES,
 	USER_PROJECTS,
 	GET_ALL_CREWS,
 	GET_ALL_WORKERS,
+	GET_WORK_TIME_EVIDENCE,
+	GET_ALL_CREW_SUMMARIES,
 };

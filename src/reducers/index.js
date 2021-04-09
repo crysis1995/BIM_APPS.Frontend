@@ -17,5 +17,5 @@ const rootReducer = combineReducers({
 	CMSLogin,
 	WorkersLog: WorkersLog.reducer,
 });
-const rootEpic = combineEpics(OdbioryEpics, AutodeskLoginEpic);
+const rootEpic = combineEpics(OdbioryEpics, AutodeskLoginEpic, WorkersLog.epics);
 export { rootReducer, rootEpic };

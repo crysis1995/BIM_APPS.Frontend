@@ -1,6 +1,5 @@
 import { config } from '../../config';
 
-
 export default class RestAPIService {
 	constructor(accessToken) {
 		this.accessToken = accessToken;
@@ -10,6 +9,22 @@ export default class RestAPIService {
 		let options = {};
 		if (this.accessToken) {
 			options.headers = {
+				Authorization: `Bearer ${this.accessToken}`,
+			};
+		}
+		return fetch(`${baseUrl}${url}`, options).then((e) => e.json());
+	}
+	fetchClientPost(url, body, baseUrl = config.bim_apps_api.url) {
+		let options = {
+			method: 'POST',
+			body: JSON.stringify(body),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+		if (this.accessToken) {
+			options.headers = {
+				...options.headers,
 				Authorization: `Bearer ${this.accessToken}`,
 			};
 		}
@@ -36,6 +51,18 @@ export default class RestAPIService {
 		},
 		getDelayCauses: () => {
 			return this.fetchClient(`/acceptance-delay-causes`);
+		},
+	};
+	WORKERS_LOG = {
+		GENERAL: {
+			fetchWorkersMap: () => {
+				return this.fetchClient(`/ax-synchro`);
+			},
+		},
+		WORK_TIME_EVIDENCE: {
+			CreateOrUpdate: (body) => {
+				return this.fetchClientPost('/workers-log-work-time-evidences/create_or_update', body);
+			},
 		},
 	};
 }

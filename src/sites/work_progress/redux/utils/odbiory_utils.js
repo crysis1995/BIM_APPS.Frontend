@@ -163,18 +163,6 @@ export function filterTree(
 				}
 			}
 		} else {
-			// switch (true) {
-			// 	case object_planned_day > actual_day:
-			// 		addNextDay(forge_id);
-			// 		break;
-			// 	case object_planned_day < actual_day:
-			// 		addPreviousDay(forge_id);
-			// 		break;
-			// 	case object_planned_day === actual_day:
-			// 		addActualDay(forge_id, revit_id);
-			// 		break;
-			// 	default:
-			// 		break;
 			forge_id && visible_elements.add(forge_id);
 			if (object_planned_day > actual_day) {
 				forge_id && colored_elements.set(forge_id, memoized_hexToRgba(future.color, future.alpha, true));
