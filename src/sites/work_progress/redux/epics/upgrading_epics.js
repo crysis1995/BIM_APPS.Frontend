@@ -86,7 +86,7 @@ const handleInitSetStatus = (action$, state$) =>
 	action$.pipe(
 		ofType(UPGRADING_SET_STATUSES_INITIALIZER),
 		withLatestFrom(state$),
-		switchMap(([{ selectedElements, status, rotation_day }, state]) => {
+		switchMap(([{ selectedElements, status, rotation_day,choose_date }, state]) => {
 			const api = new GraphQLAPIService();
 			const objects = state.Odbiory.Upgrading.MONOLITHIC.byRevitId;
 			const new_status = Object.values(state.Odbiory.OdbioryComponent.MONOLITHIC.statuses).filter(
@@ -100,7 +100,7 @@ const handleInitSetStatus = (action$, state$) =>
 								from(
 									api.MONOLITHIC.createStatus(
 										objects[revit_id].id,
-										new Date().toISOString(),
+										choose_date,
 										user,
 										new_status.id,
 									),
@@ -110,9 +110,6 @@ const handleInitSetStatus = (action$, state$) =>
 						of(checkObjectsGroupTerms(selectedElements)),
 				  )
 				: EMPTY;
-			// } else {
-			// 	return EMPTY;
-			// }
 		}),
 	);
 

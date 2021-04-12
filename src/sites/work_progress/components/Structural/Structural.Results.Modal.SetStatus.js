@@ -8,6 +8,9 @@ import { MONOLITHIC } from '../../redux/types/constans';
 import Selector from '../../../../components/Selector';
 import { selectedItemsParamsSummary } from './Structural.Results.Selector';
 
+
+
+
 function SetStatus({ selectedItemsParamsSummary, selectedElements, initSetStatus, rotation_day, statuses_options }) {
 	return (
 		<div className="p-2">

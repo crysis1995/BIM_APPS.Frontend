@@ -24,14 +24,22 @@ export function createNewDelay(crane_id, level_id, rotation_day, selected_cases,
 		commentary,
 	};
 }
-export function initCreateNewDelay(crane_id, level_id, rotation_day, selected_cases, commentary) {
+export function initCreateNewDelay({
+	crane_id,
+	level_id,
+	// rotation_day,
+	selected_cases,
+	commentary,
+	date,
+}) {
 	return {
 		type: DELAYS_CREATE_NEW_INIT,
 		crane_id,
 		level_id,
-		rotation_day,
+		// rotation_day,
 		selected_cases,
 		commentary,
+		date,
 	};
 }
 

@@ -32,9 +32,9 @@ const CREATE_STATUS = gql`
 `;
 
 const CREATE_DELAY = gql`
-	mutation createDelay($u: ID, $c: String, $rd: ID, $cs: [ID], $l: ID, $cr: ID) {
+	mutation createDelay($u: ID, $c: String, $dt: Date, $cs: [ID], $l: ID, $cr: ID) {
 		createAcceptanceDelay(
-			input: { data: { user: $u, commentary: $c, rotation_day: $rd, causes: $cs, level: $l, crane: $cr } }
+			input: { data: { user: $u, commentary: $c, date: $dt, causes: $cs, level: $l, crane: $cr } }
 		) {
 			acceptanceDelay {
 				id

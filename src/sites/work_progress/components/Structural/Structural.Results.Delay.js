@@ -3,7 +3,6 @@ import { Button, Col, Form, ListGroup, Row, Tab } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Loader from '../../../../components/Loader';
 import { initCreateNewDelay } from '../../redux/actions/delays_actions';
-import { MONOLITHIC } from '../../redux/types/constans';
 
 const baseMargin = 25;
 

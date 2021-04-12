@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Loader from '../../../../components/Loader';
 import { initialiseModal } from '../../../../components/Modal/redux/actions';
 import { handleSelectedElements } from '../../redux/actions/upgrading_actions';
-import SetStatus from './Structural.Results.Modal.SetStatus';
+import SetStatusModal from './Modal/SetStatus';
 import ShowParameters from './Structural.Results.Modal.ShowParameters';
 import ResultTable from './Structural.Results.Table';
 
 function Realisation({ initialiseModal, handleSelectedElements, data_loading }) {
+	const [showModal, setShowModal] = useState(false);
 	const variant = 'light';
 	return (
 		<>
@@ -61,7 +62,8 @@ function Realisation({ initialiseModal, handleSelectedElements, data_loading }) 
 				<Button
 					className={'float-right'}
 					variant={'success'}
-					onClick={() => initialiseModal('Awansowanie', <SetStatus />)}>
+					// onClick={() => initialiseModal('Awansowanie', <SetStatus />)}
+					onClick={() => setShowModal(true)}>
 					<svg
 						width="1em"
 						height="1em"
@@ -70,11 +72,11 @@ function Realisation({ initialiseModal, handleSelectedElements, data_loading }) 
 						fill="currentColor"
 						xmlns="http://www.w3.org/2000/svg">
 						<path
-							fill-rule="evenodd"
+							fillRule="evenodd"
 							d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"
 						/>
 						<path
-							fill-rule="evenodd"
+							fillRule="evenodd"
 							d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"
 						/>
 					</svg>
@@ -85,6 +87,7 @@ function Realisation({ initialiseModal, handleSelectedElements, data_loading }) 
 			<Col xs={12} className="h-100" style={{ overflowY: 'auto', maxHeight: 500 }}>
 				{data_loading ? <Loader height={'100px'} /> : <ResultTable />}
 			</Col>
+			<SetStatusModal setShow={setShowModal} show={showModal} />
 		</>
 	);
 }

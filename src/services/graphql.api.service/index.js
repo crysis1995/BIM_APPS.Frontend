@@ -69,16 +69,20 @@ export default class GraphQLAPIService {
 				(e) => e.data.createAcceptanceObjectStatus.acceptanceObjectStatus.id,
 			);
 		},
+		getDelays: (user_id) => {
+			const { GET_DELAYS } = this.query;
+			return this.queryClient(GET_DELAYS, { us: user_id }).then((e) => e.data.acceptanceDelays);
+		},
 		getStatuses: () => {
 			const { GET_STATUSES } = this.query;
 			return this.queryClient(GET_STATUSES).then((e) => e.data.acceptanceStatuses);
 		},
-		createDelay: (user, commentary, rotation_day_id, causes_array, level, crane) => {
+		createDelay: (user, commentary, date, causes_array, level, crane) => {
 			const { CREATE_DELAY } = this.mutation;
 			return this.mutateClient(CREATE_DELAY, {
 				u: user,
 				c: commentary,
-				rd: rotation_day_id,
+				dt: date,
 				cs: causes_array,
 				l: level,
 				cr: crane,
