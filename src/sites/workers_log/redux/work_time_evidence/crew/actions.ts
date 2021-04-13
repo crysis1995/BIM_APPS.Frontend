@@ -18,6 +18,9 @@ const CrewActions: ICrewActions = {
 		type: WorkersLogActions.WorkTimeEvidence.Crew.FETCH_CREW_SUMMARIES_END,
 		payload: { crew_summary },
 	}),
+	createCrewSummary: () => ({
+		type: WorkersLogActions.WorkTimeEvidence.Crew.CREATE_CREW_SUMMARY,
+	}),
 	updateCrewSummary: (crew_summary) => ({
 		type: WorkersLogActions.WorkTimeEvidence.Crew.UPDATE_CREW_SUMMARY,
 		payload: { crew_summary },

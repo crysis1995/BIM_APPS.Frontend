@@ -28,7 +28,7 @@ export default class RestAPIService {
 				Authorization: `Bearer ${this.accessToken}`,
 			};
 		}
-		return fetch(`${baseUrl}${url}`, options).then((e) => e.json());
+		return fetch(`${baseUrl}${url}`, options);
 	}
 	GENERAL = {
 		getAccessToken: () => {
@@ -61,7 +61,17 @@ export default class RestAPIService {
 		},
 		WORK_TIME_EVIDENCE: {
 			CreateOrUpdate: (body) => {
-				return this.fetchClientPost('/workers-log-work-time-evidences/create_or_update', body);
+				return this.fetchClientPost('/workers-log-work-time-evidences/create_or_update', body).then((e) =>
+					e.json(),
+				);
+			},
+			GenerateFinancialRaport: ({ project_id, user_id, start_date, end_date }) => {
+				return this.fetchClientPost('/raports-generator/workers-log-evidence', {
+					project_id,
+					user_id,
+					start_date,
+					end_date,
+				});
 			},
 		},
 	};

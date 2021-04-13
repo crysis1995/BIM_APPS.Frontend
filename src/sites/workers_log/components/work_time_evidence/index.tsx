@@ -13,10 +13,11 @@ import WorkerTypeSelector from './SelectorComponents/WorkerTypeSelector';
 import CrewSelectorComponent from './SelectorComponents/CrewSelectorComponent';
 import MonthsSelectorComponent from './SelectorComponents/MonthsSelectorComponent';
 import AddWorkerComponent from './AddWorkerComponent';
-import RaportGeneratorButton from './RaportGeneratorButton';
 import WorkersListComponents from './ViewComponents/WorkersListComponent';
 import HeadersComponent from './ViewComponents/HeadersComponent';
 import './table.css';
+import RaportGenerators from './RaportGenerators';
+import '../../redux/work_time_evidence/general/utils/OpenSans-Regular-normal';
 
 dayjs.extend(arraySupport);
 dayjs.extend(localeData);
@@ -35,7 +36,6 @@ type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 function WorkTimeEvidence(props: Props) {
 	const [workerInit, addWorkerInit] = useState(false);
-
 	return (
 		<>
 			<Col className={'p-3'}>
@@ -43,10 +43,10 @@ function WorkTimeEvidence(props: Props) {
 					<WorkerTypeSelector />
 					<CrewSelectorComponent />
 					<MonthsSelectorComponent />
-					<RaportGeneratorButton />
+					<RaportGenerators />
 				</Row>
 				<Row noGutters={true} className="border-top">
-					<Table size={'sm'} hover={true} borderless={true}>
+					<Table size={'sm'} hover={true} borderless={true} id={'printable-report-area'}>
 						<HeadersComponent addWorkerInit={addWorkerInit} workerInit={workerInit} />
 						<tbody>
 							<WorkersListComponents />
