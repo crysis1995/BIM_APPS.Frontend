@@ -1,6 +1,5 @@
 import { GeneralActionTypes, IGeneralAction } from './types/actions';
-import { ReturnTypeFromInterface } from '../worker/types/actions';
-import { Notification } from '../../../../../components/Notification/redux/types';
+import { Notification } from '../../../../../components/Notification/types';
 import { GeneralState } from './types/state';
 import { combineEpics, Epic } from 'redux-observable';
 import WorkersLogActions from '../../types';
@@ -16,8 +15,9 @@ import './utils/Lato-Regular-normal';
 import html2canvas from 'html2canvas';
 import CrewActions from '../crew/actions';
 import { CrewActionsTypes } from '../crew/types/actions';
+import { ReturnTypeFromInterface } from '../../../../../types/ReturnTypeFromInterface';
 
-type ActionType = GeneralActionTypes | ReturnTypeFromInterface<Notification.IActions> | CrewActionsTypes;
+type ActionType = GeneralActionTypes | ReturnTypeFromInterface<Notification.Redux.IActions> | CrewActionsTypes;
 export type RootState = {
 	CMSLogin: {
 		user: { id: { id: string } };

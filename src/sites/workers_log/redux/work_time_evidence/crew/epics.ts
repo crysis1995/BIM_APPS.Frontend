@@ -14,18 +14,19 @@ import { CreateWorkersLogCrewSummaryResponse, GetAllCrewSummariesResponse } from
 import { ExtractRequestData } from './utils/ExtractRequestData';
 import { GeneralActionTypes, IGeneralAction } from '../general/types/actions';
 import { PrepareDataForReducer } from './utils/PrepareDataForReducer';
-import { ReturnTypeFromInterface, WorkersActionTypes } from '../worker/types/actions';
+import { WorkersActionTypes } from '../worker/types/actions';
 import TimeEvidenceActions from '../time_evidence/actions';
 import { TimeEvidenceActionTypes } from '../time_evidence/types/actions';
 import NotificationActions from '../../../../../components/Notification/redux/actions';
-import { Notification } from '../../../../../components/Notification/redux/types';
+import { Notification } from '../../../../../components/Notification/types';
+import { ReturnTypeFromInterface } from '../../../../../types/ReturnTypeFromInterface';
 
 type ActionType =
 	| CrewActionsTypes
 	| GeneralActionTypes
 	| WorkersActionTypes
 	| TimeEvidenceActionTypes
-	| ReturnTypeFromInterface<Notification.IActions>;
+	| ReturnTypeFromInterface<Notification.Redux.IActions>;
 export type RootState = {
 	CMSLogin: {
 		user: { id: { id: string } };

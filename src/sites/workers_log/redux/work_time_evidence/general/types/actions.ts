@@ -1,8 +1,8 @@
 import { WORKER_TYPES } from '../../../constants';
 import WorkersLogActions from '../../../types';
-import { ReturnTypeFromInterface } from '../../worker/types/actions';
 import { Dayjs } from 'dayjs';
 import { ERaportType } from './payload';
+import { ReturnTypeFromInterface } from '../../../../../../types/ReturnTypeFromInterface';
 
 export interface IGeneralAction {
 	selectWorkerType: (
