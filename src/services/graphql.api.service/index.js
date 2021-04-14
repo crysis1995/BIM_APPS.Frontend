@@ -137,6 +137,17 @@ export default class GraphQLAPIService {
 					end: end_date,
 				});
 			},
+			CreateCrewSummary: async ({ crew, range, user, workers = [], project }) => {
+				const { CREATE_CREW_SUMMARY } = this.mutation;
+				return this.mutateClient(CREATE_CREW_SUMMARY, {
+					crw: crew,
+					start: range.start,
+					end: range.end,
+					own: user,
+					work: workers,
+					proj: project,
+				});
+			},
 			UpdateCrewSummary: async ({ crew_summary, workers }) => {
 				const { UPDATE_CREW_SUMMARY } = this.mutation;
 				return this.mutateClient(UPDATE_CREW_SUMMARY, { crewSummary: crew_summary, work: workers });

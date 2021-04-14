@@ -3,6 +3,10 @@ import WorkersLogActions from '../../types';
 import { Dayjs } from 'dayjs';
 
 const GeneralActions: IGeneralAction = {
+	generateRaportStart: (type) => ({
+		payload: { type },
+		type: WorkersLogActions.WorkTimeEvidence.General.GENERATE_RAPORT_START,
+	}),
 	selectWorkerType: (worker_type) => ({
 		payload: { worker_type },
 		type: WorkersLogActions.WorkTimeEvidence.General.SELECT_WORKER_TYPE,

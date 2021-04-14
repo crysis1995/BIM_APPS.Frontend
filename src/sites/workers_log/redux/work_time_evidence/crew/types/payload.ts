@@ -18,6 +18,12 @@ export interface GetAllCrewSummariesResponse {
 	workersLogCrewSummaries: WorkersLogCrewSummaryResponse[];
 }
 
+export interface CreateWorkersLogCrewSummaryResponse {
+	createWorkersLogCrewSummary: {
+		workersLogCrewSummary: WorkersLogCrewSummaryResponse;
+	};
+}
+
 export interface WorkersLogCrewSummaryResponse {
 	id: string;
 	workers: { id: WorkerPayload['id'] }[];
