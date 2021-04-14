@@ -90,38 +90,31 @@ const CREATE_HOUSE_CREW = gql`
 `;
 
 const CREATE_WORK_TIME_EVIDENCE = gql`
-    mutation CreateWorkTimeEvidence(
-        $date: Date
-        $workedFor: Int
-        $engineer: ID
-        $proj: ID
-        $work: ID
-    ) {
-        createWorkersLogWorkTimeEvidence(
-            input: {
-                data: {
-                    date: $date
-                    worked_time: $workedFor
-                    filling_engineer: $engineer
-                    project: $proj
-                    worker: $work
-                }
-            }
-        ) {
-            workersLogWorkTimeEvidence {
-                id
-                date
-                worker {
-                    id
-                }
-                worked_time
-                project {
-                    id
-                }
-            }
-        }
-    }
-
+	mutation CreateWorkTimeEvidence($date: Date, $workedFor: Int, $engineer: ID, $proj: ID, $work: ID) {
+		createWorkersLogWorkTimeEvidence(
+			input: {
+				data: {
+					date: $date
+					worked_time: $workedFor
+					filling_engineer: $engineer
+					project: $proj
+					worker: $work
+				}
+			}
+		) {
+			workersLogWorkTimeEvidence {
+				id
+				date
+				worker {
+					id
+				}
+				worked_time
+				project {
+					id
+				}
+			}
+		}
+	}
 `;
 
 const UPDATE_WORK_TIME_EVIDENCE = gql`
@@ -161,28 +154,28 @@ const CREATE_CREW_SUMMARY = gql`
 		) {
 			workersLogCrewSummary {
 				id
+				workers {
+					id
+				}
 			}
 		}
 	}
 `;
 
 const UPDATE_CREW_SUMMARY = gql`
-	mutation UpdateCrewSummary(
-		$crewSummary: ID!
-		$work: [ID]
-	) {
+	mutation UpdateCrewSummary($crewSummary: ID!, $work: [ID]) {
 		updateWorkersLogCrewSummary(
 			input: {
 				where: { id: $crewSummary }
-#				data: { crew: $crw, startDate: $start, endDate: $end, owner: $own, workers: $work, project: $proj }
-				data: {  workers: $work }
+				#				data: { crew: $crw, startDate: $start, endDate: $end, owner: $own, workers: $work, project: $proj }
+				data: { workers: $work }
 			}
 		) {
 			workersLogCrewSummary {
-                id
-                workers {
-                    id
-                }
+				id
+				workers {
+					id
+				}
 			}
 		}
 	}

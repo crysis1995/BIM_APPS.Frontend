@@ -1,5 +1,5 @@
 /*table {*/
-/*	overflow-x: hidden;*/
+/*	overflow-x: visible;*/
 /*	overflow-y: hidden;*/
 /*}*/
 
@@ -17,8 +17,9 @@
 /*	position: absolute;*/
 /*	background-color: #eeeeee;*/
 /*	left: 0;*/
-/*	top: -5000px;*/
-/*	height: 10000px;*/
-/*	width: 100%;*/
+/*    right: 0;*/
+/*	top: -100%;*/
+/*    bottom: -100%;*/
+/*	!*width: 100%;*!*/
 /*	z-index: -1;*/
 /*}*/

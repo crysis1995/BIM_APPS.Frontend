@@ -2,6 +2,7 @@ import WorkersLogActions from '../../../types';
 import { CrewPayload, CrewSummary } from './payload';
 import { ReturnTypeFromInterface } from '../../worker/types/actions';
 import { CrewSummariesData } from '../utils/ExtractRequestData';
+import { Dayjs } from 'dayjs';
 
 export interface ICrewActions {
 	addCrew: () => {
@@ -41,6 +42,9 @@ export interface ICrewActions {
 	) => {
 		type: typeof WorkersLogActions.WorkTimeEvidence.Crew.FETCH_CREW_SUMMARIES_END;
 		payload: { crew_summary: typeof crew_summary };
+	};
+	createCrewSummary: () => {
+		type: typeof WorkersLogActions.WorkTimeEvidence.Crew.CREATE_CREW_SUMMARY;
 	};
 	updateCrewSummary: (
 		crew_summary: CrewSummary | null,

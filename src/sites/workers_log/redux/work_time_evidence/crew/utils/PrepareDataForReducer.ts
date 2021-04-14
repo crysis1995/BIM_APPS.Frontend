@@ -1,11 +1,17 @@
-import { CrewSummary, GetAllCrewSummariesResponse, WorkersLogCrewSummaryResponse } from '../types/payload';
+import {
+	CreateWorkersLogCrewSummaryResponse,
+	CrewSummary,
+	GetAllCrewSummariesResponse,
+	WorkersLogCrewSummaryResponse,
+} from '../types/payload';
 
 export function PrepareDataForReducer(
 	data:
 		| GetAllCrewSummariesResponse
 		| {
 				workersLogCrewSummary: WorkersLogCrewSummaryResponse;
-		  },
+		  }
+		| CreateWorkersLogCrewSummaryResponse,
 ): CrewSummary | null {
 	if ('workersLogCrewSummary' in data) {
 		if (data.workersLogCrewSummary) {
@@ -14,6 +20,11 @@ export function PrepareDataForReducer(
 				workers: data.workersLogCrewSummary.workers.map((value) => value.id),
 			};
 		} else return null;
+	} else if ('createWorkersLogCrewSummary' in data) {
+		return {
+			id: data.createWorkersLogCrewSummary.workersLogCrewSummary.id,
+			workers: data.createWorkersLogCrewSummary.workersLogCrewSummary.workers.map((val) => val.id),
+		};
 	} else {
 		if (data.workersLogCrewSummaries[0])
 			return {

@@ -1,7 +1,7 @@
 import { CrewActionsTypes, ICrewActions } from './types/actions';
 import { combineEpics, Epic, ofType } from 'redux-observable';
 import WorkersLogActions from '../../types';
-import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
+import { filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { combineLatest, concat, EMPTY, from, of } from 'rxjs';
 import { GraphQLData, WorkersLogCrewsData } from '../worker/types/payload';
 import CrewActions from './actions';
@@ -10,15 +10,22 @@ import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import { CrewState } from './types/state';
 import { WorkersState } from '../worker/types/state';
 import { GeneralState } from '../general/types/state';
-import { GetAllCrewSummariesResponse } from './types/payload';
+import { CreateWorkersLogCrewSummaryResponse, GetAllCrewSummariesResponse } from './types/payload';
 import { ExtractRequestData } from './utils/ExtractRequestData';
 import { GeneralActionTypes, IGeneralAction } from '../general/types/actions';
 import { PrepareDataForReducer } from './utils/PrepareDataForReducer';
-import { WorkersActionTypes } from '../worker/types/actions';
+import { ReturnTypeFromInterface, WorkersActionTypes } from '../worker/types/actions';
 import TimeEvidenceActions from '../time_evidence/actions';
 import { TimeEvidenceActionTypes } from '../time_evidence/types/actions';
+import NotificationActions from '../../../../../components/Notification/redux/actions';
+import { Notification } from '../../../../../components/Notification/redux/types';
 
-type ActionType = CrewActionsTypes | GeneralActionTypes | WorkersActionTypes | TimeEvidenceActionTypes;
+type ActionType =
+	| CrewActionsTypes
+	| GeneralActionTypes
+	| WorkersActionTypes
+	| TimeEvidenceActionTypes
+	| ReturnTypeFromInterface<Notification.IActions>;
 export type RootState = {
 	CMSLogin: {
 		user: { id: { id: string } };
@@ -78,9 +85,74 @@ const OnFetchCrewSummariesStart: Epic<ActionType, ActionType, RootState> = ($act
 					new GraphQLAPIService().WorkersLog.WorkTimeEvidence.GetAllCrewSummaries(
 						response.payload.data,
 					) as Promise<GraphQLData<GetAllCrewSummariesResponse>>,
-				).pipe(map((response) => CrewActions.fetchCrewSummariesEnd(PrepareDataForReducer(response.data)))),
+				).pipe(
+					map((response) => {
+						let crewSummariesData = PrepareDataForReducer(response.data);
+						if (crewSummariesData) return CrewActions.fetchCrewSummariesEnd(crewSummariesData);
+						else return CrewActions.createCrewSummary();
+					}),
+				),
 			),
 		),
+	);
+
+const OnCreateCrewSummary: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
+	action$.pipe(
+		filter(
+			(data): data is ReturnType<ICrewActions['createCrewSummary']> =>
+				data.type === WorkersLogActions.WorkTimeEvidence.Crew.CREATE_CREW_SUMMARY,
+		),
+		withLatestFrom(state$),
+		mergeMap(([_, state]) => {
+			function TakeDataFromStore(
+				store: RootState,
+			): {
+				crew: string;
+				range: { start: string; end: string };
+				user: string;
+				workers: string[];
+				project: string;
+			} {
+				if (
+					store.WorkersLog.WorkTimeEvidence.Crews.actual &&
+					store.WorkersLog.WorkTimeEvidence.General.calendar.view_range.start &&
+					store.WorkersLog.WorkTimeEvidence.General.calendar.view_range.end
+				) {
+					return {
+						crew: store.WorkersLog.WorkTimeEvidence.Crews.actual,
+						user: store.CMSLogin.user.id.id,
+						project: store.CMSLogin.project.id.toString(),
+						workers: [],
+						range: {
+							start: store.WorkersLog.WorkTimeEvidence.General.calendar.view_range.start,
+							end: store.WorkersLog.WorkTimeEvidence.General.calendar.view_range.end,
+						},
+					};
+				}
+				throw new Error(
+					'Nie można utworzyć podsumowania brygady na wybrany miesiąc. Zalecany kontakt z administratorem!',
+				);
+			}
+
+			const API = new GraphQLAPIService();
+			try {
+				return concat(
+					from(
+						API.WorkersLog.WorkTimeEvidence.CreateCrewSummary(TakeDataFromStore(state)) as Promise<
+							GraphQLData<CreateWorkersLogCrewSummaryResponse>
+						>,
+					).pipe(map((response) => CrewActions.fetchCrewSummariesEnd(PrepareDataForReducer(response.data)))),
+				);
+			} catch (err) {
+				return of(
+					NotificationActions.showNotification({
+						title: 'Błąd!',
+						message: err.message,
+						triggered_time: new Date(),
+					}),
+				);
+			}
+		}),
 	);
 
 const OnFetchCrewSummariesEnd: Epic<ActionType, ActionType, RootState> = (action$) =>
@@ -97,4 +169,10 @@ const OnFetchCrewSummariesEnd: Epic<ActionType, ActionType, RootState> = (action
 		),
 	);
 
-export default combineEpics(OnFetchCrewStart, OnChooseCrew, OnFetchCrewSummariesStart, OnFetchCrewSummariesEnd);
+export default combineEpics(
+	OnFetchCrewStart,
+	OnChooseCrew,
+	OnFetchCrewSummariesStart,
+	OnCreateCrewSummary,
+	OnFetchCrewSummariesEnd,
+);

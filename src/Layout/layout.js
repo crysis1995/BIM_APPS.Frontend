@@ -6,6 +6,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { logUserIfValid } from '../components/CMSLogin/redux/actions';
 import Loader from '../components/Loader';
 import ModalComponent from '../components/Modal/component';
+import NotificationComponent from '../components/Notification';
 
 // todo zrobić sidebar
 
@@ -35,6 +36,7 @@ class Layout extends React.Component {
 							paddingRight: 0,
 						}}>
 						<Header {...this.props} />
+						<NotificationComponent />
 						<ModalComponent />
 						<Row
 							noGutters

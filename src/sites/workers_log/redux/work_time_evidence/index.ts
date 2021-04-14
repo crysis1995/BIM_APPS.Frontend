@@ -12,5 +12,5 @@ export default {
 		General: General.reducer,
 		TimeEvidence: TimeEvidence.reducer,
 	}),
-	epics: combineEpics(Crews.epics, Workers.epics, TimeEvidence.epics),
+	epics: combineEpics(Crews.epics, Workers.epics, TimeEvidence.epics, General.epics),
 };

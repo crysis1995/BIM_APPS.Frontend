@@ -11,11 +11,11 @@ function App() {
 	return (
 		<BrowserRouter basename="/bim_apps">
 			<React.Suspense fallback={<Loader />}>
-				<NotificationComponent>
+				{/*<NotificationComponent>*/}
 					<Switch>
 						<Route path="/" name="Home" component={Layout} />
 					</Switch>
-				</NotificationComponent>
+				{/*</NotificationComponent>*/}
 			</React.Suspense>
 		</BrowserRouter>
 	);
