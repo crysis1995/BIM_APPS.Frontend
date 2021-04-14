@@ -8,6 +8,9 @@ import {
 import { EditingData } from './state';
 
 export interface ITimeEvidence {
+	setInitial: () => {
+		type: typeof WorkersLogActions.WorkTimeEvidence.TimeEvidence.SET_INITIAL;
+	};
 	fetchWorkerWorkEvidenceStart: (
 		worker_id: string[],
 	) => {

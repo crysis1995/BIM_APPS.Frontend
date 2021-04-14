@@ -25,6 +25,7 @@ const CrewActions: ICrewActions = {
 		type: WorkersLogActions.WorkTimeEvidence.Crew.UPDATE_CREW_SUMMARY,
 		payload: { crew_summary },
 	}),
+	cleanSummary: () => ({ type: WorkersLogActions.WorkTimeEvidence.Crew.CLEAN_SUMMARY }),
 };
 
 export default CrewActions;

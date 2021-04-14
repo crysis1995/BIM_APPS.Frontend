@@ -31,6 +31,7 @@ export interface ICrewActions {
 		type: typeof WorkersLogActions.WorkTimeEvidence.Crew.FETCH_ERROR;
 		payload: { error: typeof error };
 	};
+
 	fetchCrewSummariesStart: (
 		data: CrewSummariesData,
 	) => {
@@ -51,6 +52,9 @@ export interface ICrewActions {
 	) => {
 		type: typeof WorkersLogActions.WorkTimeEvidence.Crew.UPDATE_CREW_SUMMARY;
 		payload: { crew_summary: typeof crew_summary };
+	};
+	cleanSummary: () => {
+		type: typeof WorkersLogActions.WorkTimeEvidence.Crew.CLEAN_SUMMARY;
 	};
 }
 

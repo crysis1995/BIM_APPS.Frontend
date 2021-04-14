@@ -1,8 +1,6 @@
 import { ITimeEvidence, TimeEvidenceActionTypes } from './types/actions';
 import { ISummaryByDate, ISummaryByWorker, TimeEvidenceState } from './types/state';
 import WorkersLogActions from '../../types';
-import { UpdateWorkerTimeSucceedResponse, WorkersLogWorkTimeEvidenceResponse } from './types/payload';
-import { TimeEvidence } from './types/types';
 import { AddToAll } from './utils/AddToAll';
 import { AddToWorkEvidence } from './utils/AddToWorkEvidence';
 import { AddToAllWorkersAndDates } from './utils/AddToAllWorkersAndDates';
@@ -76,6 +74,8 @@ function OnFetchWorkerTimeEvidenceFinishAll(state: TimeEvidenceState) {
 
 function TimeEvidenceReducer(state = INITIAL_STATE, action: TimeEvidenceActionTypes) {
 	switch (action.type) {
+		case WorkersLogActions.WorkTimeEvidence.TimeEvidence.SET_INITIAL:
+			return { ...INITIAL_STATE };
 		case WorkersLogActions.WorkTimeEvidence.TimeEvidence.FETCH_WORKER_TIME_EVIDENCE_START:
 			return { ...state, loading: true };
 		case WorkersLogActions.WorkTimeEvidence.TimeEvidence.FETCH_WORKER_TIME_EVIDENCE_FINISH_ALL:

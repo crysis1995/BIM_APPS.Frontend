@@ -21,16 +21,11 @@ function CrewReducer(state: CrewState = INITIAL_STATE, action: CrewActionsTypes)
 		case WorkersLogActions.WorkTimeEvidence.Crew.FETCH_CREW_SUMMARIES_START:
 			return { ...state, loading_summary: true };
 		case WorkersLogActions.WorkTimeEvidence.Crew.FETCH_CREW_SUMMARIES_END:
-			return {
-				...state,
-				loading_summary: false,
-				summary: action.payload.crew_summary,
-			};
+			return { ...state, loading_summary: false, summary: action.payload.crew_summary };
 		case WorkersLogActions.WorkTimeEvidence.Crew.UPDATE_CREW_SUMMARY:
-			return {
-				...state,
-				summary: action.payload.crew_summary,
-			};
+			return { ...state, summary: action.payload.crew_summary };
+		case WorkersLogActions.WorkTimeEvidence.Crew.CLEAN_SUMMARY:
+			return { ...state, summary: null };
 		default:
 			return state;
 	}
