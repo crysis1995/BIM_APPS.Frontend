@@ -2,6 +2,7 @@ import { WORKER_TYPES } from '../../../constants';
 import WorkersLogActions from '../../../types';
 import { ReturnTypeFromInterface } from '../../worker/types/actions';
 import { Dayjs } from 'dayjs';
+import { ERaportType } from './payload';
 
 export interface IGeneralAction {
 	selectWorkerType: (
@@ -16,6 +17,15 @@ export interface IGeneralAction {
 	) => {
 		type: typeof WorkersLogActions.WorkTimeEvidence.General.SET_CALENDAR;
 		payload: { days: typeof days };
+	};
+
+	generateRaportStart: (
+		type: ERaportType,
+	) => {
+		type: typeof WorkersLogActions.WorkTimeEvidence.General.GENERATE_RAPORT_START;
+		payload: {
+			type: typeof type;
+		};
 	};
 }
 

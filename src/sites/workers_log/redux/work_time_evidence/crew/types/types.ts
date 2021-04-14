@@ -14,5 +14,6 @@ export enum Crew {
 	CHOOSE = 'workers_log__CHOOSE_CREW',
 	ADD = 'workers_log__ADD_CREW',
 
-	UPDATE_CREW_SUMMARY = "workers_log__UPDATE_CREW_SUMMARY"
+	UPDATE_CREW_SUMMARY = 'workers_log__UPDATE_CREW_SUMMARY',
+	CREATE_CREW_SUMMARY = 'workers_log__CREATE_CREW_SUMMARY',
 }

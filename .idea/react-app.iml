@@ -9,5 +9,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="AUTODESK" level="project" />
+    <orderEntry type="module" module-name="BACKEND" />
   </component>
 </module>
