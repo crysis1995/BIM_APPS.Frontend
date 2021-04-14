@@ -19,9 +19,19 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 
 const mapStateToProps = (state: {
+	CMSLogin: {
+		user: { id: { id: string } };
+		project: { id: string };
+		credentials: {
+			access_token: string;
+		};
+	};
 	Odbiory: { Delays: { MONOLITHIC: { delay_causes_all: { [key: string]: { id: number; name: string } } } } };
 }) => ({
 	all_delays: state.Odbiory.Delays.MONOLITHIC.delay_causes_all,
+	user_id:state.CMSLogin.user.id.id,
+	project_id:state.CMSLogin.project.id,
+	token:state.CMSLogin.credentials.access_token
 });
 
 const mapDispatchToProps = { initCreateNewDelay };
@@ -46,7 +56,7 @@ function ListDelay(props: Props) {
 	useEffect(() => {
 		const fetchData = async () => {
 			setLoading(true);
-			const data: DelayCauseResponse[] = await new GraphQLAPIService().MONOLITHIC.getDelays();
+			const data: DelayCauseResponse[] = await new GraphQLAPIService(props.token).MONOLITHIC.getDelays(props);
 			setDaleyCauses(data);
 			const { start, end } = getDateRangeFromData(data);
 			choosedBy === FilterBy.Range &&

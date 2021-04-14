@@ -69,9 +69,9 @@ export default class GraphQLAPIService {
 				(e) => e.data.createAcceptanceObjectStatus.acceptanceObjectStatus.id,
 			);
 		},
-		getDelays: (user_id) => {
+		getDelays: ( { user_id, project_id }) => {
 			const { GET_DELAYS } = this.query;
-			return this.queryClient(GET_DELAYS, { us: user_id }).then((e) => e.data.acceptanceDelays);
+			return this.queryClient(GET_DELAYS, { us: user_id,proj:project_id }).then((e) => e.data.acceptanceDelays);
 		},
 		getStatuses: () => {
 			const { GET_STATUSES } = this.query;
