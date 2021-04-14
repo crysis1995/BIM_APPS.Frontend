@@ -10,22 +10,20 @@ import {
 	USER_PASSWORD_RESET,
 	USER_SET_CURRENT_PROJECT,
 } from './actions';
+import { CMSLogin } from '../type';
 
-export const initialState = {
-	user: { id: null, username: null, email: null, projects: {}, project_roles: {} },
-	error: '',
-	info: '',
-	credentials: {
-		access_token: null,
-		expires_in: null,
-	},
-	project: { id: null },
+export const INITIAL_STATE: CMSLogin.Redux.Store = {
+	user: null,
+	error: null,
+	info: null,
+	credentials: null,
+	project: null,
 	is_login: false,
 	loading: false,
 	permissions: [],
 };
 
-function setUserData(state, { user: { username, email }, projects }) {
+function setUserData(state: CMSLogin.Redux.Store, { user: { username, email }, projects }) {
 	const { _project, project_roles, warbud_apps } = projects.reduce(
 		(prev, acc) => {
 			prev._project[acc.project.id] = acc.project;
@@ -48,22 +46,22 @@ function setUserData(state, { user: { username, email }, projects }) {
 	};
 }
 
-function addPermissions(state, { permissions }) {
+function addPermissions(state: CMSLogin.Redux.Store, { permissions }) {
 	if (!Array.isArray(permissions)) permissions = [permissions];
 	const filteredPermissions = permissions.filter((perm) => !state.permissions.includes(perm));
 	return { ...state, permissions: [...state.permissions, ...filteredPermissions] };
 }
 
-function deletePermissions(state, { permissions }) {
+function deletePermissions(state: CMSLogin.Redux.Store, { permissions }) {
 	if (!Array.isArray(permissions)) permissions = [permissions];
 	const filteredPermissions = state.permissions.filter((perm) => !permissions.includes(perm));
 	return { ...state, permissions: filteredPermissions };
 }
 
-const CMSLoginReducer = (state = initialState, action) => {
+const CMSLoginReducer = (state = INITIAL_STATE, action: CMSLogin.Redux.Actions) => {
 	switch (action.type) {
 		case SET_INITIAL:
-			return initialState;
+			return INITIAL_STATE;
 		case USER_FETCH_DATA:
 			return setUserData(state, action);
 		case USER_SET_CURRENT_PROJECT:
@@ -77,40 +75,26 @@ const CMSLoginReducer = (state = initialState, action) => {
 				},
 			};
 		case USER_LOGIN_ERROR:
-			return {
-				...state,
-				loading: false,
-				error: action.error,
-			};
+			return { ...state, loading: false, error: action.error };
 		case USER_LOGIN_END:
 			return {
 				...state,
 				loading: false,
 				is_login: true,
 				user: {
-					id: action.user,
+					id: action.payload.user.id,
 				},
-				error: initialState.error,
+				error: INITIAL_STATE.error,
 				credentials: {
-					access_token: action.credentials,
+					access_token: action.payload.credentials,
 				},
 			};
 		case USER_LOGIN_START:
-			return {
-				...state,
-				loading: true,
-			};
+			return { ...state, loading: true };
 		case USER_LOGOUT:
-			return {
-				is_login: false,
-				...initialState,
-			};
+			return { ...INITIAL_STATE };
 		case USER_PASSWORD_RESET:
-			return {
-				...state,
-				is_login: true,
-				info: action.info,
-			};
+			return { ...state, is_login: true, info: action.info };
 		case USER_ADD_PERMISSIONS:
 			return addPermissions(state, action);
 		case USER_DELETE_PERMISSIONS:

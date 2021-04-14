@@ -1,5 +1,4 @@
-import { CrewPayload } from '../../crew/types/payload';
-import { WORKER_TYPES } from "../../../constants";
+import { WORKER_TYPES } from '../../../constants';
 
 export interface WorkerPayload {
 	id: string;
@@ -28,10 +27,6 @@ export interface WorkersLogWorker {
 	warbud_id: string;
 	is_house_worker: boolean;
 	name?: string;
-}
-
-export interface GraphQLData<T> {
-	data: T;
 }
 
 export interface WorkersLogCrewsData {

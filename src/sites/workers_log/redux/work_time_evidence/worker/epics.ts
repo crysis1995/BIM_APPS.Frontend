@@ -2,7 +2,7 @@ import { combineEpics, Epic, ofType } from 'redux-observable';
 import { IWorkersAction, WorkersActionTypes } from './types/actions';
 import WorkersLogActions from '../../types';
 import { EMPTY, from } from 'rxjs';
-import { GraphQLData, IWarbudWorkersMap, WorkersLogWorkersData } from './types/payload';
+import { IWarbudWorkersMap, WorkersLogWorkersData } from './types/payload';
 import { filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import WorkersAction from './actions';
 import RestAPIService from '../../../../../services/rest.api.service';
@@ -14,6 +14,7 @@ import { GQLUpdateCrewSummary } from '../crew/types/payload';
 import CrewActions from '../crew/actions';
 import { CrewActionsTypes } from '../crew/types/actions';
 import { PrepareDataForReducer } from '../crew/utils/PrepareDataForReducer';
+import { GraphQLData } from '../../../../../types/graphQLData';
 
 type ActionType = WorkersActionTypes | TimeEvidenceActionTypes | CrewActionsTypes;
 

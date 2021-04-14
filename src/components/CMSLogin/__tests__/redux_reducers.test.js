@@ -9,16 +9,16 @@ import {
 	userLogoutEnd,
 	userResetPassword,
 } from '../redux/actions';
-import CMSLoginReducer, { initialState } from '../redux/reducers';
+import CMSLoginReducer, { INITIAL_STATE } from '../redux/reducers';
 
 describe('CMS LOGIN REDUCER', () => {
 	test('return initial state', () => {
-		expect(CMSLoginReducer(undefined, {})).toEqual(initialState);
+		expect(CMSLoginReducer(undefined, {})).toEqual(INITIAL_STATE);
 	});
 	test('USER_LOGIN_START action', () => {
 		const action = userLoginStart();
 		const state = {
-			...initialState,
+			...INITIAL_STATE,
 		};
 		expect(CMSLoginReducer(state, action)).toEqual({ ...state, loading: true });
 	});
@@ -27,7 +27,7 @@ describe('CMS LOGIN REDUCER', () => {
 		const credentials = 'test token';
 		const action = userLoginEnd(user, credentials);
 		const state = {
-			...initialState,
+			...INITIAL_STATE,
 			loading: true,
 		};
 		expect(CMSLoginReducer(state, action)).toEqual({
@@ -37,7 +37,7 @@ describe('CMS LOGIN REDUCER', () => {
 			user: {
 				id: user,
 			},
-			error: initialState.error,
+			error: INITIAL_STATE.error,
 			credentials: {
 				access_token: credentials,
 			},
@@ -47,7 +47,7 @@ describe('CMS LOGIN REDUCER', () => {
 		const error = 'error';
 		const action = userLoginError(error);
 		const state = {
-			...initialState,
+			...INITIAL_STATE,
 			loading: true,
 		};
 		expect(CMSLoginReducer(state, action)).toEqual({
@@ -60,7 +60,7 @@ describe('CMS LOGIN REDUCER', () => {
 		const error = 'error';
 		const action = userLogoutEnd(error);
 		const state = {
-			...initialState,
+			...INITIAL_STATE,
 			is_login: true,
 			user: {
 				id: '1',
@@ -78,7 +78,7 @@ describe('CMS LOGIN REDUCER', () => {
 		const info = 'info';
 		const action = userResetPassword(info);
 		const state = {
-			...initialState,
+			...INITIAL_STATE,
 			is_login: true,
 			user: {
 				id: '1',
@@ -99,7 +99,7 @@ describe('CMS LOGIN REDUCER', () => {
 		const project_roles = [];
 		const action = setUserData({ username, email, project_roles });
 		const state = {
-			...initialState,
+			...INITIAL_STATE,
 			user: {
 				id: '1',
 			},
@@ -120,7 +120,7 @@ describe('CMS LOGIN REDUCER', () => {
 		const name = [];
 		const action = setCurrentProject(project_id, urn, name);
 		const state = {
-			...initialState,
+			...INITIAL_STATE,
 		};
 		expect(CMSLoginReducer(state, action)).toEqual({
 			...state,
@@ -136,7 +136,7 @@ describe('CMS LOGIN REDUCER', () => {
 			const permissions = 'test.perm';
 			const action = addPermissions(permissions);
 			const state = {
-				...initialState,
+				...INITIAL_STATE,
 			};
 			expect(CMSLoginReducer(state, action)).toEqual({
 				...state,
@@ -147,7 +147,7 @@ describe('CMS LOGIN REDUCER', () => {
 			const permissions = ['test.perm', 'test.perm.2'];
 			const action = addPermissions(permissions);
 			const state = {
-				...initialState,
+				...INITIAL_STATE,
 			};
 			expect(CMSLoginReducer(state, action)).toEqual({
 				...state,
@@ -158,7 +158,7 @@ describe('CMS LOGIN REDUCER', () => {
 			const permissions = 'test.perm';
 			const action = addPermissions(permissions);
 			const state = {
-				...initialState,
+				...INITIAL_STATE,
 				permissions: ['test'],
 			};
 			expect(CMSLoginReducer(state, action)).toEqual({
@@ -169,7 +169,7 @@ describe('CMS LOGIN REDUCER', () => {
 		test('multiple permission - when duplicates', () => {
 			const action = addPermissions(['test.perm', 'test.perm.2']);
 			const state = {
-				...initialState,
+				...INITIAL_STATE,
 				permissions: ['test', 'test.perm'],
 			};
 			expect(CMSLoginReducer(state, action)).toEqual({
@@ -182,7 +182,7 @@ describe('CMS LOGIN REDUCER', () => {
 		test('delete single permission', () => {
 			const action = deletePermissions('test.perm');
 			const state = {
-				...initialState,
+				...INITIAL_STATE,
 				permissions: ['test', 'test.perm'],
 			};
 			expect(CMSLoginReducer(state, action)).toEqual({
@@ -193,7 +193,7 @@ describe('CMS LOGIN REDUCER', () => {
 		test('delete many permission', () => {
 			const action = deletePermissions(['test.perm', 'test.perms.2']);
 			const state = {
-				...initialState,
+				...INITIAL_STATE,
 				permissions: ['test', 'test.perm', 'test.perms.2'],
 			};
 			expect(CMSLoginReducer(state, action)).toEqual({
@@ -204,7 +204,7 @@ describe('CMS LOGIN REDUCER', () => {
 		test('delete many permission - when any exist', () => {
 			const action = deletePermissions(['test.perm', 'test.perms.2']);
 			const state = {
-				...initialState,
+				...INITIAL_STATE,
 				permissions: ['test'],
 			};
 			expect(CMSLoginReducer(state, action)).toEqual({
@@ -215,7 +215,7 @@ describe('CMS LOGIN REDUCER', () => {
 		test('delete many permission - when one exist and one not', () => {
 			const action = deletePermissions(['test.perm', 'test.perms.2']);
 			const state = {
-				...initialState,
+				...INITIAL_STATE,
 				permissions: ['test', 'test.perm'],
 			};
 			expect(CMSLoginReducer(state, action)).toEqual({

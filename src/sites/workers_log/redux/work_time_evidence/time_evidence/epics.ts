@@ -4,7 +4,6 @@ import { debounceTime, delay, filter, map, mergeMap, switchMap, withLatestFrom }
 import { ITimeEvidence, TimeEvidenceActionTypes } from './types/actions';
 import WorkersLogActions from '../../types';
 import { concat, from, of } from 'rxjs';
-import { GraphQLData } from '../worker/types/payload';
 import {
 	GetWorkerTimeEvidenceResponse,
 	UpdateWorkerTimeAbortedResponse,
@@ -14,6 +13,7 @@ import {
 import TimeEvidenceActions from './actions';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import RestAPIService from '../../../../../services/rest.api.service';
+import { GraphQLData } from '../../../../../types/graphQLData';
 
 type ActionType = TimeEvidenceActionTypes;
 

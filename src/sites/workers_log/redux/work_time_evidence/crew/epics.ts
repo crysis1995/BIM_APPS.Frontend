@@ -3,7 +3,7 @@ import { combineEpics, Epic, ofType } from 'redux-observable';
 import WorkersLogActions from '../../types';
 import { filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { combineLatest, concat, EMPTY, from, of } from 'rxjs';
-import { GraphQLData, WorkersLogCrewsData } from '../worker/types/payload';
+import { WorkersLogCrewsData } from '../worker/types/payload';
 import CrewActions from './actions';
 import { normalize } from '../../../../../utils/normalize';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
@@ -20,6 +20,7 @@ import { TimeEvidenceActionTypes } from '../time_evidence/types/actions';
 import NotificationActions from '../../../../../components/Notification/redux/actions';
 import { Notification } from '../../../../../components/Notification/types';
 import { ReturnTypeFromInterface } from '../../../../../types/ReturnTypeFromInterface';
+import { GraphQLData } from '../../../../../types/graphQLData';
 
 type ActionType =
 	| CrewActionsTypes

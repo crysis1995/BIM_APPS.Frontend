@@ -1,33 +1,45 @@
 import { graphQLClient } from '../index';
 import MUTATION from './CONSTANTS/mutation';
 import QUERY from './CONSTANTS/query';
+import { CMSLogin } from '../../components/CMSLogin/type';
+import { LoginType } from './CONSTANTS/Mutations/Login.type';
+import ApolloClient, { FetchPolicy } from 'apollo-client';
+import { NormalizedCacheObject } from '@apollo/client';
 
 export default class GraphQLAPIService {
-	constructor(access_token, client = graphQLClient, query = QUERY, mutation = MUTATION) {
+	private client: ApolloClient<NormalizedCacheObject>;
+	private readonly query: any;
+	private readonly mutation: any;
+	constructor(
+		access_token: CMSLogin.Payload.Credentials['access_token'],
+		client = graphQLClient,
+		query = QUERY,
+		mutation = MUTATION,
+	) {
 		this.client = client(access_token);
 		this.query = query;
 		this.mutation = mutation;
 	}
-	fetchPolicy = 'no-cache';
+	fetchPolicy: FetchPolicy = 'no-cache';
 
-	login(identifier, password) {
+	login(credentials: LoginType.Request) {
 		const { LOGIN } = this.mutation;
-		return this.client.mutate({
+		return this.client.mutate<LoginType.Response, LoginType.Request>({
 			mutation: LOGIN,
-			variables: { i: identifier, p: password },
+			variables: credentials,
 			fetchPolicy: this.fetchPolicy,
 		});
 	}
 
-	queryClient(query, variables, fetchPolicy = this.fetchPolicy) {
-		return this.client.query({
+	queryClient<Response, Request>(query, variables, fetchPolicy = this.fetchPolicy) {
+		return this.client.query<Response, Request>({
 			query,
 			variables,
 			fetchPolicy,
 		});
 	}
-	mutateClient(mutation, variables, fetchPolicy = this.fetchPolicy) {
-		return this.client.mutate({
+	mutateClient<Response, Request>(mutation, variables, fetchPolicy = this.fetchPolicy) {
+		return this.client.mutate<Response, Request>({
 			mutation,
 			variables,
 			fetchPolicy,
