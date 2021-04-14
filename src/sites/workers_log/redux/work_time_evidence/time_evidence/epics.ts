@@ -1,6 +1,6 @@
 import { combineEpics, Epic } from 'redux-observable';
 import { RootState } from '../crew/epics';
-import { filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { debounceTime, delay, filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { ITimeEvidence, TimeEvidenceActionTypes } from './types/actions';
 import WorkersLogActions from '../../types';
 import { concat, from, of } from 'rxjs';
@@ -55,8 +55,9 @@ const OnEditingWorkedTimeEpic: Epic<ActionType, ActionType, RootState> = (action
 			(data): data is ReturnType<ITimeEvidence['editingWorkedTimeInit']> =>
 				data.type === WorkersLogActions.WorkTimeEvidence.TimeEvidence.EDITING_WORKED_TIME_INIT,
 		),
+		debounceTime(500),
 		withLatestFrom(state$),
-		mergeMap(([value, state]) => {
+		switchMap(([value, state]) => {
 			const { date, worker, hours } = value.payload;
 			const { project, user } = state.CMSLogin;
 			const body: UpdateWorkerTimePayload = {
@@ -78,6 +79,5 @@ const OnEditingWorkedTimeEpic: Epic<ActionType, ActionType, RootState> = (action
 			);
 		}),
 	);
-
 
 export default combineEpics(OnFetchWorkerWorkEvidenceStartEpic, OnEditingWorkedTimeEpic);
