@@ -4,7 +4,7 @@ import { Notification } from '../../../../../components/Notification/redux/types
 import { GeneralState } from './types/state';
 import { combineEpics, Epic } from 'redux-observable';
 import WorkersLogActions from '../../types';
-import { filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { concat, from, of } from 'rxjs';
 import { ERaportType } from './types/payload';
 import RestAPIService from '../../../../../services/rest.api.service';
@@ -14,8 +14,10 @@ import dayjs from 'dayjs';
 import { jsPDF } from 'jspdf';
 import './utils/Lato-Regular-normal';
 import html2canvas from 'html2canvas';
+import CrewActions from '../crew/actions';
+import { CrewActionsTypes } from '../crew/types/actions';
 
-type ActionType = GeneralActionTypes | ReturnTypeFromInterface<Notification.IActions>;
+type ActionType = GeneralActionTypes | ReturnTypeFromInterface<Notification.IActions> | CrewActionsTypes;
 export type RootState = {
 	CMSLogin: {
 		user: { id: { id: string } };
@@ -114,4 +116,22 @@ const OnFetchCrewStart: Epic<ActionType, ActionType, RootState> = ($action, $sta
 		}),
 	);
 
-export default combineEpics(OnFetchCrewStart);
+const OnSelectWorkerType: Epic<ActionType, ActionType, RootState> = ($action) =>
+	$action.pipe(
+		filter(
+			(data): data is ReturnType<IGeneralAction['selectWorkerType']> =>
+				data.type === WorkersLogActions.WorkTimeEvidence.General.SELECT_WORKER_TYPE,
+		),
+		map(() => CrewActions.cleanSummary()),
+	);
+//
+// const OnSetCalendar: Epic<ActionType, ActionType, RootState> = ($action) =>
+// 	$action.pipe(
+// 		filter(
+// 			(data): data is ReturnType<IGeneralAction['setCalendar']> =>
+// 				data.type === WorkersLogActions.WorkTimeEvidence.General.SET_CALENDAR,
+// 		),
+// 		map(() => CrewActions.cleanSummary()),
+// 	);
+
+export default combineEpics(OnFetchCrewStart, OnSelectWorkerType);

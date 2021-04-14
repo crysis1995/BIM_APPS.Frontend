@@ -69,7 +69,9 @@ const OnChooseCrew: Epic<ActionType, ActionType, RootState> = ($action, $state) 
 		withLatestFrom($state),
 		switchMap(([_, state]) => {
 			const requestData = ExtractRequestData(state);
-			return requestData ? of(CrewActions.fetchCrewSummariesStart(requestData)) : EMPTY;
+			return requestData
+				? of(CrewActions.cleanSummary(), CrewActions.fetchCrewSummariesStart(requestData))
+				: of(CrewActions.cleanSummary());
 		}),
 	);
 
@@ -169,10 +171,20 @@ const OnFetchCrewSummariesEnd: Epic<ActionType, ActionType, RootState> = (action
 		),
 	);
 
+const OnCleanSummary: Epic<ActionType, ActionType, RootState> = (action$) =>
+	action$.pipe(
+		filter(
+			(data): data is ReturnType<ICrewActions['cleanSummary']> =>
+				data.type === WorkersLogActions.WorkTimeEvidence.Crew.CLEAN_SUMMARY,
+		),
+		map(() => TimeEvidenceActions.setInitial()),
+	);
+
 export default combineEpics(
 	OnFetchCrewStart,
 	OnChooseCrew,
 	OnFetchCrewSummariesStart,
 	OnCreateCrewSummary,
 	OnFetchCrewSummariesEnd,
+	OnCleanSummary,
 );

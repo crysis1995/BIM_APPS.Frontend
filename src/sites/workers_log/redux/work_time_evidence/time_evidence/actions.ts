@@ -2,6 +2,7 @@ import WorkersLogActions from '../../types';
 import { ITimeEvidence } from './types/actions';
 
 const TimeEvidenceActions: ITimeEvidence = {
+	setInitial: () => ({ type: WorkersLogActions.WorkTimeEvidence.TimeEvidence.SET_INITIAL }),
 	fetchWorkerWorkEvidenceStart: (worker_id) => ({
 		type: WorkersLogActions.WorkTimeEvidence.TimeEvidence.FETCH_WORKER_TIME_EVIDENCE_START,
 		payload: { worker_id },
