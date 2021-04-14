@@ -119,8 +119,8 @@ const GET_STATUSES = gql`
 `;
 
 const GET_DELAYS = gql`
-	query getAllAcceptanceDalays($us: ID) {
-		acceptanceDelays(where: { user: $us }) {
+	query getAllAcceptanceDalays($us: ID, $proj: ID) {
+		acceptanceDelays(where: { user: $us, project: $proj }) {
 			id
 			commentary
 			level {
@@ -130,7 +130,7 @@ const GET_DELAYS = gql`
 				name
 			}
 			user {
-                email
+				email
 			}
 			date
 			created_at
