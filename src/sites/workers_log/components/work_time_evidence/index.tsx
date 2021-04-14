@@ -17,7 +17,6 @@ import WorkersListComponents from './ViewComponents/WorkersListComponent';
 import HeadersComponent from './ViewComponents/HeadersComponent';
 import './table.css';
 import RaportGenerators from './RaportGenerators';
-import '../../redux/work_time_evidence/general/utils/OpenSans-Regular-normal';
 
 dayjs.extend(arraySupport);
 dayjs.extend(localeData);
@@ -46,7 +45,7 @@ function WorkTimeEvidence(props: Props) {
 					<RaportGenerators />
 				</Row>
 				<Row noGutters={true} className="border-top">
-					<Table size={'sm'} hover={true} borderless={true} id={'printable-report-area'}>
+					<Table size={'sm'} bordered id={'printable-report-area'}>
 						<HeadersComponent addWorkerInit={addWorkerInit} workerInit={workerInit} />
 						<tbody>
 							<WorkersListComponents />

@@ -12,6 +12,8 @@ import NotificationActions from '../../../../../components/Notification/redux/ac
 import { saveAs } from 'file-saver';
 import dayjs from 'dayjs';
 import { jsPDF } from 'jspdf';
+import './utils/Lato-Regular-normal';
+import html2canvas from 'html2canvas';
 
 type ActionType = GeneralActionTypes | ReturnTypeFromInterface<Notification.IActions>;
 export type RootState = {
@@ -79,34 +81,18 @@ const OnFetchCrewStart: Epic<ActionType, ActionType, RootState> = ($action, $sta
 					let format: number[];
 					if (y / x >= 1) {
 						orientation = 'p';
-						format = [y + 100, x + 100];
+						format = [y, x];
 					} else {
 						orientation = 'l';
-						format = [x + 100, y + 100];
+						format = [x, y];
 					}
-					//
-					// (function (jsPDFAPI) {
-					// 	var callAddFont = () => {
-					// 		// @ts-ignore
-					// 		this.addFileToVFS('Roboto-regular.tff', font);
-					// 		// @ts-ignore
-					// 		this.addFont('Roboto-regular.tff', 'Roboto-Regular', 'normal');
-					// 	};
-					// 	jsPDFAPI.events.push(['addFonts', callAddFont])
-					// })(jsPDF.API);
-
 					let doc = new jsPDF(orientation, 'px', format);
-
-					return from(
-						doc.html(htmlElement, {
-							x: 50,
-							y: 50,
-						}),
-					).pipe(
+					return from(html2canvas(htmlElement, { scale: 2 })).pipe(
 						mergeMap((pdf) => {
-							doc.addFont('OpenSans-Regular.ttf', 'OpenSans-Regular', 'normal');
-							doc.setFont('OpenSans-Regular');
-							doc.save('test.pdf');
+							const image = pdf.toDataURL('image/png');
+							format = [0, 0, ...format];
+							doc.addImage(image, 'JPEG', format[0], format[1], format[2], format[3]);
+							doc.save('Raport.pdf');
 							return of(
 								NotificationActions.showNotification({
 									title: 'Raport',
@@ -120,7 +106,7 @@ const OnFetchCrewStart: Epic<ActionType, ActionType, RootState> = ($action, $sta
 					return of(
 						NotificationActions.showNotification({
 							title: 'Raport',
-							message: 'Pomyślnie wygenerowano raport',
+							message: 'Niestety, nie można było wygenerować raportu.',
 							triggered_time: new Date(),
 						}),
 					);
