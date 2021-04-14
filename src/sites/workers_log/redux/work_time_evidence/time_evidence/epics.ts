@@ -62,7 +62,7 @@ const OnEditingWorkedTimeEpic: Epic<ActionType, ActionType, RootState> = (action
 			const { project, user } = state.CMSLogin;
 			const body: UpdateWorkerTimePayload = {
 				date,
-				filling_engineer: user.id.id,
+				filling_engineer: user.id,
 				project: project.id,
 				worked_time: hours,
 				worker,

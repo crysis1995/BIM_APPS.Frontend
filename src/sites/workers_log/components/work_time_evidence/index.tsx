@@ -7,8 +7,6 @@ import React, { useState } from 'react';
 import { Col, Row, Table } from 'react-bootstrap';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import { connect } from 'react-redux';
-import { CrewState } from '../../redux/work_time_evidence/crew/types/state';
-import { WorkersState } from '../../redux/work_time_evidence/worker/types/state';
 import WorkerTypeSelector from './SelectorComponents/WorkerTypeSelector';
 import CrewSelectorComponent from './SelectorComponents/CrewSelectorComponent';
 import MonthsSelectorComponent from './SelectorComponents/MonthsSelectorComponent';
@@ -17,6 +15,8 @@ import WorkersListComponents from './ViewComponents/WorkersListComponent';
 import HeadersComponent from './ViewComponents/HeadersComponent';
 import './table.css';
 import RaportGenerators from './RaportGenerators';
+import Loader from '../../../../components/Loader';
+import { RootState } from '../../redux/work_time_evidence/crew/epics';
 
 dayjs.extend(arraySupport);
 dayjs.extend(localeData);
@@ -26,9 +26,15 @@ dayjs.extend(isToday);
  *   TODO - integracja z kalendarzem wolnego wg WARBUDSA
  * */
 
-const mapStateToProps = (state: {
-	WorkersLog: { WorkTimeEvidence: { Crews: CrewState; Workers: WorkersState } };
-}) => ({});
+const mapStateToProps = (state: RootState) => ({
+	loading:
+		state.WorkersLog.WorkTimeEvidence.Crews.loading_summary ||
+		state.WorkersLog.WorkTimeEvidence.Crews.loading ||
+		state.WorkersLog.WorkTimeEvidence.Workers.loading ||
+		state.WorkersLog.WorkTimeEvidence.Workers.loading_map ||
+		state.WorkersLog.WorkTimeEvidence.Workers.loading_workers ||
+		state.WorkersLog.WorkTimeEvidence.General.worker_type
+});
 const mapDispatchToProps = {};
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -45,15 +51,19 @@ function WorkTimeEvidence(props: Props) {
 					<RaportGenerators />
 				</Row>
 				<Row noGutters={true} className="border-top">
-					<Table size={'sm'} bordered id={'printable-report-area'}>
-						<HeadersComponent addWorkerInit={addWorkerInit} workerInit={workerInit} />
-						<tbody>
-							<WorkersListComponents />
-						</tbody>
-						<footer>
-							<AddWorkerComponent show={workerInit} />
-						</footer>
-					</Table>
+					{props.loading ? (
+						<Loader />
+					) : (
+						<Table size={'sm'} bordered id={'printable-report-area'}>
+							<HeadersComponent addWorkerInit={addWorkerInit} workerInit={workerInit} />
+							<tbody>
+								<WorkersListComponents />
+							</tbody>
+							<footer>
+								<AddWorkerComponent show={workerInit} />
+							</footer>
+						</Table>
+					)}
 				</Row>
 			</Col>
 		</>

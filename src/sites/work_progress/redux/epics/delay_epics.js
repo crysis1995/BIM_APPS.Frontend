@@ -23,11 +23,7 @@ export const handleSendDelays = (action$, state$) =>
 		ofType(DELAYS_CREATE_NEW_INIT),
 		withLatestFrom(state$),
 		switchMap(([{ crane_id, level_id, selected_cases, commentary, date }, state]) => {
-			const user_id = state.CMSLogin.user.id
-				? state.CMSLogin.user.id.hasOwnProperty('id')
-					? state.CMSLogin.user.id.id
-					: state.CMSLogin.user.id
-				: null;
+			const user_id = state.CMSLogin.user.id;
 			const crane_name = crane_id && state.Odbiory.OdbioryComponent.MONOLITHIC.cranes[crane_id].name;
 			const level_name = level_id && state.Odbiory.OdbioryComponent.MONOLITHIC.levels[level_id].name;
 			// const rotation_day_id = state.Odbiory.OdbioryComponent.MONOLITHIC.calendar[rotation_day].id;

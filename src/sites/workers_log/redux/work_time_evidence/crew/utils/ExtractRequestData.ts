@@ -11,7 +11,7 @@ export function ExtractRequestData(state: RootState) {
 	let requestData: CrewSummariesData | null = null;
 
 	const crew_id = state.WorkersLog.WorkTimeEvidence.Crews.actual;
-	const user_id = state.CMSLogin.user.id.id;
+	const user_id = state.CMSLogin.user.id;
 	const project_id = state.CMSLogin.project.id;
 	// const start_date = state.WorkersLog.WorkTimeEvidence.General.calendar.view_range.start;
 	const start_date = state.WorkersLog.WorkTimeEvidence.General.calendar.view_range.start;

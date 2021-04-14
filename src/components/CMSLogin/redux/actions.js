@@ -1,7 +1,13 @@
-import GraphQLAPIService from "../../../services/graphql.api.service";
-import { setInitial } from "../../../sites/work_progress/redux/actions";
-import { cleanUserDataInLocalStorage, getUserFromLocalStorage, isExpired, login, resetPasswordAPI, saveUserDataToLocalStorage } from "./utils";
-
+import GraphQLAPIService from '../../../services/graphql.api.service';
+import { setInitial } from '../../../sites/work_progress/redux/actions';
+import {
+	cleanUserDataInLocalStorage,
+	getUserFromLocalStorage,
+	isExpired,
+	login,
+	resetPasswordAPI,
+	saveUserDataToLocalStorage,
+} from './utils';
 
 export const USER_LOGIN_START = 'cmslogin__USER_LOGIN_START';
 export const USER_LOGIN_END = 'cmslogin__USER_LOGIN_END';
@@ -129,7 +135,7 @@ export const logUserIfValid = () => async (dispatch) => {
 	if (data.user && data.user_token && data.projects) {
 		if (!isExpired(data.user_token)) {
 			const { user, projects, user_token } = data;
-			dispatch(userLoginEnd(user, user_token));
+			dispatch(userLoginEnd(user.id, user_token));
 			dispatch(setUserData({ user, projects }));
 			dispatch(setActiveProject());
 		}

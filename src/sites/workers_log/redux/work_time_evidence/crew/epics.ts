@@ -27,9 +27,10 @@ type ActionType =
 	| WorkersActionTypes
 	| TimeEvidenceActionTypes
 	| ReturnTypeFromInterface<Notification.Redux.IActions>;
+
 export type RootState = {
 	CMSLogin: {
-		user: { id: { id: string } };
+		user: { id: string };
 		project: { id: string };
 		credentials: {
 			access_token: string;
@@ -46,7 +47,7 @@ const OnFetchCrewStart: Epic<ActionType, ActionType, RootState> = ($action, $sta
 			from(
 				new GraphQLAPIService().WorkersLog.WorkTimeEvidence.GetAllCrews(
 					state.CMSLogin.project.id,
-					state.CMSLogin.user.id.id,
+					state.CMSLogin.user.id,
 				) as Promise<GraphQLData<WorkersLogCrewsData>>,
 			).pipe(map((response) => CrewActions.fetchCrewEnd(normalize(response.data.workersLogCrews)))),
 		),
@@ -123,7 +124,7 @@ const OnCreateCrewSummary: Epic<ActionType, ActionType, RootState> = (action$, s
 				) {
 					return {
 						crew: store.WorkersLog.WorkTimeEvidence.Crews.actual,
-						user: store.CMSLogin.user.id.id,
+						user: store.CMSLogin.user.id,
 						project: store.CMSLogin.project.id.toString(),
 						workers: [],
 						range: {

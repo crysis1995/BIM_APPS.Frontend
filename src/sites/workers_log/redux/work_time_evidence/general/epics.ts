@@ -20,7 +20,7 @@ import { ReturnTypeFromInterface } from '../../../../../types/ReturnTypeFromInte
 type ActionType = GeneralActionTypes | ReturnTypeFromInterface<Notification.Redux.IActions> | CrewActionsTypes;
 export type RootState = {
 	CMSLogin: {
-		user: { id: { id: string } };
+		user: { id: string };
 		project: { id: string };
 		credentials: {
 			access_token: string;
@@ -32,7 +32,7 @@ export type RootState = {
 function TakeDataFromStore(state: RootState) {
 	return {
 		project_id: state.CMSLogin.project.id,
-		user_id: state.CMSLogin.user.id.id,
+		user_id: state.CMSLogin.user.id,
 		start_date: state.WorkersLog.WorkTimeEvidence.General.calendar.view_range.start,
 		end_date: state.WorkersLog.WorkTimeEvidence.General.calendar.view_range.end,
 	};
