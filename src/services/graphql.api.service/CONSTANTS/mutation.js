@@ -1,47 +1,11 @@
 import { gql } from 'apollo-boost';
 
-const LOGIN = gql`
-	mutation login($i: String!, $p: String!) {
-		login(input: { identifier: $i, password: $p }) {
-			jwt
-			user {
-				id
-			}
-		}
-	}
-`;
 
-const RESET_PASSWORD = gql`
-	mutation resetPassword($u: ID!, $p: String) {
-		updateUser(input: { where: { id: $u }, data: { password: $p } }) {
-			user {
-				id
-			}
-		}
-	}
-`;
 
-const CREATE_STATUS = gql`
-	mutation setStatus($o: ID, $d: DateTime, $u: ID, $s: ID) {
-		createAcceptanceObjectStatus(input: { data: { object: $o, date: $d, user: $u, status: $s } }) {
-			acceptanceObjectStatus {
-				id
-			}
-		}
-	}
-`;
 
-const CREATE_DELAY = gql`
-	mutation createDelay($u: ID, $c: String, $dt: Date, $cs: [ID], $l: ID, $cr: ID) {
-		createAcceptanceDelay(
-			input: { data: { user: $u, commentary: $c, date: $dt, causes: $cs, level: $l, crane: $cr } }
-		) {
-			acceptanceDelay {
-				id
-			}
-		}
-	}
-`;
+
+
+
 const UPDATE_TERM = gql`
 	mutation updateTerms($i: ID!, $RS: DateTime, $PF: DateTime, $RF: DateTime, $PS: DateTime, $obj: [ID]) {
 		updateAcceptanceTerm(

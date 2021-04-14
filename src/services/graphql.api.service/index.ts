@@ -2,9 +2,19 @@ import { graphQLClient } from '../index';
 import MUTATION from './CONSTANTS/mutation';
 import QUERY from './CONSTANTS/query';
 import { CMSLogin } from '../../components/CMSLogin/type';
-import { LoginType } from './CONSTANTS/Mutations/Login.type';
+
 import ApolloClient, { FetchPolicy } from 'apollo-client';
-import { NormalizedCacheObject } from '@apollo/client';
+import { DocumentNode, NormalizedCacheObject } from '@apollo/client';
+import LOGIN, { LoginType } from './CONSTANTS/Mutations/Login';
+import RESET_PASSWORD, { ResetPasswordType } from './CONSTANTS/Mutations/ResetPassword';
+import USER_DATA, { UserDataType } from './CONSTANTS/Queries/UserData';
+import USER_PROJECTS, { UserProjectsType } from './CONSTANTS/Queries/UserProjects';
+import CREATE_STATUS, { CreateStatusType } from './CONSTANTS/Mutations/CreateStatus';
+import CREATE_DELAY, { CreateDelayType } from './CONSTANTS/Mutations/CreateDelay';
+import GET_DELAYS, { GetDelaysType } from './CONSTANTS/Queries/GetDelays';
+import GET_STATUSES, { GetStatusesType } from './CONSTANTS/Queries/GetStatuses';
+import GET_ALL_CREWS, { GetAllCrewsType } from './CONSTANTS/Queries/GetAllCrews';
+import GET_ALL_WORKERS, { GetAllWorkersType } from './CONSTANTS/Queries/GetAllWorkers';
 
 export default class GraphQLAPIService {
 	private client: ApolloClient<NormalizedCacheObject>;
@@ -23,7 +33,6 @@ export default class GraphQLAPIService {
 	fetchPolicy: FetchPolicy = 'no-cache';
 
 	login(credentials: LoginType.Request) {
-		const { LOGIN } = this.mutation;
 		return this.client.mutate<LoginType.Response, LoginType.Request>({
 			mutation: LOGIN,
 			variables: credentials,
@@ -31,14 +40,14 @@ export default class GraphQLAPIService {
 		});
 	}
 
-	queryClient<Response, Request>(query, variables, fetchPolicy = this.fetchPolicy) {
+	queryClient<Response, Request>(query: DocumentNode, variables?: Request, fetchPolicy = this.fetchPolicy) {
 		return this.client.query<Response, Request>({
 			query,
 			variables,
 			fetchPolicy,
 		});
 	}
-	mutateClient<Response, Request>(mutation, variables, fetchPolicy = this.fetchPolicy) {
+	mutateClient<Response, Request>(mutation: DocumentNode, variables: Request, fetchPolicy = this.fetchPolicy) {
 		return this.client.mutate<Response, Request>({
 			mutation,
 			variables,
@@ -46,58 +55,43 @@ export default class GraphQLAPIService {
 		});
 	}
 
-	resetPassword(id, password) {
-		const { RESET_PASSWORD } = this.mutation;
-		return this.mutateClient(RESET_PASSWORD, { p: password, u: id });
+	resetPassword(data: ResetPasswordType.Request) {
+		return this.mutateClient<ResetPasswordType.Response, ResetPasswordType.Request>(RESET_PASSWORD, data);
 	}
 
-	userData(user_id) {
-		const { USER_DATA } = this.query;
-		return this.queryClient(USER_DATA, { i: user_id }).then((e) => e.data.user);
+	userData(data: UserDataType.Request) {
+		return this.queryClient<UserDataType.Response, UserDataType.Request>(USER_DATA, data).then((e) => e.data.user);
 	}
-	getUserProjectRoles(user_id) {
-		const { USER_PROJECTS } = this.query;
-		return this.queryClient(USER_PROJECTS, { i: user_id }).then((e) => e.data.warbudProjUserRoles);
+	getUserProjectRoles(data: UserProjectsType.Request) {
+		return this.queryClient<UserProjectsType.Response, UserProjectsType.Request>(USER_PROJECTS, data).then(
+			(e) => e.data.warbudProjUserRoles,
+		);
 	}
-
-	ARCHITECTURAL = {
-		getAllJobs: () => {
-			const { GET_ALL_ACCEPTANCE_JOBS } = this.query;
-			return this.queryClient(GET_ALL_ACCEPTANCE_JOBS);
-		},
-	};
 
 	MONOLITHIC = {
-		countObjects: (project_id) => {
-			const { ACCEPTANCE_OBJECTS_COUNT } = this.query;
-			return this.queryClient(ACCEPTANCE_OBJECTS_COUNT, { p: project_id }).then(
-				(e) => e.data.acceptanceObjectsConnection.aggregate.totalCount,
+		// countObjects: (project_id) => {
+		// 	const { ACCEPTANCE_OBJECTS_COUNT } = this.query;
+		// 	return this.queryClient(ACCEPTANCE_OBJECTS_COUNT, { p: project_id }).then(
+		// 		(e) => e.data.acceptanceObjectsConnection.aggregate.totalCount,
+		// 	);
+		// },
+		createStatus: (data: CreateStatusType.Request) => {
+			return this.mutateClient<CreateStatusType.Response, CreateStatusType.Request>(CREATE_STATUS, data).then(
+				(e) => e.data?.createAcceptanceObjectStatus.acceptanceObjectStatus.id,
 			);
 		},
-		createStatus: (object_id, date, user_id, status_id) => {
-			const { CREATE_STATUS } = this.mutation;
-			return this.mutateClient(CREATE_STATUS, { o: object_id, d: date, u: user_id, s: status_id }).then(
-				(e) => e.data.createAcceptanceObjectStatus.acceptanceObjectStatus.id,
+		getDelays: (data: GetDelaysType.Request) => {
+			return this.queryClient<GetDelaysType.Response, GetDelaysType.Request>(GET_DELAYS, data).then(
+				(e) => e.data.acceptanceDelays,
 			);
-		},
-		getDelays: ({ user_id, project_id }) => {
-			const { GET_DELAYS } = this.query;
-			return this.queryClient(GET_DELAYS, { us: user_id, proj: project_id }).then((e) => e.data.acceptanceDelays);
 		},
 		getStatuses: () => {
-			const { GET_STATUSES } = this.query;
-			return this.queryClient(GET_STATUSES).then((e) => e.data.acceptanceStatuses);
+			return this.queryClient<GetStatusesType.Response, GetStatusesType.Request>(GET_STATUSES).then(
+				(e) => e.data.acceptanceStatuses,
+			);
 		},
-		createDelay: (user, commentary, date, causes_array, level, crane) => {
-			const { CREATE_DELAY } = this.mutation;
-			return this.mutateClient(CREATE_DELAY, {
-				u: user,
-				c: commentary,
-				dt: date,
-				cs: causes_array,
-				l: level,
-				cr: crane,
-			});
+		createDelay: (data: CreateDelayType.Request) => {
+			return this.mutateClient<CreateDelayType.Response, CreateDelayType.Request>(CREATE_DELAY, data);
 		},
 		updateTerm: (term_id, { REAL_START, PLANNED_FINISH, REAL_FINISH, PLANNED_START, objects }) => {
 			const { UPDATE_TERM } = this.mutation;
@@ -113,16 +107,13 @@ export default class GraphQLAPIService {
 
 	WorkersLog = {
 		WorkTimeEvidence: {
-			GetAllCrews: async (project_id, user_id) => {
-				const { GET_ALL_CREWS } = this.query;
-				return this.queryClient(GET_ALL_CREWS, { proj: project_id, user: user_id });
+			GetAllCrews: (data: GetAllCrewsType.Request) => {
+				return this.queryClient<GetAllCrewsType.Response, GetAllCrewsType.Request>(GET_ALL_CREWS, data);
 			},
 			GetAllWorkers: async () => {
-				const { GET_ALL_WORKERS } = this.query;
-				return this.queryClient(GET_ALL_WORKERS);
+				return this.queryClient<GetAllWorkersType.Response, GetAllWorkersType.Request>(GET_ALL_WORKERS);
 			},
 			CreateHouseCrew: async (project_id, user_id, crew_name, work_type) => {
-				const { CREATE_HOUSE_CREW } = this.mutation;
 				return this.mutateClient(CREATE_HOUSE_CREW, {
 					name: crew_name,
 					user: user_id,
@@ -165,13 +156,4 @@ export default class GraphQLAPIService {
 			},
 		},
 	};
-}
-
-function generateRanges(total, N = 100) {
-	const ranges = Math.ceil(total / N);
-	let arr = [];
-	for (let i = 0; i < ranges; i++) {
-		arr.push(i * N);
-	}
-	return arr;
 }
