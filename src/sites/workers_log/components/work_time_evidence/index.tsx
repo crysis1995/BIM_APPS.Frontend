@@ -33,7 +33,7 @@ const mapStateToProps = (state: RootState) => ({
 		state.WorkersLog.WorkTimeEvidence.Workers.loading ||
 		state.WorkersLog.WorkTimeEvidence.Workers.loading_map ||
 		state.WorkersLog.WorkTimeEvidence.Workers.loading_workers ||
-		state.WorkersLog.WorkTimeEvidence.General.worker_type
+		state.WorkersLog.WorkTimeEvidence.TimeEvidence.loading,
 });
 const mapDispatchToProps = {};
 
@@ -52,7 +52,9 @@ function WorkTimeEvidence(props: Props) {
 				</Row>
 				<Row noGutters={true} className="border-top">
 					{props.loading ? (
-						<Loader />
+						<Col className={'justify-content-center p-5 m-5'}>
+							<Loader height={'400'} />
+						</Col>
 					) : (
 						<Table size={'sm'} bordered id={'printable-report-area'}>
 							<HeadersComponent addWorkerInit={addWorkerInit} workerInit={workerInit} />

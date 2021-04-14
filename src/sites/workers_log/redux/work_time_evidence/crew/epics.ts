@@ -20,6 +20,7 @@ import { TimeEvidenceActionTypes } from '../time_evidence/types/actions';
 import NotificationActions from '../../../../../components/Notification/redux/actions';
 import { Notification } from '../../../../../components/Notification/types';
 import { ReturnTypeFromInterface } from '../../../../../types/ReturnTypeFromInterface';
+import { TimeEvidenceState } from '../time_evidence/types/state';
 
 type ActionType =
 	| CrewActionsTypes
@@ -36,7 +37,14 @@ export type RootState = {
 			access_token: string;
 		};
 	};
-	WorkersLog: { WorkTimeEvidence: { Crews: CrewState; Workers: WorkersState; General: GeneralState } };
+	WorkersLog: {
+		WorkTimeEvidence: {
+			Crews: CrewState;
+			Workers: WorkersState;
+			General: GeneralState;
+			TimeEvidence: TimeEvidenceState;
+		};
+	};
 };
 
 const OnFetchCrewStart: Epic<ActionType, ActionType, RootState> = ($action, $state) =>
