@@ -1,6 +1,7 @@
-import AutodeskLoginReducer from './reducers';
+import reducer from './reducers';
+import epic from './epic';
 
-export { default as AutodeskLoginTypes } from './types';
-export { default as AutodeskLoginActions } from './actions';
-export { default as AutodeskLoginEpic } from './epic';
-export default AutodeskLoginReducer;
+export default {
+	reducer,
+	epic,
+};

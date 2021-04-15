@@ -1,5 +1,6 @@
 import WorkersLogActions from '../../../types';
 import { IWarbudWorkerMapData, WorkerPayload } from './payload';
+import { ReturnTypeFromInterface } from '../../../../../../types/ReturnTypeFromInterface';
 
 export interface IWorkersAction {
 	fetchWorkersStart: () => {
@@ -41,9 +42,5 @@ export interface IWorkersAction {
 		};
 	};
 }
-
-export type ReturnTypeFromInterface<T> = {
-	[K in keyof T]: T[K] extends (...args: any[]) => any ? ReturnType<T[K]> : never;
-}[keyof T];
 
 export type WorkersActionTypes = ReturnTypeFromInterface<IWorkersAction>;

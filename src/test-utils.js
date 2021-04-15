@@ -1,5 +1,5 @@
 import { render as rtlRender } from '@testing-library/react';
-// test-utils.js
+// test-utils.ts
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';

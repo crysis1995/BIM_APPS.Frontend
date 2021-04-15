@@ -57,7 +57,7 @@ export const upgradeJobEpic = (action$, state$) =>
 										state$.value.Odbiory.Upgrading.byJobId[job_id].summary_value[revit_id] * value,
 									),
 									object_type: null, // obecnie niewykorzystywane - w przyszłości ID typu obiektu z bazy danych
-									user: state$.value.CMSLogin.user.id.id, // ID usera z bazy danych - do śledzenia zmian dokonywanych osobowo
+									user: state$.value.CMSLogin.user.id, // ID usera z bazy danych - do śledzenia zmian dokonywanych osobowo
 									objects: state$.value.Odbiory.Upgrading.byJobId[job_id].object_ids[
 										revit_id
 									].map((e) => parseInt(e)), // tablica z ID obiektów, których dotyczy dane awansowanie roboty
@@ -92,7 +92,7 @@ const handleInitSetStatus = (action$, state$) =>
 			const new_status = Object.values(state.Odbiory.OdbioryComponent.MONOLITHIC.statuses).filter(
 				(e) => e.name === status,
 			)[0];
-			const user = state.CMSLogin.user.id.id;
+			const user = state.CMSLogin.user.id;
 			return !!new_status
 				? concat(
 						from(selectedElements).pipe(

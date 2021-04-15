@@ -12,7 +12,7 @@ export default class RestAPIService {
 				Authorization: `Bearer ${this.accessToken}`,
 			};
 		}
-		return fetch(`${baseUrl}${url}`, options).then((e) => e.json());
+		return fetch(`${baseUrl}${url}`, options);
 	}
 	fetchClientPost(url, body, baseUrl = config.bim_apps_api.url) {
 		let options = {
@@ -38,25 +38,27 @@ export default class RestAPIService {
 
 	MONOLITHIC = {
 		initializeTerms: (project_id) => {
-			return this.fetchClient(`/acceptance-terms/getActual?project_id=${project_id}`);
+			return this.fetchClient(`/acceptance-terms/getActual?project_id=${project_id}`).then((e) => e.json());
 		},
 		getAllObjects: async (project_id) => {
-			return this.fetchClient(`/acceptance-objects?_limit=2000&project=${project_id}`);
+			return this.fetchClient(`/acceptance-objects?_limit=2000&project=${project_id}`).then((e) => e.json());
 		},
 		getAccepntaceTerms: (project_id) => {
-			return this.fetchClient(`/acceptance-terms?project=${project_id}`);
+			return this.fetchClient(`/acceptance-terms?project=${project_id}`).then((e) => e.json());
 		},
 		getAllRotationDays: (project_id) => {
-			return this.fetchClient(`/warbud-project-rotation-days/?_limit=1000&_where[project]=${project_id}`);
+			return this.fetchClient(
+				`/warbud-project-rotation-days/?_limit=1000&_where[project]=${project_id}`,
+			).then((e) => e.json());
 		},
 		getDelayCauses: () => {
-			return this.fetchClient(`/acceptance-delay-causes`);
+			return this.fetchClient(`/acceptance-delay-causes`).then((e) => e.json());
 		},
 	};
 	WORKERS_LOG = {
 		GENERAL: {
 			fetchWorkersMap: () => {
-				return this.fetchClient(`/ax-synchro`);
+				return this.fetchClient(`/ax-synchro`).then((e) => e.json());
 			},
 		},
 		WORK_TIME_EVIDENCE: {
