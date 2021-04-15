@@ -1,11 +1,11 @@
 import WorkersLogActions from '../../../types';
-import { ReturnTypeFromInterface } from '../../worker/types/actions';
 import {
 	UpdateWorkerTimeAbortedResponse,
 	UpdateWorkerTimeSucceedResponse,
 	WorkersLogWorkTimeEvidenceResponse,
 } from './payload';
 import { EditingData } from './state';
+import { ReturnTypeFromInterface } from '../../../../../../types/ReturnTypeFromInterface';
 
 export interface ITimeEvidence {
 	setInitial: () => {

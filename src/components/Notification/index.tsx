@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Notification } from './redux/types';
+import { Notification } from './types';
 import Notify from './Notify';
 
-const mapStateToProps = (state: { Notifications: Notification.IStore }) => ({
+const mapStateToProps = (state: { Notifications: Notification.Redux.IStore }) => ({
 	notifications: state.Notifications.notifications,
 });
 

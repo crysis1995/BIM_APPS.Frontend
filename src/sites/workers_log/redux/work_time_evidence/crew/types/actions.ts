@@ -1,8 +1,8 @@
 import WorkersLogActions from '../../../types';
 import { CrewPayload, CrewSummary } from './payload';
-import { ReturnTypeFromInterface } from '../../worker/types/actions';
 import { CrewSummariesData } from '../utils/ExtractRequestData';
 import { Dayjs } from 'dayjs';
+import { ReturnTypeFromInterface } from '../../../../../../types/ReturnTypeFromInterface';
 
 export interface ICrewActions {
 	addCrew: () => {

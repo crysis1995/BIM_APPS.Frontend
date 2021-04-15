@@ -1,13 +1,13 @@
-import { Alert, Button, Col, Form, Row } from "react-bootstrap";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import GraphQLAPIService from "../../../../../../services/graphql.api.service";
-import { connect } from "react-redux";
-import { PL_DICTIONARY, WORKER_TYPES } from "../../../../redux/constants";
+import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import GraphQLAPIService from '../../../../../../services/graphql.api.service';
+import { connect } from 'react-redux';
+import { PL_DICTIONARY, WORKER_TYPES } from '../../../../redux/constants';
 
 type RootState = {
 	CMSLogin: {
-		user: { id: { id: string } };
+		user: { id: string };
 		project: { id: string };
 		credentials: {
 			access_token: string;
@@ -17,7 +17,7 @@ type RootState = {
 
 const mapStateToProps = (state: RootState) => ({
 	token: state.CMSLogin.credentials.access_token,
-	user_id: state.CMSLogin.user.id.id,
+	user_id: state.CMSLogin.user.id,
 	project_id: state.CMSLogin.project.id,
 });
 const mapDispatchToProps = {};

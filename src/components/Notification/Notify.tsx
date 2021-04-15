@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Toast } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { Notification } from './redux/types';
+import { Notification } from './types';
 import NotificationActions from './redux/actions';
 import dayjs from 'dayjs';
 
-const mapStateToProps = (state: { Notifications: Notification.IStore }, componentProps: { id: string }) => ({
+const mapStateToProps = (state: { Notifications: Notification.Redux.IStore }, componentProps: { id: string }) => ({
 	actualNotification: state.Notifications.notifications_detailed[componentProps.id],
 });
 
