@@ -1,9 +1,10 @@
-import { Alert, Button, Col, Form, Row } from "react-bootstrap";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import GraphQLAPIService from "../../../../../../services/graphql.api.service";
-import { connect } from "react-redux";
-import { PL_DICTIONARY, WORKER_TYPES } from "../../../../redux/constants";
+import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import GraphQLAPIService from '../../../../../../services/graphql.api.service';
+import { connect } from 'react-redux';
+import { PL_DICTIONARY, WORKER_TYPES } from '../../../../redux/constants';
+import { WORKERS_LOG__WORKERS_TYPE } from '../../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
 
 type RootState = {
 	CMSLogin: {
@@ -28,20 +29,19 @@ type CrewPayload = {
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-type Inputs = { crewName: string; crewType: string };
+type Inputs = { crewName: string; crewType: WORKERS_LOG__WORKERS_TYPE };
 
 function HouseCrewDBCreator(props: Props) {
 	const [valid, setValid] = useState<boolean | null>(null);
 	const { register, handleSubmit, errors, reset } = useForm<Inputs>();
 	const onSubmit = async (data: Inputs) => {
 		const api = new GraphQLAPIService();
-		const crew = await api.WorkersLog.WorkTimeEvidence.CreateHouseCrew(
-			props.project_id,
-			props.user_id,
-			data.crewName,
-			data.crewType,
-		);
-		console.log(data);
+		const crew = await api.WorkersLog.WorkTimeEvidence.CreateHouseCrew({
+			name: data.crewName,
+			user_id: props.user_id,
+			project_id: props.project_id,
+			work_type: data.crewType,
+		});
 		if (crew) {
 			setValid(true);
 			reset();

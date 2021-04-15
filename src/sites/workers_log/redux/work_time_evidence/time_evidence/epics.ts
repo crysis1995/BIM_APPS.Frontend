@@ -24,15 +24,16 @@ const OnFetchWorkerWorkEvidenceStartEpic: Epic<ActionType, ActionType, RootState
 				data.type === WorkersLogActions.WorkTimeEvidence.TimeEvidence.FETCH_WORKER_TIME_EVIDENCE_START,
 		),
 		withLatestFrom(state$),
-		mergeMap(([data, state]) =>
-			concat(
+		mergeMap(([data, state]) => {
+			let viewRange = state.WorkersLog.WorkTimeEvidence.General.calendar.view_range;
+			return concat(
 				from(data.payload.worker_id).pipe(
 					mergeMap((worker_id) =>
 						from(
 							new GraphQLAPIService().WorkersLog.WorkTimeEvidence.GetWorkerTimeEvidence({
 								worker_id: worker_id,
-								start_date: state.WorkersLog.WorkTimeEvidence.General.calendar.view_range.start,
-								end_date: state.WorkersLog.WorkTimeEvidence.General.calendar.view_range.end,
+								start: new Date(viewRange ? viewRange.start : ''),
+								end: new Date(viewRange ? viewRange.end : ''),
 							}) as Promise<GraphQLData<GetWorkerTimeEvidenceResponse>>,
 						).pipe(
 							map((data) =>
@@ -45,8 +46,8 @@ const OnFetchWorkerWorkEvidenceStartEpic: Epic<ActionType, ActionType, RootState
 					),
 				),
 				of(TimeEvidenceActions.fetchWorkerWorkEvidenceFinish()),
-			),
-		),
+			);
+		}),
 	);
 
 const OnEditingWorkedTimeEpic: Epic<ActionType, ActionType, RootState> = (action$, state$) =>

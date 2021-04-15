@@ -5,9 +5,9 @@ export interface GeneralState {
 	calendar: {
 		by_date: ICalendarByDate | null;
 		view_range: {
-			start: null | string;
-			end: null | string;
-		};
+			start: string;
+			end: string;
+		} | null;
 	};
 }
 

@@ -3,7 +3,6 @@ import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import { connect } from 'react-redux';
 import { initCreateNewDelay } from '../../../redux/actions/delays_actions';
 import Loader from '../../../../../components/Loader';
-import { DelayCauseResponse } from './DelayCauseResponse';
 import { v4 } from 'uuid';
 import dayjs from 'dayjs';
 import { Card, Col, Row } from 'react-bootstrap';
@@ -13,6 +12,7 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import { FilterBy, FilterByOneOrRange } from './FilterByOneOrRange';
 import { getDateRangeFromData } from './GetDateRangeFromData';
 import GenerateExcelRaportButton from './GenerateExcelRaportButton';
+import { GetDelaysType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/GetDelays';
 
 dayjs.extend(isBetween);
 dayjs.extend(isSameOrBefore);
@@ -29,9 +29,9 @@ const mapStateToProps = (state: {
 	Odbiory: { Delays: { MONOLITHIC: { delay_causes_all: { [key: string]: { id: number; name: string } } } } };
 }) => ({
 	all_delays: state.Odbiory.Delays.MONOLITHIC.delay_causes_all,
-	user_id:state.CMSLogin.user.id.id,
-	project_id:state.CMSLogin.project.id,
-	token:state.CMSLogin.credentials.access_token
+	user_id: state.CMSLogin.user.id.id,
+	project_id: state.CMSLogin.project.id,
+	token: state.CMSLogin.credentials.access_token,
 });
 
 const mapDispatchToProps = { initCreateNewDelay };
@@ -40,8 +40,8 @@ type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 function ListDelay(props: Props) {
 	const [loading, setLoading] = useState<boolean>(false);
-	const [delayCauses, setDaleyCauses] = useState<DelayCauseResponse[]>([]);
-	const [filteredDelayCauses, setFilteredDelayCauses] = useState<DelayCauseResponse[]>([]);
+	const [delayCauses, setDaleyCauses] = useState<GetDelaysType.AcceptanceDelay[]>([]);
+	const [filteredDelayCauses, setFilteredDelayCauses] = useState<GetDelaysType.AcceptanceDelay[]>([]);
 
 	const [startSetDay, setStartSetDay] = useState(dayjs().format('YYYY-MM-DD'));
 	const [endSetDay, setEndSetDay] = useState(dayjs().format('YYYY-MM-DD'));
@@ -56,7 +56,7 @@ function ListDelay(props: Props) {
 	useEffect(() => {
 		const fetchData = async () => {
 			setLoading(true);
-			const data: DelayCauseResponse[] = await new GraphQLAPIService(props.token).MONOLITHIC.getDelays(props);
+			const data = await new GraphQLAPIService(props.token).MONOLITHIC.getDelays(props);
 			setDaleyCauses(data);
 			const { start, end } = getDateRangeFromData(data);
 			choosedBy === FilterBy.Range &&

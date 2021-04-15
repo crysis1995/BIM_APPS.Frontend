@@ -4,7 +4,7 @@ import { createHttpLink } from 'apollo-link-http';
 import { config } from '../config';
 import { CMSLogin } from '../components/CMSLogin/type';
 
-const graphQLClient = (access_token: CMSLogin.Payload.Credentials['access_token']) => {
+const graphQLClient = (access_token?: CMSLogin.Payload.Credentials['access_token']) => {
 	var headers = {};
 	if (access_token) {
 		headers = { Authorization: `Bearer ${access_token}` };

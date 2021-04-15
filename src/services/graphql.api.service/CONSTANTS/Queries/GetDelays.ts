@@ -34,11 +34,11 @@ export namespace GetDelaysType {
 	export interface AcceptanceDelay {
 		id: string;
 		commentary: string;
-		level: Crane;
+		level: Level;
 		crane: Crane;
 		user: User;
-		date: null;
-		created_at: Date;
+		date: null | string;
+		created_at: string;
 		causes: Cause[];
 	}
 
@@ -47,6 +47,9 @@ export namespace GetDelaysType {
 	}
 
 	export interface Crane {
+		name: string;
+	}
+	export interface Level {
 		name: string;
 	}
 

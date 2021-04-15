@@ -1,8 +1,8 @@
 import { combineEpics, Epic, ofType } from 'redux-observable';
 import { IWorkersAction, WorkersActionTypes } from './types/actions';
 import WorkersLogActions from '../../types';
-import { EMPTY, from } from 'rxjs';
-import { IWarbudWorkersMap, WorkersLogWorkersData } from './types/payload';
+import { EMPTY, from, of } from 'rxjs';
+import { IWarbudWorkersMap } from './types/payload';
 import { filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import WorkersAction from './actions';
 import RestAPIService from '../../../../../services/rest.api.service';
@@ -10,11 +10,10 @@ import { normalize } from '../../../../../utils/normalize';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import { TimeEvidenceActionTypes } from '../time_evidence/types/actions';
 import { RootState } from '../crew/epics';
-import { GQLUpdateCrewSummary } from '../crew/types/payload';
 import CrewActions from '../crew/actions';
 import { CrewActionsTypes } from '../crew/types/actions';
 import { PrepareDataForReducer } from '../crew/utils/PrepareDataForReducer';
-import { GraphQLData } from '../../../../../types/graphQLData';
+import { UpdateCrewSummaryType } from '../../../../../services/graphql.api.service/CONSTANTS/Mutations/UpdateCrewSummary';
 
 type ActionType = WorkersActionTypes | TimeEvidenceActionTypes | CrewActionsTypes;
 
@@ -32,21 +31,21 @@ const OnFetchWorkersStartEpic: Epic<ActionType, ActionType, any> = (action$) =>
 	action$.pipe(
 		ofType(WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_START),
 		switchMap(() =>
-			from(
-				new GraphQLAPIService().WorkersLog.WorkTimeEvidence.GetAllWorkers() as Promise<
-					GraphQLData<WorkersLogWorkersData>
-				>,
-			).pipe(map((response) => WorkersAction.fetchWorkersEnd(normalize(response.data.workersLogWorkers)))),
+			from(new GraphQLAPIService().WorkersLog.WorkTimeEvidence.GetAllWorkers()).pipe(
+				map((response) => WorkersAction.fetchWorkersEnd(normalize(response.data.workersLogWorkers))),
+			),
 		),
 	);
 
-function ExtrarctToUpdateCrewSummary(action: ReturnType<IWorkersAction['addWorker']>, state: RootState) {
+function ExtrarctToUpdateCrewSummary(
+	action: ReturnType<IWorkersAction['addWorker']>,
+	state: RootState,
+): UpdateCrewSummaryType.Request | undefined {
 	if (state.WorkersLog.WorkTimeEvidence.Crews.summary)
 		return {
-			crew_summary: state.WorkersLog.WorkTimeEvidence.Crews.summary.id,
-			workers: [...state.WorkersLog.WorkTimeEvidence.Crews.summary.workers, action.payload.worker.id],
+			crew_summary_id: state.WorkersLog.WorkTimeEvidence.Crews.summary.id,
+			worker_ids: [...state.WorkersLog.WorkTimeEvidence.Crews.summary.workers, action.payload.worker.id],
 		};
-	return false;
 }
 
 const OnAddWorkerEpic: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
@@ -59,14 +58,16 @@ const OnAddWorkerEpic: Epic<ActionType, ActionType, RootState> = (action$, state
 		mergeMap(([action, state]) => {
 			const data = ExtrarctToUpdateCrewSummary(action, state);
 			if (data)
-				return from(
-					new GraphQLAPIService().WorkersLog.WorkTimeEvidence.UpdateCrewSummary(data) as Promise<
-						GraphQLData<GQLUpdateCrewSummary>
-					>,
-				).pipe(
-					map((response) =>
-						CrewActions.updateCrewSummary(PrepareDataForReducer(response.data.updateWorkersLogCrewSummary)),
-					),
+				return from(new GraphQLAPIService().WorkersLog.WorkTimeEvidence.UpdateCrewSummary(data)).pipe(
+					mergeMap((response) => {
+						if (!!response.data)
+							return of(
+								CrewActions.updateCrewSummary(
+									PrepareDataForReducer(response.data.updateWorkersLogCrewSummary),
+								),
+							);
+						else return EMPTY;
+					}),
 				);
 			else return EMPTY;
 		}),

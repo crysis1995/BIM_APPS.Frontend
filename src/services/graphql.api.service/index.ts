@@ -1,6 +1,4 @@
 import { graphQLClient } from '../index';
-import MUTATION from './CONSTANTS/mutation';
-import QUERY from './CONSTANTS/query';
 import { CMSLogin } from '../../components/CMSLogin/type';
 
 import ApolloClient, { FetchPolicy } from 'apollo-client';
@@ -15,20 +13,17 @@ import GET_DELAYS, { GetDelaysType } from './CONSTANTS/Queries/GetDelays';
 import GET_STATUSES, { GetStatusesType } from './CONSTANTS/Queries/GetStatuses';
 import GET_ALL_CREWS, { GetAllCrewsType } from './CONSTANTS/Queries/GetAllCrews';
 import GET_ALL_WORKERS, { GetAllWorkersType } from './CONSTANTS/Queries/GetAllWorkers';
+import CREATE_HOUSE_CREW, { CreateHouseCrewType } from './CONSTANTS/Mutations/CreateHouseCrew';
+import GET_ALL_CREW_SUMMARIES, { GetAllCrewSummariesType } from './CONSTANTS/Queries/GetAllCrewSummaries';
+import GET_WORK_TIME_EVIDENCE, { GetWorkTimeEvidenceType } from './CONSTANTS/Queries/GetWorkTimeEvidence';
+import CREATE_CREW_SUMMARY, { CreateCrewSummaryType } from './CONSTANTS/Mutations/CreateCrewSummary';
+import UPDATE_CREW_SUMMARY, { UpdateCrewSummaryType } from './CONSTANTS/Mutations/UpdateCrewSummary';
+import UPDATE_TERM, { UpdateTermType } from './CONSTANTS/Mutations/UpdateTerm';
 
 export default class GraphQLAPIService {
 	private client: ApolloClient<NormalizedCacheObject>;
-	private readonly query: any;
-	private readonly mutation: any;
-	constructor(
-		access_token: CMSLogin.Payload.Credentials['access_token'],
-		client = graphQLClient,
-		query = QUERY,
-		mutation = MUTATION,
-	) {
+	constructor(access_token?: CMSLogin.Payload.Credentials['access_token'], client = graphQLClient) {
 		this.client = client(access_token);
-		this.query = query;
-		this.mutation = mutation;
 	}
 	fetchPolicy: FetchPolicy = 'no-cache';
 
@@ -69,12 +64,6 @@ export default class GraphQLAPIService {
 	}
 
 	MONOLITHIC = {
-		// countObjects: (project_id) => {
-		// 	const { ACCEPTANCE_OBJECTS_COUNT } = this.query;
-		// 	return this.queryClient(ACCEPTANCE_OBJECTS_COUNT, { p: project_id }).then(
-		// 		(e) => e.data.acceptanceObjectsConnection.aggregate.totalCount,
-		// 	);
-		// },
 		createStatus: (data: CreateStatusType.Request) => {
 			return this.mutateClient<CreateStatusType.Response, CreateStatusType.Request>(CREATE_STATUS, data).then(
 				(e) => e.data?.createAcceptanceObjectStatus.acceptanceObjectStatus.id,
@@ -93,15 +82,8 @@ export default class GraphQLAPIService {
 		createDelay: (data: CreateDelayType.Request) => {
 			return this.mutateClient<CreateDelayType.Response, CreateDelayType.Request>(CREATE_DELAY, data);
 		},
-		updateTerm: (term_id, { REAL_START, PLANNED_FINISH, REAL_FINISH, PLANNED_START, objects }) => {
-			const { UPDATE_TERM } = this.mutation;
-			let variables = { i: term_id };
-			if (REAL_START) variables.RS = REAL_START;
-			if (PLANNED_FINISH) variables.PF = PLANNED_FINISH;
-			if (REAL_FINISH) variables.RF = REAL_FINISH;
-			if (PLANNED_START) variables.PS = PLANNED_START;
-			if (objects) variables.obj = objects;
-			return this.mutateClient(UPDATE_TERM, variables);
+		updateTerm: (data: UpdateTermType.Request) => {
+			return this.mutateClient<UpdateTermType.Response, UpdateTermType.Request>(UPDATE_TERM, data);
 		},
 	};
 
@@ -110,49 +92,38 @@ export default class GraphQLAPIService {
 			GetAllCrews: (data: GetAllCrewsType.Request) => {
 				return this.queryClient<GetAllCrewsType.Response, GetAllCrewsType.Request>(GET_ALL_CREWS, data);
 			},
-			GetAllWorkers: async () => {
+			GetAllWorkers: () => {
 				return this.queryClient<GetAllWorkersType.Response, GetAllWorkersType.Request>(GET_ALL_WORKERS);
 			},
-			CreateHouseCrew: async (project_id, user_id, crew_name, work_type) => {
-				return this.mutateClient(CREATE_HOUSE_CREW, {
-					name: crew_name,
-					user: user_id,
-					proj: project_id,
-					work_type,
-				});
+			CreateHouseCrew: (data: CreateHouseCrewType.Request) => {
+				return this.mutateClient<CreateHouseCrewType.Response, CreateHouseCrewType.Request>(
+					CREATE_HOUSE_CREW,
+					data,
+				);
 			},
-			GetAllCrewSummaries: async ({ crew_id, start_date, end_date, user_id, project_id }) => {
-				const { GET_ALL_CREW_SUMMARIES } = this.query;
-				return this.queryClient(GET_ALL_CREW_SUMMARIES, {
-					crw: crew_id,
-					start: start_date,
-					end: end_date,
-					own: user_id,
-					proj: project_id,
-				});
+			GetAllCrewSummaries: (data: GetAllCrewSummariesType.Request) => {
+				return this.queryClient<GetAllCrewSummariesType.Response, GetAllCrewSummariesType.Request>(
+					GET_ALL_CREW_SUMMARIES,
+					data,
+				);
 			},
-			GetWorkerTimeEvidence: async ({ worker_id, start_date, end_date }) => {
-				const { GET_WORK_TIME_EVIDENCE } = this.query;
-				return this.queryClient(GET_WORK_TIME_EVIDENCE, {
-					worker: worker_id,
-					start: start_date,
-					end: end_date,
-				});
+			GetWorkerTimeEvidence: (data: GetWorkTimeEvidenceType.Request) => {
+				return this.queryClient<GetWorkTimeEvidenceType.Response, GetWorkTimeEvidenceType.Request>(
+					GET_WORK_TIME_EVIDENCE,
+					data,
+				);
 			},
-			CreateCrewSummary: async ({ crew, range, user, workers = [], project }) => {
-				const { CREATE_CREW_SUMMARY } = this.mutation;
-				return this.mutateClient(CREATE_CREW_SUMMARY, {
-					crw: crew,
-					start: range.start,
-					end: range.end,
-					own: user,
-					work: workers,
-					proj: project,
-				});
+			CreateCrewSummary: (data: CreateCrewSummaryType.Request) => {
+				return this.mutateClient<CreateCrewSummaryType.Response, CreateCrewSummaryType.Request>(
+					CREATE_CREW_SUMMARY,
+					data,
+				);
 			},
-			UpdateCrewSummary: async ({ crew_summary, workers }) => {
-				const { UPDATE_CREW_SUMMARY } = this.mutation;
-				return this.mutateClient(UPDATE_CREW_SUMMARY, { crewSummary: crew_summary, work: workers });
+			UpdateCrewSummary: (data: UpdateCrewSummaryType.Request) => {
+				return this.mutateClient<UpdateCrewSummaryType.Response, UpdateCrewSummaryType.Request>(
+					UPDATE_CREW_SUMMARY,
+					data,
+				);
 			},
 		},
 	};

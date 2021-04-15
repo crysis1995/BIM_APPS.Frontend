@@ -2,12 +2,12 @@ import jwtDecoder from 'jwt-decode';
 import GraphQLAPIService from '../../../services/graphql.api.service';
 
 export const login = async (identifier, password) => {
-	return new GraphQLAPIService().login(identifier, password);
+	return new GraphQLAPIService().login({ name: identifier, password });
 };
 
 export const resetPasswordAPI = async (password, access_token) => {
 	const { id } = jwtDecoder(access_token);
-	return new GraphQLAPIService(access_token).resetPassword(id, password);
+	return new GraphQLAPIService(access_token).resetPassword({ id, password });
 };
 
 export const getUserFromLocalStorage = () => {
