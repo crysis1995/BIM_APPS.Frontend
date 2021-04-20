@@ -16,7 +16,7 @@ export default GET_WORK_TIME_EVIDENCE;
 
 export namespace GetWorkTimeEvidenceType {
 	export type Response = { workersLogWorkTimeEvidences: WorkersLogWorkTimeEvidence[] };
-	export type Request = { worker_id: string; start: Date; end: Date };
+	export type Request = { worker_id: string; start: string; end: string };
 
 	export interface WorkersLogWorkTimeEvidence {
 		id: string;

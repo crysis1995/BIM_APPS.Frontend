@@ -4,16 +4,26 @@ import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import { userLogin } from '../redux/actions';
+import { CMSLogin } from '../type';
+import CMSLoginActions from '../redux/actions';
 
-function Login(props) {
+const mapStateToProps = (state: { CMSLogin: CMSLogin.Redux.Store }) => ({
+	is_login: state.CMSLogin.is_login,
+});
+
+const mapDispatchToProps = {
+	UserLoginStart:CMSLoginActions.UserLoginStart
+};
+
+type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+function Login(props: Props) {
 	const { register, handleSubmit, errors } = useForm();
-	if (props.CMSLogin.is_login) return <Redirect to="/" />;
+	if (props.is_login) return <Redirect to="/" />;
 	else
 		return (
 			<>
 				<Col xs={2} className={'pt-5'}>
-					<Form onSubmit={handleSubmit(props.userLogin)}>
+					<Form onSubmit={handleSubmit(props.UserLoginStart)}>
 						<Form.Group controlId="formBasicEmail">
 							<Form.Label>Email address / Login</Form.Label>
 							<Form.Control
@@ -27,7 +37,9 @@ function Login(props) {
 									},
 								})}
 							/>
-							<Form.Text className="text-danger">{errors.identifier && errors.identifier.message}</Form.Text>
+							<Form.Text className="text-danger">
+								{errors.identifier && errors.identifier.message}
+							</Form.Text>
 						</Form.Group>
 
 						<Form.Group controlId="formBasicPassword">
@@ -48,7 +60,7 @@ function Login(props) {
 						<Form.Group controlId="formBasicCheckbox">
 							<Form.Check name="checkbox" ref={register()} type="checkbox" label="Zapamiętaj mnie" />
 						</Form.Group>
-						{props.CMSLogin.error && <Alert variant={'danger'}>{props.CMSLogin.error}</Alert>}
+						{/*{props.error && <Alert variant={'danger'}>{props.error}</Alert>}*/}
 						<Button className="float-right" variant="primary" type="submit">
 							Zaloguj się
 						</Button>
@@ -57,11 +69,5 @@ function Login(props) {
 			</>
 		);
 }
-
-const mapStateToProps = ({ CMSLogin }) => ({
-	CMSLogin,
-});
-
-const mapDispatchToProps = { userLogin };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

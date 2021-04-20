@@ -1,8 +1,8 @@
 import { gql } from 'apollo-boost';
 
 const LOGIN = gql`
-	mutation login($i: String!, $p: String!) {
-		login(input: { identifier: $i, password: $p }) {
+	mutation login($name: String!, $password: String!) {
+		login(input: { identifier: $name, password: $password }) {
 			jwt
 			user {
 				id

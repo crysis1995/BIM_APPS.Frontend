@@ -84,7 +84,7 @@ const mapStateToProps = ({ Autodesk, Odbiory, CMSLogin }) => ({
 	Autodesk_is_login: Autodesk.isLogin,
 	started: Odbiory.OdbioryComponent.started,
 	CMS_is_login: CMSLogin.is_login,
-	project: CMSLogin.project,
+	project: CMSLogin.actual_project,
 });
 const mapDispatchToProps = { setAcceptanceType };
 export default connect(mapStateToProps, mapDispatchToProps)(AcceptanceLayout);

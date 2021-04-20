@@ -15,7 +15,7 @@ export const GET_ALL_ACCEPTANCE_JOBS = gql`
 		}
 	}
 `;
-export const fetchAllJobsFromAPI = () => new GraphQLAPIService().getAllJobs();
+// export const fetchAllJobsFromAPI = () => new GraphQLAPIService().getAllJobs();
 // return graphQLClient().query({
 // 	query: GET_ALL_ACCEPTANCE_JOBS,
 // 	fetchPolicy: 'no-cache',

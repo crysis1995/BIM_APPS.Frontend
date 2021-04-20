@@ -26,8 +26,8 @@ export namespace CreateCrewSummaryType {
 		user_id: string;
 		project_id: string;
 		worker_ids: string[];
-		start: Date;
-		end: Date;
+		start: string;
+		end: string;
 	};
 
 	export interface CreateWorkersLogCrewSummary {

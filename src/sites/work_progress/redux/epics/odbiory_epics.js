@@ -71,8 +71,8 @@ export const setCranes = (action$, state$) =>
 		switchMap(() => {
 			const GRAPHQL = new GraphQLAPIService();
 			const REST = new RestAPIService();
-			const project = state$.value.CMSLogin.project.id;
-			const cranes = state$.value.CMSLogin.user.projects[project].crane_ranges;
+			const project = state$.value.CMSLogin.actual_project.id;
+			const cranes = state$.value.CMSLogin.projects[project].crane_ranges;
 			return concat(
 				of({ type: ACCEPTANCE_MONOLITHIC_INIT }),
 				of(fetchStatusesStart()),

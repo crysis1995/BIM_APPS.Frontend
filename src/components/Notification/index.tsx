@@ -13,6 +13,8 @@ type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 function NotificationComponent(props: Props) {
 	return (
 		<div
+			aria-live="polite"
+			aria-atomic="true"
 			style={{
 				position: 'absolute',
 				bottom: 50,

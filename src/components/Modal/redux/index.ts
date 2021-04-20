@@ -1,6 +1,5 @@
 import reducer from './reducers';
-import epics from './epic';
-
+import epics from './epics';
 export default {
 	reducer,
 	epics,

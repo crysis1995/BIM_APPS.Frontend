@@ -3,14 +3,14 @@ import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
-import { logUserIfValid } from '../components/CMSLogin/redux/actions';
 import Loader from '../components/Loader';
 import ModalComponent from '../components/Modal/component';
 import NotificationComponent from '../components/Notification';
+import { AutodeskLogin } from '../components/AutodeskLogin/type';
+import { CMSLogin } from '../components/CMSLogin/type';
 
 // todo zrobić sidebar
 
-//components
 const Header = React.lazy(() => import('./header'));
 const WorkProgressLayout = React.lazy(() => import('../sites/work_progress'));
 const WorkAcceptanceLayout = React.lazy(() => import('../sites/work_acceptance'));
@@ -19,10 +19,21 @@ const WorkersLogLayout = React.lazy(() => import('../sites/workers_log'));
 const Login = React.lazy(() => import('../components/CMSLogin/components/login'));
 const Settings = React.lazy(() => import('../components/CMSLogin/components/settings'));
 
-class Layout extends React.Component {
-	componentDidMount() {
-		this.props.logUserIfValid();
-	}
+const mapStateToProps = (state: {
+	Autodesk: AutodeskLogin.Redux.Store;
+	CMSLogin: CMSLogin.Redux.Store;
+	Odbiory: { OdbioryComponent: { started: boolean } };
+}) => ({
+	Autodesk_is_login: state.Autodesk.isLogin,
+	started: state.Odbiory.OdbioryComponent.started,
+	CMS_is_login: state.CMSLogin.is_login,
+	project: state.CMSLogin.actual_project,
+});
+
+const mapDispatchToProps = {};
+
+type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+class Layout extends React.Component<Props> {
 	render() {
 		return (
 			<>
@@ -35,7 +46,7 @@ class Layout extends React.Component {
 							paddingLeft: 0,
 							paddingRight: 0,
 						}}>
-						<Header {...this.props} />
+						<Header />
 						<NotificationComponent />
 						<ModalComponent />
 						<Row
@@ -50,13 +61,13 @@ class Layout extends React.Component {
 									path={['/work_progress/:type', '/work_progress']}
 									render={(props) => {
 										if (!this.props.CMS_is_login) return <Redirect to="/login" />;
-										else if (!this.props.project.id)
+										else if (!this.props.project?.id)
 											return (
 												<Col sm={'auto'} className={'p-3'}>
 													<Alert variant={'warning'}>Wybierz projekt</Alert>
 												</Col>
 											);
-										else if (!this.props.project.urn)
+										else if (!this.props.project?.urn)
 											return (
 												<Col sm={'auto'} className={'p-3'}>
 													<Alert variant={'warning'}>
@@ -81,13 +92,13 @@ class Layout extends React.Component {
 									path={['/workers_log/:module', '/workers_log']}
 									render={() => {
 										if (!this.props.CMS_is_login) return <Redirect to="/login" />;
-										else if (!this.props.project.id)
+										else if (!this.props.project?.id)
 											return (
 												<Col sm={'auto'} className={'p-3'}>
 													<Alert variant={'warning'}>Wybierz projekt</Alert>
 												</Col>
 											);
-										else if (!this.props.project.urn)
+										else if (!this.props.project?.urn)
 											return (
 												<Col sm={'auto'} className={'p-3'}>
 													<Alert variant={'warning'}>
@@ -122,14 +133,5 @@ class Layout extends React.Component {
 		);
 	}
 }
-
-const mapStateToProps = ({ Autodesk, Odbiory, CMSLogin }) => ({
-	Autodesk_is_login: Autodesk.isLogin,
-	started: Odbiory.OdbioryComponent.started,
-	CMS_is_login: CMSLogin.is_login,
-	project: CMSLogin.project,
-});
-
-const mapDispatchToProps = { logUserIfValid };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Layout);

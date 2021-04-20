@@ -4,34 +4,58 @@ import { Alert, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 
-import { resetPassword } from '../redux/actions';
+import CMSLoginActions from '../redux/actions';
+import { CMSLogin } from '../type';
 
-function AccountSettings(props) {
-	const [activeTab, setActiveTab] = useState(null);
+const mapStateToProps = (state: { CMSLogin: CMSLogin.Redux.Store }) => ({
+	info: state.CMSLogin.info,
+});
+
+const mapDispatchToProps = {
+	resetPassword: CMSLoginActions.UserResetPasswordInit,
+};
+
+export enum AccountSettingsTab {
+	ACCOUNT_SETTINGS = 'account_settings',
+	PERMISSIONS_SETTINGS = 'permissions_settings',
+	PASSWORD_RESET = 'password_reset',
+	NONE = '',
+}
+
+type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+function AccountSettings(props: Props) {
+	const [activeTab, setActiveTab] = useState<AccountSettingsTab>(AccountSettingsTab.NONE);
 	const { register, watch, handleSubmit, errors } = useForm();
-	const submit = (e) => console.log(e);
+	const submit = (e: any) => console.log(e);
 	return (
 		<>
 			<Col xs="2" className="p-5">
 				<Nav className="flex-column" variant="pills">
 					<Nav.Item>
-						<Nav.Link onSelect={(e) => setActiveTab(e)} eventKey="account_settings" disabled>
+						<Nav.Link
+							onSelect={(e) => setActiveTab(AccountSettingsTab.ACCOUNT_SETTINGS)}
+							eventKey={AccountSettingsTab.ACCOUNT_SETTINGS}
+							disabled>
 							Ustawienia konta
 						</Nav.Link>
 					</Nav.Item>
 					<Nav.Item>
-						<Nav.Link onSelect={(e) => setActiveTab(e)} eventKey="permissions_settings">
+						<Nav.Link
+							onSelect={(e) => setActiveTab(AccountSettingsTab.PERMISSIONS_SETTINGS)}
+							eventKey={AccountSettingsTab.PERMISSIONS_SETTINGS}>
 							Ustawienia dostępów
 						</Nav.Link>
 					</Nav.Item>
 					<Nav.Item>
-						<Nav.Link onSelect={(e) => setActiveTab(e)} eventKey="password_reset">
+						<Nav.Link
+							onSelect={(e) => setActiveTab(AccountSettingsTab.PASSWORD_RESET)}
+							eventKey={AccountSettingsTab.PASSWORD_RESET}>
 							Reset hasła
 						</Nav.Link>
 					</Nav.Item>
 				</Nav>
 			</Col>
-			{activeTab === 'password_reset' && (
+			{activeTab === AccountSettingsTab.PASSWORD_RESET && (
 				<>
 					<Col className="p-5 justify-content-md-center">
 						<Form onSubmit={handleSubmit(props.resetPassword)}>
@@ -81,9 +105,9 @@ function AccountSettings(props) {
 								</Form.Text>
 							</Form.Group>
 							<Form.Group as={Row} controlId="errors">
-								<Col sm={7}>
-									{props.fetch_error && <Alert variant={'danger'}>{props.fetch_error}</Alert>}
-								</Col>
+								{/*<Col sm={7}>*/}
+								{/*	{props.fetch_error && <Alert variant={'danger'}>{props.fetch_error}</Alert>}*/}
+								{/*</Col>*/}
 								<Col sm={7}>{props.info && <Alert variant={'success'}>{props.info}</Alert>}</Col>
 							</Form.Group>
 
@@ -94,19 +118,11 @@ function AccountSettings(props) {
 					</Col>
 				</>
 			)}
-
-			{activeTab === 'account_settings' && <Col className="p-5">Ustawienia konta</Col>}
-			{activeTab === 'permissions_settings' && <Col className="p-5">Ustawienia dostępów</Col>}
-			{!activeTab && <Col className="p-5">Wybierz akcję</Col>}
+			{activeTab === AccountSettingsTab.ACCOUNT_SETTINGS && <Col className="p-5">Ustawienia konta</Col>}
+			{activeTab === AccountSettingsTab.PERMISSIONS_SETTINGS && <Col className="p-5">Ustawienia dostępów</Col>}
+			{activeTab === AccountSettingsTab.NONE && <Col className="p-5">Wybierz akcję</Col>}
 		</>
 	);
 }
-
-const mapStateToProps = ({ CMSLogin }) => ({
-	fetch_error: CMSLogin.error,
-	info: CMSLogin.info,
-});
-
-const mapDispatchToProps = { resetPassword };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountSettings);

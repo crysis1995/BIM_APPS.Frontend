@@ -5,7 +5,7 @@ import { FORGE_VIEWER_HANDLE_COLORIZE_FORGE } from '../../../../components/Forge
 import GraphQLAPIService from '../../../../services/graphql.api.service';
 import { RoundNumber } from '../../../../utils/RoundNumber';
 import { objectJobFetchCompleted, objectJobFetchStart } from '../actions/jobs_actions';
-import { initSetTermsByGroup, initUpdateTermsByGroup } from '../actions/terms_actions';
+import { initUpdateTermsByGroup } from '../actions/terms_actions';
 import {
 	checkObjectsGroupTerms,
 	handleSelectedElements,
@@ -18,7 +18,7 @@ import {
 	UPGRADING_SET_STATUSES,
 	UPGRADING_SET_STATUSES_INITIALIZER,
 } from '../types';
-import { MONOLITHIC, TERM_TYPE } from '../types/constans';
+import { TERM_TYPE } from '../types/constans';
 import { createReferenceJob, updateObjectJob } from '../utils/jobs_utils';
 
 export const upgradeJobEpic = (action$, state$) =>
@@ -57,7 +57,7 @@ export const upgradeJobEpic = (action$, state$) =>
 										state$.value.Odbiory.Upgrading.byJobId[job_id].summary_value[revit_id] * value,
 									),
 									object_type: null, // obecnie niewykorzystywane - w przyszłości ID typu obiektu z bazy danych
-									user: state$.value.CMSLogin.user.id.id, // ID usera z bazy danych - do śledzenia zmian dokonywanych osobowo
+									user: state$.value.CMSLogin.user.id, // ID usera z bazy danych - do śledzenia zmian dokonywanych osobowo
 									objects: state$.value.Odbiory.Upgrading.byJobId[job_id].object_ids[
 										revit_id
 									].map((e) => parseInt(e)), // tablica z ID obiektów, których dotyczy dane awansowanie roboty
@@ -86,24 +86,24 @@ const handleInitSetStatus = (action$, state$) =>
 	action$.pipe(
 		ofType(UPGRADING_SET_STATUSES_INITIALIZER),
 		withLatestFrom(state$),
-		switchMap(([{ selectedElements, status, rotation_day,choose_date }, state]) => {
+		switchMap(([{ selectedElements, status, rotation_day, choose_date }, state]) => {
 			const api = new GraphQLAPIService();
 			const objects = state.Odbiory.Upgrading.MONOLITHIC.byRevitId;
 			const new_status = Object.values(state.Odbiory.OdbioryComponent.MONOLITHIC.statuses).filter(
 				(e) => e.name === status,
 			)[0];
-			const user = state.CMSLogin.user.id.id;
+			const user_id = state.CMSLogin.user.id;
 			return !!new_status
 				? concat(
 						from(selectedElements).pipe(
 							mergeMap((revit_id) =>
 								from(
-									api.MONOLITHIC.createStatus(
-										objects[revit_id].id,
-										choose_date,
-										user,
-										new_status.id,
-									),
+									api.MONOLITHIC.createStatus({
+										user_id,
+										date: choose_date,
+										status_id: new_status.id,
+										object_id: objects[revit_id].id,
+									}),
 								).pipe(map((e) => storeSetStatus(selectedElements, new_status.id, rotation_day))),
 							),
 						),

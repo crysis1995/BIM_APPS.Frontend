@@ -13,7 +13,7 @@ import {
 	OBJECT_JOB_FETCH_START,
 } from '../types';
 import { JOB_TYPE } from '../types/constans';
-import { addParameterWithValue, createReferenceJob, fetchAllJobsFromAPI, updateObjectJob } from '../utils/jobs_utils';
+import { addParameterWithValue, createReferenceJob, updateObjectJob } from '../utils/jobs_utils';
 
 export const jobsLoadingStart = () => ({
 	type: JOBS_LOADING_START,
@@ -59,23 +59,23 @@ export const setJobInitial = () => ({
 	type: JOBS_CLEAN_DATA_OF_JOB,
 });
 
-export const fetchAllJobs = () => async (dispatch) => {
-	dispatch(jobsFetchStart());
-	try {
-		const { data } = await fetchAllJobsFromAPI();
-		if (data) {
-			dispatch(
-				jobsFetchEnd(
-					addParameterWithValue(normalize(data.acceptanceJobs), 'hidden', (val) =>
-						[JOB_TYPE.AMOUNT, JOB_TYPE.OCCURRENCE].includes(val.unit),
-					),
-				),
-			);
-		}
-	} catch (errors) {
-		dispatch(jobsFetchError(errors.message));
-	}
-};
+// export const fetchAllJobs = () => async (dispatch) => {
+// 	dispatch(jobsFetchStart());
+// 	try {
+// 		const { data } = await fetchAllJobsFromAPI();
+// 		if (data) {
+// 			dispatch(
+// 				jobsFetchEnd(
+// 					addParameterWithValue(normalize(data.acceptanceJobs), 'hidden', (val) =>
+// 						[JOB_TYPE.AMOUNT, JOB_TYPE.OCCURRENCE].includes(val.unit),
+// 					),
+// 				),
+// 			);
+// 		}
+// 	} catch (errors) {
+// 		dispatch(jobsFetchError(errors.message));
+// 	}
+// };
 
 export const changeJobPercentageValue = (job_key, value) => async (dispatch, getState) => {
 	const precision = 2;

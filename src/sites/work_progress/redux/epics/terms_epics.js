@@ -38,7 +38,13 @@ const handleSetTerms = (action$, state$) =>
 				`Odbiory.Terms.MONOLITHIC.terms.byCrane.${crane_id}.byLevel.${level_id}.byGroup.${group_id}.id`,
 			);
 			const GRAPHQL = new GraphQLAPIService();
-			return from(GRAPHQL.MONOLITHIC.updateTerm(term_id, { [term_type]: term })).pipe(
+			const TERM = {
+				REAL_START: 'REAL_START_Date',
+				PLANNED_FINISH: 'PLANNED_FINISH_Date',
+				REAL_FINISH: 'REAL_FINISH_Date',
+				PLANNED_START: 'PLANNED_START_Date',
+			};
+			return from(GRAPHQL.MONOLITHIC.updateTerm({ term_id, [TERM[term_type]]: term })).pipe(
 				map(() => setTermByGroup(crane_id, level_id, group_id, term_type, term)),
 			);
 		}),
@@ -49,9 +55,15 @@ const handleUpdateTermObject = (action$) =>
 		ofType(TERMS_MONOLITHIC_UPDATE_BY_GROUP_INIT),
 		mergeMap(({ payload: { term } }) => {
 			const GRAPHQL = new GraphQLAPIService();
-			return from(GRAPHQL.MONOLITHIC.updateTerm(term.id, term)).pipe(
-				map((response) => updateTermsByGroup(term,response.data.updateAcceptanceTerm)),
-			);
+			return from(
+				GRAPHQL.MONOLITHIC.updateTerm({
+					term_id: term.id,
+					PLANNED_START_Date: term.PLANNED_START,
+					PLANNED_FINISH_Date: term.PLANNED_FINISH,
+					REAL_FINISH_Date: term.REAL_FINISH,
+					REAL_START_Date: term.REAL_START,
+				}),
+			).pipe(map((response) => updateTermsByGroup(term, response.data.updateAcceptanceTerm)));
 		}),
 	);
 

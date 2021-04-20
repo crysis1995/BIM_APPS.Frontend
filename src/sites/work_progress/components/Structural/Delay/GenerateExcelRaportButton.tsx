@@ -1,8 +1,8 @@
 import { Button } from 'react-bootstrap';
 import React from 'react';
 import ExcelRaportGenerator from '../../../../../utils/ExcelRaportGenerator';
-import { DelayCauseResponse } from './DelayCauseResponse';
 import { connect } from 'react-redux';
+import { GetDelaysType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/GetDelays';
 
 const mapStateToProps = (state: {
 	Odbiory: { Delays: { MONOLITHIC: { delay_causes_all: { [key: string]: { id: number; name: string } } } } };
@@ -13,7 +13,7 @@ const mapStateToProps = (state: {
 const mapDispatchToProps = {};
 
 type Props = ReturnType<typeof mapStateToProps> &
-	typeof mapDispatchToProps & { filteredDelayCauses: DelayCauseResponse[] };
+	typeof mapDispatchToProps & { filteredDelayCauses: GetDelaysType.AcceptanceDelay[] };
 
 function GenerateExcelRaportButton(props: Props) {
 	async function GenerateExcelRaport() {

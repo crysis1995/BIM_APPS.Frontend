@@ -6,7 +6,7 @@ import { GetFormattedDate } from './utils/GetFormattedDate';
 
 const INITIAL_STATE: GeneralState = {
 	worker_type: null,
-	calendar: { by_date: null, view_range: { start: null, end: null } },
+	calendar: { by_date: null, view_range: null },
 };
 
 function GeneralReducer(state = INITIAL_STATE, action: GeneralActionTypes) {

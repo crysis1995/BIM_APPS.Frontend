@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { CrewState } from '../../../redux/work_time_evidence/crew/types/state';
 import { WorkersState } from '../../../redux/work_time_evidence/worker/types/state';
-import { initialiseModal } from '../../../../../components/Modal/redux/actions';
 import CrewActions from '../../../redux/work_time_evidence/crew/actions';
 import { filterCrewsByWorkerTypes } from '../Selectors/Crew.Selector';
 import { GeneralState } from '../../../redux/work_time_evidence/general/types/state';
@@ -25,7 +24,6 @@ const mapStateToProps = (state: {
 });
 
 const mapDispatchToProps = {
-	initialiseModal,
 	chooseCrew: CrewActions.chooseCrew,
 	fetchCrewStart: CrewActions.fetchCrewStart,
 };

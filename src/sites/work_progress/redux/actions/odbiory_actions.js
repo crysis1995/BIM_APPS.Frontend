@@ -25,7 +25,7 @@ import {
 } from '../types';
 
 import { ACCEPTANCE_TYPE, CONSTANTS } from '../types/constans';
-import { fetchAllJobs } from './jobs_actions';
+// import { fetchAllJobs } from './jobs_actions';
 import { cleanResults } from './results_actions';
 
 /*
@@ -150,7 +150,7 @@ export const fetchCalendarEnd = (data, normalizedByDate) => ({
 export const componentStarted = (component_type) => (dispatch, getState) => {
 	const { started } = getState().Odbiory.OdbioryComponent;
 	dispatch(componentStart(component_type));
-	if (!started.hasOwnProperty(ACCEPTANCE_TYPE.ARCHITECTURAL)) dispatch(fetchAllJobs());
+	// if (!started.hasOwnProperty(ACCEPTANCE_TYPE.ARCHITECTURAL)) dispatch(fetchAllJobs());
 };
 
 export const changeActiveTab = (tabName) => (dispatch, getState) => {

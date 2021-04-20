@@ -2,11 +2,18 @@ import React from 'react';
 import { Button, OverlayTrigger, Tooltip, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Loader from '../../../../components/Loader';
-import { initialiseModal } from '../../../../components/Modal/redux/actions';
+import ModalActions from '../../../../components/Modal/redux/actions';
 import ShowParameters from './Structural.Results.Modal.ShowParameters';
 import ResultTable from './Structural.Results.Table';
 
-function BasePlan({ initialiseModal, data_loading }) {
+const mapStateToProps = (state) => ({
+	data_loading: state.Odbiory.Upgrading.MONOLITHIC.loading,
+});
+
+const mapDispatchToProps = {
+	InitializeModal: ModalActions.InitializeModal,
+};
+function BasePlan({ InitializeModal, data_loading }) {
 	const variant = 'light';
 	return (
 		<>
@@ -16,11 +23,12 @@ function BasePlan({ initialiseModal, data_loading }) {
 					overlay={<Tooltip>Pokaż okno ustawiania widoczności parametrów</Tooltip>}>
 					<Button
 						variant={variant}
-						onClick={() =>
-							initialiseModal('Widoczność parametrów', <ShowParameters />, () =>
-								console.log('zamknięto parametry'),
-							)
-						}>
+						// onClick={() =>
+						// 	InitializeModal('Widoczność parametrów', <ShowParameters />, () =>
+						// 		console.log('zamknięto parametry'),
+						// 	)
+						// }
+					>
 						<svg
 							width="1em"
 							height="1em"
@@ -41,18 +49,10 @@ function BasePlan({ initialiseModal, data_loading }) {
 				</OverlayTrigger>
 			</Col>
 			<Col xs={12} className="h-100" style={{ overflowY: 'auto', maxHeight: '500px' }}>
-				{data_loading ? <Loader height={"100px"}/> : <ResultTable allowSelection={false} />}
+				{data_loading ? <Loader height={'100px'} /> : <ResultTable allowSelection={false} />}
 			</Col>
 		</>
 	);
 }
-
-const mapStateToProps = (state) => ({
-	data_loading: state.Odbiory.Upgrading.MONOLITHIC.loading,
-});
-
-const mapDispatchToProps = {
-	initialiseModal,
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(BasePlan);

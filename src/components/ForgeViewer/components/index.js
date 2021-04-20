@@ -1,7 +1,8 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { selectRoom } from '../../../sites/work_progress/redux/actions/rooms_actions';
 import { handleSelectedElements } from '../../../sites/work_progress/redux/actions/upgrading_actions';
 import { ACCEPTANCE_TYPE } from '../../../sites/work_progress/redux/types/constans';
-import { initialiseModal } from '../../Modal/redux/actions';
 import {
 	initializeViewer,
 	selectedElementsAdd,
@@ -9,9 +10,6 @@ import {
 	setViewerElements,
 	setViewerRooms,
 } from '../redux/actions';
-import ReactPanelExtension from './extenstions/TestExtension';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
 const Autodesk = window.Autodesk; // import Autodesk Library
 const THREE = window.THREE; // import THREE library
@@ -317,7 +315,7 @@ const mapStateToProps = ({ ForgeViewer, Autodesk, Odbiory, CMSLogin }) => ({
 	visible_element: ForgeViewer.visible_element,
 	model_elements_loading: ForgeViewer.model_elements_loading,
 	login_3_legged: Autodesk.login_3_legged,
-	project_urn: CMSLogin.project.urn,
+	project_urn: CMSLogin.actual_project.urn,
 	status: Odbiory.Results.status,
 
 	selected_rooms: Odbiory.Rooms.selected_rooms,
@@ -333,7 +331,7 @@ const mapStateToProps = ({ ForgeViewer, Autodesk, Odbiory, CMSLogin }) => ({
 });
 
 const mapDispatchToProps = {
-	initialiseModal,
+	// initialiseModal,
 	setSheetsSuccess,
 	initializeViewer,
 	setViewerRooms,

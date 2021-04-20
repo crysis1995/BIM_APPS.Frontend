@@ -20,8 +20,8 @@ dayjs.extend(isSameOrAfter);
 
 const mapStateToProps = (state: {
 	CMSLogin: {
-		user: { id: { id: string } };
-		project: { id: string };
+		user: { id: string };
+		actual_project: { id: string };
 		credentials: {
 			access_token: string;
 		};
@@ -29,8 +29,8 @@ const mapStateToProps = (state: {
 	Odbiory: { Delays: { MONOLITHIC: { delay_causes_all: { [key: string]: { id: number; name: string } } } } };
 }) => ({
 	all_delays: state.Odbiory.Delays.MONOLITHIC.delay_causes_all,
-	user_id: state.CMSLogin.user.id.id,
-	project_id: state.CMSLogin.project.id,
+	user_id: state.CMSLogin.user.id,
+	project_id: state.CMSLogin.actual_project.id,
 	token: state.CMSLogin.credentials.access_token,
 });
 

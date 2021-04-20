@@ -1,11 +1,10 @@
 import { combineEpics, Epic } from 'redux-observable';
 import { RootState } from '../crew/epics';
-import { debounceTime, delay, filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { debounceTime, filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { ITimeEvidence, TimeEvidenceActionTypes } from './types/actions';
 import WorkersLogActions from '../../types';
 import { concat, from, of } from 'rxjs';
 import {
-	GetWorkerTimeEvidenceResponse,
 	UpdateWorkerTimeAbortedResponse,
 	UpdateWorkerTimePayload,
 	UpdateWorkerTimeSucceedResponse,
@@ -13,7 +12,7 @@ import {
 import TimeEvidenceActions from './actions';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import RestAPIService from '../../../../../services/rest.api.service';
-import { GraphQLData } from '../../../../../types/graphQLData';
+import dayjs from 'dayjs';
 
 type ActionType = TimeEvidenceActionTypes;
 
@@ -32,9 +31,9 @@ const OnFetchWorkerWorkEvidenceStartEpic: Epic<ActionType, ActionType, RootState
 						from(
 							new GraphQLAPIService().WorkersLog.WorkTimeEvidence.GetWorkerTimeEvidence({
 								worker_id: worker_id,
-								start: new Date(viewRange ? viewRange.start : ''),
-								end: new Date(viewRange ? viewRange.end : ''),
-							}) as Promise<GraphQLData<GetWorkerTimeEvidenceResponse>>,
+								start: dayjs(viewRange?.start).format('YYYY-MM-DD'),
+								end: dayjs(viewRange?.end).format('YYYY-MM-DD'),
+							}),
 						).pipe(
 							map((data) =>
 								TimeEvidenceActions.fetchWorkerWorkEvidenceEnd(
@@ -60,11 +59,11 @@ const OnEditingWorkedTimeEpic: Epic<ActionType, ActionType, RootState> = (action
 		withLatestFrom(state$),
 		switchMap(([value, state]) => {
 			const { date, worker, hours } = value.payload;
-			const { project, user } = state.CMSLogin;
+			const { actual_project, user } = state.CMSLogin;
 			const body: UpdateWorkerTimePayload = {
 				date,
-				filling_engineer: user.id.id,
-				project: project.id,
+				filling_engineer: user.id,
+				project: actual_project.id,
 				worked_time: hours,
 				worker,
 			};

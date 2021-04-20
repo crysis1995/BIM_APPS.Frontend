@@ -38,7 +38,7 @@ export namespace Notification {
 			export interface NotificationFactory {
 				title: string;
 				message: string;
-				triggered_time: Date | string;
+				triggered_time?: Date | string;
 			}
 		}
 	}

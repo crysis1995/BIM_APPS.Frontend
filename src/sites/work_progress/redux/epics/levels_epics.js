@@ -2,7 +2,8 @@ import { ofType } from 'redux-observable';
 import { concat, of } from 'rxjs';
 import { filter, switchMap, throttleTime } from 'rxjs/operators';
 import { SET_CURRENT_SHEET } from '../../../../components/ForgeViewer/redux/actions';
-import { initialiseModal } from '../../../../components/Modal/redux/actions';
+import ModalActions, { initialiseModal } from '../../../../components/Modal/redux/actions';
+import { ModalType } from '../../../../components/Modal/type';
 import { setInitial } from '../actions';
 import { _setCurrentLevel } from '../actions/levels_actions';
 import { fetchResultStart } from '../actions/results_actions';
@@ -27,7 +28,13 @@ export const selectLevel = (action$, state$) =>
 					of(termsDataFetchStart()),
 				);
 			} else {
-				return of(initialiseModal('Uwaga!', 'Nie możemy znaleźc tego poziomu'));
+				return of(
+					ModalActions.InitializeModal({
+						title: 'Uwaga!',
+						body: 'Nie możemy znaleźc tego poziomu',
+						modalType: ModalType.Payload.EModalType.Error,
+					}),
+				);
 			}
 		}),
 	);

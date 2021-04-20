@@ -19,6 +19,7 @@ import NotificationActions from '../../../../../components/Notification/redux/ac
 import { Notification } from '../../../../../components/Notification/types';
 import { ReturnTypeFromInterface } from '../../../../../types/ReturnTypeFromInterface';
 import { CreateCrewSummaryType } from '../../../../../services/graphql.api.service/CONSTANTS/Mutations/CreateCrewSummary';
+import dayjs from 'dayjs';
 
 type ActionType =
 	| CrewActionsTypes
@@ -29,7 +30,7 @@ type ActionType =
 export type RootState = {
 	CMSLogin: {
 		user: { id: string };
-		project: { id: string };
+		actual_project: { id: string };
 		credentials: {
 			access_token: string;
 		};
@@ -45,7 +46,7 @@ const OnFetchCrewStart: Epic<ActionType, ActionType, RootState> = ($action, $sta
 			from(
 				new GraphQLAPIService().WorkersLog.WorkTimeEvidence.GetAllCrews({
 					user_id: state.CMSLogin.user.id,
-					project_id: state.CMSLogin.project.id,
+					project_id: state.CMSLogin.actual_project.id,
 				}),
 			).pipe(map((response) => CrewActions.fetchCrewEnd(normalize(response.data.workersLogCrews)))),
 		),
@@ -86,8 +87,8 @@ const OnFetchCrewSummariesStart: Epic<ActionType, ActionType, RootState> = ($act
 				from(
 					new GraphQLAPIService().WorkersLog.WorkTimeEvidence.GetAllCrewSummaries({
 						crew_id,
-						start: new Date(start_date),
-						end: new Date(end_date),
+						start: dayjs(start_date).format('YYYY-MM-DD'),
+						end: dayjs(end_date).format('YYYY-MM-DD'),
 						project_id,
 						user_id,
 					}),
@@ -120,10 +121,14 @@ const OnCreateCrewSummary: Epic<ActionType, ActionType, RootState> = (action$, s
 					return {
 						crew_id: store.WorkersLog.WorkTimeEvidence.Crews.actual,
 						user_id: store.CMSLogin.user.id,
-						project_id: store.CMSLogin.project.id.toString(),
+						project_id: store.CMSLogin.actual_project.id.toString(),
 						worker_ids: [],
-						start: new Date(store.WorkersLog.WorkTimeEvidence.General.calendar.view_range.start),
-						end: new Date(store.WorkersLog.WorkTimeEvidence.General.calendar.view_range.end),
+						start: dayjs(store.WorkersLog.WorkTimeEvidence.General.calendar.view_range.start).format(
+							'YYYY-MM-DD',
+						),
+						end: dayjs(store.WorkersLog.WorkTimeEvidence.General.calendar.view_range.end).format(
+							'YYYY-MM-DD',
+						),
 					};
 				}
 				throw new Error(

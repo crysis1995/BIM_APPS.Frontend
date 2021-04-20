@@ -12,7 +12,7 @@ import { FormatType, GetFormattedDate } from '../../../redux/work_time_evidence/
 const mapStateToProps = (state: {
 	WorkersLog: { WorkTimeEvidence: { Crews: CrewState; Workers: WorkersState; General: GeneralState } };
 }) => ({
-	date: state.WorkersLog.WorkTimeEvidence.General.calendar.view_range.start,
+	date: state.WorkersLog.WorkTimeEvidence.General.calendar.view_range?.start,
 });
 const mapDispatchToProps = {
 	setCalendar: GeneralActions.setCalendar,

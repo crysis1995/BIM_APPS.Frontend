@@ -1,30 +1,25 @@
-import { SET_INITIAL } from '../../../sites/work_progress/redux/types';
-import {
-	USER_ADD_PERMISSIONS,
-	USER_DELETE_PERMISSIONS,
-	USER_FETCH_DATA,
-	USER_LOGIN_END,
-	USER_LOGIN_ERROR,
-	USER_LOGIN_START,
-	USER_LOGOUT,
-	USER_PASSWORD_RESET,
-	USER_SET_CURRENT_PROJECT,
-} from './actions';
 import { CMSLogin } from '../type';
+import { UserProjectsType } from '../../../services/graphql.api.service/CONSTANTS/Queries/UserProjects';
 
 export const INITIAL_STATE: CMSLogin.Redux.Store = {
 	user: null,
-	error: null,
 	info: null,
 	credentials: null,
-	project: null,
+	actual_project: null,
+	project_roles: null,
+	warbud_apps: null,
+	projects: null,
 	is_login: false,
 	loading: false,
 	permissions: [],
 };
 
-function setUserData(state: CMSLogin.Redux.Store, { user: { username, email }, projects }) {
-	const { _project, project_roles, warbud_apps } = projects.reduce(
+function SetUserData(state: CMSLogin.Redux.Store, action: ReturnType<CMSLogin.Redux.IActions['SetUserData']>) {
+	const { _project, project_roles, warbud_apps } = action.payload.project.reduce<{
+		_project: { [key: string]: UserProjectsType.Project };
+		project_roles: { [key: string]: UserProjectsType.ProjectRole };
+		warbud_apps: { [key: string]: string[] };
+	}>(
 		(prev, acc) => {
 			prev._project[acc.project.id] = acc.project;
 			prev.project_roles[acc.project.id] = acc.project_role;
@@ -37,68 +32,48 @@ function setUserData(state: CMSLogin.Redux.Store, { user: { username, email }, p
 		...state,
 		user: {
 			...state.user,
-			username,
-			email,
-			projects: _project,
-			project_roles,
-			warbud_apps,
+			username: action.payload.user.username,
+			email: action.payload.user.email,
 		},
+		projects: _project,
+		project_roles,
+		warbud_apps,
 	};
-}
-
-function addPermissions(state: CMSLogin.Redux.Store, { permissions }) {
-	if (!Array.isArray(permissions)) permissions = [permissions];
-	const filteredPermissions = permissions.filter((perm) => !state.permissions.includes(perm));
-	return { ...state, permissions: [...state.permissions, ...filteredPermissions] };
-}
-
-function deletePermissions(state: CMSLogin.Redux.Store, { permissions }) {
-	if (!Array.isArray(permissions)) permissions = [permissions];
-	const filteredPermissions = state.permissions.filter((perm) => !permissions.includes(perm));
-	return { ...state, permissions: filteredPermissions };
 }
 
 const CMSLoginReducer = (state = INITIAL_STATE, action: CMSLogin.Redux.Actions) => {
 	switch (action.type) {
-		case SET_INITIAL:
-			return INITIAL_STATE;
-		case USER_FETCH_DATA:
-			return setUserData(state, action);
-		case USER_SET_CURRENT_PROJECT:
-			return {
-				...state,
-				project: {
-					id: action.project_id,
-					urn: action.urn,
-					name: action.name,
-					webcon_code: action.webcon_code,
-				},
-			};
-		case USER_LOGIN_ERROR:
-			return { ...state, loading: false, error: action.error };
-		case USER_LOGIN_END:
+		case CMSLogin.Redux.Types.STARTUP_LOGIN_COMPONENT:
+		case CMSLogin.Redux.Types.USER_LOGIN_START:
+			return { ...state, loading: true };
+		case CMSLogin.Redux.Types.USER_LOGIN_END:
 			return {
 				...state,
 				loading: false,
 				is_login: true,
 				user: {
-					id: action.payload.user.id,
+					id: action.payload.user,
 				},
-				error: INITIAL_STATE.error,
-				credentials: {
-					access_token: action.payload.credentials,
+				credentials: action.payload.credentials,
+			};
+		case CMSLogin.Redux.Types.USER_LOGOUT_START:
+		case CMSLogin.Redux.Types.USER_LOGOUT_END:
+			return { ...INITIAL_STATE };
+		case CMSLogin.Redux.Types.USER_PASSWORD_RESET_INIT:
+		case CMSLogin.Redux.Types.USER_PASSWORD_RESET:
+			return { ...state, is_login: true };
+		case CMSLogin.Redux.Types.USER_FETCH_DATA:
+			return SetUserData(state, action);
+		case CMSLogin.Redux.Types.USER_SET_CURRENT_PROJECT:
+			return {
+				...state,
+				actual_project: {
+					id: action.payload.project.id,
+					urn: action.payload.project.urn,
+					name: action.payload.project.name,
+					webcon_code: action.payload.project.webcon_code,
 				},
 			};
-		case USER_LOGIN_START:
-			return { ...state, loading: true };
-		case USER_LOGOUT:
-			return { ...INITIAL_STATE };
-		case USER_PASSWORD_RESET:
-			return { ...state, is_login: true, info: action.info };
-		case USER_ADD_PERMISSIONS:
-			return addPermissions(state, action);
-		case USER_DELETE_PERMISSIONS:
-			return deletePermissions(state, action);
 		default:
 			return state;
 	}

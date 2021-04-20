@@ -3,20 +3,30 @@ import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
-import AutodeskLogin from '../components/AutodeskLogin';
-import CMSLogin from '../components/CMSLogin';
+import AutodeskLoginComponent from '../components/AutodeskLogin';
 import { EApplications } from '../sites/types';
 import { ACCEPTANCE_TYPE } from '../sites/work_progress/redux/types/constans';
 import { WORKERS_LOG } from '../sites/workers_log/redux/constants';
+import { CMSLogin } from '../components/CMSLogin/type';
+import CMSLoginComponent from '../components/CMSLogin';
 
-function Header({ warbud_apps, project }) {
-	function isAllowedApp(app_type) {
+const mapStateToProps = (state: { CMSLogin: CMSLogin.Redux.Store }) => ({
+	warbud_apps: state.CMSLogin.warbud_apps,
+	project: state.CMSLogin?.actual_project?.id,
+});
+
+const mapDispatchToProps = {};
+type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+function Header(props: Props) {
+	console.log(props)
+	function isAllowedApp(app_type: string) {
+
 		return !(
-			project &&
-			warbud_apps &&
-			warbud_apps[project] &&
-			Array.isArray(warbud_apps[project]) &&
-			warbud_apps[project].includes(app_type)
+			props.project &&
+			props.warbud_apps &&
+			props.warbud_apps[props.project] &&
+			Array.isArray(props.warbud_apps[props.project]) &&
+			props.warbud_apps[props.project].includes(app_type)
 		);
 	}
 
@@ -29,7 +39,7 @@ function Header({ warbud_apps, project }) {
 				<Nav className="mr-auto">
 					<NavDropdown
 						disabled={isAllowedApp(EApplications.WORK_PROGRESS)}
-						rootCloseEvent={'mouseover'}
+						rootCloseEvent={'click'}
 						title="Awansowanie robót"
 						id={EApplications.WORK_PROGRESS}>
 						<NavLink
@@ -46,7 +56,7 @@ function Header({ warbud_apps, project }) {
 					</NavDropdown>
 					<NavDropdown
 						disabled={isAllowedApp(EApplications.WORKERS_LOG)}
-						rootCloseEvent={'mouseover'}
+						rootCloseEvent={'click'}
 						title="Dzienniki brygadzistowskie"
 						id={EApplications.WORKERS_LOG}>
 						<NavLink
@@ -63,18 +73,12 @@ function Header({ warbud_apps, project }) {
 				</Nav>
 
 				<Nav className="align-right">
-					<AutodeskLogin />
-					<CMSLogin />
+					<AutodeskLoginComponent />
+					<CMSLoginComponent />
 				</Nav>
 			</Navbar.Collapse>
 		</Navbar>
 	);
 }
 
-const mapStateToProps = ({ CMSLogin }) => ({
-	warbud_apps: CMSLogin?.user?.warbud_apps,
-	project: CMSLogin.project.id,
-});
-
-const mapDispatchToProps = {};
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

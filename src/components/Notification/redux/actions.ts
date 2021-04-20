@@ -6,7 +6,9 @@ const NotificationActions: Notification.Redux.IActions = {
 		type: Notification.Redux.ETypes.ADD_NOTIFICATION,
 		payload: {
 			id: v4().toString(),
-			...data,
+			triggered_time: data.triggered_time ? data.triggered_time : Date(),
+			message: data.message,
+			title: data.title,
 		},
 	}),
 	deleteNotification: (id) => ({

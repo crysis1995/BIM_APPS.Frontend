@@ -1,35 +1,70 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, NavDropdown } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { v4 } from 'uuid';
-import { getUserProjects } from './components/CMSLogin.Selector';
-import { setActiveProject, userLogout } from './redux/actions';
+import CMSLoginActions from './redux/actions';
+import { CMSLogin } from './type';
 
-function CMSLogin({ is_login, active_project, projects, username, userLogout, setActiveProject }) {
-	return is_login ? (
+const mapStateToProps = (state: { CMSLogin: CMSLogin.Redux.Store }) => ({
+	is_login: state.CMSLogin.is_login,
+	user: state.CMSLogin.user,
+	projects: state.CMSLogin.projects,
+});
+
+const mapDispatchToProps = {
+	UserLogoutStart: CMSLoginActions.UserLogoutStart,
+	SetCurrentProject: CMSLoginActions.SetCurrentProject,
+	StartupComponent: CMSLoginActions.StartupComponent,
+};
+
+type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+function CMSLoginComponent(props: Props) {
+	const [selectedProjectID, setSelectedProjectID] = useState<undefined | string>(undefined);
+
+	useEffect(() => {
+		props.StartupComponent();
+	}, []);
+
+	useEffect(() => {
+		if (selectedProjectID && props.projects && props.projects[selectedProjectID]) {
+			props.SetCurrentProject({
+				id: props.projects[selectedProjectID].id,
+				urn: props.projects[selectedProjectID].bim_models[0].model_urn,
+				webcon_code: props.projects[selectedProjectID].webcon_code,
+				name: props.projects[selectedProjectID].name,
+			});
+		}
+	}, [selectedProjectID]);
+
+	return props.is_login ? (
 		<>
 			<Form className="mr-3" inline>
 				<Form.Control
-					value={active_project}
-					onChange={(e) => setActiveProject(e.target.value)}
+					value={selectedProjectID}
+					onChange={(e) => setSelectedProjectID(e.target.value)}
 					as="select"
 					size={'sm'}>
 					<option>Wybierz...</option>
-					{projects.map((e) => (
-						<option data-testid="options" key={v4()} value={e.id}>
-							{e.webcon_code ? e.webcon_code + ' - ' + e.name : e.name}
-						</option>
-					))}
+					{props.projects &&
+						Object.values(props.projects).map((proj) => (
+							<option data-testid="options" key={v4()} value={proj.id}>
+								{proj.webcon_code ? proj.webcon_code + ' - ' + proj.name : proj.name}
+							</option>
+						))}
 				</Form.Control>
 			</Form>
-			<NavDropdown alignRight className="" title={<span>Witaj, {username}</span>} id="nav-dropdown">
+			<NavDropdown
+				alignRight
+				className=""
+				title={<span>Witaj, {props.user?.username || ''}</span>}
+				id="nav-dropdown">
 				<NavDropdown.Item>
 					<Link className="" to="/settings">
 						Ustawienia konta
 					</Link>
 				</NavDropdown.Item>
-				<NavDropdown.Item onClick={userLogout}>Wyloguj</NavDropdown.Item>
+				<NavDropdown.Item onClick={() => props.UserLogoutStart()}>Wyloguj</NavDropdown.Item>
 			</NavDropdown>
 		</>
 	) : (
@@ -41,16 +76,4 @@ function CMSLogin({ is_login, active_project, projects, username, userLogout, se
 	);
 }
 
-const mapStateToProps = (state) => ({
-	is_login: state.CMSLogin.is_login,
-	username: state.CMSLogin.user.username,
-	active_project: state.CMSLogin.project.id,
-	projects: getUserProjects(state),
-});
-
-const mapDispatchToProps = {
-	userLogout,
-	setActiveProject,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CMSLogin);
+export default connect(mapStateToProps, mapDispatchToProps)(CMSLoginComponent);

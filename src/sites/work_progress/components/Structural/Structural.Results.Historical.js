@@ -2,13 +2,10 @@ import React from 'react';
 import { Button, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Loader from '../../../../components/Loader';
-import { initialiseModal } from '../../../../components/Modal/redux/actions';
 import { handleSelectedElements } from '../../redux/actions/upgrading_actions';
-import ShowParameters from './Structural.Results.Modal.ShowParameters';
 import ResultTable from './Structural.Results.Table';
 
-
-function Historical({ initialiseModal, handleSelectedElements, data_loading }) {
+function Historical({ handleSelectedElements, data_loading }) {
 	const variant = 'light';
 	return (
 		<>
@@ -18,7 +15,8 @@ function Historical({ initialiseModal, handleSelectedElements, data_loading }) {
 					overlay={<Tooltip>Pokaż okno ustawiania widoczności parametrów</Tooltip>}>
 					<Button
 						variant={variant}
-						onClick={() => initialiseModal('Widoczność parametrów', <ShowParameters />)}>
+						// onClick={() => initialiseModal('Widoczność parametrów', <ShowParameters />)}
+					>
 						<svg
 							width="1em"
 							height="1em"
@@ -70,7 +68,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-	initialiseModal,
+	// initialiseModal,
 	handleSelectedElements,
 };
 

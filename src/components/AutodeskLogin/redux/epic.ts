@@ -17,15 +17,15 @@ const OnHandleFetchAccessToken: Epic<ActionType, ActionType> = (action$) =>
 			concat(
 				from(new RestAPIService().GENERAL.getAccessToken().then((e) => e.json())).pipe(
 					map((e) => {
-						if (!e) throw 'Nie można nawiązać połączenia z usługą BIM360!';
 						return AutodeskLoginActions.Login3Legged(e);
 					}),
 					catchError((err) => {
 						return concat(
+							of(AutodeskLoginActions.Logout3Legged()),
 							of(
 								NotificationActions.showNotification({
 									title: 'Błąd!',
-									message: err.message,
+									message: "Nie udało się połączyć z usługą BIM360!",
 									triggered_time: new Date(),
 								}),
 							),

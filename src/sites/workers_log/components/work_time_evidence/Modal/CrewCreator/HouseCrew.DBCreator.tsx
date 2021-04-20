@@ -8,8 +8,8 @@ import { WORKERS_LOG__WORKERS_TYPE } from '../../../../../../services/graphql.ap
 
 type RootState = {
 	CMSLogin: {
-		user: { id: { id: string } };
-		project: { id: string };
+		user: { id: string };
+		actual_project: { id: string };
 		credentials: {
 			access_token: string;
 		};
@@ -18,8 +18,8 @@ type RootState = {
 
 const mapStateToProps = (state: RootState) => ({
 	token: state.CMSLogin.credentials.access_token,
-	user_id: state.CMSLogin.user.id.id,
-	project_id: state.CMSLogin.project.id,
+	user_id: state.CMSLogin.user.id,
+	project_id: state.CMSLogin.actual_project.id,
 });
 const mapDispatchToProps = {};
 

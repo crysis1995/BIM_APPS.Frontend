@@ -55,12 +55,10 @@ export default class GraphQLAPIService {
 	}
 
 	userData(data: UserDataType.Request) {
-		return this.queryClient<UserDataType.Response, UserDataType.Request>(USER_DATA, data).then((e) => e.data.user);
+		return this.queryClient<UserDataType.Response, UserDataType.Request>(USER_DATA, data)
 	}
 	getUserProjectRoles(data: UserProjectsType.Request) {
-		return this.queryClient<UserProjectsType.Response, UserProjectsType.Request>(USER_PROJECTS, data).then(
-			(e) => e.data.warbudProjUserRoles,
-		);
+		return this.queryClient<UserProjectsType.Response, UserProjectsType.Request>(USER_PROJECTS, data)
 	}
 
 	MONOLITHIC = {
