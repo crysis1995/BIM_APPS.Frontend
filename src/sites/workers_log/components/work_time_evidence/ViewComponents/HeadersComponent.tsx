@@ -1,5 +1,4 @@
 import DatesComponent from './DaysMonthly';
-import AddWorkerButton from './AddWorkerButton';
 import React from 'react';
 import DailySummary from './DailySummary';
 import { CrewState } from '../../../redux/work_time_evidence/crew/types/state';
@@ -14,11 +13,7 @@ const mapStateToProps = (state: {
 	by_date: state.WorkersLog.WorkTimeEvidence.General.calendar.by_date,
 });
 const mapDispatchToProps = {};
-type Props = ReturnType<typeof mapStateToProps> &
-	typeof mapDispatchToProps & {
-		addWorkerInit: (value: ((prevState: boolean) => boolean) | boolean) => void;
-		workerInit: boolean;
-	};
+type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 function HeadersComponent(props: Props) {
 	if (props.by_date)
@@ -30,7 +25,7 @@ function HeadersComponent(props: Props) {
 						rowSpan={2}
 						className={'text-right border-top border-right border-bottom'}
 						style={{ minWidth: 100 }}>
-						<AddWorkerButton addWorkerInit={props.addWorkerInit} workerInit={props.workerInit} />
+						<span className="align-middle">Pracownik</span>
 					</th>
 					<th className={'border-right'} style={{ maxWidth: 60, minWidth: 50 }}>
 						<span>Suma:</span>

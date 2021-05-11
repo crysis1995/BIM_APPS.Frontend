@@ -1,11 +1,24 @@
 import { gql } from 'apollo-boost';
 
 const UPDATE_TERM = gql`
-	mutation updateTerms($i: ID!, $RS: DateTime, $PF: DateTime, $RF: DateTime, $PS: DateTime, $obj: [ID]) {
+	mutation updateTerms(
+		$term_id: ID!
+		$REAL_START_Date: DateTime
+		$PLANNED_FINISH_Date: DateTime
+		$REAL_FINISH_Date: DateTime
+		$PLANNED_START_Date: DateTime
+		$object_ids: [ID]
+	) {
 		updateAcceptanceTerm(
 			input: {
-				data: { REAL_START: $RS, PLANNED_FINISH: $PF, REAL_FINISH: $RF, PLANNED_START: $PS, objects: $obj }
-				where: { id: $i }
+				data: {
+					REAL_START: $REAL_START_Date
+					PLANNED_FINISH: $PLANNED_FINISH_Date
+					REAL_FINISH: $REAL_FINISH_Date
+					PLANNED_START: $PLANNED_START_Date
+					objects: $object_ids
+				}
+				where: { id: $term_id }
 			}
 		) {
 			acceptanceTerm {

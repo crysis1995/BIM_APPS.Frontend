@@ -7,10 +7,10 @@ import AutodeskLoginComponent from '../components/AutodeskLogin';
 import { EApplications } from '../sites/types';
 import { ACCEPTANCE_TYPE } from '../sites/work_progress/redux/types/constans';
 import { WORKERS_LOG } from '../sites/workers_log/redux/constants';
-import { CMSLogin } from '../components/CMSLogin/type';
+import { CMSLoginType } from '../components/CMSLogin/type';
 import CMSLoginComponent from '../components/CMSLogin';
 
-const mapStateToProps = (state: { CMSLogin: CMSLogin.Redux.Store }) => ({
+const mapStateToProps = (state: { CMSLogin: CMSLoginType.Redux.Store }) => ({
 	warbud_apps: state.CMSLogin.warbud_apps,
 	project: state.CMSLogin?.actual_project?.id,
 });
@@ -18,9 +18,7 @@ const mapStateToProps = (state: { CMSLogin: CMSLogin.Redux.Store }) => ({
 const mapDispatchToProps = {};
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 function Header(props: Props) {
-	console.log(props)
 	function isAllowedApp(app_type: string) {
-
 		return !(
 			props.project &&
 			props.warbud_apps &&

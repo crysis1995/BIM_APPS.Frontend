@@ -2,13 +2,13 @@ import { ReturnTypeFromInterface } from '../../types/ReturnTypeFromInterface';
 import { UserDataType } from '../../services/graphql.api.service/CONSTANTS/Queries/UserData';
 import { UserProjectsType } from '../../services/graphql.api.service/CONSTANTS/Queries/UserProjects';
 
-export namespace CMSLogin {
+export namespace CMSLoginType {
 	export namespace Redux {
 		export interface Store {
-			user: null | CMSLogin.Payload.User;
+			user: null | CMSLoginType.Payload.User;
 			info: string | null;
-			credentials: null | CMSLogin.Payload.Credentials;
-			actual_project: null | CMSLogin.Payload.ActualProject;
+			credentials: null | CMSLoginType.Payload.Credentials;
+			actual_project: null | CMSLoginType.Payload.ActualProject;
 			projects: null | { [key: string]: UserProjectsType.Project };
 			project_roles: null | { [key: string]: UserProjectsType.ProjectRole };
 			warbud_apps: null | { [key: string]: string[] };
@@ -18,21 +18,21 @@ export namespace CMSLogin {
 		}
 		export interface IActions {
 			StartupComponent: () => {
-				type: typeof CMSLogin.Redux.Types.STARTUP_LOGIN_COMPONENT;
+				type: typeof CMSLoginType.Redux.Types.STARTUP_LOGIN_COMPONENT;
 			};
 
 			UserLoginStart: (
-				data: CMSLogin.Payload.Login,
+				data: CMSLoginType.Payload.Login,
 			) => {
-				type: typeof CMSLogin.Redux.Types.USER_LOGIN_START;
+				type: typeof CMSLoginType.Redux.Types.USER_LOGIN_START;
 				payload: { data: typeof data };
 			};
 
 			UserLoginEnd: (
-				user: CMSLogin.Payload.User['id'],
-				credentials: CMSLogin.Payload.Credentials,
+				user: CMSLoginType.Payload.User['id'],
+				credentials: CMSLoginType.Payload.Credentials,
 			) => {
-				type: typeof CMSLogin.Redux.Types.USER_LOGIN_END;
+				type: typeof CMSLoginType.Redux.Types.USER_LOGIN_END;
 				payload: {
 					user: typeof user;
 					credentials: typeof credentials;
@@ -40,24 +40,24 @@ export namespace CMSLogin {
 			};
 
 			UserLogoutStart: () => {
-				type: typeof CMSLogin.Redux.Types.USER_LOGOUT_START;
+				type: typeof CMSLoginType.Redux.Types.USER_LOGOUT_START;
 			};
 			UserLogoutEnd: () => {
-				type: typeof CMSLogin.Redux.Types.USER_LOGOUT_END;
+				type: typeof CMSLoginType.Redux.Types.USER_LOGOUT_END;
 			};
 
 			UserResetPasswordInit: ({
 				password,
 				passwordConfirmation,
-			}: CMSLogin.Payload.ResetPassword) => {
-				type: typeof CMSLogin.Redux.Types.USER_PASSWORD_RESET_INIT;
-				payload: CMSLogin.Payload.ResetPassword;
+			}: CMSLoginType.Payload.ResetPassword) => {
+				type: typeof CMSLoginType.Redux.Types.USER_PASSWORD_RESET_INIT;
+				payload: CMSLoginType.Payload.ResetPassword;
 			};
 
 			UserResetPassword: (
 				info: string,
 			) => {
-				type: typeof CMSLogin.Redux.Types.USER_PASSWORD_RESET;
+				type: typeof CMSLoginType.Redux.Types.USER_PASSWORD_RESET;
 				payload: { info: typeof info };
 			};
 
@@ -65,7 +65,7 @@ export namespace CMSLogin {
 				user: UserDataType.User,
 				project: UserProjectsType.WarbudProjUserRole[],
 			) => {
-				type: typeof CMSLogin.Redux.Types.USER_FETCH_DATA;
+				type: typeof CMSLoginType.Redux.Types.USER_FETCH_DATA;
 				payload: {
 					user: typeof user;
 					project: typeof project;
@@ -73,13 +73,13 @@ export namespace CMSLogin {
 			};
 
 			SetCurrentProject: (
-				project: CMSLogin.Payload.ActualProject,
+				project: CMSLoginType.Payload.ActualProject | null,
 			) => {
-				type: typeof CMSLogin.Redux.Types.USER_SET_CURRENT_PROJECT;
+				type: typeof CMSLoginType.Redux.Types.USER_SET_CURRENT_PROJECT;
 				payload: { project: typeof project };
 			};
 		}
-		export type Actions = ReturnTypeFromInterface<CMSLogin.Redux.IActions>;
+		export type Actions = ReturnTypeFromInterface<CMSLoginType.Redux.IActions>;
 		export enum Types {
 			USER_LOGIN_START = 'cmslogin__USER_LOGIN_START',
 			USER_LOGIN_END = 'cmslogin__USER_LOGIN_END',
@@ -116,20 +116,25 @@ export namespace CMSLogin {
 			urn: string;
 			name: string;
 			webcon_code: string;
+			cranes_all: { [key: string]: CMSLoginType.Payload.Crane };
+			levels_all: { [key: string]: CMSLoginType.Payload.Level };
+			crane_ranges: {
+				[key: string]: CMSLoginType.Payload.Level['id'][];
+			};
 		}
 		export interface Project {
 			id: string;
 			name: string;
 			webcon_code: string;
-			bim_models: BIMModel[];
-			crane_ranges: CraneRange[];
+			bim_models: CMSLoginType.Payload.BIMModel[];
+			crane_ranges: CMSLoginType.Payload.CraneRange[];
 		}
 		export interface BIMModel {
 			model_urn: string;
 		}
 		export interface CraneRange {
-			crane: Crane;
-			level: Level;
+			crane: CMSLoginType.Payload.Crane;
+			level: CMSLoginType.Payload.Level;
 		}
 		export interface Crane {
 			id: string;

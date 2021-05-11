@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { combineEpics, ofType } from 'redux-observable';
 import { concat, EMPTY, from, iif, of } from 'rxjs';
 import { catchError, filter, map, mapTo, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
@@ -100,7 +101,7 @@ const handleInitSetStatus = (action$, state$) =>
 								from(
 									api.MONOLITHIC.createStatus({
 										user_id,
-										date: choose_date,
+										date: dayjs(choose_date).format('YYYY-MM-DD'),
 										status_id: new_status.id,
 										object_id: objects[revit_id].id,
 									}),

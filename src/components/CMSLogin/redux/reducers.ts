@@ -1,7 +1,7 @@
-import { CMSLogin } from '../type';
+import { CMSLoginType } from '../type';
 import { UserProjectsType } from '../../../services/graphql.api.service/CONSTANTS/Queries/UserProjects';
 
-export const INITIAL_STATE: CMSLogin.Redux.Store = {
+export const INITIAL_STATE: CMSLoginType.Redux.Store = {
 	user: null,
 	info: null,
 	credentials: null,
@@ -14,7 +14,7 @@ export const INITIAL_STATE: CMSLogin.Redux.Store = {
 	permissions: [],
 };
 
-function SetUserData(state: CMSLogin.Redux.Store, action: ReturnType<CMSLogin.Redux.IActions['SetUserData']>) {
+function SetUserData(state: CMSLoginType.Redux.Store, action: ReturnType<CMSLoginType.Redux.IActions['SetUserData']>) {
 	const { _project, project_roles, warbud_apps } = action.payload.project.reduce<{
 		_project: { [key: string]: UserProjectsType.Project };
 		project_roles: { [key: string]: UserProjectsType.ProjectRole };
@@ -41,12 +41,12 @@ function SetUserData(state: CMSLogin.Redux.Store, action: ReturnType<CMSLogin.Re
 	};
 }
 
-const CMSLoginReducer = (state = INITIAL_STATE, action: CMSLogin.Redux.Actions) => {
+const CMSLoginReducer = (state = INITIAL_STATE, action: CMSLoginType.Redux.Actions) => {
 	switch (action.type) {
-		case CMSLogin.Redux.Types.STARTUP_LOGIN_COMPONENT:
-		case CMSLogin.Redux.Types.USER_LOGIN_START:
+		case CMSLoginType.Redux.Types.STARTUP_LOGIN_COMPONENT:
+		case CMSLoginType.Redux.Types.USER_LOGIN_START:
 			return { ...state, loading: true };
-		case CMSLogin.Redux.Types.USER_LOGIN_END:
+		case CMSLoginType.Redux.Types.USER_LOGIN_END:
 			return {
 				...state,
 				loading: false,
@@ -56,23 +56,28 @@ const CMSLoginReducer = (state = INITIAL_STATE, action: CMSLogin.Redux.Actions) 
 				},
 				credentials: action.payload.credentials,
 			};
-		case CMSLogin.Redux.Types.USER_LOGOUT_START:
-		case CMSLogin.Redux.Types.USER_LOGOUT_END:
+		case CMSLoginType.Redux.Types.USER_LOGOUT_START:
+		case CMSLoginType.Redux.Types.USER_LOGOUT_END:
 			return { ...INITIAL_STATE };
-		case CMSLogin.Redux.Types.USER_PASSWORD_RESET_INIT:
-		case CMSLogin.Redux.Types.USER_PASSWORD_RESET:
+		case CMSLoginType.Redux.Types.USER_PASSWORD_RESET_INIT:
+		case CMSLoginType.Redux.Types.USER_PASSWORD_RESET:
 			return { ...state, is_login: true };
-		case CMSLogin.Redux.Types.USER_FETCH_DATA:
+		case CMSLoginType.Redux.Types.USER_FETCH_DATA:
 			return SetUserData(state, action);
-		case CMSLogin.Redux.Types.USER_SET_CURRENT_PROJECT:
+		case CMSLoginType.Redux.Types.USER_SET_CURRENT_PROJECT:
 			return {
 				...state,
-				actual_project: {
-					id: action.payload.project.id,
-					urn: action.payload.project.urn,
-					name: action.payload.project.name,
-					webcon_code: action.payload.project.webcon_code,
-				},
+				actual_project: action.payload.project
+					? {
+							id: action.payload.project.id,
+							urn: action.payload.project.urn,
+							name: action.payload.project.name,
+							webcon_code: action.payload.project.webcon_code,
+							levels_all: action.payload.project.levels_all,
+							cranes_all: action.payload.project.cranes_all,
+							crane_ranges: action.payload.project.crane_ranges,
+					  }
+					: null,
 			};
 		default:
 			return state;

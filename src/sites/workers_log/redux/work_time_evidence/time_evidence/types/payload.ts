@@ -19,6 +19,7 @@ export interface UpdateWorkerTimePayload {
 	project: string;
 	worked_time: number;
 	filling_engineer: string;
+	crew_summary: string;
 }
 
 export interface UpdateWorkerTimeSucceedResponse {

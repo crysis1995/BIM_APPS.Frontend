@@ -1,5 +1,5 @@
 import { graphQLClient } from '../index';
-import { CMSLogin } from '../../components/CMSLogin/type';
+import { CMSLoginType } from '../../components/CMSLogin/type';
 
 import ApolloClient, { FetchPolicy } from 'apollo-client';
 import { DocumentNode, NormalizedCacheObject } from '@apollo/client';
@@ -19,10 +19,19 @@ import GET_WORK_TIME_EVIDENCE, { GetWorkTimeEvidenceType } from './CONSTANTS/Que
 import CREATE_CREW_SUMMARY, { CreateCrewSummaryType } from './CONSTANTS/Mutations/CreateCrewSummary';
 import UPDATE_CREW_SUMMARY, { UpdateCrewSummaryType } from './CONSTANTS/Mutations/UpdateCrewSummary';
 import UPDATE_TERM, { UpdateTermType } from './CONSTANTS/Mutations/UpdateTerm';
+import COUNT_WORKERS, { CountWorkersType } from './CONSTANTS/Queries/CountWorkers';
+import GET_CREWS_AND_THEIR_CREW_SUMMARIES, {
+	GetCrewsAndTheirCrewSummariesType,
+} from './CONSTANTS/Queries/GetCrewsAndTheirCrewSummaries';
+import GetSummaryWorkerTime, { GetSummaryWorkerTimeType } from './CONSTANTS/Queries/GET_SUMMARY_WORKER_TIME';
+import GET_SUMMARY_WORKER_TIME from './CONSTANTS/Queries/GET_SUMMARY_WORKER_TIME';
+import GetObjectTimeEvidences, { GetObjectTimeEvidencesType } from './CONSTANTS/Queries/GetObjectTimeEvidences';
+import CreateObjectTimeEvidence, { CreateObjectTimeEvidenceType } from './CONSTANTS/Mutations/CreateObjectTimeEvidence';
+import UpdateObjectTimeEvidence, { UpdateObjectTimeEvidenceType } from './CONSTANTS/Mutations/UpdateObjectTimeEvidence';
 
 export default class GraphQLAPIService {
 	private client: ApolloClient<NormalizedCacheObject>;
-	constructor(access_token?: CMSLogin.Payload.Credentials['access_token'], client = graphQLClient) {
+	constructor(access_token?: CMSLoginType.Payload.Credentials['access_token'], client = graphQLClient) {
 		this.client = client(access_token);
 	}
 	fetchPolicy: FetchPolicy = 'no-cache';
@@ -55,10 +64,10 @@ export default class GraphQLAPIService {
 	}
 
 	userData(data: UserDataType.Request) {
-		return this.queryClient<UserDataType.Response, UserDataType.Request>(USER_DATA, data)
+		return this.queryClient<UserDataType.Response, UserDataType.Request>(USER_DATA, data);
 	}
 	getUserProjectRoles(data: UserProjectsType.Request) {
-		return this.queryClient<UserProjectsType.Response, UserProjectsType.Request>(USER_PROJECTS, data)
+		return this.queryClient<UserProjectsType.Response, UserProjectsType.Request>(USER_PROJECTS, data);
 	}
 
 	MONOLITHIC = {
@@ -86,12 +95,35 @@ export default class GraphQLAPIService {
 	};
 
 	WorkersLog = {
+		WorkersLog: {
+			GetObjectTimeEvidences: (data: GetObjectTimeEvidencesType.Request) => {
+				return this.queryClient<GetObjectTimeEvidencesType.Response, GetObjectTimeEvidencesType.Request>(
+					GetObjectTimeEvidences,
+					data,
+				);
+			},
+			CreateObjectTimeEvidence: (data: CreateObjectTimeEvidenceType.Request) => {
+				return this.queryClient<CreateObjectTimeEvidenceType.Response, CreateObjectTimeEvidenceType.Request>(
+					CreateObjectTimeEvidence,
+					data,
+				);
+			},
+			UpdateObjectTimeEvidence: (data:UpdateObjectTimeEvidenceType.Request) => {
+				return this.queryClient<UpdateObjectTimeEvidenceType.Response, UpdateObjectTimeEvidenceType.Request>(
+					UpdateObjectTimeEvidence,
+					data,
+				);
+			},
+		},
 		WorkTimeEvidence: {
 			GetAllCrews: (data: GetAllCrewsType.Request) => {
 				return this.queryClient<GetAllCrewsType.Response, GetAllCrewsType.Request>(GET_ALL_CREWS, data);
 			},
-			GetAllWorkers: () => {
-				return this.queryClient<GetAllWorkersType.Response, GetAllWorkersType.Request>(GET_ALL_WORKERS);
+			GetAllWorkers: (data: GetAllWorkersType.Request) => {
+				return this.queryClient<GetAllWorkersType.Response, GetAllWorkersType.Request>(GET_ALL_WORKERS, data);
+			},
+			CountWorkers: () => {
+				return this.queryClient<CountWorkersType.Response, CountWorkersType.Request>(COUNT_WORKERS);
 			},
 			CreateHouseCrew: (data: CreateHouseCrewType.Request) => {
 				return this.mutateClient<CreateHouseCrewType.Response, CreateHouseCrewType.Request>(
@@ -120,6 +152,18 @@ export default class GraphQLAPIService {
 			UpdateCrewSummary: (data: UpdateCrewSummaryType.Request) => {
 				return this.mutateClient<UpdateCrewSummaryType.Response, UpdateCrewSummaryType.Request>(
 					UPDATE_CREW_SUMMARY,
+					data,
+				);
+			},
+			GetCrewsAndTheirCrewSummaries: (data: GetCrewsAndTheirCrewSummariesType.Request) => {
+				return this.queryClient<
+					GetCrewsAndTheirCrewSummariesType.Response,
+					GetCrewsAndTheirCrewSummariesType.Request
+				>(GET_CREWS_AND_THEIR_CREW_SUMMARIES, data);
+			},
+			GetSummaryWorkedTime: (data: GetSummaryWorkerTimeType.Request) => {
+				return this.queryClient<GetSummaryWorkerTimeType.Response, GetSummaryWorkerTimeType.Request>(
+					GET_SUMMARY_WORKER_TIME,
 					data,
 				);
 			},

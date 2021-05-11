@@ -16,23 +16,18 @@ import html2canvas from 'html2canvas';
 import CrewActions from '../crew/actions';
 import { CrewActionsTypes } from '../crew/types/actions';
 import { ReturnTypeFromInterface } from '../../../../../types/ReturnTypeFromInterface';
+import { CMSLoginType } from '../../../../../components/CMSLogin/type';
 
 type ActionType = GeneralActionTypes | ReturnTypeFromInterface<Notification.Redux.IActions> | CrewActionsTypes;
 export type RootState = {
-	CMSLogin: {
-		user: { id: string };
-		actual_project: { id: string };
-		credentials: {
-			access_token: string;
-		};
-	};
+	CMSLogin: CMSLoginType.Redux.Store;
 	WorkersLog: { WorkTimeEvidence: { General: GeneralState } };
 };
 
 function TakeDataFromStore(state: RootState) {
 	return {
-		project_id: state.CMSLogin.actual_project.id,
-		user_id: state.CMSLogin.user.id,
+		project_id: state.CMSLogin.actual_project?.id,
+		user_id: state.CMSLogin.user?.id,
 		start_date: state.WorkersLog.WorkTimeEvidence.General.calendar.view_range?.start,
 		end_date: state.WorkersLog.WorkTimeEvidence.General.calendar.view_range?.end,
 	};
@@ -49,7 +44,7 @@ const OnFetchCrewStart: Epic<ActionType, ActionType, RootState> = ($action, $sta
 			if (action.payload.type === ERaportType.Financial) {
 				return from(
 					new RestAPIService(
-						state.CMSLogin.credentials.access_token,
+						state.CMSLogin.credentials?.access_token,
 					).WORKERS_LOG.WORK_TIME_EVIDENCE.GenerateFinancialRaport(TakeDataFromStore(state)),
 				).pipe(
 					mergeMap((response) =>

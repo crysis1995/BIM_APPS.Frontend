@@ -151,24 +151,23 @@ class Viewer extends Component {
 
 					var elements = {};
 					var rooms = {};
+					tree.enumNodeChildren(
+						rootId,
+						(dbID) => {
+							if (tree.getChildCount(dbID) === 0) {
+								let revit_id = /.+\[(.+)\]/g.exec(tree.getNodeName(dbID));
+
+								if (revit_id) {
+									elements[revit_id[1]] = dbID;
+								}
+							}
+						},
+						true,
+					);
+					this.props.setViewerElements(elements);
 
 					if (this.props.active_acceptance_type === ACCEPTANCE_TYPE.MONOLITHIC) {
 						this.viewer.hide(rootId);
-						tree.enumNodeChildren(
-							rootId,
-							(dbID) => {
-								if (tree.getChildCount(dbID) === 0) {
-									let revit_id = /.+\[(.+)\]/g.exec(tree.getNodeName(dbID));
-
-									if (revit_id) {
-										elements[revit_id[1]] = dbID;
-									}
-								}
-							},
-							true,
-						);
-
-						this.props.setViewerElements(elements);
 					}
 					if (this.props.active_acceptance_type === ACCEPTANCE_TYPE.ARCHITECTURAL) {
 						tree.enumNodeChildren(

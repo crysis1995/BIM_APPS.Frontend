@@ -5,9 +5,9 @@ import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 
 import CMSLoginActions from '../redux/actions';
-import { CMSLogin } from '../type';
+import { CMSLoginType } from '../type';
 
-const mapStateToProps = (state: { CMSLogin: CMSLogin.Redux.Store }) => ({
+const mapStateToProps = (state: { CMSLogin: CMSLoginType.Redux.Store }) => ({
 	info: state.CMSLogin.info,
 });
 

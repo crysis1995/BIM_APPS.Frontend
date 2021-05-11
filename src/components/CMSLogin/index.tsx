@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { v4 } from 'uuid';
 import CMSLoginActions from './redux/actions';
-import { CMSLogin } from './type';
+import { CMSLoginType } from './type';
 
-const mapStateToProps = (state: { CMSLogin: CMSLogin.Redux.Store }) => ({
+const mapStateToProps = (state: { CMSLogin: CMSLoginType.Redux.Store }) => ({
 	is_login: state.CMSLogin.is_login,
 	user: state.CMSLogin.user,
 	projects: state.CMSLogin.projects,
@@ -33,8 +33,35 @@ function CMSLoginComponent(props: Props) {
 				urn: props.projects[selectedProjectID].bim_models[0].model_urn,
 				webcon_code: props.projects[selectedProjectID].webcon_code,
 				name: props.projects[selectedProjectID].name,
+				cranes_all: props.projects[selectedProjectID].crane_ranges.reduce<
+					CMSLoginType.Payload.ActualProject['cranes_all']
+				>((prev, acc) => {
+					if (acc.crane) {
+						prev[acc.crane.id] = acc.crane;
+						return prev;
+					}
+					return prev;
+				}, {}),
+				levels_all: props.projects[selectedProjectID].crane_ranges.reduce<
+					CMSLoginType.Payload.ActualProject['levels_all']
+				>((prev, acc) => {
+					if (acc.levels.length > 0) {
+						acc.levels.forEach((level) => {
+							if (!(level.id in prev)) prev[level.id] = level;
+						});
+					}
+					return prev;
+				}, {}),
+				crane_ranges: props.projects[selectedProjectID].crane_ranges.reduce<
+					CMSLoginType.Payload.ActualProject['crane_ranges']
+				>((previousValue, currentValue) => {
+					if (currentValue.crane && currentValue.levels.length > 0) {
+						previousValue[currentValue.crane.id] = currentValue.levels.map((lvl) => lvl.id);
+					}
+					return previousValue;
+				}, {}),
 			});
-		}
+		} else props.SetCurrentProject(null);
 	}, [selectedProjectID]);
 
 	return props.is_login ? (

@@ -330,6 +330,7 @@ const STATUS = {
 	Delayed: { id: 'Delayed', name: 'Opóźniony', color: '#f05454' },
 	Planned: { id: 'Planned', name: 'Planowany', color: '#FFCC1B' },
 	Finished: { id: 'Finished', name: 'Wykonano', color: '#00ca43' },
+	'In progress': { id: 'In progress', name: 'W realizacji', color: '#008aca' },
 };
 
 const DELAY = [

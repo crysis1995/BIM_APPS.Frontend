@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
-import { CMSLogin } from '../type';
+import { CMSLoginType } from '../type';
 
 export const getUserProjects = createSelector(
-	(state: { CMSLogin: CMSLogin.Redux.Store }) => state.CMSLogin.projects,
+	(state: { CMSLogin: CMSLoginType.Redux.Store }) => state.CMSLogin.projects,
 	(projects) => (projects ? Object.values(projects) : []),
 );

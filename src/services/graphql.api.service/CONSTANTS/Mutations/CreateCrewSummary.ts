@@ -1,10 +1,10 @@
 import { gql } from 'apollo-boost';
 
 const CREATE_CREW_SUMMARY = gql`
-	mutation CreateCrewSummary($crw: ID, $start: Date, $end: Date, $own: ID, $work: [ID], $proj: ID) {
+	mutation CreateCrewSummary($crew_id: ID, $start: Date, $end: Date, $user_id: ID, $worker_ids: [ID], $project_id: ID) {
 		createWorkersLogCrewSummary(
 			input: {
-				data: { crew: $crw, startDate: $start, endDate: $end, owner: $own, workers: $work, project: $proj }
+				data: { crew: $crew_id, startDate: $start, endDate: $end, owner: $user_id, workers: $worker_ids, project: $project_id }
 			}
 		) {
 			workersLogCrewSummary {

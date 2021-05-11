@@ -1,9 +1,14 @@
 import { LabourInput } from '../types';
-import EGeneral = LabourInput.Types.EGeneral;
 
-const LabourInputGeneralActions: LabourInput.Actions.IGeneral = {
-	setCranes: (cranes) => ({ type: EGeneral.SET_CRANES, payload: { cranes } }),
-	chooseCrane: (crane) => ({ type: EGeneral.CHOOSE_CRANE, payload: { crane } }),
+const LabourInputGeneralActions: LabourInput.Redux.General.IActions = {
+	InitializeComponent: () => ({ type: LabourInput.Redux.General.Types.INITIALIZE }),
+	SetInitial: () => ({ type: LabourInput.Redux.General.Types.SET_INITIAL }),
+	ChooseLevel: (data) => ({ type: LabourInput.Redux.General.Types.CHOOSE_LEVEL, payload: data }),
+	SetDate: (data) => ({ type: LabourInput.Redux.General.Types.SET_DATE, payload: data }),
+	SelectWorkerType: (data) => ({ type: LabourInput.Redux.General.Types.SELECT_WORKER_TYPE, payload: { data } }),
+	SelectCrew: (data) => ({ type: LabourInput.Redux.General.Types.SELECT_CREW, payload: { data } }),
+	FetchStatusesStart: () => ({ type: LabourInput.Redux.General.Types.FETCH_STATUSES_START }),
+	FetchStatusesEnd: (statuses) => ({ type: LabourInput.Redux.General.Types.FETCH_STATUSES_END, payload: statuses }),
 };
 
 export default LabourInputGeneralActions;

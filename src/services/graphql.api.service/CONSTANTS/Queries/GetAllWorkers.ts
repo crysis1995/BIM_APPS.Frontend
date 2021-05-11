@@ -1,8 +1,8 @@
 import { gql } from 'apollo-boost';
 
 const GET_ALL_WORKERS = gql`
-	query GetAllWorkers {
-		workersLogWorkers {
+	query GetAllWorkers($start: Int) {
+		workersLogWorkers(start: $start) {
 			id
 			warbud_id
 			is_house_worker
@@ -14,7 +14,7 @@ export default GET_ALL_WORKERS;
 
 export namespace GetAllWorkersType {
 	export type Response = { workersLogWorkers: WorkersLogWorker[] };
-	export type Request = never;
+	export type Request = { start: number };
 
 	export interface WorkersLogWorker {
 		id: string;

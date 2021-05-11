@@ -3,7 +3,7 @@ import { RootState } from '../crew/epics';
 import { debounceTime, filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { ITimeEvidence, TimeEvidenceActionTypes } from './types/actions';
 import WorkersLogActions from '../../types';
-import { concat, from, of } from 'rxjs';
+import { concat, EMPTY, from, of } from 'rxjs';
 import {
 	UpdateWorkerTimeAbortedResponse,
 	UpdateWorkerTimePayload,
@@ -13,8 +13,9 @@ import TimeEvidenceActions from './actions';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import RestAPIService from '../../../../../services/rest.api.service';
 import dayjs from 'dayjs';
-
-type ActionType = TimeEvidenceActionTypes;
+import ModalActions from '../../../../../components/Modal/redux/actions';
+import { ModalType } from '../../../../../components/Modal/type';
+type ActionType = TimeEvidenceActionTypes | ModalType.Redux.Actions;
 
 const OnFetchWorkerWorkEvidenceStartEpic: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
 	action$.pipe(
@@ -58,25 +59,41 @@ const OnEditingWorkedTimeEpic: Epic<ActionType, ActionType, RootState> = (action
 		debounceTime(500),
 		withLatestFrom(state$),
 		switchMap(([value, state]) => {
-			const { date, worker, hours } = value.payload;
-			const { actual_project, user } = state.CMSLogin;
-			const body: UpdateWorkerTimePayload = {
-				date,
-				filling_engineer: user.id,
-				project: actual_project.id,
-				worked_time: hours,
-				worker,
-			};
-			return from(
-				new RestAPIService().WORKERS_LOG.WORK_TIME_EVIDENCE.CreateOrUpdate(body) as Promise<
-					UpdateWorkerTimeSucceedResponse | UpdateWorkerTimeAbortedResponse
-				>,
-			).pipe(
-				switchMap((data) => {
-					if ('message' in data) return of(TimeEvidenceActions.editingWorkedTimeAborted(data, worker));
-					else return of(TimeEvidenceActions.editingWorkedTimeSucceed(data, worker));
-				}),
-			);
+			function ExtractData() {
+				const { date, worker, hours } = value.payload;
+				const { actual_project, user } = state.CMSLogin;
+				const { summary } = state.WorkersLog.WorkTimeEvidence.Crews;
+				return { date, worker, hours, actual_project, user, summary };
+			}
+			const { date, worker, hours, actual_project, user, summary } = ExtractData();
+			if (user && actual_project && summary) {
+				const body: UpdateWorkerTimePayload = {
+					date,
+					filling_engineer: user.id,
+					project: actual_project.id,
+					worked_time: hours,
+					worker,
+					crew_summary: summary.id,
+				};
+				return from(
+					new RestAPIService().WORKERS_LOG.WORK_TIME_EVIDENCE.CreateOrUpdate(body) as Promise<
+						UpdateWorkerTimeSucceedResponse | UpdateWorkerTimeAbortedResponse
+					>,
+				).pipe(
+					switchMap((data) => {
+						if ('message' in data)
+							return of(
+								TimeEvidenceActions.editingWorkedTimeAborted(data, worker),
+								ModalActions.InitializeModal({
+									title: 'Uwaga!',
+									modalType: ModalType.Payload.EModalType.Error,
+									body: data.message,
+								}),
+							);
+						else return of(TimeEvidenceActions.editingWorkedTimeSucceed(data, worker));
+					}),
+				);
+			} else return EMPTY;
 		}),
 	);
 

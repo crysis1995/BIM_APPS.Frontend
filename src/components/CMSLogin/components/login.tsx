@@ -1,29 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert, Button, Col, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import { CMSLogin } from '../type';
+import { CMSLoginType } from '../type';
 import CMSLoginActions from '../redux/actions';
+import GraphQLAPIService from '../../../services/graphql.api.service';
+import { setCachedData } from '../redux/utils';
 
-const mapStateToProps = (state: { CMSLogin: CMSLogin.Redux.Store }) => ({
+const mapStateToProps = (state: { CMSLogin: CMSLoginType.Redux.Store }) => ({
 	is_login: state.CMSLogin.is_login,
 });
 
 const mapDispatchToProps = {
-	UserLoginStart:CMSLoginActions.UserLoginStart
+	UserLoginEnd: CMSLoginActions.UserLoginEnd,
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 function Login(props: Props) {
 	const { register, handleSubmit, errors } = useForm();
+	const [formErrors, setFormErrors] = useState<null | string[]>(null);
+
+	const onSubmit = async (formFata: { identifier: string; password: string; checkbox: boolean }) => {
+		try {
+			const { data } = await new GraphQLAPIService().login({
+				name: formFata.identifier,
+				password: formFata.password,
+			});
+			if (data) {
+				props.UserLoginEnd(data.login.user.id, { access_token: data.login.jwt });
+				if (formFata.checkbox) setCachedData<typeof data.login.user>(data.login.user, data.login.jwt);
+			}
+		} catch (e) {
+			setFormErrors(['Logowanie się nie powiodło!']);
+		}
+	};
+
 	if (props.is_login) return <Redirect to="/" />;
 	else
 		return (
 			<>
 				<Col xs={2} className={'pt-5'}>
-					<Form onSubmit={handleSubmit(props.UserLoginStart)}>
+					<Form onSubmit={handleSubmit(onSubmit)}>
 						<Form.Group controlId="formBasicEmail">
 							<Form.Label>Email address / Login</Form.Label>
 							<Form.Control
@@ -60,7 +79,7 @@ function Login(props: Props) {
 						<Form.Group controlId="formBasicCheckbox">
 							<Form.Check name="checkbox" ref={register()} type="checkbox" label="Zapamiętaj mnie" />
 						</Form.Group>
-						{/*{props.error && <Alert variant={'danger'}>{props.error}</Alert>}*/}
+						{formErrors && formErrors.map((err) => <Alert variant={'danger'}>{err}</Alert>)}
 						<Button className="float-right" variant="primary" type="submit">
 							Zaloguj się
 						</Button>

@@ -1,7 +1,7 @@
 import { gql } from 'apollo-boost';
 
 const CREATE_STATUS = gql`
-	mutation setStatus($object_id: ID, $date: DateTime, $user_id: ID, $status_id: ID) {
+	mutation setStatus($object_id: ID, $date: Date, $user_id: ID, $status_id: ID) {
 		createAcceptanceObjectStatus(
 			input: { data: { object: $object_id, date: $date, user: $user_id, status: $status_id } }
 		) {

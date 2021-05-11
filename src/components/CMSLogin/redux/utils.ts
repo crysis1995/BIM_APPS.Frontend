@@ -7,30 +7,25 @@ export const resetPasswordAPI = async (password: string, access_token: string) =
 	return new GraphQLAPIService(access_token).resetPassword({ id, password });
 };
 
-export function getCachedData<UserType, ProjectsType>() {
+export function getCachedData<T>() {
 	const service = new CookieService();
 	let user = service.getCookie(CookieKeys.User);
-	let projects = service.getCookie(CookieKeys.Projects);
 	let user_token = service.getCookie(CookieKeys.UserToken);
 	let data: {
-		user: UserType;
+		user: T;
 		user_token: string;
-		projects: ProjectsType;
 	} | null = null;
-	if (user && user_token && projects) {
-		data = { user: JSON.parse(user), user_token, projects: JSON.parse(projects) };
+	if (user && user_token) {
+		data = { user: JSON.parse(user), user_token };
 	}
 	return data;
 }
 
-export function setCachedData<UserType, ProjectsType>(
-	user: string | UserType,
-	user_token: string,
-	projects: ProjectsType | string,
-) {
+export function setCachedData<UserType>(user: string | UserType, user_token: string) {
 	const service = new CookieService();
 	service.setCookie(CookieKeys.User, typeof user === 'string' ? user : JSON.stringify(user));
-	service.setCookie(CookieKeys.Projects, typeof projects === 'string' ? projects : JSON.stringify(projects));
+	// service.setCookie(CookieKeys.Projects, JSON.stringify(projects));
+	// console.log(service.getCookie(CookieKeys.Projects));
 	service.setCookie(CookieKeys.UserToken, user_token);
 }
 

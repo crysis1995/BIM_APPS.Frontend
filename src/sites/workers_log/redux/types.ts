@@ -1,7 +1,6 @@
 import { Crew } from './work_time_evidence/crew/types/types';
 import { Workers } from './work_time_evidence/worker/types/types';
 import { General } from './work_time_evidence/general/types/types';
-import { WorkersLogGeneral } from './general/types/types';
 import { TimeEvidence } from './work_time_evidence/time_evidence/types/types';
 
 export default class WorkersLogActions {
@@ -11,5 +10,4 @@ export default class WorkersLogActions {
 		TimeEvidence,
 		General,
 	};
-	static General = WorkersLogGeneral;
 }

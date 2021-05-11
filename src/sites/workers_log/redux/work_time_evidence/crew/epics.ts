@@ -20,6 +20,8 @@ import { Notification } from '../../../../../components/Notification/types';
 import { ReturnTypeFromInterface } from '../../../../../types/ReturnTypeFromInterface';
 import { CreateCrewSummaryType } from '../../../../../services/graphql.api.service/CONSTANTS/Mutations/CreateCrewSummary';
 import dayjs from 'dayjs';
+import { TimeEvidenceState } from '../time_evidence/types/state';
+import { CMSLoginType } from '../../../../../components/CMSLogin/type';
 
 type ActionType =
 	| CrewActionsTypes
@@ -28,28 +30,31 @@ type ActionType =
 	| TimeEvidenceActionTypes
 	| ReturnTypeFromInterface<Notification.Redux.IActions>;
 export type RootState = {
-	CMSLogin: {
-		user: { id: string };
-		actual_project: { id: string };
-		credentials: {
-			access_token: string;
+	CMSLogin: CMSLoginType.Redux.Store;
+	WorkersLog: {
+		WorkTimeEvidence: {
+			Crews: CrewState;
+			Workers: WorkersState;
+			General: GeneralState;
+			TimeEvidence: TimeEvidenceState;
 		};
 	};
-	WorkersLog: { WorkTimeEvidence: { Crews: CrewState; Workers: WorkersState; General: GeneralState } };
 };
 
 const OnFetchCrewStart: Epic<ActionType, ActionType, RootState> = ($action, $state) =>
 	$action.pipe(
 		ofType(WorkersLogActions.WorkTimeEvidence.Crew.FETCH_START),
 		withLatestFrom($state),
-		switchMap(([_, state]) =>
-			from(
-				new GraphQLAPIService().WorkersLog.WorkTimeEvidence.GetAllCrews({
-					user_id: state.CMSLogin.user.id,
-					project_id: state.CMSLogin.actual_project.id,
-				}),
-			).pipe(map((response) => CrewActions.fetchCrewEnd(normalize(response.data.workersLogCrews)))),
-		),
+		switchMap(([_, state]) => {
+			if (state.CMSLogin.user && state.CMSLogin.actual_project)
+				return from(
+					new GraphQLAPIService().WorkersLog.WorkTimeEvidence.GetAllCrews({
+						user_id: state.CMSLogin.user.id,
+						project_id: state.CMSLogin.actual_project.id,
+					}),
+				).pipe(map((response) => CrewActions.fetchCrewEnd(normalize(response.data.workersLogCrews))));
+			else return EMPTY;
+		}),
 	);
 
 const OnChooseCrew: Epic<ActionType, ActionType, RootState> = ($action, $state) =>
@@ -116,7 +121,9 @@ const OnCreateCrewSummary: Epic<ActionType, ActionType, RootState> = (action$, s
 					store.WorkersLog.WorkTimeEvidence.Crews.actual &&
 					store.WorkersLog.WorkTimeEvidence.General.calendar.view_range &&
 					store.WorkersLog.WorkTimeEvidence.General.calendar.view_range.start &&
-					store.WorkersLog.WorkTimeEvidence.General.calendar.view_range.end
+					store.WorkersLog.WorkTimeEvidence.General.calendar.view_range.end &&
+					store.CMSLogin.user &&
+					store.CMSLogin.actual_project
 				) {
 					return {
 						crew_id: store.WorkersLog.WorkTimeEvidence.Crews.actual,

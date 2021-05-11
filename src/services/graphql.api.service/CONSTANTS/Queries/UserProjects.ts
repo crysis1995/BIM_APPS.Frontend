@@ -59,8 +59,18 @@ export namespace UserProjectsType {
 	}
 
 	export interface CraneRange {
-		crane: null;
-		levels: any[];
+		crane: null | Crane;
+		levels: Level[];
+	}
+
+	export interface Crane {
+		id: string;
+		name: string;
+	}
+
+	export interface Level {
+		id: string;
+		name: string;
 	}
 
 	export interface ProjectRole {

@@ -1,6 +1,6 @@
-import GeneralReducer from './reducers';
-
+import reducer from './reducers';
+import epics from './epics';
 export default {
-	reducer: GeneralReducer,
-	epics: {},
+	reducer,
+	epics,
 };

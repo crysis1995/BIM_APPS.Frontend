@@ -1,25 +1,23 @@
-/*table {*/
-/*	overflow-x: visible;*/
-/*	overflow-y: hidden;*/
-/*}*/
+.work-time-evidence-table {
+	overflow: hidden;
+}
 
-/*tr:hover {*/
-/*	background-color: #eeeeee;*/
-/*}*/
+.work-time-evidence-table tr:hover {
+	background-color: #eee;
+}
 
-/*td,*/
-/*th {*/
-/*	position: relative;*/
-/*}*/
-/*td:hover::after,*/
-/*th:hover::after {*/
-/*	content: '';*/
-/*	position: absolute;*/
-/*	background-color: #eeeeee;*/
-/*	left: 0;*/
-/*    right: 0;*/
-/*	top: -100%;*/
-/*    bottom: -100%;*/
-/*	!*width: 100%;*!*/
-/*	z-index: -1;*/
-/*}*/
+.work-time-evidence-table td,
+.work-time-evidence-table th {
+	position: relative;
+}
+.work-time-evidence-table td:hover::after,
+.work-time-evidence-table th:hover::after {
+	content: '';
+	position: absolute;
+	background-color: #eee;
+	left: 0;
+	top: -5000px;
+	height: 10000px;
+	width: 100%;
+	z-index: -1;
+}

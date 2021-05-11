@@ -14,6 +14,8 @@ import CrewActions from '../crew/actions';
 import { CrewActionsTypes } from '../crew/types/actions';
 import { PrepareDataForReducer } from '../crew/utils/PrepareDataForReducer';
 import { UpdateCrewSummaryType } from '../../../../../services/graphql.api.service/CONSTANTS/Mutations/UpdateCrewSummary';
+import { ApolloQueryResult } from 'apollo-client';
+import { GetAllWorkersType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/GetAllWorkers';
 
 type ActionType = WorkersActionTypes | TimeEvidenceActionTypes | CrewActionsTypes;
 
@@ -31,8 +33,24 @@ const OnFetchWorkersStartEpic: Epic<ActionType, ActionType, any> = (action$) =>
 	action$.pipe(
 		ofType(WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_START),
 		switchMap(() =>
-			from(new GraphQLAPIService().WorkersLog.WorkTimeEvidence.GetAllWorkers()).pipe(
-				map((response) => WorkersAction.fetchWorkersEnd(normalize(response.data.workersLogWorkers))),
+			from(new GraphQLAPIService().WorkersLog.WorkTimeEvidence.CountWorkers()).pipe(
+				mergeMap((data) => {
+					const N = 100;
+					const count = data.data.workersLogWorkersConnection.aggregate.totalCount;
+					const parts = Math.floor(count / N);
+					let arr: Promise<ApolloQueryResult<GetAllWorkersType.Response>>[] = [];
+					let i = 0;
+					while (i < parts) {
+						arr.push(new GraphQLAPIService().WorkersLog.WorkTimeEvidence.GetAllWorkers({ start: i * 100 }));
+						i++;
+					}
+					return from(Promise.all(arr)).pipe(
+						map((data) => {
+							let reduxData = data.flatMap((x) => x.data.workersLogWorkers);
+							return WorkersAction.fetchWorkersEnd(normalize(reduxData));
+						}),
+					);
+				}),
 			),
 		),
 	);

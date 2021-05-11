@@ -19,7 +19,19 @@ describe('Round Number test', () => {
 	});
 	test('should round number when precision is undefined', () => {
 		var number = 12.345345;
-		var expected = 12.34;
+		var expected = 12.35;
 		expect(RoundNumber(number, undefined)).toBe(expected);
 	});
+
+	test('should round number properly with set step', () => {
+		var number = 12.123123124;
+		var expected = 12.0;
+		expect(RoundNumber(number, 1, 0.5)).toBe(expected);
+	});
+	test('should round number properly with set step - other number', () => {
+		var number = 12.513123124;
+		var expected = 12.5;
+		expect(RoundNumber(number, 1, 0.5)).toBe(expected);
+	});
 });
+

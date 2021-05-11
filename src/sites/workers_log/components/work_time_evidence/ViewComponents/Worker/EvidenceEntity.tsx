@@ -8,9 +8,13 @@ import classNames from 'classnames';
 import TimeEvidenceActions from '../../../../redux/work_time_evidence/time_evidence/actions';
 import { isEditableTimeEvidence } from '../../Selectors/IsEditableTimeEvidence.Selector';
 import EditableCell from './EditableCell';
+import { CMSLoginType } from '../../../../../../components/CMSLogin/type';
+import { TooltipComponent } from '../../../../../../components/Tooltip';
+import { UserProjectsType } from '../../../../../../services/graphql.api.service/CONSTANTS/Queries/UserProjects';
 
 const mapStateToProps = (
 	state: {
+		CMSLogin: CMSLoginType.Redux.Store;
 		WorkersLog: {
 			WorkTimeEvidence: {
 				Crews: CrewState;
@@ -28,6 +32,8 @@ const mapStateToProps = (
 			componentProps.date.date
 		],
 	isEditable: isEditableTimeEvidence(state, componentProps),
+	projects: state.CMSLogin.projects,
+	actual_project_id: state.CMSLogin.actual_project?.id,
 });
 const mapDispatchToProps = {
 	editingStart: TimeEvidenceActions.editingStart,
@@ -38,70 +44,76 @@ const mapDispatchToProps = {
 type Props = ReturnType<typeof mapStateToProps> &
 	typeof mapDispatchToProps & { workerID: string; date: { date: string; is_holiday: boolean } };
 
-function EvidenceEntity(props: Props) {
-	const [color, setColor] = useState('#ffffff');
+function PrepareMessage(projects: { [p: string]: UserProjectsType.Project } | null, project_id: string | null) {
+	if (!!projects && !!project_id) {
+		return `Pracownik ma uzupełnione godziny na budowie - ${projects[project_id].name} | ${projects[project_id].webcon_code}`;
+	}
+	return 'Pracownik ma uzupełnione godziny na innej budowie';
+}
 
-	const handleOver = () => setColor('#eee');
-	const handleLeave = () => setColor('#fff');
+function EvidenceEntity(props: Props) {
 	if (props.evidence_entity && props.all_evidences) {
+		const project_id = props.all_evidences[props.evidence_entity].project.id.toString();
 		if (props.isEditable) {
 			return (
-				<td
-					style={{ maxWidth: 40, minWidth: 40, margin: 0, padding: 0, backgroundColor: color }}
-					onMouseOver={handleOver}
-					onMouseLeave={handleLeave}>
-					<EditableCell
-						handleChange={(value) => props.editingWorkedTime(props.workerID, props.date.date, value)}
-						handleBlur={props.editingCancel}
-						value={props.all_evidences[props.evidence_entity].worked_time}
-					/>
-				</td>
+				<TooltipComponent
+					show={project_id !== props.actual_project_id}
+					message={PrepareMessage(props.projects, project_id)}>
+					<td style={{ maxWidth: 40, minWidth: 40, margin: 0, padding: 0 }}>
+						<EditableCell
+							classnames={classNames({
+								'table-warning': project_id !== props.actual_project_id,
+							})}
+							handleChange={(value) => props.editingWorkedTime(props.workerID, props.date.date, value)}
+							handleBlur={props.editingCancel}
+							value={props.all_evidences[props.evidence_entity].worked_time.toString()}
+						/>
+					</td>
+				</TooltipComponent>
 			);
 		} else {
 			return (
-				<td
-					onMouseOver={handleOver}
-					onMouseLeave={handleLeave}
-					className={classNames({
-						'text-center': true,
-					})}
-					style={{ backgroundColor: color }}
-					onClick={() =>
-						props.editingStart({
-							mode: EditingMode.BY_BOTH,
-							coordinates: { date: props.date.date, worker: props.workerID },
-						})
-					}>
-					{props.all_evidences[props.evidence_entity].worked_time}
-				</td>
+				<TooltipComponent
+					show={project_id !== props.actual_project_id}
+					message={PrepareMessage(props.projects, project_id)}>
+					<td
+						className={classNames({
+							'text-center': true,
+							'table-warning': project_id !== props.actual_project_id,
+						})}
+						onClick={() =>
+							props.editingStart({
+								mode: EditingMode.BY_BOTH,
+								coordinates: { date: props.date.date, worker: props.workerID },
+							})
+						}>
+						{props.all_evidences[props.evidence_entity].worked_time}
+					</td>
+				</TooltipComponent>
 			);
 		}
 	} else {
 		if (props.isEditable) {
 			return (
 				<td
-					onMouseOver={handleOver}
-					onMouseLeave={handleLeave}
 					className={classNames({
 						'text-center': true,
 					})}
-					style={{ maxWidth: 40, minWidth: 40, margin: 0, padding: 0, backgroundColor: color }}>
+					style={{ maxWidth: 40, minWidth: 40, margin: 0, padding: 0 }}>
 					<EditableCell
+						classnames={''}
 						handleChange={(value) => props.editingWorkedTime(props.workerID, props.date.date, value)}
 						handleBlur={props.editingCancel}
-						value={0}
+						value={''}
 					/>
 				</td>
 			);
 		} else {
 			return (
 				<td
-					onMouseOver={handleOver}
-					onMouseLeave={handleLeave}
 					className={classNames({
 						'text-center': true,
 					})}
-					style={{ backgroundColor: color }}
 					onClick={(e) =>
 						props.editingStart({
 							mode: EditingMode.BY_BOTH,
