@@ -8,6 +8,8 @@ const INITIAL_STATE: LabourInput.Redux.General.Store = {
 	ActualCrew: null,
 	Statuses: null,
 	StatusesLoading: false,
+	OtherWorks: null,
+	OtherWorksLoading: false,
 };
 
 export default function GeneralReducer(
@@ -32,6 +34,10 @@ export default function GeneralReducer(
 			return { ...state, StatusesLoading: true };
 		case LabourInput.Redux.General.Types.FETCH_STATUSES_END:
 			return { ...state, StatusesLoading: false, Statuses: action.payload };
+		case LabourInput.Redux.General.Types.FETCH_OTHER_WORKS_START:
+			return { ...state, OtherWorksLoading: true };
+		case LabourInput.Redux.General.Types.FETCH_OTHER_WORKS_END:
+			return { ...state, OtherWorksLoading: false, OtherWorks: action.payload };
 		default:
 			return { ...state };
 	}

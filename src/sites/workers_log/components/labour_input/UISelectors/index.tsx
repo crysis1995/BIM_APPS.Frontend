@@ -1,5 +1,4 @@
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
 import DateSelectorComponent from './DateSelectorComponent';
 import CrewTypeSelectorComponent from './CrewTypeSelectorComponent';
 import LevelSelectorComponent from './LevelSelectorComponent';
@@ -7,20 +6,20 @@ import CrewSelectorComponent from './CrewSelectorComponent';
 
 function UISelectorsComponent() {
 	return (
-		<Row className={'pb-3 border-bottom'}>
-			<Col>
+		<div className={'pb-3 border-bottom d-flex flex-row'}>
+			<div className={'flex-fill pr-2'}>
 				<LevelSelectorComponent />
-			</Col>
-			<Col>
+			</div>
+			<div className={'flex-fill pr-2'}>
 				<DateSelectorComponent />
-			</Col>
-			<Col>
+			</div>
+			<div className={'flex-fill pr-2'}>
 				<CrewTypeSelectorComponent />
-			</Col>
-			<Col>
+			</div>
+			<div className={'flex-fill'}>
 				<CrewSelectorComponent />
-			</Col>
-		</Row>
+			</div>
+		</div>
 	);
 }
 

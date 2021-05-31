@@ -7,8 +7,8 @@ import { CrewState } from '../../work_time_evidence/crew/types/state';
 import { WorkersState } from '../../work_time_evidence/worker/types/state';
 import { GeneralState } from '../../work_time_evidence/general/types/state';
 import { TimeEvidenceState } from '../../work_time_evidence/time_evidence/types/state';
-import { catchError, filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
-import { concat, EMPTY, from, of } from 'rxjs';
+import { catchError, combineAll, filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { concat, EMPTY, from, iif, of } from 'rxjs';
 import RestAPIService from '../../../../../services/rest.api.service';
 import LabourInputObjectsActions from './actions';
 import ModalActions from '../../../../../components/Modal/redux/actions';
@@ -17,7 +17,6 @@ import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import { GetObjectTimeEvidencesType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/GetObjectTimeEvidences';
 import dayjs from 'dayjs';
 import LabourInputTimeEvidenceActions from '../time_evidence/actions';
-// import EModalType = ModalType.Payload.EModalType;
 
 type ActionType =
 	| LabourInput.Redux.Objects.Actions
@@ -121,7 +120,7 @@ function FetchObjectTimeEvidenceEpic(state: RootState, data: GetObjectTimeEviden
 		from(
 			new GraphQLAPIService(
 				state.CMSLogin.credentials?.access_token,
-			).WorkersLog.WorkersLog.GetObjectTimeEvidences({ ...data, object_ids, limit: 1 }),
+			).WorkersLog.LabourInput.ObjectTimeEvidences.Get({ ...data, object_ids, limit: 1 }),
 		).pipe(
 			map((data) =>
 				LabourInputTimeEvidenceActions.FetchObjectTimeEvidenceEnd(
@@ -132,6 +131,21 @@ function FetchObjectTimeEvidenceEpic(state: RootState, data: GetObjectTimeEviden
 				),
 			),
 		),
+	);
+}
+function FetchObjectTimeEvidenceEpicv2(state: RootState, data: GetObjectTimeEvidencesType.Request, object_ids: number) {
+	return from(
+		new GraphQLAPIService(state.CMSLogin.credentials?.access_token).WorkersLog.LabourInput.ObjectTimeEvidences.Get({
+			...data,
+			object_ids,
+			limit: 1,
+		}),
+	).pipe(
+		map((data) => {
+			if (data.data.workersLogObjectTimeEvidences.length > 0)
+				return of(data.data.workersLogObjectTimeEvidences[0]);
+			return EMPTY;
+		}),
 	);
 }
 const onFetchObjectsEnd: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
@@ -152,51 +166,26 @@ const onFetchObjectsEnd: Epic<ActionType, ActionType, RootState> = (action$, sta
 				const payloadDataWithoutObjectID = GetDataPayload(state);
 				return concat(
 					of(LabourInputTimeEvidenceActions.FetchAllObjectTimeEvidenceStart()),
-					from(objectIDS).pipe(
-						mergeMap((id) => FetchObjectTimeEvidenceEpic(state, payloadDataWithoutObjectID, id)),
+					iif(
+						() => objectIDS.length > 0,
+						from(objectIDS)
+							.pipe(
+								mergeMap((id) => FetchObjectTimeEvidenceEpicv2(state, payloadDataWithoutObjectID, id)),
+								combineAll(),
+							)
+							.pipe(
+								map((data) => {
+									return LabourInputTimeEvidenceActions.FetchAllObjectTimeEvidenceEnd(data);
+								}),
+							),
+						of(LabourInputTimeEvidenceActions.FetchAllObjectTimeEvidenceEnd([])),
 					),
-					of(LabourInputTimeEvidenceActions.FetchAllObjectTimeEvidenceEnd()),
 				);
 			} catch (Error) {
 				return EMPTY;
 			}
 		}),
 	);
-
-const CreateOrUpdateOnAPI = (
-	state: RootState,
-	action: ReturnType<LabourInput.Redux.TimeEvidence.IActions['CreateOrUpdateObjectTimeEvidenceStart']>,
-) => {
-	const { ObjectTimeEvidenceID, workedTime, objectID } = action.payload;
-	const api = new GraphQLAPIService(state.CMSLogin.credentials?.access_token);
-	if (ObjectTimeEvidenceID) {
-		return from(
-			api.WorkersLog.WorkersLog.UpdateObjectTimeEvidence({
-				object_time_evidence_id: ObjectTimeEvidenceID,
-				worked_time: workedTime,
-			}),
-		);
-	} else {
-		const date = dayjs(state.WorkersLog.LabourInput.General.ActualDate).format('YYYY-MM-DD'),
-			project_id = state.CMSLogin.actual_project?.id,
-			user_id = state.CMSLogin.user?.id,
-			crew_id = state.WorkersLog.LabourInput.General.ActualCrew,
-			worked_time = workedTime,
-			object_id = objectID;
-		if (!project_id || !user_id || !crew_id)
-			throw new Error('Nie można zapisać aktualizacji nakładu pracy dla elementu o ID : ' + objectID);
-		return from(
-			api.WorkersLog.WorkersLog.CreateObjectTimeEvidence({
-				date,
-				project_id,
-				user_id,
-				crew_id,
-				worked_time,
-				object_id,
-			}),
-		);
-	}
-};
 
 const CreateOrUpdateObjectTimeEvidence: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
 	action$.pipe(
@@ -212,17 +201,21 @@ const CreateOrUpdateObjectTimeEvidence: Epic<ActionType, ActionType, RootState> 
 			const api = new GraphQLAPIService(state.CMSLogin.credentials?.access_token);
 			if (ObjectTimeEvidenceID) {
 				return from(
-					api.WorkersLog.WorkersLog.UpdateObjectTimeEvidence({
+					api.WorkersLog.LabourInput.ObjectTimeEvidences.Update({
 						object_time_evidence_id: ObjectTimeEvidenceID,
 						worked_time: workedTime,
 					}),
 				).pipe(
-					map((response) =>
-						LabourInputTimeEvidenceActions.CreateOrUpdateObjectTimeEvidenceEnd(
-							response.data.updateWorkersLogObjectTimeEvidence.workersLogObjectTimeEvidence,
-							objectID,
-						),
-					),
+					mergeMap((response) => {
+						if (response.data)
+							return of(
+								LabourInputTimeEvidenceActions.CreateOrUpdateObjectTimeEvidenceEnd(
+									response.data?.updateWorkersLogObjectTimeEvidence.workersLogObjectTimeEvidence,
+									objectID,
+								),
+							);
+						return EMPTY;
+					}),
 				);
 			} else {
 				const date = dayjs(state.WorkersLog.LabourInput.General.ActualDate).format('YYYY-MM-DD'),
@@ -240,7 +233,7 @@ const CreateOrUpdateObjectTimeEvidence: Epic<ActionType, ActionType, RootState> 
 						}),
 					);
 				return from(
-					api.WorkersLog.WorkersLog.CreateObjectTimeEvidence({
+					api.WorkersLog.LabourInput.ObjectTimeEvidences.Create({
 						date,
 						project_id,
 						user_id,
@@ -249,12 +242,16 @@ const CreateOrUpdateObjectTimeEvidence: Epic<ActionType, ActionType, RootState> 
 						object_id,
 					}),
 				).pipe(
-					map((response) =>
-						LabourInputTimeEvidenceActions.CreateOrUpdateObjectTimeEvidenceEnd(
-							response.data.createWorkersLogObjectTimeEvidence.workersLogObjectTimeEvidence,
-							objectID,
-						),
-					),
+					mergeMap((response) => {
+						if (response.data)
+							return of(
+								LabourInputTimeEvidenceActions.CreateOrUpdateObjectTimeEvidenceEnd(
+									response.data.createWorkersLogObjectTimeEvidence.workersLogObjectTimeEvidence,
+									objectID,
+								),
+							);
+						return EMPTY;
+					}),
 				);
 			}
 		}),

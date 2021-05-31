@@ -1,8 +1,12 @@
 import { ReturnTypeFromInterface } from '../../../../../types/ReturnTypeFromInterface';
 import { CMSLoginType } from '../../../../../components/CMSLogin/type';
 import dayjs from 'dayjs';
-import { WORKERS_LOG__WORKERS_TYPE } from '../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
+import {
+	OTHER_WORK_TYPE,
+	WORKERS_LOG__WORKERS_TYPE,
+} from '../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
 import { GetStatusesType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/GetStatuses';
+import { GetGroupedOtherWorksTimeEvidencesType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/GetGroupedOtherWorksTimeEvidences';
 
 export namespace LabourInput {
 	export namespace Redux {
@@ -14,6 +18,8 @@ export namespace LabourInput {
 				ActualCrew: string | null;
 				Statuses: null | { [key: string]: GetStatusesType.AcceptanceStatus };
 				StatusesLoading: boolean;
+				OtherWorks: null | { [key: string]: LabourInput.Payload.General.OtherWorksData };
+				OtherWorksLoading: boolean;
 			}
 
 			export interface IActions {
@@ -61,6 +67,16 @@ export namespace LabourInput {
 						data: typeof data;
 					};
 				};
+
+				FetchOtherWorksStart: () => {
+					type: typeof LabourInput.Redux.General.Types.FETCH_OTHER_WORKS_START;
+				};
+				FetchOtherWorksEnd: (data: {
+					[key: string]: LabourInput.Payload.General.OtherWorksData;
+				}) => {
+					type: typeof LabourInput.Redux.General.Types.FETCH_OTHER_WORKS_END;
+					payload: typeof data;
+				};
 			}
 
 			export type Actions = ReturnTypeFromInterface<LabourInput.Redux.General.IActions>;
@@ -74,6 +90,8 @@ export namespace LabourInput {
 				FETCH_STATUSES_END = 'labour_input__FETCH_STATUSES_END',
 				SET_INITIAL = 'labour_input__SET_INITIAL',
 				INITIALIZE = 'labour_input__INITIALIZE',
+				FETCH_OTHER_WORKS_START = 'labour_input__FETCH_OTHER_WORKS_START',
+				FETCH_OTHER_WORKS_END = 'labour_input__FETCH_OTHER_WORKS_END',
 			}
 		}
 		export namespace Objects {
@@ -131,8 +149,16 @@ export namespace LabourInput {
 				CurrentSummaryWorkTime: number;
 				CurrentSummaryWorkTimeLoading: boolean;
 
-				TimeDifference:number
-				CanFillTime:boolean
+				GroupedOtherWorkTimeEvidenceId: null | string;
+				GroupedOtherWorkTimeEvidenceLoading: boolean;
+
+				OtherWorksTimeEvidences: null | {
+					[key: string]: LabourInput.Payload.TimeEvidence.OtherWorksTimeEvidence;
+				};
+				OtherWorksTimeEvidencesLoading: { [key: string]: boolean };
+
+				TimeDifference: number;
+				CanFillTime: boolean;
 			}
 
 			export interface IActions {
@@ -151,8 +177,11 @@ export namespace LabourInput {
 					type: typeof LabourInput.Redux.TimeEvidence.Types.FETCH_ALL_OBJECTS_TIME_EVIDENCE_START;
 				};
 
-				FetchAllObjectTimeEvidenceEnd: () => {
+				FetchAllObjectTimeEvidenceEnd: (
+					data: LabourInput.Payload.TimeEvidence.ObjectTimeEvidence[],
+				) => {
 					type: typeof LabourInput.Redux.TimeEvidence.Types.FETCH_ALL_OBJECTS_TIME_EVIDENCE_END;
+					payload: typeof data;
 				};
 				FetchObjectTimeEvidenceStart: (
 					objectID: LabourInput.Payload.Objects.ObjectWithStatus['id'],
@@ -186,6 +215,43 @@ export namespace LabourInput {
 					type: typeof LabourInput.Redux.TimeEvidence.Types.CREATE_OR_UPDATE_OBJECT_TIME_EVIDENCE_END;
 					payload: { data: typeof data; objectID: typeof objectID };
 				};
+
+				FetchGroupedOtherWorkTimeEvidenceStart: () => {
+					type: typeof LabourInput.Redux.TimeEvidence.Types.FETCH_GROUPED_OTHER_WORK_TIME_EVIDENCE_START;
+				};
+				FetchGroupedOtherWorkTimeEvidenceEnd: (
+					data: LabourInput.Payload.TimeEvidence.GroupedOtherWorkTimeEvidence,
+				) => {
+					type: typeof LabourInput.Redux.TimeEvidence.Types.FETCH_GROUPED_OTHER_WORK_TIME_EVIDENCE_END;
+					payload: typeof data;
+				};
+
+				CreateOtherWorkStart: (
+					data: LabourInput.Payload.TimeEvidence.CreateOtherWorkPayload,
+				) => {
+					type: typeof LabourInput.Redux.TimeEvidence.Types.CREATE_OTHER_WORK_START;
+					payload: typeof data;
+				};
+				CreateOtherWorkEnd: (
+					data: LabourInput.Payload.TimeEvidence.OtherWorksTimeEvidence,
+				) => {
+					type: typeof LabourInput.Redux.TimeEvidence.Types.CREATE_OTHER_WORK_END;
+					payload: typeof data;
+				};
+
+				UpdateOtherWorkStart: (data: {
+					worked_time: number;
+					id: LabourInput.Payload.TimeEvidence.OtherWorksTimeEvidence['id'];
+				}) => {
+					type: typeof LabourInput.Redux.TimeEvidence.Types.UPDATE_OTHER_WORK_START;
+					payload: typeof data;
+				};
+				UpdateOtherWorkEnd: (
+					data: LabourInput.Payload.TimeEvidence.OtherWorksTimeEvidence,
+				) => {
+					type: typeof LabourInput.Redux.TimeEvidence.Types.UPDATE_OTHER_WORK_END;
+					payload: typeof data;
+				};
 			}
 			export type Actions = ReturnTypeFromInterface<LabourInput.Redux.TimeEvidence.IActions>;
 			export enum Types {
@@ -199,10 +265,29 @@ export namespace LabourInput {
 
 				CREATE_OR_UPDATE_OBJECT_TIME_EVIDENCE_START = 'labour_input__CREATE_OR_UPDATE_OBJECT_TIME_EVIDENCE_START',
 				CREATE_OR_UPDATE_OBJECT_TIME_EVIDENCE_END = 'labour_input__CREATE_OR_UPDATE_OBJECT_TIME_EVIDENCE_END',
+
+				FETCH_GROUPED_OTHER_WORK_TIME_EVIDENCE_START = 'labour_input__FETCH_GROUPED_OTHER_WORK_TIME_EVIDENCE_START',
+				FETCH_GROUPED_OTHER_WORK_TIME_EVIDENCE_END = 'labour_input__FETCH_GROUPED_OTHER_WORK_TIME_EVIDENCE_END',
+
+				CREATE_OR_UPDATE_OTHER_WORK_TIME_EVIDENCE_START = 'labour_input__CREATE_OR_UPDATE_OTHER_WORK_TIME_EVIDENCE_START',
+				CREATE_OR_UPDATE_OTHER_WORK_TIME_EVIDENCE_END = 'labour_input__CREATE_OR_UPDATE_OTHER_WORK_TIME_EVIDENCE_END',
+				CREATE_OTHER_WORK_START = 'labour_input__CREATE_OTHER_WORK_START',
+				CREATE_OTHER_WORK_END = 'labour_input__CREATE_OTHER_WORK_END',
+				UPDATE_OTHER_WORK_START = 'labour_input__UPDATE_OTHER_WORK_START',
+				UPDATE_OTHER_WORK_END = 'labour_input__UPDATE_OTHER_WORK_END',
 			}
 		}
 	}
 	export namespace Payload {
+		export namespace General {
+			export interface OtherWorksData {
+				id: string;
+				name: string;
+				work_type: OTHER_WORK_TYPE;
+				crew_type: null | WORKERS_LOG__WORKERS_TYPE;
+			}
+		}
+
 		export namespace Objects {
 			export interface ObjectWithStatus {
 				id: number;
@@ -227,6 +312,14 @@ export namespace LabourInput {
 				id: number | string;
 				worked_time: number;
 			}
+
+			export interface CreateOtherWorkPayload {
+				id: string | number;
+				work_type: OTHER_WORK_TYPE;
+			}
+
+			export type GroupedOtherWorkTimeEvidence = GetGroupedOtherWorksTimeEvidencesType.WorkersLogGroupedOtherWorksTimeEvidence;
+			export type OtherWorksTimeEvidence = GetGroupedOtherWorksTimeEvidencesType.OtherWorksTimeEvidence;
 		}
 	}
 }

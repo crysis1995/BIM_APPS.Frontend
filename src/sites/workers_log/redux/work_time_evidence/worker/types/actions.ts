@@ -1,6 +1,7 @@
 import WorkersLogActions from '../../../types';
 import { IWarbudWorkerMapData, WorkerPayload } from './payload';
 import { ReturnTypeFromInterface } from '../../../../../../types/ReturnTypeFromInterface';
+import { WORKERS_LOG__WORKERS_TYPE } from '../../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
 
 export interface IWorkersAction {
 	fetchWorkersStart: () => {
@@ -12,23 +13,36 @@ export interface IWorkersAction {
 		type: typeof WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_END;
 		payload: { workers: typeof workers };
 	};
+	createWorker: (worker: {
+		name: string;
+		worker_type: WORKERS_LOG__WORKERS_TYPE;
+	}) => {
+		type: typeof WorkersLogActions.WorkTimeEvidence.Workers.CREATE;
+		payload: { worker: typeof worker };
+	};
 	addNewWorker: (
 		worker: WorkerPayload,
 	) => {
 		type: typeof WorkersLogActions.WorkTimeEvidence.Workers.ADD_NEW;
-		payload: { worker: WorkerPayload };
+		payload: typeof worker;
 	};
 	addWorker: (
-		worker: WorkerPayload,
+		workerID: WorkerPayload['id'],
 	) => {
 		type: typeof WorkersLogActions.WorkTimeEvidence.Workers.ADD;
-		payload: { worker: WorkerPayload };
+		payload: { worker: typeof workerID };
 	};
 	deleteWorker: (
-		worker: WorkerPayload,
+		workerID: WorkerPayload['id'],
 	) => {
 		type: typeof WorkersLogActions.WorkTimeEvidence.Workers.DELETE;
-		payload: { worker: WorkerPayload };
+		payload: typeof workerID;
+	};
+	copyWorkersToCrew: (
+		workerIDList: WorkerPayload['id'][],
+	) => {
+		type: typeof WorkersLogActions.WorkTimeEvidence.Workers.COPY_WORKERS;
+		payload: typeof workerIDList;
 	};
 	fetchWorkersMapStart: () => {
 		type: typeof WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_MAP_START;

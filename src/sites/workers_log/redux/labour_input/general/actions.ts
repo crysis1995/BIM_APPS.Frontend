@@ -9,6 +9,8 @@ const LabourInputGeneralActions: LabourInput.Redux.General.IActions = {
 	SelectCrew: (data) => ({ type: LabourInput.Redux.General.Types.SELECT_CREW, payload: { data } }),
 	FetchStatusesStart: () => ({ type: LabourInput.Redux.General.Types.FETCH_STATUSES_START }),
 	FetchStatusesEnd: (statuses) => ({ type: LabourInput.Redux.General.Types.FETCH_STATUSES_END, payload: statuses }),
+	FetchOtherWorksStart: () => ({ type: LabourInput.Redux.General.Types.FETCH_OTHER_WORKS_START }),
+	FetchOtherWorksEnd: (data) => ({ type: LabourInput.Redux.General.Types.FETCH_OTHER_WORKS_END, payload: data }),
 };
 
 export default LabourInputGeneralActions;

@@ -5,7 +5,7 @@ import { AddToAll } from './utils/AddToAll';
 import { AddToWorkEvidence } from './utils/AddToWorkEvidence';
 import { AddToAllWorkersAndDates } from './utils/AddToAllWorkersAndDates';
 
-const INITIAL_STATE: TimeEvidenceState = {
+export const INITIAL_STATE: TimeEvidenceState = {
 	all_by_days: null,
 	all_by_workers: null,
 	loading: false,

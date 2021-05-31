@@ -1,17 +1,17 @@
-import React from 'react';
-import RowObjectComponent from './Row.Object.Component';
-import { v4 } from 'uuid';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { CMSLoginType } from '../../../../../../../components/CMSLogin/type';
 import WorkersLogRedux from '../../../../../redux';
 import HideComponent from '../../../../../../../components/HideComponent';
+import OtherWorks from './OtherWork';
+import Objects from './Objects';
 
 const mapStateToProps = (state: {
 	CMSLogin: CMSLoginType.Redux.Store;
 	WorkersLog: ReturnType<typeof WorkersLogRedux.reducer>;
 }) => ({
-	objectsNotLoaded: !state.WorkersLog.LabourInput.Objects.AllObjects,
-	FilteredObjects: state.WorkersLog.LabourInput.Objects.FilteredObjects,
+	objectsNotLoaded:
+		!state.WorkersLog.LabourInput.Objects.AllObjects || !state.WorkersLog.LabourInput.General.OtherWorks,
 });
 
 const mapDispatchToProps = {};
@@ -19,16 +19,16 @@ const mapDispatchToProps = {};
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 function TableBodyComponent(props: Props) {
-	console.count('TableBodyComponent');
+	const [actualAccordion, setActualAccordion] = useState<string | null>(null);
 	return (
 		<HideComponent when={props.objectsNotLoaded}>
 			<tbody>
-				{props.FilteredObjects.map((objectID) => (
-					<RowObjectComponent key={v4()} objectID={objectID} />
-				))}
+				<Objects setActualAccordion={setActualAccordion} actualAccordion={actualAccordion} />
+				<OtherWorks setActualAccordion={setActualAccordion} actualAccordion={actualAccordion} />
 			</tbody>
 		</HideComponent>
 	);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TableBodyComponent);
+

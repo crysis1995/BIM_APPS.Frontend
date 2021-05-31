@@ -1,6 +1,6 @@
 import { LabourInput } from '../types';
 
-const INITIAL_STATE: LabourInput.Redux.Objects.Store = {
+export const INITIAL_STATE: LabourInput.Redux.Objects.Store = {
 	AllObjects: null,
 	Loading: false,
 	FilteredObjects: [],

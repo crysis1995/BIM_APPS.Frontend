@@ -15,8 +15,6 @@ const graphQLClient = (access_token?: CMSLoginType.Payload.Credentials['access_t
 			headers,
 		}),
 		cache: new InMemoryCache(),
-		// onError: (error) => console.log(error),
-		// fetchOptions: {},
 	});
 };
 

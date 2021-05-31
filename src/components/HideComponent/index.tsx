@@ -4,7 +4,7 @@ type Props = {
 };
 const HideComponent: React.FunctionComponent<Props> = (props) => {
 	if (!props.when) return <>{props.children}</>;
-	return <></>;
+	return <React.Fragment  />;
 };
 
 export default HideComponent;

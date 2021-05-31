@@ -5,7 +5,7 @@ import WorkersLogRedux from '../../../redux';
 import { Col, Row, Spinner } from 'react-bootstrap';
 import Summary from './summary';
 import HideComponent from '../../../../../components/HideComponent';
-
+import FillLabourInputComponent from './fillLabourInputComponent';
 const mapStateToProps = (state: {
 	CMSLogin: CMSLoginType.Redux.Store;
 	WorkersLog: ReturnType<typeof WorkersLogRedux.reducer>;
@@ -23,21 +23,25 @@ const mapStateToProps = (state: {
 const mapDispatchToProps = {};
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+
 function WorkTimeSummaryComponent(props: Props) {
 	return (
-		<Row className={'pb-3'}>
+		<div data-testid="WorkTimeSummaryComponent" className={'py-3 d-flex flex-row'}>
 			{props.loading ? (
-				<Col className={'justify-content-center'}>
-					<Spinner animation="border" size="sm" />
-				</Col>
+				<div className={'d-flex flex-column w-100 align-items-center'}>
+					<Spinner data-testid="loading" animation="border" size="sm" />
+				</div>
 			) : (
 				<HideComponent when={!props.ActualCrew}>
-					<Col className={'pt-3'}>
+					<div className={'f-flex flex-column'}>
 						<Summary />
-					</Col>
+					</div>
+					{/*<Col xs={"auto"} className={"pt-3 d-flex justify-content-end"}>*/}
+					{/*	<FillLabourInputComponent />*/}
+					{/*</Col>*/}
 				</HideComponent>
 			)}
-		</Row>
+		</div>
 	);
 }
 

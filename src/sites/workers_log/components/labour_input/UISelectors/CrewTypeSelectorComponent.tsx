@@ -12,7 +12,6 @@ const mapStateToProps = (state: {
 	CMSLogin: CMSLoginType.Redux.Store;
 	WorkersLog: ReturnType<typeof WorkersLogRedux.reducer>;
 }) => ({
-	loading: state.CMSLogin.loading,
 	ActiveWorkType: state.WorkersLog.LabourInput.General.ActiveWorkType,
 });
 

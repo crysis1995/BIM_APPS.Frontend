@@ -23,11 +23,33 @@ import COUNT_WORKERS, { CountWorkersType } from './CONSTANTS/Queries/CountWorker
 import GET_CREWS_AND_THEIR_CREW_SUMMARIES, {
 	GetCrewsAndTheirCrewSummariesType,
 } from './CONSTANTS/Queries/GetCrewsAndTheirCrewSummaries';
-import GetSummaryWorkerTime, { GetSummaryWorkerTimeType } from './CONSTANTS/Queries/GET_SUMMARY_WORKER_TIME';
-import GET_SUMMARY_WORKER_TIME from './CONSTANTS/Queries/GET_SUMMARY_WORKER_TIME';
+import GET_SUMMARY_WORKER_TIME, { GetSummaryWorkerTimeType } from './CONSTANTS/Queries/GET_SUMMARY_WORKER_TIME';
 import GetObjectTimeEvidences, { GetObjectTimeEvidencesType } from './CONSTANTS/Queries/GetObjectTimeEvidences';
 import CreateObjectTimeEvidence, { CreateObjectTimeEvidenceType } from './CONSTANTS/Mutations/CreateObjectTimeEvidence';
 import UpdateObjectTimeEvidence, { UpdateObjectTimeEvidenceType } from './CONSTANTS/Mutations/UpdateObjectTimeEvidence';
+import GetAllOtherWorkOptions, { GetAllOtherWorkOptionsType } from './CONSTANTS/Queries/GetAllOtherWorkOptions';
+import CreateGroupedOtherWorkTimeEvidence, {
+	CreateGroupedOtherWorkTimeEvidenceType,
+} from './CONSTANTS/Mutations/CreateGroupedOtherWorkTimeEvidence';
+import CreateOtherWorkTimeEvidence, {
+	CreateOtherWorkTimeEvidenceType,
+} from './CONSTANTS/Mutations/CreateOtherWorkTimeEvidence';
+import UpdateGroupedOtherWorkTimeEvidence, {
+	UpdateGroupedOtherWorkTimeEvidenceType,
+} from './CONSTANTS/Mutations/UpdateGroupedOtherWorkTimeEvidence';
+import UpdateOtherWorkTimeEvidence, {
+	UpdateOtherWorkTimeEvidenceType,
+} from './CONSTANTS/Mutations/UpdateOtherWorkTimeEvidence';
+import DeleteOtherWorkTimeEvidence, {
+	DeleteOtherWorkTimeEvidenceType,
+} from './CONSTANTS/Mutations/DeleteOtherWorkTimeEvidence';
+import GetGroupedOtherWorksTimeEvidences, {
+	GetGroupedOtherWorksTimeEvidencesType,
+} from './CONSTANTS/Queries/GetGroupedOtherWorksTimeEvidences';
+import CreateWorker, { CreateWorkerType } from './CONSTANTS/Mutations/CreateWorker';
+import AgregateWorkerTimeEvidence, {
+	AgregateWorkerTimeEvidenceType,
+} from './CONSTANTS/Queries/AgregateWorkerTimeEvidence';
 
 export default class GraphQLAPIService {
 	private client: ApolloClient<NormalizedCacheObject>;
@@ -95,27 +117,88 @@ export default class GraphQLAPIService {
 	};
 
 	WorkersLog = {
-		WorkersLog: {
-			GetObjectTimeEvidences: (data: GetObjectTimeEvidencesType.Request) => {
-				return this.queryClient<GetObjectTimeEvidencesType.Response, GetObjectTimeEvidencesType.Request>(
-					GetObjectTimeEvidences,
-					data,
-				);
+		LabourInput: {
+			ObjectTimeEvidences: {
+				Get: (data: GetObjectTimeEvidencesType.Request) => {
+					return this.queryClient<GetObjectTimeEvidencesType.Response, GetObjectTimeEvidencesType.Request>(
+						GetObjectTimeEvidences,
+						data,
+					);
+				},
+				Create: (data: CreateObjectTimeEvidenceType.Request) => {
+					return this.mutateClient<
+						CreateObjectTimeEvidenceType.Response,
+						CreateObjectTimeEvidenceType.Request
+					>(CreateObjectTimeEvidence, data);
+				},
+				Update: (data: UpdateObjectTimeEvidenceType.Request) => {
+					return this.mutateClient<
+						UpdateObjectTimeEvidenceType.Response,
+						UpdateObjectTimeEvidenceType.Request
+					>(UpdateObjectTimeEvidence, data);
+				},
 			},
-			CreateObjectTimeEvidence: (data: CreateObjectTimeEvidenceType.Request) => {
-				return this.queryClient<CreateObjectTimeEvidenceType.Response, CreateObjectTimeEvidenceType.Request>(
-					CreateObjectTimeEvidence,
-					data,
-				);
+			OtherWorkOptions: {
+				GetAll: () => {
+					return this.queryClient<GetAllOtherWorkOptionsType.Response, GetAllOtherWorkOptionsType.Request>(
+						GetAllOtherWorkOptions,
+					);
+				},
 			},
-			UpdateObjectTimeEvidence: (data:UpdateObjectTimeEvidenceType.Request) => {
-				return this.queryClient<UpdateObjectTimeEvidenceType.Response, UpdateObjectTimeEvidenceType.Request>(
-					UpdateObjectTimeEvidence,
-					data,
-				);
+
+			GroupedOtherWorkTimeEvidence: {
+				GetAll: (data: GetGroupedOtherWorksTimeEvidencesType.Request) => {
+					return this.queryClient<
+						GetGroupedOtherWorksTimeEvidencesType.Response,
+						GetGroupedOtherWorksTimeEvidencesType.Request
+					>(GetGroupedOtherWorksTimeEvidences, data);
+				},
+				Create: (data: CreateGroupedOtherWorkTimeEvidenceType.Request) => {
+					return this.mutateClient<
+						CreateGroupedOtherWorkTimeEvidenceType.Response,
+						CreateGroupedOtherWorkTimeEvidenceType.Request
+					>(CreateGroupedOtherWorkTimeEvidence, data);
+				},
+				Update: (data: UpdateGroupedOtherWorkTimeEvidenceType.Request) => {
+					return this.mutateClient<
+						UpdateGroupedOtherWorkTimeEvidenceType.Response,
+						UpdateGroupedOtherWorkTimeEvidenceType.Request
+					>(UpdateGroupedOtherWorkTimeEvidence, data);
+				},
+			},
+			OtherWorkTimeEvidence: {
+				Create: (data: CreateOtherWorkTimeEvidenceType.Request) => {
+					return this.mutateClient<
+						CreateOtherWorkTimeEvidenceType.Response,
+						CreateOtherWorkTimeEvidenceType.Request
+					>(CreateOtherWorkTimeEvidence, data);
+				},
+				Update: (data: UpdateOtherWorkTimeEvidenceType.Request) => {
+					return this.mutateClient<
+						UpdateOtherWorkTimeEvidenceType.Response,
+						UpdateOtherWorkTimeEvidenceType.Request
+					>(UpdateOtherWorkTimeEvidence, data);
+				},
+				Delete: (data: DeleteOtherWorkTimeEvidenceType.Request) => {
+					return this.mutateClient<
+						DeleteOtherWorkTimeEvidenceType.Response,
+						DeleteOtherWorkTimeEvidenceType.Request
+					>(DeleteOtherWorkTimeEvidence, data);
+				},
 			},
 		},
 		WorkTimeEvidence: {
+			Worker: {
+				Create: (data: CreateWorkerType.Request) => {
+					return this.mutateClient<CreateWorkerType.Response, CreateWorkerType.Request>(CreateWorker, data);
+				},
+				AgregateTimeEvidence: (data: AgregateWorkerTimeEvidenceType.Request) => {
+					return this.queryClient<
+						AgregateWorkerTimeEvidenceType.Response,
+						AgregateWorkerTimeEvidenceType.Request
+					>(AgregateWorkerTimeEvidence, data);
+				},
+			},
 			GetAllCrews: (data: GetAllCrewsType.Request) => {
 				return this.queryClient<GetAllCrewsType.Response, GetAllCrewsType.Request>(GET_ALL_CREWS, data);
 			},

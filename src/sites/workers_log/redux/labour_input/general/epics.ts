@@ -1,4 +1,4 @@
-import { combineEpics, Epic } from 'redux-observable';
+import { combineEpics, Epic, ofType } from 'redux-observable';
 import { LabourInput } from '../types';
 import { filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { setCurrentSheet } from '../../../../../components/ForgeViewer/redux/actions';
@@ -51,7 +51,11 @@ const OnInitializeComponent: Epic<ActionType, ActionType, RootState> = (action$,
 		),
 		withLatestFrom(state$),
 		mergeMap(([_, state]) =>
-			concat(of(LabourInputGeneralActions.SetDate(dayjs())), of(LabourInputGeneralActions.FetchStatusesStart())),
+			concat(
+				of(LabourInputGeneralActions.SetDate(dayjs())),
+				of(LabourInputGeneralActions.FetchStatusesStart()),
+				of(LabourInputGeneralActions.FetchOtherWorksStart()),
+			),
 		),
 	);
 
@@ -69,6 +73,35 @@ const FetchStatuses: Epic<ActionType, ActionType, RootState> = (action$, state$)
 		),
 	);
 
+const FetchOtherWorks: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
+	action$.pipe(
+		ofType(LabourInput.Redux.General.Types.FETCH_OTHER_WORKS_START),
+		withLatestFrom(state$),
+		switchMap(([_, state]) =>
+			from(
+				new GraphQLAPIService(
+					state.CMSLogin.credentials?.access_token,
+				).WorkersLog.LabourInput.OtherWorkOptions.GetAll(),
+			).pipe(
+				mergeMap((response) => {
+					try {
+						const data = normalize(response.data.workersLogOtherWorksOptions);
+						return of(LabourInputGeneralActions.FetchOtherWorksEnd(data));
+					} catch (e) {
+						console.log(e);
+						return of(
+							ModalActions.InitializeModal({
+								title: 'Uwaga!',
+								modalType: ModalType.Payload.EModalType.Error,
+								body: 'Nie udało się załadować opcji pozostałych prac budowlanych',
+							}),
+						);
+					}
+				}),
+			),
+		),
+	);
+
 const onChooseLevel: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
@@ -78,7 +111,10 @@ const onChooseLevel: Epic<ActionType, ActionType, RootState> = (action$, state$)
 		withLatestFrom(state$),
 		mergeMap(([action, state]) => {
 			const sheet = state.ForgeViewer.sheets.filter(
-				(x) => action.payload && x.name.toLowerCase().includes(action.payload.name.toLowerCase()),
+				(x) =>
+					action.payload &&
+					x.name.toLowerCase().includes(action.payload.name.toLowerCase()) &&
+					x.name.toLowerCase().includes('WSPro'.toLowerCase()),
 			);
 			if (sheet.length > 0) return of(setCurrentSheet(sheet[0].index));
 			return EMPTY;
@@ -147,4 +183,10 @@ const OnChangeDateWorkerTypeOrCrew: Epic<ActionType, ActionType, RootState> = (a
 		}),
 	);
 
-export default combineEpics(OnInitializeComponent, FetchStatuses, onChooseLevel, OnChangeDateWorkerTypeOrCrew);
+export default combineEpics(
+	OnInitializeComponent,
+	FetchStatuses,
+	onChooseLevel,
+	OnChangeDateWorkerTypeOrCrew,
+	FetchOtherWorks,
+);

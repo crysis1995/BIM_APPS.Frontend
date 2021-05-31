@@ -3,3 +3,8 @@ export enum WORKERS_LOG__WORKERS_TYPE {
 	CARPENTER = 'carpenter',
 	GENERAL_CONSTRUCTION = 'general_construction',
 }
+
+export enum OTHER_WORK_TYPE {
+	ADDITIONAL = 'additional',
+	HELPER = 'helper',
+}
