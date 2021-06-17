@@ -3,16 +3,11 @@ import { Redirect } from 'react-router-dom';
 import { Alert, Col } from 'react-bootstrap';
 import { AutodeskLogin } from '../components/AutodeskLogin/type';
 import { CMSLoginType } from '../components/CMSLogin/type';
-import WorkProgressLayout from '../sites/work_progress';
+import WorkProgressLayout from '../sites/work_progress/index';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: {
-	Autodesk: AutodeskLogin.Redux.Store;
-	CMSLogin: CMSLoginType.Redux.Store;
-	Odbiory: { OdbioryComponent: { started: boolean } };
-}) => ({
+const mapStateToProps = (state: { Autodesk: AutodeskLogin.Redux.Store; CMSLogin: CMSLoginType.Redux.Store }) => ({
 	Autodesk_is_login: state.Autodesk.isLogin,
-	started: state.Odbiory.OdbioryComponent.started,
 	CMS_is_login: state.CMSLogin.is_login,
 	project: state.CMSLogin.actual_project,
 });
@@ -40,7 +35,7 @@ function WorkProgressComponent(props: Props) {
 				<Alert variant={'warning'}>Usługa BIM360 niedostępna - odśwież stronę lub wróć później</Alert>
 			</Col>
 		);
-	else return <WorkProgressLayout {...props} />;
+	else return <WorkProgressLayout />;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(WorkProgressComponent);

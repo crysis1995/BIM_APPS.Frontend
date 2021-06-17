@@ -9,6 +9,7 @@ import { initSetTermsByGroup } from '../../redux/actions/terms_actions';
 import { MONOLITHIC } from '../../redux/types/constans';
 import { parseDate } from '../../redux/utils/terms_utils';
 
+
 const Terms = ({ active_crane, cranes, active_level, levels, terms, initSetTermsByGroup, terms_loading }) => {
 	let crane = '';
 	let level = '';
@@ -27,7 +28,7 @@ const Terms = ({ active_crane, cranes, active_level, levels, terms, initSetTerms
 					<div className={'py-4 text-center'}>
 						<h6>Planowane i rzeczywiste terminy realizacji elementów</h6>
 					</div>
-					<Table data-testid="TermsComponent" size={'sm'}>
+					<Table data-testid="ComponentTermsTable" size={'sm'}>
 						<thead>
 							<tr>
 								<th>Grupa elementów</th>
@@ -35,7 +36,7 @@ const Terms = ({ active_crane, cranes, active_level, levels, terms, initSetTerms
 									key={v4()}
 									placement="top"
 									overlay={
-										<Tooltip id={`tooltip-top`}>
+										<Tooltip id={'88510d1a-9abd-4dd7-8218-64b1eb66e3ad'}>
 											Data planowanego rozpoczęcia wg. planu bazowego
 										</Tooltip>
 									}>
@@ -44,14 +45,18 @@ const Terms = ({ active_crane, cranes, active_level, levels, terms, initSetTerms
 								<OverlayTrigger
 									key={v4()}
 									placement="top"
-									overlay={<Tooltip id={`tooltip-top`}>Data rzeczywistego rozpoczęcia</Tooltip>}>
+									overlay={
+										<Tooltip id={'c8737d54-cf8b-47c3-a2a6-b69802f044ae'}>
+											Data rzeczywistego rozpoczęcia
+										</Tooltip>
+									}>
 									<th>Data rzeczywistego rozpoczęcia</th>
 								</OverlayTrigger>
 								<OverlayTrigger
 									key={v4()}
 									placement="top"
 									overlay={
-										<Tooltip id={`tooltip-top`}>
+										<Tooltip id={'cdd9d5eb-d2a1-4aea-b7a0-985a256f55c1'}>
 											Data planowanego zakończenia wg. planu bazowego
 										</Tooltip>
 									}>
@@ -60,7 +65,11 @@ const Terms = ({ active_crane, cranes, active_level, levels, terms, initSetTerms
 								<OverlayTrigger
 									key={v4()}
 									placement="top"
-									overlay={<Tooltip id={`tooltip-top`}>Planowana data zakończenia</Tooltip>}>
+									overlay={
+										<Tooltip id={'3d6879f7-e5ae-4198-805b-2c11041c1d08'}>
+											Planowana data zakończenia
+										</Tooltip>
+									}>
 									<th>Planowana data zakończenia</th>
 								</OverlayTrigger>
 							</tr>

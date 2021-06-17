@@ -6,7 +6,6 @@ import { IWarbudWorkersMap } from './types/payload';
 import { filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import WorkersAction from './actions';
 import RestAPIService from '../../../../../services/rest.api.service';
-import { normalize } from '../../../../../utils/normalize';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import { TimeEvidenceActionTypes } from '../time_evidence/types/actions';
 import { RootState } from '../crew/epics';
@@ -14,18 +13,32 @@ import CrewActions from '../crew/actions';
 import { CrewActionsTypes } from '../crew/types/actions';
 import { PrepareDataForReducer } from '../crew/utils/PrepareDataForReducer';
 import { UpdateCrewSummaryType } from '../../../../../services/graphql.api.service/CONSTANTS/Mutations/UpdateCrewSummary';
-import { ApolloQueryResult } from 'apollo-client';
 import { GetAllWorkersType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/GetAllWorkers';
 import { CreateWorkerType } from '../../../../../services/graphql.api.service/CONSTANTS/Mutations/CreateWorker';
+import normalize from '../../../../../utils/Normalize';
+import ModalActions from '../../../../../components/Modal/redux/actions';
+import { ModalType } from '../../../../../components/Modal/type';
 
-type ActionType = WorkersActionTypes | TimeEvidenceActionTypes | CrewActionsTypes;
+type ActionType = WorkersActionTypes | TimeEvidenceActionTypes | CrewActionsTypes | ModalType.Redux.Actions;
 
 const OnFetchWorkersMapStartEpic: Epic<ActionType, ActionType, any> = ($action) =>
 	$action.pipe(
 		ofType(WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_MAP_START),
 		switchMap(() =>
 			from(new RestAPIService().WORKERS_LOG.GENERAL.fetchWorkersMap() as Promise<IWarbudWorkersMap>).pipe(
-				map((data) => WorkersAction.fetchWorkersMapEnd(normalize(data.data, 'EmplId'))),
+				switchMap((data) => {
+					try {
+						return of(WorkersAction.fetchWorkersMapEnd(normalize(data.data, 'EmplId')));
+					} catch (e) {
+						return of(
+							ModalActions.InitializeModal({
+								modalType: ModalType.Payload.EModalType.Error,
+								body: e.message,
+								title: 'Uwaga!',
+							}),
+						);
+					}
+				}),
 			),
 		),
 	);
@@ -37,9 +50,9 @@ const OnFetchWorkersStartEpic: Epic<ActionType, ActionType, any> = (action$) =>
 			from(new GraphQLAPIService().WorkersLog.WorkTimeEvidence.CountWorkers()).pipe(
 				mergeMap((data) => {
 					const N = 100;
-					const count = data.data.workersLogWorkersConnection.aggregate.totalCount;
+					const count = data.workersLogWorkersConnection.aggregate.totalCount;
 					const parts = Math.floor(count / N);
-					let arr: Promise<ApolloQueryResult<GetAllWorkersType.Response>>[] = [];
+					let arr: Promise<GetAllWorkersType.Response>[] = [];
 					let i = 0;
 					while (i <= parts) {
 						arr.push(new GraphQLAPIService().WorkersLog.WorkTimeEvidence.GetAllWorkers({ start: i * 100 }));
@@ -47,8 +60,8 @@ const OnFetchWorkersStartEpic: Epic<ActionType, ActionType, any> = (action$) =>
 					}
 					return from(Promise.all(arr)).pipe(
 						map((data) => {
-							let reduxData = data.flatMap((x) => x.data.workersLogWorkers);
-							return WorkersAction.fetchWorkersEnd(normalize(reduxData));
+							let reduxData = data.flatMap((x) => x.workersLogWorkers);
+							return WorkersAction.fetchWorkersEnd(normalize(reduxData, 'id'));
 						}),
 					);
 				}),
@@ -74,10 +87,8 @@ function UpdateCrewSummaryFetchEpic(state: RootState, data: UpdateCrewSummaryTyp
 		),
 	).pipe(
 		mergeMap((response) => {
-			if (!!response.data)
-				return of(
-					CrewActions.updateCrewSummary(PrepareDataForReducer(response.data.updateWorkersLogCrewSummary)),
-				);
+			if (response)
+				return of(CrewActions.updateCrewSummary(PrepareDataForReducer(response.updateWorkersLogCrewSummary)));
 			else return EMPTY;
 		}),
 	);
@@ -124,7 +135,7 @@ const OnCreateWorkerEpic: Epic<ActionType, ActionType, RootState> = (action$, st
 						state.CMSLogin.credentials?.access_token,
 					).WorkersLog.WorkTimeEvidence.Worker.Create(data),
 				)
-					.pipe(map((response) => response.data?.createWorkersLogWorker.workersLogWorker))
+					.pipe(map((response) => response.createWorkersLogWorker.workersLogWorker))
 					.pipe(
 						mergeMap((response) => {
 							if (response && response.id) {

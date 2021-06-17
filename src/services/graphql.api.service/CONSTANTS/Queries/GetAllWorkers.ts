@@ -18,8 +18,8 @@ export namespace GetAllWorkersType {
 
 	export interface WorkersLogWorker {
 		id: string;
-		warbud_id: string;
+		warbud_id: string | null;
 		is_house_worker: boolean;
-		name: null;
+		name: null | string;
 	}
 }

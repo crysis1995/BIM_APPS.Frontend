@@ -5,6 +5,10 @@
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/src/sites/work_progress/components/Results" />
+      <excludeFolder url="file://$MODULE_DIR$/src/sites/work_progress/components/Tools" />
+      <excludeFolder url="file://$MODULE_DIR$/src/sites/work_progress/components/Upgradings" />
+      <excludeFolder url="file://$MODULE_DIR$/src/sites/work_progress/components/Terms" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

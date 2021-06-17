@@ -1,16 +1,11 @@
 import React from 'react';
 import { Badge } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { notify } from 'reapop';
-import { MONOLITHIC } from '../../redux/types/constans';
 import { ElementStatusSelector } from './Structural.Results.Selector';
 
-function Status({ status, click }) {
+function Status({ status }) {
 	return (
-		<Badge
-			className={'p-1 small'}
-			onClick={() => click()}
-			style={{ backgroundColor: status.color, color: '#ffffff' }}>
+		<Badge className={'p-1 small'} style={{ backgroundColor: status.color, statusColor: '#ffffff' }}>
 			{status.name}
 		</Badge>
 	);
@@ -20,15 +15,6 @@ const mapStateToProps = (state, { revit_id }) => ({
 	status: ElementStatusSelector(state, revit_id),
 });
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		click: () =>
-			dispatch(
-				notify('Uploading your file...', 'loading', {
-					dismissible: false,
-				}),
-			),
-	};
-};
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Status);

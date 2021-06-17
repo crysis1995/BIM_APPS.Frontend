@@ -16,7 +16,7 @@ function Log(props) {
 			<div className={'py-4 text-center'}>
 				<h6>Dziennki brygadzistkowski</h6>
 			</div>
-			<Table data-testid="TermsComponent" size={'sm'}>
+			<Table data-testid="ComponentTermsTable" size={'sm'}>
 				<thead>
 					<tr>
 						<th>Grupa elementów</th>

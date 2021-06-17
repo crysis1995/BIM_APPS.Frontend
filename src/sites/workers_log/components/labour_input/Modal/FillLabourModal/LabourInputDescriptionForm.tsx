@@ -20,7 +20,7 @@ export function LabourInputDescriptionForm({
 	// };
 }) {
 	// object = {
-	// 	[ParameterType.Element]: 'test',
+	// 	[ParameterType.Element]: 'epic.test',
 	// 	[ParameterType.TimeInput]: 5.5,
 	// 	[ParameterType.CharacteristicParameters]: {
 	// 		[CharacteristicParametersChild.Height]: 12,

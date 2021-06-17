@@ -12,7 +12,6 @@ import {
 	TERMS_SET_DEPARTMENT,
 } from '../types';
 import { parseTermsToMonolithic } from '../utils/terms_utils';
-import MONOLITHIC_terms from '../__MOCK__/MONOLITHIC.terms.json';
 /**
  *
  * @type {{byDepartment: {}, chosenDepartment: string, loading: boolean, error: null}}

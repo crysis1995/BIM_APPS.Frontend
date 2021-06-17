@@ -8,7 +8,7 @@ import { CrewState } from './redux/work_time_evidence/crew/types/state';
 import { WorkersState } from './redux/work_time_evidence/worker/types/state';
 import WorkersLogGeneralActions from './redux/general/actions';
 import Viewer from '../../components/ForgeViewer/components';
-import { Props } from '../../types/ReactComponentProps';
+import { Props } from '../../types/PropsType';
 
 type ComponentProps = {};
 const mapStateToProps = (state: {

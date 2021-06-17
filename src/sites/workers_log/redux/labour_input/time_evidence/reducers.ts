@@ -1,6 +1,6 @@
 import { LabourInput } from '../types';
 import RoundHalf from '../../../../../utils/RoundHalf';
-import { normalize } from '../../../../../utils/normalize';
+import normalize from '../../../../../utils/Normalize';
 
 export const INITIAL_STATE: LabourInput.Redux.TimeEvidence.Store = {
 	CurrentSummaryWorkTimeLoading: false,
@@ -107,7 +107,7 @@ class ReducerActions {
 		): LabourInput.Redux.TimeEvidence.Store => {
 			return {
 				...state,
-				ObjectsTimeEvidences: normalize(action.payload),
+				ObjectsTimeEvidences: normalize(action.payload, 'id'),
 			};
 		},
 	};
@@ -182,7 +182,7 @@ class ReducerActions {
 		return {
 			...state,
 			GroupedOtherWorkTimeEvidenceId: action.payload.id,
-			OtherWorksTimeEvidences: normalize(action.payload.other_works_time_evidences),
+			OtherWorksTimeEvidences: normalize(action.payload.other_works_time_evidences, 'id'),
 		};
 	}
 	static OtherWorksTimeEvidencesLoading = {

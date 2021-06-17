@@ -38,8 +38,8 @@ function DeleteWorkerModal(props: Props) {
 					worker_id: workerToDelete.value,
 					crew_summary_id: props.crew_summary_id,
 				});
-				if (response.data) {
-					const sum = response.data.workersLogWorkTimeEvidencesConnection.aggregate.sum.worked_time;
+				if (response) {
+					const sum = response.workersLogWorkTimeEvidencesConnection.aggregate.sum.worked_time;
 					if (sum === null || sum === 0) {
 						setCanDelete(true);
 						setErrorMessage('');

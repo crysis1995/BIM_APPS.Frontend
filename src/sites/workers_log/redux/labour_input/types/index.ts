@@ -316,6 +316,7 @@ export namespace LabourInput {
 			export interface CreateOtherWorkPayload {
 				id: string | number;
 				work_type: OTHER_WORK_TYPE;
+				commentary?:string
 			}
 
 			export type GroupedOtherWorkTimeEvidence = GetGroupedOtherWorksTimeEvidencesType.WorkersLogGroupedOtherWorksTimeEvidence;

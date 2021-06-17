@@ -40,7 +40,7 @@ function WorkTimeEvidenceComponent(props: Props) {
 	// const [workerInit, addWorkerInit] = useState(false);
 	useEffect(() => {
 		return () => {
-			console.log('WorkTimeEvidenceComponent - unmount');
+
 		};
 	}, []);
 	return (

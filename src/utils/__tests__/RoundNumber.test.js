@@ -1,6 +1,6 @@
 import { RoundNumber } from '../RoundNumber';
 
-describe('Round Number test', () => {
+describe('Round Number epic.test', () => {
 	test('should round number properly', () => {
 		var number = 12.123123124;
 		var expected = 12.12;

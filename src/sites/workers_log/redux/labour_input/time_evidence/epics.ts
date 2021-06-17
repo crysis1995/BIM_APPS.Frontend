@@ -95,13 +95,13 @@ const FetchGroupedOtherWorkTimeEvidencesEpic: Epic<ActionType, ActionType, RootS
 						of(LabourInputTimeEvidenceActions.FetchGroupedOtherWorkTimeEvidenceStart()),
 						from(apiQueryPromise).pipe(
 							mergeMap((response) => {
-								if (response.data.workersLogGroupedOtherWorksTimeEvidences.length > 0) {
+								if (response.workersLogGroupedOtherWorksTimeEvidences.length > 0) {
 									return of(
 										LabourInputTimeEvidenceActions.FetchGroupedOtherWorkTimeEvidenceEnd(
-											response.data.workersLogGroupedOtherWorksTimeEvidences[0],
+											response.workersLogGroupedOtherWorksTimeEvidences[0],
 										),
 									);
-								} else if (response.data.workersLogGroupedOtherWorksTimeEvidences.length === 0) {
+								} else if (response.workersLogGroupedOtherWorksTimeEvidences.length === 0) {
 									function GetCreateGroupedOtherWorkTimeEvidenceData(
 										state: RootState,
 									): CreateGroupedOtherWorkTimeEvidenceType.Request {
@@ -124,11 +124,11 @@ const FetchGroupedOtherWorkTimeEvidencesEpic: Epic<ActionType, ActionType, RootS
 											).WorkersLog.LabourInput.GroupedOtherWorkTimeEvidence.Create(RequestData),
 										).pipe(
 											mergeMap((response) => {
-												if (response.data)
+												if (response)
 													return of(
 														LabourInputTimeEvidenceActions.FetchGroupedOtherWorkTimeEvidenceEnd(
 															{
-																...response.data
+																...response
 																	.createWorkersLogGroupedOtherWorksTimeEvidence
 																	.workersLogGroupedOtherWorksTimeEvidence,
 																other_works_time_evidences: [],
@@ -171,7 +171,7 @@ function GetRequestDataFrom(
 		crew_type: state.WorkersLog.LabourInput.General.ActiveWorkType,
 		worked_time: 0,
 		work_option_id: action.payload.id,
-		description: '',
+		description: action.payload.commentary,
 	};
 }
 
@@ -191,10 +191,13 @@ const OnCreateOtherWorkEpic: Epic<ActionType, ActionType, RootState> = (action$,
 					).WorkersLog.LabourInput.OtherWorkTimeEvidence.Create(data),
 				).pipe(
 					mergeMap((responseData) => {
-						const data =
-							responseData.data?.createWorkersLogOtherWorksTimeEvidence.workersLogOtherWorksTimeEvidence;
-						if (data) {
-							return of(LabourInputTimeEvidenceActions.CreateOtherWorkEnd(data));
+						if (responseData) {
+							return of(
+								LabourInputTimeEvidenceActions.CreateOtherWorkEnd(
+									responseData.createWorkersLogOtherWorksTimeEvidence
+										.workersLogOtherWorksTimeEvidence,
+								),
+							);
 						} else {
 							return of(
 								ModalActions.InitializeModal({
@@ -235,9 +238,13 @@ const OnUpdateOtherWorkTimeEvidence: Epic<ActionType, ActionType, RootState> = (
 					}),
 				).pipe(
 					mergeMap((responseData) => {
-						const data =
-							responseData.data?.updateWorkersLogOtherWorksTimeEvidence.workersLogOtherWorksTimeEvidence;
-						if (data) return of(LabourInputTimeEvidenceActions.UpdateOtherWorkEnd(data));
+						if (responseData)
+							return of(
+								LabourInputTimeEvidenceActions.UpdateOtherWorkEnd(
+									responseData.updateWorkersLogOtherWorksTimeEvidence
+										.workersLogOtherWorksTimeEvidence,
+								),
+							);
 						else return EMPTY;
 					}),
 				);

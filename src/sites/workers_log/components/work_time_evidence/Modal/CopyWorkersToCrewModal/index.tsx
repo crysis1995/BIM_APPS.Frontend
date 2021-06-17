@@ -48,7 +48,7 @@ function CopyWorkersToCrewModal(props: Props) {
 					start: GetFormattedDate(dayjs(copyFromDate).startOf('month'), FormatType.Day),
 					user_id,
 				})
-					.then((e) => (e.data.workersLogCrewSummaries.length > 0 ? e.data.workersLogCrewSummaries[0] : null))
+					.then((e) => (e.workersLogCrewSummaries.length > 0 ? e.workersLogCrewSummaries[0] : null))
 					.then((data) => {
 						if (data)
 							setWorkersInFetchedCrew(

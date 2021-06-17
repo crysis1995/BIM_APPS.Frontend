@@ -1,22 +1,18 @@
 import { combineEpics, Epic, ofType } from 'redux-observable';
 import { LabourInput } from '../types';
 import { filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
-import { setCurrentSheet } from '../../../../../components/ForgeViewer/redux/actions';
+import ForgeViewerActions from '../../../../../components/ForgeViewer/redux/actions';
 import { concat, EMPTY, from, of } from 'rxjs';
-import { CMSLoginType } from '../../../../../components/CMSLogin/type';
-import { CrewState } from '../../work_time_evidence/crew/types/state';
-import { WorkersState } from '../../work_time_evidence/worker/types/state';
-import { GeneralState } from '../../work_time_evidence/general/types/state';
-import { TimeEvidenceState } from '../../work_time_evidence/time_evidence/types/state';
-import { WorkersLogGeneral } from '../../general/types';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { ModalType } from '../../../../../components/Modal/type';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import LabourInputGeneralActions from './actions';
 import ModalActions from '../../../../../components/Modal/redux/actions';
-import { normalize } from '../../../../../utils/normalize';
 import LabourInputTimeEvidenceActions from '../time_evidence/actions';
+import normalize from '../../../../../utils/Normalize';
+import ForgeViewer from '../../../../../components/ForgeViewer/types';
+import { RootState } from '../../../../../store';
 
 dayjs.extend(isBetween);
 
@@ -24,24 +20,9 @@ type ActionType =
 	| LabourInput.Redux.General.Actions
 	| LabourInput.Redux.Objects.Actions
 	| LabourInput.Redux.TimeEvidence.Actions
-	| ReturnType<typeof setCurrentSheet>
+	| ForgeViewer.Redux.Actions
 	| ModalType.Redux.Actions;
-type RootState = {
-	ForgeViewer: {
-		sheets: { index: string; name: string }[];
-	};
-	CMSLogin: CMSLoginType.Redux.Store;
-	WorkersLog: {
-		General: WorkersLogGeneral.Redux.Store;
-		LabourInput: { General: LabourInput.Redux.General.Store; Objects: LabourInput.Redux.Objects.Store };
-		WorkTimeEvidence: {
-			Crews: CrewState;
-			Workers: WorkersState;
-			General: GeneralState;
-			TimeEvidence: TimeEvidenceState;
-		};
-	};
-};
+
 // start wszelkich niezbędnych metod przy starcie komponentu
 const OnInitializeComponent: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
 	action$.pipe(
@@ -67,8 +48,8 @@ const FetchStatuses: Epic<ActionType, ActionType, RootState> = (action$, state$)
 		),
 		withLatestFrom(state$),
 		switchMap(([_, state]) =>
-			from(new GraphQLAPIService(state.CMSLogin.credentials?.access_token).MONOLITHIC.getStatuses()).pipe(
-				map((data) => LabourInputGeneralActions.FetchStatusesEnd(normalize(data))),
+			from(new GraphQLAPIService(state.CMSLogin.credentials?.access_token).MONOLITHIC.Status.Get()).pipe(
+				map((data) => LabourInputGeneralActions.FetchStatusesEnd(normalize(data, 'id'))),
 			),
 		),
 	);
@@ -85,7 +66,7 @@ const FetchOtherWorks: Epic<ActionType, ActionType, RootState> = (action$, state
 			).pipe(
 				mergeMap((response) => {
 					try {
-						const data = normalize(response.data.workersLogOtherWorksOptions);
+						const data = normalize(response.workersLogOtherWorksOptions, 'id');
 						return of(LabourInputGeneralActions.FetchOtherWorksEnd(data));
 					} catch (e) {
 						console.log(e);
@@ -110,13 +91,15 @@ const onChooseLevel: Epic<ActionType, ActionType, RootState> = (action$, state$)
 		),
 		withLatestFrom(state$),
 		mergeMap(([action, state]) => {
-			const sheet = state.ForgeViewer.sheets.filter(
-				(x) =>
-					action.payload &&
-					x.name.toLowerCase().includes(action.payload.name.toLowerCase()) &&
-					x.name.toLowerCase().includes('WSPro'.toLowerCase()),
-			);
-			if (sheet.length > 0) return of(setCurrentSheet(sheet[0].index));
+			if (state.ForgeViewer.sheets) {
+				const sheet = Object.values(state.ForgeViewer.sheets).filter(
+					(x) =>
+						action.payload &&
+						x.name.toLowerCase().includes(action.payload.name.toLowerCase()) &&
+						x.name.toLowerCase().includes('WSPro'.toLowerCase()),
+				);
+				if (sheet.length > 0) return of(ForgeViewerActions.SetCurrentSheet(sheet[0]));
+			}
 			return EMPTY;
 		}),
 	);
@@ -158,11 +141,12 @@ const OnChangeDateWorkerTypeOrCrew: Epic<ActionType, ActionType, RootState> = (a
 								selected_date: ActualDate,
 							}),
 						).pipe(
-							mergeMap(({ data }) => {
-								if (data)
+							mergeMap((response) => {
+								if (response)
 									return of(
 										LabourInputTimeEvidenceActions.SetSummaryWorkTimeEnd(
-											data?.workersLogWorkTimeEvidencesConnection.aggregate.sum.worked_time || 0,
+											response?.workersLogWorkTimeEvidencesConnection.aggregate.sum.worked_time ||
+												0,
 										),
 									);
 								else

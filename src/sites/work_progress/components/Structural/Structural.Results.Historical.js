@@ -5,7 +5,7 @@ import Loader from '../../../../components/Loader';
 import { handleSelectedElements } from '../../redux/actions/upgrading_actions';
 import ResultTable from './Structural.Results.Table';
 
-function Historical({ handleSelectedElements, data_loading }) {
+function Historical() {
 	const variant = 'light';
 	return (
 		<>

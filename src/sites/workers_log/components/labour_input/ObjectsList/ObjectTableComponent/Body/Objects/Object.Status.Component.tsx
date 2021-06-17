@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import { CMSLoginType } from '../../../../../../../../components/CMSLogin/type';
 import WorkersLogRedux from '../../../../../../redux';
 import { StatusesColor } from '../../../../settings';
-import { Badge, Spinner } from 'react-bootstrap';
+import { Badge } from 'react-bootstrap';
 import { LabourInput } from '../../../../../../redux/labour_input/types';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+
 dayjs.extend(isSameOrBefore);
 
 const mapStateToProps = (

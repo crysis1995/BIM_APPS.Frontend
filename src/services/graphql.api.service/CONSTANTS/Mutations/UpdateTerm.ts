@@ -1,12 +1,13 @@
 import { gql } from 'apollo-boost';
+import { GetAllAcceptanceTermsType } from '../Queries/GetAcceptanceTerms';
 
 const UPDATE_TERM = gql`
 	mutation updateTerms(
 		$term_id: ID!
-		$REAL_START_Date: DateTime
-		$PLANNED_FINISH_Date: DateTime
-		$REAL_FINISH_Date: DateTime
-		$PLANNED_START_Date: DateTime
+		$REAL_START_Date: Date
+		$PLANNED_FINISH_Date: Date
+		$REAL_FINISH_Date: Date
+		$PLANNED_START_Date: Date
 		$object_ids: [ID]
 	) {
 		updateAcceptanceTerm(
@@ -68,18 +69,13 @@ export namespace UpdateTermType {
 		objects: Objects[];
 		level: null | Level;
 		crane: null | Crane;
-		vertical: VERTICAL;
+		vertical: GetAllAcceptanceTermsType.Vertical;
 		REAL_START: null | string;
 		PLANNED_FINISH: null | string;
 		REAL_FINISH: null | string;
 		PLANNED_START_BP: null | string;
 		PLANNED_FINISH_BP: null | string;
 		PLANNED_START: null | string;
-	}
-
-	export enum VERTICAL {
-		H = 'H',
-		V = 'V',
 	}
 
 	export interface Objects {

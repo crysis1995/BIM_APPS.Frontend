@@ -1,4 +1,4 @@
-describe('test LevelSelectorComponent', () => {
+describe('epic.test LevelSelectorComponent', () => {
 	test('exist', () => {});
 	test('render default', () => {});
 	test('render disabled while cmslogin is loading or levels is null', () => {});

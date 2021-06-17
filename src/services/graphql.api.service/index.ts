@@ -50,6 +50,13 @@ import CreateWorker, { CreateWorkerType } from './CONSTANTS/Mutations/CreateWork
 import AgregateWorkerTimeEvidence, {
 	AgregateWorkerTimeEvidenceType,
 } from './CONSTANTS/Queries/AgregateWorkerTimeEvidence';
+import GetProjectRotationDays, { GetProjectRotationDaysType } from './CONSTANTS/Queries/GetProjectRotationDays';
+import CountProjectRotationDays, { CountProjectRotationDaysType } from './CONSTANTS/Queries/CountProjectRotationDays';
+import GetObjectsByLevel, { GetObjectsByLevelType } from './CONSTANTS/Queries/GetObjectsByLevel';
+import GetObjectsCount, { GetObjectsCountType } from './CONSTANTS/Queries/GetObjectsCount';
+import GetAllDelacCauses, { GetAllDelacCausesType } from './CONSTANTS/Queries/GetAllDelayCauses';
+import GetAllAcceptanceTerms, { GetAllAcceptanceTermsType } from './CONSTANTS/Queries/GetAcceptanceTerms';
+import CountAcceptanceTerms, { CountAcceptanceTermsType } from './CONSTANTS/Queries/CountAcceptanceTerms';
 
 export default class GraphQLAPIService {
 	private client: ApolloClient<NormalizedCacheObject>;
@@ -67,18 +74,28 @@ export default class GraphQLAPIService {
 	}
 
 	queryClient<Response, Request>(query: DocumentNode, variables?: Request, fetchPolicy = this.fetchPolicy) {
-		return this.client.query<Response, Request>({
-			query,
-			variables,
-			fetchPolicy,
-		});
+		return this.client
+			.query<Response, Request>({
+				query,
+				variables,
+				fetchPolicy,
+			})
+			.then((response) => {
+				if (response.data) return response.data;
+				else throw new Error(response.errors?.[0]?.message || '');
+			});
 	}
 	mutateClient<Response, Request>(mutation: DocumentNode, variables: Request, fetchPolicy = this.fetchPolicy) {
-		return this.client.mutate<Response, Request>({
-			mutation,
-			variables,
-			fetchPolicy,
-		});
+		return this.client
+			.mutate<Response, Request>({
+				mutation,
+				variables,
+				fetchPolicy,
+			})
+			.then((response) => {
+				if (response.data) return response.data;
+				else throw new Error(response.errors?.[0]?.message || '');
+			});
 	}
 
 	resetPassword(data: ResetPasswordType.Request) {
@@ -93,26 +110,78 @@ export default class GraphQLAPIService {
 	}
 
 	MONOLITHIC = {
-		createStatus: (data: CreateStatusType.Request) => {
-			return this.mutateClient<CreateStatusType.Response, CreateStatusType.Request>(CREATE_STATUS, data).then(
-				(e) => e.data?.createAcceptanceObjectStatus.acceptanceObjectStatus.id,
+		Term: {
+			Get: (data: GetAllAcceptanceTermsType.Request) => {
+				return this.queryClient<GetAllAcceptanceTermsType.Response, GetAllAcceptanceTermsType.Request>(
+					GetAllAcceptanceTerms,
+					data,
+				);
+			},
+			Count: (data: CountAcceptanceTermsType.Request) => {
+				return this.queryClient<CountAcceptanceTermsType.Response, CountAcceptanceTermsType.Request>(
+					CountAcceptanceTerms,
+					data,
+				);
+			},
+			Update: (data: UpdateTermType.Request) => {
+				return this.mutateClient<UpdateTermType.Response, UpdateTermType.Request>(UPDATE_TERM, data);
+			},
+		},
+		DelayCauses: {
+			GetAll: (data: GetAllDelacCausesType.Request) => {
+				return this.queryClient<GetAllDelacCausesType.Response, GetAllDelacCausesType.Request>(
+					GetAllDelacCauses,
+					data,
+				);
+			},
+		},
+		Objects: {
+			GetAll: (data: GetObjectsByLevelType.Request) => {
+				return this.queryClient<GetObjectsByLevelType.Response, GetObjectsByLevelType.Request>(
+					GetObjectsByLevel,
+					data,
+				);
+			},
+			Count: (data: GetObjectsCountType.Request) => {
+				return this.queryClient<GetObjectsCountType.Response, GetObjectsCountType.Request>(
+					GetObjectsCount,
+					data,
+				);
+			},
+		},
+		GetProjectRotationDays: (data: GetProjectRotationDaysType.Request) => {
+			return this.queryClient<GetProjectRotationDaysType.Response, GetProjectRotationDaysType.Request>(
+				GetProjectRotationDays,
+				data,
 			);
 		},
-		getDelays: (data: GetDelaysType.Request) => {
-			return this.queryClient<GetDelaysType.Response, GetDelaysType.Request>(GET_DELAYS, data).then(
-				(e) => e.data.acceptanceDelays,
+		CountProjectRotationDays: (data: CountProjectRotationDaysType.Request) => {
+			return this.queryClient<CountProjectRotationDaysType.Response, CountProjectRotationDaysType.Request>(
+				CountProjectRotationDays,
+				data,
 			);
 		},
-		getStatuses: () => {
-			return this.queryClient<GetStatusesType.Response, GetStatusesType.Request>(GET_STATUSES).then(
-				(e) => e.data.acceptanceStatuses,
-			);
+		Status: {
+			Create: (data: CreateStatusType.Request) => {
+				return this.mutateClient<CreateStatusType.Response, CreateStatusType.Request>(CREATE_STATUS, data).then(
+					(e) => e?.createAcceptanceObjectStatus.acceptanceObjectStatus,
+				);
+			},
+			Get: () => {
+				return this.queryClient<GetStatusesType.Response, GetStatusesType.Request>(GET_STATUSES).then(
+					(e) => e.acceptanceStatuses,
+				);
+			},
 		},
-		createDelay: (data: CreateDelayType.Request) => {
-			return this.mutateClient<CreateDelayType.Response, CreateDelayType.Request>(CREATE_DELAY, data);
-		},
-		updateTerm: (data: UpdateTermType.Request) => {
-			return this.mutateClient<UpdateTermType.Response, UpdateTermType.Request>(UPDATE_TERM, data);
+		Delay: {
+			Get: (data: GetDelaysType.Request) => {
+				return this.queryClient<GetDelaysType.Response, GetDelaysType.Request>(GET_DELAYS, data).then(
+					(e) => e.acceptanceDelays,
+				);
+			},
+			Create: (data: CreateDelayType.Request) => {
+				return this.mutateClient<CreateDelayType.Response, CreateDelayType.Request>(CREATE_DELAY, data);
+			},
 		},
 	};
 

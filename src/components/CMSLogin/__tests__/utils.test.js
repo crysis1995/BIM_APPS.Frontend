@@ -13,7 +13,7 @@ describe('TEST CMS LOGIN UTILS', () => {
 	});
 
 	test('function getUserFromLocalStorage should properly return local storage data', () => {
-		localStorage.setItem('user', '{"test":123}');
+		localStorage.setItem('user', '{"epic.test":123}');
 		localStorage.setItem('user_token', '123123');
 		localStorage.getItem.mockClear();
 		const data = getCachedData();
@@ -22,16 +22,16 @@ describe('TEST CMS LOGIN UTILS', () => {
 	});
 	test('function saveUserDataToLocalStorage should properly save data to local storage', () => {
 		localStorage.setItem.mockClear();
-		setCachedData('test', 'test token');
+		setCachedData('test', 'epic.test token');
 		expect(localStorage.setItem).toBeCalledTimes(2);
 	});
 	test('function saveUserDataToLocalStorage should properly save data to local storage', () => {
-		setCachedData('test', 'test token');
+		setCachedData('test', 'epic.test token');
 		expect(localStorage.getItem('user')).toBe('test');
-		expect(localStorage.getItem('user_token')).toBe('test token');
+		expect(localStorage.getItem('user_token')).toBe('epic.test token');
 	});
 	test('function saveUserDataToLocalStorage should properly save data to local storage', () => {
-		localStorage.setItem('user', '{"test":123}');
+		localStorage.setItem('user', '{"epic.test":123}');
 		localStorage.setItem('user_token', '123123');
 		cleanCachedData();
 		expect(localStorage.getItem('user')).toBeNull();

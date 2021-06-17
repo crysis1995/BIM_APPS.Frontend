@@ -39,7 +39,7 @@ const OnFetchWorkerWorkEvidenceStartEpic: Epic<ActionType, ActionType, RootState
 							map((data) =>
 								TimeEvidenceActions.fetchWorkerWorkEvidenceEnd(
 									worker_id,
-									data.data.workersLogWorkTimeEvidences,
+									data.workersLogWorkTimeEvidences,
 								),
 							),
 						),

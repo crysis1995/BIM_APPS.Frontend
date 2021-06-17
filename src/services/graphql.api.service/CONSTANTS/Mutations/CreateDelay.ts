@@ -29,7 +29,7 @@ export namespace CreateDelayType {
 	export type Request = {
 		user_id: string;
 		comment: string;
-		date: Date;
+		date: string;
 		causes: string[];
 		level_id: string;
 		crane_id: string;

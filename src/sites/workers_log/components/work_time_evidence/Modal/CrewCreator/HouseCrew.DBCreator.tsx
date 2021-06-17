@@ -52,7 +52,6 @@ function HouseCrewDBCreator(props: Props) {
 		id: WORKER_TYPES[workerType],
 		name: PL_DICTIONARY[WORKER_TYPES[workerType]],
 	}));
-	console.log(errors?.crewType?.message);
 	return (
 		<>
 			<Form onSubmit={handleSubmit(onSubmit)}>

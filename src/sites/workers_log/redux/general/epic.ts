@@ -40,8 +40,8 @@ const FetchDataEpic = (state: RootState) => {
 				project_id: state.CMSLogin.actual_project.id,
 			}),
 		).pipe(
-			mergeMap(({ data }) => {
-				if (data) return of(WorkersLogGeneralActions.FetchCrewsData(data));
+			mergeMap((response) => {
+				if (response) return of(WorkersLogGeneralActions.FetchCrewsData(response));
 				return EMPTY;
 			}),
 		);

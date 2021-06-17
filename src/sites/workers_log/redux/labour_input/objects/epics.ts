@@ -1,44 +1,27 @@
-import { combineEpics, Epic } from 'redux-observable';
+import { combineEpics, Epic, ofType } from 'redux-observable';
 import { LabourInput } from '../types';
 import { ModalType } from '../../../../../components/Modal/type';
-import { CMSLoginType } from '../../../../../components/CMSLogin/type';
-import { WorkersLogGeneral } from '../../general/types';
-import { CrewState } from '../../work_time_evidence/crew/types/state';
-import { WorkersState } from '../../work_time_evidence/worker/types/state';
-import { GeneralState } from '../../work_time_evidence/general/types/state';
-import { TimeEvidenceState } from '../../work_time_evidence/time_evidence/types/state';
 import { catchError, combineAll, filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
-import { concat, EMPTY, from, iif, of } from 'rxjs';
+import { combineLatest, concat, EMPTY, from, iif, of } from 'rxjs';
 import RestAPIService from '../../../../../services/rest.api.service';
 import LabourInputObjectsActions from './actions';
 import ModalActions from '../../../../../components/Modal/redux/actions';
-import { normalize } from '../../../../../utils/normalize';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import { GetObjectTimeEvidencesType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/GetObjectTimeEvidences';
 import dayjs from 'dayjs';
 import LabourInputTimeEvidenceActions from '../time_evidence/actions';
+import normalize from '../../../../../utils/Normalize';
+import { RootState } from '../../../../../store';
+import CurrentElementsFilter from '../../utils/CurrentElements.Filter';
+import ForgeViewerActions from '../../../../../components/ForgeViewer/redux/actions';
+import ForgeViewer from '../../../../../components/ForgeViewer/types';
 
 type ActionType =
 	| LabourInput.Redux.Objects.Actions
 	| LabourInput.Redux.General.Actions
 	| LabourInput.Redux.TimeEvidence.Actions
-	| ModalType.Redux.Actions;
-type RootState = {
-	ForgeViewer: {
-		sheets: { index: string; name: string }[];
-	};
-	CMSLogin: CMSLoginType.Redux.Store;
-	WorkersLog: {
-		General: WorkersLogGeneral.Redux.Store;
-		LabourInput: { General: LabourInput.Redux.General.Store; Objects: LabourInput.Redux.Objects.Store };
-		WorkTimeEvidence: {
-			Crews: CrewState;
-			Workers: WorkersState;
-			General: GeneralState;
-			TimeEvidence: TimeEvidenceState;
-		};
-	};
-};
+	| ModalType.Redux.Actions
+	| ForgeViewer.Redux.Actions;
 const OnChangeLevelOrDate: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
@@ -67,7 +50,7 @@ const OnChangeLevelOrDate: Epic<ActionType, ActionType, RootState> = (action$, s
 							withLatestFrom(state$),
 							mergeMap(([data, state]) => {
 								const level = state.WorkersLog.LabourInput.General.ActiveLevel;
-								const objects = normalize(data) as {
+								const objects = normalize(data, 'id') as {
 									[key: string]: LabourInput.Payload.Objects.ObjectWithStatus;
 								};
 								return concat(
@@ -98,6 +81,23 @@ const OnChangeLevelOrDate: Epic<ActionType, ActionType, RootState> = (action$, s
 		}),
 	);
 
+const OnSetFilteredObjects: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
+	combineLatest(
+		action$.pipe(ofType(LabourInput.Redux.Objects.Types.SET_FILTERED_OBJECTS)),
+		action$.pipe(ofType(ForgeViewer.Redux.Types.SET_MODEL_ELEMENTS)),
+	).pipe(
+		withLatestFrom(state$),
+		mergeMap(([action, state]) => {
+			try {
+				const { filteredData } = new CurrentElementsFilter(CurrentElementsFilter.validateData(state));
+				return of(ForgeViewerActions.SetElements(filteredData.forgeElements));
+			} catch (e) {
+				console.log(e.message);
+				return EMPTY;
+			}
+		}),
+	);
+
 function GetDataPayload(state: RootState): GetObjectTimeEvidencesType.Request {
 	const date = state.WorkersLog.LabourInput.General.ActualDate;
 	const crew_id = state.WorkersLog.LabourInput.General.ActualCrew;
@@ -124,9 +124,7 @@ function FetchObjectTimeEvidenceEpic(state: RootState, data: GetObjectTimeEviden
 		).pipe(
 			map((data) =>
 				LabourInputTimeEvidenceActions.FetchObjectTimeEvidenceEnd(
-					data.data.workersLogObjectTimeEvidences.length > 0
-						? data.data.workersLogObjectTimeEvidences[0]
-						: null,
+					data.workersLogObjectTimeEvidences.length > 0 ? data.workersLogObjectTimeEvidences[0] : null,
 					object_ids,
 				),
 			),
@@ -142,8 +140,7 @@ function FetchObjectTimeEvidenceEpicv2(state: RootState, data: GetObjectTimeEvid
 		}),
 	).pipe(
 		map((data) => {
-			if (data.data.workersLogObjectTimeEvidences.length > 0)
-				return of(data.data.workersLogObjectTimeEvidences[0]);
+			if (data.workersLogObjectTimeEvidences.length > 0) return of(data.workersLogObjectTimeEvidences[0]);
 			return EMPTY;
 		}),
 	);
@@ -207,12 +204,12 @@ const CreateOrUpdateObjectTimeEvidence: Epic<ActionType, ActionType, RootState> 
 					}),
 				).pipe(
 					mergeMap((response) => {
-						if (response.data)
+						if (response)
 							return of(
 								LabourInputTimeEvidenceActions.CreateOrUpdateObjectTimeEvidenceEnd(
-									response.data?.updateWorkersLogObjectTimeEvidence.workersLogObjectTimeEvidence,
+									response.updateWorkersLogObjectTimeEvidence.workersLogObjectTimeEvidence,
 									objectID,
-								),
+								)
 							);
 						return EMPTY;
 					}),
@@ -243,10 +240,10 @@ const CreateOrUpdateObjectTimeEvidence: Epic<ActionType, ActionType, RootState> 
 					}),
 				).pipe(
 					mergeMap((response) => {
-						if (response.data)
+						if (response)
 							return of(
 								LabourInputTimeEvidenceActions.CreateOrUpdateObjectTimeEvidenceEnd(
-									response.data.createWorkersLogObjectTimeEvidence.workersLogObjectTimeEvidence,
+									response.createWorkersLogObjectTimeEvidence.workersLogObjectTimeEvidence,
 									objectID,
 								),
 							);
@@ -257,4 +254,9 @@ const CreateOrUpdateObjectTimeEvidence: Epic<ActionType, ActionType, RootState> 
 		}),
 	);
 
-export default combineEpics(OnChangeLevelOrDate, onFetchObjectsEnd, CreateOrUpdateObjectTimeEvidence);
+export default combineEpics(
+	OnChangeLevelOrDate,
+	onFetchObjectsEnd,
+	CreateOrUpdateObjectTimeEvidence,
+	OnSetFilteredObjects,
+);

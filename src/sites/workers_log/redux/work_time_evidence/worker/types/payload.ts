@@ -2,7 +2,7 @@ import { WORKER_TYPES } from '../../../constants';
 
 export interface WorkerPayload {
 	id: string;
-	name?: string;
+	name: null | string;
 	// crew: CrewPayload['id'] | null;
 	// worker_type: WORKER_TYPES;
 	is_house_worker: boolean;

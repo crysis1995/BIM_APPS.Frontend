@@ -1,4 +1,4 @@
-describe("test CrewTypeSelectorComponent", () => {
+describe("epic.test CrewTypeSelectorComponent", () => {
 	test("exist", () => {})
 	test("render default", () => {})
 	test("render all select options", () => {})

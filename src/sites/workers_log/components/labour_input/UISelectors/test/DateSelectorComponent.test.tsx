@@ -1,4 +1,4 @@
-describe('test DateSelectorComponent', () => {
+describe('epic.test DateSelectorComponent', () => {
 	test('exist', () => {});
 	test('render default', () => {});
 	test('disabled when CMSLogin loading or project levels is null', () => {});

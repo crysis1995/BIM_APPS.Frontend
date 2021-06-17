@@ -1,0 +1,18 @@
+#button_3d.active .view_3d {
+	display: inline-block;
+	background-repeat: no-repeat;
+	background-image: url('./3d.svg');
+	filter: invert(58%) sepia(18%) saturate(4225%) hue-rotate(159deg) brightness(99%) contrast(110%);;
+}
+#button_3d.inactive .view_3d {
+	display: inline-block;
+	background-repeat: no-repeat;
+	background-image: url('./3d.svg');
+	filter: invert(92%) sepia(100%) saturate(39%) hue-rotate(26deg) brightness(108%) contrast(99%);
+}
+#button_3d.inactive :hover{
+	display: inline-block;
+	background-repeat: no-repeat;
+	background-image: url('./3d.svg');
+	filter: invert(58%) sepia(18%) saturate(4225%) hue-rotate(159deg) brightness(99%) contrast(110%);;
+}

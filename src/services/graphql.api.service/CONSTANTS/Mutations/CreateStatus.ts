@@ -6,7 +6,10 @@ const CREATE_STATUS = gql`
 			input: { data: { object: $object_id, date: $date, user: $user_id, status: $status_id } }
 		) {
 			acceptanceObjectStatus {
-				id
+				status {
+					id
+				}
+				date
 			}
 		}
 	}
@@ -17,13 +20,18 @@ export namespace CreateStatusType {
 	export type Response = {
 		createAcceptanceObjectStatus: CreateAcceptanceObjectStatus;
 	};
-	export type Request = { object_id: string; date: Date; user_id: string; status_id: string };
+	export type Request = { object_id: string; date: string; user_id: string; status_id: string };
 
 	export interface CreateAcceptanceObjectStatus {
-		acceptanceObjectStatus: AcceptanceObjectStatus;
+		acceptanceObjectStatus: Status;
 	}
 
-	export interface AcceptanceObjectStatus {
+	export interface Status {
+		status: Crane;
+		date: string;
+	}
+
+	export interface Crane {
 		id: string;
 	}
 }

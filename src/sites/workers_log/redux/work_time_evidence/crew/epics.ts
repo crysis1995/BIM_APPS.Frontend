@@ -4,7 +4,7 @@ import WorkersLogActions from '../../types';
 import { filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { combineLatest, concat, EMPTY, from, of } from 'rxjs';
 import CrewActions from './actions';
-import { normalize } from '../../../../../utils/normalize';
+
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import { CrewState } from './types/state';
 import { WorkersState } from '../worker/types/state';
@@ -22,6 +22,7 @@ import { CreateCrewSummaryType } from '../../../../../services/graphql.api.servi
 import dayjs from 'dayjs';
 import { TimeEvidenceState } from '../time_evidence/types/state';
 import { CMSLoginType } from '../../../../../components/CMSLogin/type';
+import normalize from '../../../../../utils/Normalize';
 
 type ActionType =
 	| CrewActionsTypes
@@ -52,7 +53,7 @@ const OnFetchCrewStart: Epic<ActionType, ActionType, RootState> = ($action, $sta
 						user_id: state.CMSLogin.user.id,
 						project_id: state.CMSLogin.actual_project.id,
 					}),
-				).pipe(map((response) => CrewActions.fetchCrewEnd(normalize(response.data.workersLogCrews))));
+				).pipe(map((response) => CrewActions.fetchCrewEnd(normalize(response.workersLogCrews, 'id'))));
 			else return EMPTY;
 		}),
 	);
@@ -99,7 +100,7 @@ const OnFetchCrewSummariesStart: Epic<ActionType, ActionType, RootState> = ($act
 					}),
 				).pipe(
 					map((response) => {
-						let crewSummariesData = PrepareDataForReducer(response.data);
+						let crewSummariesData = PrepareDataForReducer(response);
 						if (crewSummariesData) return CrewActions.fetchCrewSummariesEnd(crewSummariesData);
 						else return CrewActions.createCrewSummary();
 					}),
@@ -148,8 +149,8 @@ const OnCreateCrewSummary: Epic<ActionType, ActionType, RootState> = (action$, s
 				return concat(
 					from(API.WorkersLog.WorkTimeEvidence.CreateCrewSummary(TakeDataFromStore(state))).pipe(
 						mergeMap((response) => {
-							if (response.data)
-								return of(CrewActions.fetchCrewSummariesEnd(PrepareDataForReducer(response.data)));
+							if (response)
+								return of(CrewActions.fetchCrewSummariesEnd(PrepareDataForReducer(response)));
 							else return EMPTY;
 						}),
 					),

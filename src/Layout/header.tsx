@@ -31,7 +31,7 @@ function Header(props: Props) {
 	return (
 		<Navbar bg="light" expand="lg" className="flex-shrink-0">
 			<NavLink to="/">
-				<Navbar.Brand>WSPro</Navbar.Brand>
+				<Navbar.Brand>WSPro v2</Navbar.Brand>
 			</NavLink>
 			<Navbar.Collapse>
 				<Nav className="mr-auto">

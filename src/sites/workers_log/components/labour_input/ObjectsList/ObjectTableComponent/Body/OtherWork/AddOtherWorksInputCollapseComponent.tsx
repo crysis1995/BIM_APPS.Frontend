@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { OTHER_WORK_TYPE } from '../../../../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
 import AcceptModalComponent from './Modal/AcceptModalComponent';
 import LabourInputTimeEvidenceActions from '../../../../../../redux/labour_input/time_evidence/actions';
+import HideComponent from '../../../../../../../../components/HideComponent';
 
 type componentProps = {
 	eventKey: string;
@@ -23,11 +24,13 @@ const mapStateToProps = (
 ) => ({
 	otherWorksOptions: (() => {
 		const otherWorks = state.WorkersLog.LabourInput.General.OtherWorks;
-		const otherWorksUsedOptions = state.WorkersLog.LabourInput.TimeEvidence.OtherWorksTimeEvidences && componentProps.option === OTHER_WORK_TYPE.HELPER
-			? Object.values(state.WorkersLog.LabourInput.TimeEvidence.OtherWorksTimeEvidences).map(
-					(x) => x.other_works_option.id,
-			  )
-			: [];
+		const otherWorksUsedOptions =
+			state.WorkersLog.LabourInput.TimeEvidence.OtherWorksTimeEvidences &&
+			componentProps.option === OTHER_WORK_TYPE.HELPER
+				? Object.values(state.WorkersLog.LabourInput.TimeEvidence.OtherWorksTimeEvidences).map(
+						(x) => x.other_works_option.id,
+				  )
+				: [];
 
 		if (otherWorks) {
 			return Object.values(otherWorks)
@@ -56,9 +59,9 @@ function AddOtherWorksInputCollapseComponent(props: Props) {
 	const handleCloseButton = () => {
 		setShow(false);
 	};
-	const handleAddButton = () => {
+	const handleAddButton = (commentary?:string) => {
 		setShow(false);
-		props.CreateOtherWorkStart({ id: selectedOptionId, work_type: props.option });
+		props.CreateOtherWorkStart({ id: selectedOptionId, work_type: props.option, commentary });
 		setSelectedOptionId('');
 	};
 
@@ -90,6 +93,7 @@ function AddOtherWorksInputCollapseComponent(props: Props) {
 				<td colSpan={3} />
 			</ActualEventKeyRowViewer>
 			<AcceptModalComponent
+				option={props.option}
 				show={show}
 				selectedID={selectedOptionId}
 				onCancel={handleCloseButton}

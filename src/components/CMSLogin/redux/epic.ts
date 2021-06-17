@@ -5,21 +5,26 @@ import { CMSLoginType } from '../type';
 import { cleanCachedData, getCachedData, isExpired, resetPasswordAPI } from './utils';
 import { concat, EMPTY, from, of } from 'rxjs';
 import CMSLoginActions from './actions';
-import { setInitial } from '../../../sites/work_progress/redux/actions';
 import GraphQLAPIService from '../../../services/graphql.api.service';
 import { fromPromise } from 'rxjs/internal-compatibility';
-import { RootState } from '../../../sites/workers_log/redux/work_time_evidence/general/epics';
 import NotificationActions from '../../Notification/redux/actions';
 import { UserDataType } from '../../../services/graphql.api.service/CONSTANTS/Queries/UserData';
+import WorkProgress from '../../../sites/work_progress/types';
+import { RootState } from '../../../store';
+import WorkProgressGeneralActions from '../../../sites/work_progress/redux/general/actions';
 
-type ActionType = CMSLoginType.Redux.Actions | Notification.Redux.Actions | ReturnType<typeof setInitial>;
+type ActionType =
+	| CMSLoginType.Redux.Actions
+	| Notification.Redux.Actions
+	| WorkProgress.General.Redux.Actions
+	| WorkProgress.Monolithic.General.Redux.Actions;
 
 const handleLogout: Epic<ActionType, ActionType> = (action$) =>
 	action$.pipe(
 		ofType(CMSLoginType.Redux.Types.USER_LOGOUT_START),
 		mergeMap((_) => {
 			cleanCachedData();
-			return of(CMSLoginActions.UserLogoutEnd(), setInitial());
+			return of(CMSLoginActions.UserLogoutEnd(), WorkProgressGeneralActions.SetInitial());
 		}),
 	);
 
@@ -41,11 +46,8 @@ const handleLogin: Epic<ActionType, ActionType> = (action$) =>
 					]),
 				).pipe(
 					map(([userData, projectRoles]) => {
-						if (userData.data && projectRoles.data) {
-							return CMSLoginActions.SetUserData(
-								userData.data.user,
-								projectRoles.data.warbudProjUserRoles,
-							);
+						if (userData && projectRoles) {
+							return CMSLoginActions.SetUserData(userData.user, projectRoles.warbudProjUserRoles);
 						}
 						return NotificationActions.showNotification({
 							title: 'Błąd!',
@@ -137,18 +139,8 @@ const OnResetPassword: Epic<ActionType, ActionType, RootState> = (action$, state
 					return fromPromise(
 						resetPasswordAPI(value.payload.password, state.CMSLogin.credentials.access_token),
 					).pipe(
-						mergeMap(({ data, errors }) => {
+						mergeMap((data) => {
 							if (data) return of(CMSLoginActions.UserResetPassword('Pomyślnie zmieniono hasło!'));
-							if (errors)
-								return of(
-									NotificationActions.showNotification({
-										title: 'Błąd!',
-										message: errors.reduce<string>(
-											(previousValue, currentValue) => previousValue + currentValue + '\n',
-											'',
-										),
-									}),
-								);
 							return EMPTY;
 						}),
 						catchError((error) =>

@@ -1,4 +1,4 @@
-describe('test UISelectorsComponent', () => {
+describe('epic.test UISelectorsComponent', () => {
 	test('exist', () => {});
 	test('render LevelSelectorComponent component', () => {});
 	test('render DateSelectorComponent component', () => {});

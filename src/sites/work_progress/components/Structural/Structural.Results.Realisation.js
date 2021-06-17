@@ -62,7 +62,7 @@ function Realisation({ handleSelectedElements, data_loading }) {
 				<Button
 					className={'float-right'}
 					variant={'success'}
-					// onClick={() => initialiseModal('Awansowanie', <SetStatus />)}
+					// onClick={() => initialiseModal('Awansowanie', <SetStatus.Modal />)}
 					onClick={() => setShowModal(true)}>
 					<svg
 						width="1em"

@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { CMSLoginType } from '../CMSLogin/type';
-import { Redirect } from 'react-router-dom';
 import ModalActions from '../Modal/redux/actions';
-import { ModalType } from '../Modal/type';
+import { Alert, Col } from 'react-bootstrap';
 
 const mapStateToProps = (state: { CMSLogin: CMSLoginType.Redux.Store }) => ({
 	project: state.CMSLogin.actual_project,
@@ -15,22 +14,28 @@ const mapDispatchToProps = {
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 const ProjectAccessor: React.FunctionComponent<Props> = (props) => {
+	const [message, setMessage] = useState('');
 	useEffect(() => {
-		if (!props.project?.id)
-			props.InitializeModal({
-				body: 'Wybierz projekt',
-				modalType: ModalType.Payload.EModalType.Error,
-				title: 'Uwaga!',
-			});
-		else if (!props.project?.urn)
-			props.InitializeModal({
-				body: 'Model niedostępny dla wybranego projektu',
-				modalType: ModalType.Payload.EModalType.Error,
-				title: 'Uwaga!',
-			});
+		if (!props.project?.id) setMessage('Wybierz projekt');
+		// props.InitializeModal({
+		// 	body: 'Wybierz projekt',
+		// 	modalType: ModalType.Payload.EModalType.Error,
+		// 	title: 'Uwaga!',
+		// });
+		else if (!props.project?.urn) setMessage('Model niedostępny dla wybranego projektu');
+		// props.InitializeModal({
+		// 	body: 'Model niedostępny dla wybranego projektu',
+		// 	modalType: ModalType.Payload.EModalType.Error,
+		// 	title: 'Uwaga!',
+		// });
 	}, [props.project]);
 	if (props.project?.id && props.project?.urn) return <>{props.children}</>;
-	return <Redirect to="/" />;
+	// return <Redirect to="/" />;
+	return (
+		<Col sm={'auto'} className={'p-3'}>
+			<Alert variant={'warning'}>{message}</Alert>
+		</Col>
+	);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectAccessor);

@@ -31,7 +31,8 @@ type Props = ReturnType<typeof mapStateToProps> &
 function OtherWorksCollapseComponent(props: Props) {
 	return (
 		<ActualEventKeyRowViewer eventKey={props.eventKey} actualAccordion={props.actualAccordion}>
-			<td colSpan={3}>{props.otherWork?.other_works_option.name}</td>
+			<td colSpan={2}>{props.otherWork?.other_works_option.name}</td>
+			<td>{props.otherWork?.description}</td>
 			<OtherWorksWorkedTime otherWorkID={props.workID} />
 		</ActualEventKeyRowViewer>
 	);

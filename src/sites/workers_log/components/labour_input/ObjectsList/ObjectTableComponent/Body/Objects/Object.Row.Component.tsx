@@ -13,9 +13,9 @@ function ObjectRowComponent(props: {
 	return (
 		<ActualEventKeyRowViewer eventKey={props.eventKey} actualAccordion={props.actualAccordion}>
 			{/*<td>*/}
-			{/*	<ObjectSelectionComponent objectID={props.objectID} />*/}
+			{/*<ObjectSelectionComponent objectID={props.objectID} />*/}
 			{/*</td>*/}
-			<td>
+			<td colSpan={2}>
 				<ObjectNameComponent objectID={props.objectID} />
 			</td>
 			<td>

@@ -16,6 +16,10 @@ export namespace GetStatusesType {
 
 	export interface AcceptanceStatus {
 		id: string;
-		name: string;
+		name: DBStatuses;
+	}
+	export enum DBStatuses {
+		InProgress = 'In progress',
+		Finished = 'Finished',
 	}
 }

@@ -1,11 +1,18 @@
-import { Button, Modal } from 'react-bootstrap';
-import React from 'react';
+import { Button, Form, Modal } from 'react-bootstrap';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { CMSLoginType } from '../../../../../../../../../components/CMSLogin/type';
 import WorkersLogRedux from '../../../../../../../redux';
-import LabourInputTimeEvidenceActions from '../../../../../../../redux/labour_input/time_evidence/actions';
+import { OTHER_WORK_TYPE } from '../../../../../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
+import HideComponent from '../../../../../../../../../components/HideComponent';
 
-type componentProps = { show: boolean; onCancel: () => void; onAccept: () => void; selectedID: string };
+type componentProps = {
+	show: boolean;
+	onCancel: () => void;
+	onAccept: (commentary?: string) => void;
+	selectedID: string;
+	option: OTHER_WORK_TYPE;
+};
 
 const mapStateToProps = (
 	state: {
@@ -22,20 +29,30 @@ const mapStateToProps = (
 			: '',
 });
 
-const mapDispatchToProps = {
-
-};
+const mapDispatchToProps = {};
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & componentProps;
 
 function AcceptModalComponent(props: Props) {
 	console.count('AcceptModalComponent');
+	const [commentary, setCommentary] = useState('');
 	return (
 		<Modal show={props.show} onHide={props.onCancel} backdrop="static" keyboard={false}>
 			<Modal.Header>
 				<Modal.Title>Uwaga!</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
+				<HideComponent when={props.option !== OTHER_WORK_TYPE.ADDITIONAL}>
+					<Form.Label>Opis dodatkowy</Form.Label>
+					<Form.Control
+						onChange={(e) => setCommentary(e.target.value)}
+						value={commentary}
+						className={'p-1'}
+						size={'sm'}
+						type={'text'}
+					/>
+					<hr />
+				</HideComponent>
 				<p>
 					Czy dodać wybraną pracę (<strong>{props.otherWorksOptionName}</strong>) do zestawienia?
 				</p>
@@ -44,7 +61,7 @@ function AcceptModalComponent(props: Props) {
 				<Button variant="secondary" onClick={props.onCancel}>
 					Anuluj
 				</Button>
-				<Button variant="primary" onClick={props.onAccept}>
+				<Button variant="primary" onClick={() => props.onAccept(commentary)}>
 					Zatwierdź
 				</Button>
 			</Modal.Footer>
