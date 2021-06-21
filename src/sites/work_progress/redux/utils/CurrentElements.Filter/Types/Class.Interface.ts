@@ -3,6 +3,6 @@ import CurrentElementsFilter from '../index';
 
 export type Class<T> = new (
 	element: GetObjectsByLevelType.AcceptanceObject,
-	forgeID: number,
+	forgeID: number|undefined,
 	obj: ReturnType<typeof CurrentElementsFilter.validateData>,
 ) => T;

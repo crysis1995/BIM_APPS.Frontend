@@ -53,10 +53,10 @@ export namespace UpdateTermType {
 	export type Response = { updateAcceptanceTerm: UpdateAcceptanceTerm };
 	export type Request = {
 		term_id: string;
-		REAL_START_Date?: Date;
-		PLANNED_FINISH_Date?: Date;
-		REAL_FINISH_Date?: Date;
-		PLANNED_START_Date?: Date;
+		REAL_START_Date?: string;
+		PLANNED_FINISH_Date?: string;
+		REAL_FINISH_Date?: string;
+		PLANNED_START_Date?: string;
 		object_ids?: string[];
 	};
 

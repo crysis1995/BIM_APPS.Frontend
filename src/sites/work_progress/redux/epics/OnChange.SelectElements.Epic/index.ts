@@ -23,7 +23,7 @@ export const OnChangeSelectElementsEpic: Epic<ActionTypes, ActionTypes, RootStat
 		withLatestFrom(state$),
 		mergeMap(([action, state]) => {
 			const data = state.WorkProgress.Monolithic.Upgrading.selectedElements
-				.map((revitID) => state.ForgeViewer.model_elements?.[revitID].forgeId)
+				.map((revitID) => state.ForgeViewer.model_elements?.[revitID]?.forgeId)
 				.filter((x) => !!x) as number[];
 
 			return of(ForgeViewerActions.SetElements({ selected: data }));

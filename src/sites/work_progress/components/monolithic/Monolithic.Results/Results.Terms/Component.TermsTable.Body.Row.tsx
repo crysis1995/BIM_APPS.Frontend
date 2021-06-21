@@ -1,7 +1,6 @@
 import { RootState } from '../../../../../../store';
 import React from 'react';
 import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import {
 	FormatType,
 	GetFormattedDate,
@@ -10,25 +9,12 @@ import classNames from 'classnames';
 import dayjs from 'dayjs';
 import TermsActions from '../../../../redux/monolithic/terms/actions';
 import { Constants } from '../../../../redux/constants';
+import { getTermObjectSelector } from './Selector.GetTermObject';
+import { getCraneNameSelector } from './Selector.GetCraneName';
 
-type ComponentProps = {
+export type ComponentProps = {
 	objectId: string;
 };
-
-const getTermObjectSelector = createSelector(
-	(state: RootState, componentProps: ComponentProps) =>
-		state.WorkProgress.Monolithic.Terms.termsAll?.[componentProps.objectId],
-	(object) => object || null,
-);
-
-const getCraneNameSelector = createSelector(
-	(state: RootState, componentProps: ComponentProps) => getTermObjectSelector(state, componentProps),
-	(state: RootState) => state.CMSLogin.actual_project?.cranes_all,
-	(term, cranes) => {
-		if (!term || !cranes || !term.crane?.id) return '';
-		else return cranes[term.crane.id].name;
-	},
-);
 
 const mapStateToProps = (state: RootState, componentProps: ComponentProps) => ({
 	object: getTermObjectSelector(state, componentProps),
@@ -46,14 +32,15 @@ function ComponentTermsTableBodyRow(props: Props) {
 					crane: object.crane?.id,
 					vertical: object.vertical,
 					level: object.level?.id,
-					termType,
-					date: GetFormattedDate(date, FormatType.Day),
+					toUpdate: {
+						[termType]: GetFormattedDate(date, FormatType.Day),
+					},
 				});
 			}
 		}
 	}
 
-	if (!props.object) return <tr></tr>;
+	if (!props.object) return <tr />;
 	else {
 		return (
 			<tr>

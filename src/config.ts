@@ -80,7 +80,6 @@ export type MonolithicViewerLegendType = {
 	};
 };
 export const MonolithicViewerLegend: MonolithicViewerLegendType = {
-
 	active: { color: '#FFCC1B', alpha: 0.7, option: 'Bieżący' },
 	finished: { color: '#858585', alpha: 0.9, option: 'Zakończony' },
 	finished_historical: { color: '#009b03', alpha: 0.9, option: 'Zakończony / Dzień' },
@@ -91,6 +90,16 @@ export const MonolithicViewerLegend: MonolithicViewerLegendType = {
 	future: { color: '#bababa', alpha: 0.9, option: 'Element planowane' },
 	in_progress: { color: '#1b82ff', alpha: 0.7, option: 'W trakcie' },
 };
+
+export enum Color {
+	Yellow = '#FFCC1B',
+	Green = '#009b03',
+	Blue = '#3A86FF',
+	Red = '#EF233C',
+	BrightGrey = '#efefef',
+	Grey = '#bababa',
+	DarkGrey = '#858585',
+}
 
 export enum TOOLTIPS_MESSAGES {
 	TooltipShowBasePlan = 'tooltip_show_base_plan',

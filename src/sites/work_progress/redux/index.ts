@@ -15,6 +15,8 @@ import { OnChangeSelectElementsEpic } from './epics/OnChange.SelectElements.Epic
 import { OnEndWorkProgressMonolithicComponent } from './epics/OnEnd.WorkProgressMonolithicComponent.Epic';
 import { OnInvokeSetStatusesInitEpic } from './epics/OnInvoke.SetStatusesInit.Epic';
 import { OnStartUpdateTermEpic } from './epics/OnStart.UpdateTerm.Epic';
+import { OnInvokeCheckObjectsGroupTermsEpic } from './epics/OnInvoke.CheckObjectsGroupTerms.Epic';
+import { HandleCleanSelectedElements } from './epics/Handle.CleanSelectedElements.Epic';
 
 export default {
 	reducer: combineReducers({
@@ -35,5 +37,7 @@ export default {
 		OnEndWorkProgressMonolithicComponent,
 		OnInvokeSetStatusesInitEpic,
 		OnStartUpdateTermEpic,
+		OnInvokeCheckObjectsGroupTermsEpic,
+		HandleCleanSelectedElements,
 	),
 };

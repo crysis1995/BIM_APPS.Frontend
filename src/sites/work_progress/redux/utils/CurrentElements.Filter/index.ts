@@ -8,6 +8,7 @@ import { ScheduledModeClassifier } from './Classifiers/Scheduled.Mode.Classifier
 import { ActualModeClassifier } from './Classifiers/Actual.Mode.Classifier';
 import { TabClassifier } from './Types/TabClassifier.Interface';
 import { CurrentElementsFilterData } from './Types/CurrentElementsFilterData.Interface';
+import { HistoricModeClassifier } from './Classifiers/Historic.Mode.Classifier';
 
 export default class CurrentElementsFilter {
 	// private _state: RootState;
@@ -49,6 +50,7 @@ export default class CurrentElementsFilter {
 	private readonly _tabClassifier: TabClassifier = {
 		[Constants.MonolithicTabs.SCHEDULED]: ScheduledModeClassifier,
 		[Constants.MonolithicTabs.CURRENT]: ActualModeClassifier,
+		[Constants.MonolithicTabs.HISTORICAL]: HistoricModeClassifier,
 	};
 	private _currentElements = new Set<number>();
 	private _currentElementsCombinedWithStatus: { [key: string]: Constants.WorkProgressElementStatus } = {};
@@ -144,68 +146,16 @@ export default class CurrentElementsFilter {
 		for (const revitID in this._objects) {
 			const element = this._objects[revitID];
 			const forgeID = this.extractForgeId(revitID);
-			if (!forgeID) continue;
-
-			if (!this.isElementOnActualLevel(element)) {
-				this.onInvalidLevel(revitID, forgeID);
-				continue;
-			}
-
-			const elementPlannedRotationDay = this.extractRotationDay(element);
-			if (!elementPlannedRotationDay) {
-				this.onInvalidDay(revitID, forgeID);
-				continue;
-			}
 
 			this.handleTabClassifier(element, forgeID);
 		}
-	}
-	/*
-	 * 		Check is element is on actual level
-	 *
-	 * */
-	private isElementOnActualLevel(element: GetObjectsByLevelType.AcceptanceObject) {
-		const elementLevel = element.level;
-		if (elementLevel) return this._level === elementLevel.id;
-		else return false;
-	}
-
-	/*
-	 * 	Method add element while is on invalid level
-	 *
-	 * */
-	private onInvalidLevel(revitID: string, forgeID: number) {
-		this.addElementToOutput(revitID, forgeID, {
-			valid: false,
-			addTo: [
-				ForgeViewer.Payload.ElementOperationTypesEnum.DISABLED,
-				ForgeViewer.Payload.ElementOperationTypesEnum.VISIBLE,
-			],
-			color: null,
-		});
-	}
-	/*
-	 * 		Method add element while has not rotation day.
-	 *
-	 *		Example: while DIP do not provide/or planed yet current element in schedule
-	 *
-	 * */
-	private onInvalidDay(revitID: string, forgeID: number) {
-		this.addElementToOutput(revitID, forgeID, {
-			valid: false,
-			addTo: [
-				ForgeViewer.Payload.ElementOperationTypesEnum.DISABLED,
-				ForgeViewer.Payload.ElementOperationTypesEnum.VISIBLE,
-			],
-			color: null,
-		});
 	}
 
 	/*
 	 * 	Generic method to add element according to option
 	 *
 	 * */
-	private addElementToOutput(revitID: string, forgeID: number, options: Options) {
+	private addElementToOutput(revitID: string, forgeID: number | undefined, options: Options) {
 		if (options.valid) {
 			this._currentElements.add(parseInt(revitID));
 			if (options.status) {
@@ -218,8 +168,8 @@ export default class CurrentElementsFilter {
 	/*
 	 *		Method to add element to colorize container
 	 * */
-	private addToForgeColorizeContainer(options: Options, forgeID: number) {
-		if (options.color) {
+	private addToForgeColorizeContainer(options: Options, forgeID: number | undefined) {
+		if (options.color && forgeID) {
 			this._forgeContainer[ForgeViewer.Payload.ElementOperationTypesEnum.COLORED][forgeID] = {
 				element: forgeID,
 				color: options.color,
@@ -229,16 +179,19 @@ export default class CurrentElementsFilter {
 	/*
 	 *		Method to add element to array like forge container
 	 * */
-	private addToForgeVisibleContainers(options: Options, forgeID: number) {
-		if (Array.isArray(options.addTo)) {
-			options.addTo.forEach((key) => {
-				const data = key as ForgeViewer.Payload.ElementOperationTypesEnum;
-				if (data !== ForgeViewer.Payload.ElementOperationTypesEnum.COLORED)
-					this._forgeContainer[data].push(forgeID);
-			});
-		} else {
-			const key = options.addTo as ForgeViewer.Payload.ElementOperationTypesEnum;
-			if (key !== ForgeViewer.Payload.ElementOperationTypesEnum.COLORED) this._forgeContainer[key].push(forgeID);
+	private addToForgeVisibleContainers(options: Options, forgeID: number | undefined) {
+		if (forgeID) {
+			if (Array.isArray(options.addTo)) {
+				options.addTo.forEach((key) => {
+					const data = key as ForgeViewer.Payload.ElementOperationTypesEnum;
+					if (data !== ForgeViewer.Payload.ElementOperationTypesEnum.COLORED)
+						this._forgeContainer[data].push(forgeID);
+				});
+			} else {
+				const key = options.addTo as ForgeViewer.Payload.ElementOperationTypesEnum;
+				if (key !== ForgeViewer.Payload.ElementOperationTypesEnum.COLORED)
+					this._forgeContainer[key].push(forgeID);
+			}
 		}
 	}
 
@@ -248,19 +201,11 @@ export default class CurrentElementsFilter {
 	private extractForgeId(revitID: string) {
 		if (this._forgeElements.hasOwnProperty(revitID)) return this._forgeElements[revitID].forgeId;
 	}
-	/*
-	 *		Rotation Day extractor
-	 * */
-	private extractRotationDay(element: GetObjectsByLevelType.AcceptanceObject) {
-		const currentElementRotationDay = element.rotation_day;
-		if (currentElementRotationDay) return currentElementRotationDay.rotation_day;
-		else return null;
-	}
 
 	/*
-	 *		Classifier based on actual choosed tab
+	 *		Classifier based on actual choose tab
 	 * */
-	private handleTabClassifier(element: GetObjectsByLevelType.AcceptanceObject, forgeID: number) {
+	private handleTabClassifier(element: GetObjectsByLevelType.AcceptanceObject, forgeID: number | undefined) {
 		const classifier = this._tabClassifier[this._mode];
 		if (classifier) {
 			new classifier(element, forgeID, this.classifierData).Classify((revitID, forgeID1, options) =>

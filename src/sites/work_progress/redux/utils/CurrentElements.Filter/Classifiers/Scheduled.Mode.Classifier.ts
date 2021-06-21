@@ -8,18 +8,48 @@ import { hexToRgba } from '../../../../../../utils/hexToRgb';
 
 export class ScheduledModeClassifier extends ModeClassifierInterface {
 	private readonly _rotationDay: number;
+	private readonly _storedLevel: string;
 	constructor(
 		element: GetObjectsByLevelType.AcceptanceObject,
-		forgeID: number,
+		forgeID: number | undefined,
 		obj: ReturnType<typeof CurrentElementsFilter.validateData>,
 	) {
 		super(element, forgeID, obj);
 		this._rotationDay = obj.rotationDay;
+		this._storedLevel = obj.level;
 	}
 
-	public Classify(callback: (revitID: string, forgeID: number, options: Options) => void): void {
+	public Classify(callback: (revitID: string, forgeID: number | undefined, options: Options) => void): void {
 		let options: Options;
 		switch (true) {
+			case !this.isElementHaveVisibleElementOnForgeViewer():
+				options = {
+					valid: false,
+					addTo: [],
+					color: null,
+				};
+				break;
+			case !this.isElementOnActualLevel():
+				options = {
+					valid: false,
+					addTo: [
+						ForgeViewer.Payload.ElementOperationTypesEnum.DISABLED,
+						ForgeViewer.Payload.ElementOperationTypesEnum.VISIBLE,
+					],
+					color: null,
+				};
+				break;
+			case !this.isElementHaveValidRotationDay():
+				options = {
+					valid: false,
+					addTo: [
+						ForgeViewer.Payload.ElementOperationTypesEnum.DISABLED,
+						ForgeViewer.Payload.ElementOperationTypesEnum.VISIBLE,
+					],
+					color: null,
+				};
+				break;
+
 			case this.isObjectPlannedDay().higherThanGlobalDay():
 				options = {
 					valid: false,
@@ -60,9 +90,20 @@ export class ScheduledModeClassifier extends ModeClassifierInterface {
 				this._element.rotation_day ? this._element.rotation_day.rotation_day === this._rotationDay : false,
 		};
 	}
+	private isElementHaveValidRotationDay() {
+		const currentElementRotationDay = this._element.rotation_day;
+		return !!currentElementRotationDay?.rotation_day;
+	}
+	private isElementOnActualLevel() {
+		const elementLevel = this._element.level;
+		return elementLevel?.id === this._storedLevel;
+	}
+	private isElementHaveVisibleElementOnForgeViewer() {
+		return this._forgeID !== undefined;
+	}
 
 	public ExtractColor(key: Constants.WorkProgressElementStatus): ForgeViewer.Payload.Color | undefined {
 		const color = Constants.WorkProgressMonolithicColorMap[Constants.MonolithicTabs.SCHEDULED]?.[key];
-		if (color) return hexToRgba(color.color, color.alpha,true);
+		if (color) return hexToRgba(color.color, color.alpha, true);
 	}
 }

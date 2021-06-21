@@ -11,7 +11,7 @@ function App() {
 		<BrowserRouter basename="/bim_apps/v2">
 			<React.Suspense fallback={<Loader />}>
 				<Switch>
-					<Route path="/" name="Home" component={Layout} />
+					<Route path="/" component={Layout} />
 				</Switch>
 			</React.Suspense>
 		</BrowserRouter>

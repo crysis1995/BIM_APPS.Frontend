@@ -13,9 +13,10 @@ export class ActualModeClassifier extends ModeClassifierInterface {
 	private readonly _statuses: NonNullable<WorkProgress.Monolithic.General.Redux.IStore['statuses']>;
 	private readonly _rotationDate: string;
 	private readonly _statusName: GetStatusesType.DBStatuses | undefined;
+	private readonly _storedLevel: string;
 	constructor(
 		element: GetObjectsByLevelType.AcceptanceObject,
-		forgeID: number,
+		forgeID: number | undefined,
 		obj: ReturnType<typeof CurrentElementsFilter.validateData>,
 	) {
 		super(element, forgeID, obj);
@@ -23,11 +24,22 @@ export class ActualModeClassifier extends ModeClassifierInterface {
 		this._rotationDate = obj.rotationDate;
 		this._rotationDay = obj.rotationDay;
 		this._statusName = this.ExtractLatestStatusName();
+		this._storedLevel = obj.level;
 	}
 
-	Classify(callback: (revitID: string, forgeID: number, options: Options) => void): void {
+	Classify(callback: (revitID: string, forgeID: number | undefined, options: Options) => void): void {
 		let options: Options;
 		switch (true) {
+			case !this.isElementOnActualLevel() || !this.isElementHaveValidRotationDay():
+				options = {
+					valid: false,
+					addTo: [
+						ForgeViewer.Payload.ElementOperationTypesEnum.DISABLED,
+						ForgeViewer.Payload.ElementOperationTypesEnum.VISIBLE,
+					],
+					color: null,
+				}
+				break
 			case this.ElementIsFinished():
 				if (this.ElementPlannedRotationDay().sameDayAsActualGlobal()) {
 					options = {
@@ -92,6 +104,14 @@ export class ActualModeClassifier extends ModeClassifierInterface {
 		}
 
 		callback(this._element.revit_id.toString(), this._forgeID, options);
+	}
+	private isElementHaveValidRotationDay() {
+		const currentElementRotationDay = this._element.rotation_day;
+		return !!currentElementRotationDay?.rotation_day;
+	}
+	private isElementOnActualLevel() {
+		const elementLevel = this._element.level;
+		return elementLevel?.id === this._storedLevel;
 	}
 	private ElementIsFinished() {
 		return this._statusName === GetStatusesType.DBStatuses.Finished;

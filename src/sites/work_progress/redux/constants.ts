@@ -167,5 +167,10 @@ export namespace Constants {
 			[WorkProgressElementStatus.Finished]: { color: '#858585', alpha: 0.9 },
 			[WorkProgressElementStatus.None]: { color: '#2f2f2f', alpha: 0.9 },
 		},
+		[MonolithicTabs.HISTORICAL]:{
+			[WorkProgressElementStatus.Finished]: { color: '#494949', alpha: 0.7 },
+			[WorkProgressElementStatus.InProgress]: { color: '#009b03', alpha: 0.7 },
+		}
 	};
+
 }

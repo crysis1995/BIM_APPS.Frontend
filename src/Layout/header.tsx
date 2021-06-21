@@ -45,12 +45,6 @@ function Header(props: Props) {
 							className="dropdown-item">
 							Monolitycznych
 						</NavLink>
-						{/*<NavLink to={`/work_progress/${ACCEPTANCE_TYPE.ARCHITECTURAL}`} className="dropdown-item">*/}
-						{/*	Wykończeniowych*/}
-						{/*</NavLink>*/}
-						{/*<NavLink to={`/work_progress/${ACCEPTANCE_TYPE.MEP}`} className="dropdown-item">*/}
-						{/*	Instalacyjnych*/}
-						{/*</NavLink>*/}
 					</NavDropdown>
 					<NavDropdown
 						disabled={isAllowedApp(EApplications.WORKERS_LOG)}

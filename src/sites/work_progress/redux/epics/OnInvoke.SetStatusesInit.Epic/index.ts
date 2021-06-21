@@ -63,6 +63,7 @@ export const OnInvokeSetStatusesInitEpic: Epic<ActionTypes, ActionTypes, RootSta
 						),
 						of(WorkProgressMonolithicUpgradingActions.SetStatusesEnd()),
 						of(WorkProgressMonolithicUpgradingActions.CheckObjectsGroupTerms(selectedElements)),
+						of(WorkProgressMonolithicUpgradingActions.HandleSetCurrentElement())
 					);
 				}
 				return EMPTY;

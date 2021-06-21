@@ -114,68 +114,68 @@ const handleInitSetStatus = (action$, state$) =>
 		}),
 	);
 
-const handleSendStatusData = (action$, state$) =>
-	action$.pipe(
-		ofType(UPGRADING_SET_STATUSES),
-		withLatestFrom(state$),
-		map(() => handleSelectedElements('')),
-	);
+// const handleSendStatusData = (action$, state$) =>
+// 	action$.pipe(
+// 		ofType(UPGRADING_SET_STATUSES),
+// 		withLatestFrom(state$),
+// 		map(() => handleSelectedElements('')),
+// 	);
 
-function getStateData(state) {
-	const { active_crane, cranes, active_level, levels } = state.Odbiory.OdbioryComponent.MONOLITHIC;
-	const { byRevitId } = state.Odbiory.Upgrading.MONOLITHIC;
-
-	// terms object
-	const { byGroup } = state.Odbiory.Terms.MONOLITHIC?.terms?.byCrane?.[cranes[active_crane].crane.name]?.byLevel?.[
-		levels[active_level].name
-	];
-
-	const groupObjects = state.Odbiory.Upgrading.MONOLITHIC?.byCrane?.[active_crane]?.byLevel?.[active_level];
-	return { groupObjects, byRevitId, groupedTerms: byGroup };
-}
-const checkObjectsGroupTermsEpic = (action$, state$) =>
-	action$.pipe(
-		ofType(UPGRADING_CHECK_OBJECT_GROUP_TERMS),
-		withLatestFrom(state$),
-		switchMap(([{ selectedElements }, state]) => {
-			const { groupObjects, groupedTerms, byRevitId } = getStateData(state);
-			if (!groupObjects) return EMPTY;
-			else {
-				return from(Object.keys(groupObjects)).pipe(
-					mergeMap((group_key) => {
-						const { needUpgradeTermState, termsObject } = checkObjectsTerms(
-							selectedElements.filter((revit_id) => groupObjects[group_key].includes(parseInt(revit_id))),
-							byRevitId,
-							groupObjects[group_key],
-							groupedTerms[group_key],
-						);
-						return iif(() => needUpgradeTermState, of(initUpdateTermsByGroup(termsObject)));
-					}),
-				);
-			}
-		}),
-	);
-export function checkObjectsTerms(actualGroupedRevitIds, byRevitId, allElementsInGroup, termsObject) {
-	termsObject = { ...termsObject }; // must copy object
-
-	let needUpgradeTermState = false;
-	if (actualGroupedRevitIds.length > 0) {
-		needUpgradeTermState = true;
-		const dbElements = actualGroupedRevitIds.map((revitId) => byRevitId[revitId].id);
-
-		if (termsObject.objects.length === 0) {
-			termsObject[TERM_TYPE.REAL_START.id] = new Date().toISOString();
-		}
-		termsObject.objects = termsObject.objects.map((obj) => obj.id);
-		termsObject.objects = termsObject.objects.concat(dbElements);
-		const isComplete = termsObject.objects.length === allElementsInGroup.length;
-		if (isComplete) {
-			termsObject[TERM_TYPE.REAL_FINISH.id] = new Date().toISOString();
-		}
-	}
-
-	return { needUpgradeTermState, termsObject };
-}
+// function getStateData(state) {
+// 	const { active_crane, cranes, active_level, levels } = state.Odbiory.OdbioryComponent.MONOLITHIC;
+// 	const { byRevitId } = state.Odbiory.Upgrading.MONOLITHIC;
+//
+// 	// terms object
+// 	const { byGroup } = state.Odbiory.Terms.MONOLITHIC?.terms?.byCrane?.[cranes[active_crane].crane.name]?.byLevel?.[
+// 		levels[active_level].name
+// 	];
+//
+// 	const groupObjects = state.Odbiory.Upgrading.MONOLITHIC?.byCrane?.[active_crane]?.byLevel?.[active_level];
+// 	return { groupObjects, byRevitId, groupedTerms: byGroup };
+// }
+// const checkObjectsGroupTermsEpic = (action$, state$) =>
+// 	action$.pipe(
+// 		ofType(UPGRADING_CHECK_OBJECT_GROUP_TERMS),
+// 		withLatestFrom(state$),
+// 		switchMap(([{ selectedElements }, state]) => {
+// 			const { groupObjects, groupedTerms, byRevitId } = getStateData(state);
+// 			if (!groupObjects) return EMPTY;
+// 			else {
+// 				return from(Object.keys(groupObjects)).pipe(
+// 					mergeMap((group_key) => {
+// 						const { needUpgradeTermState, termsObject } = checkObjectsTerms(
+// 							selectedElements.filter((revit_id) => groupObjects[group_key].includes(parseInt(revit_id))),
+// 							byRevitId,
+// 							groupObjects[group_key],
+// 							groupedTerms[group_key],
+// 						);
+// 						return iif(() => needUpgradeTermState, of(initUpdateTermsByGroup(termsObject)));
+// 					}),
+// 				);
+// 			}
+// 		}),
+// 	);
+// export function checkObjectsTerms(actualGroupedRevitIds, byRevitId, allElementsInGroup, termsObject) {
+// 	termsObject = { ...termsObject }; // must copy object
+//
+// 	let needUpgradeTermState = false;
+// 	if (actualGroupedRevitIds.length > 0) {
+// 		needUpgradeTermState = true;
+// 		const dbElements = actualGroupedRevitIds.map((revitId) => byRevitId[revitId].id);
+//
+// 		if (termsObject.objects.length === 0) {
+// 			termsObject[TERM_TYPE.REAL_START.id] = new Date().toISOString();
+// 		}
+// 		termsObject.objects = termsObject.objects.map((obj) => obj.id);
+// 		termsObject.objects = termsObject.objects.concat(dbElements);
+// 		const isComplete = termsObject.objects.length === allElementsInGroup.length;
+// 		if (isComplete) {
+// 			termsObject[TERM_TYPE.REAL_FINISH.id] = new Date().toISOString();
+// 		}
+// 	}
+//
+// 	return { needUpgradeTermState, termsObject };
+// }
 
 export default combineEpics(
 	// upgradeJobEpic,

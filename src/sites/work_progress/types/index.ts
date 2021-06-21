@@ -363,8 +363,9 @@ namespace WorkProgress {
 					crane: string;
 					vertical: GetAllAcceptanceTermsType.Vertical;
 					level: string;
-					date: string;
-					termType: Constants.TermTypes;
+					toUpdate: {
+						[key in Constants.TermTypes]?: string;
+					};
 				}
 				export type UpdateTermsByGroup = UpdateTermType.AcceptanceTerm;
 			}

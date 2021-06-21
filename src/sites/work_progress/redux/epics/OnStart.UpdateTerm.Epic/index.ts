@@ -18,6 +18,12 @@ type ActionTypes =
 	| WorkProgress.Monolithic.Terms.Redux.Actions
 	| ForgeViewer.Redux.Actions;
 
+/*
+ * 		Epic is invoked while user try change term date
+ *
+ *
+ *
+ * */
 export const OnStartUpdateTermEpic: Epic<ActionTypes, ActionTypes, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
@@ -65,19 +71,24 @@ function ExtractDataToUpdate(
 	const level = action.payload.level;
 	const vertical = action.payload.vertical;
 	const crane = action.payload.crane;
-	const termType = action.payload.termType;
-	const date = action.payload.date;
-
-	const dateToUpdate = termTypeMap[termType];
+	const toUpdate = action.payload.toUpdate;
 
 	const termID =
 		state.WorkProgress.Monolithic.Terms.termsNorm?.byLevel?.[level]?.byVertical?.[vertical]?.byCrane?.[crane];
-	if (termID && allTerms && dateToUpdate) {
+	if (termID && allTerms) {
 		const { id } = allTerms[termID];
-
-		return {
+		let Output: UpdateTermType.Request = {
 			term_id: id,
-			[dateToUpdate]: date,
 		};
+		const keys = Object.keys(toUpdate) as Constants.TermTypes[];
+
+		keys.forEach((key) => {
+			const dateToUpdate = termTypeMap[key];
+			if (dateToUpdate) {
+				Output[dateToUpdate] = toUpdate[key];
+			}
+		});
+
+		return Output;
 	}
 }
