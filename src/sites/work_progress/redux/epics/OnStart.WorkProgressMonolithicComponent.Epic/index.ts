@@ -6,7 +6,6 @@ import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import { combineLatest, EMPTY, merge } from 'rxjs';
 import RestAPIService from '../../../../../services/rest.api.service';
 import { ModalType } from '../../../../../components/Modal/type';
-import { FetchStatusesEpic } from './FetchStatuses.Epic';
 import { FetchRotationDaysEpic } from './FetchRotationDays.Epic';
 import { FetchTermsEpic } from './FetchTerms.Epic';
 import { FetchDelayCausesEpic } from './FetchDelayCauses.Epic';
@@ -46,9 +45,8 @@ function FetchNecessary(
 ) {
 	return merge(
 		SetProjectUtilsEpic(state),
-		FetchStatusesEpic(GRAPHQL),
 		FetchRotationDaysEpic(GRAPHQL, project),
-		FetchTermsEpic(REST,GRAPHQL, project),
+		FetchTermsEpic(REST, GRAPHQL, project),
 		FetchDelayCausesEpic(GRAPHQL),
 	).pipe(takeUntil(action$.pipe(ofType(WorkProgress.Monolithic.General.Redux.Types.COMPONENT_ENDED))));
 }

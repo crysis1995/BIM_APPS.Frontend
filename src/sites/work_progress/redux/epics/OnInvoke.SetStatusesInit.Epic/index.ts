@@ -26,7 +26,7 @@ export const OnInvokeSetStatusesInitEpic: Epic<ActionTypes, ActionTypes, RootSta
 		switchMap(
 			([
 				{
-					payload: { date, selectedElements, status_id },
+					payload: { date, selectedElements, status },
 				},
 				state,
 			]) => {
@@ -42,7 +42,7 @@ export const OnInvokeSetStatusesInitEpic: Epic<ActionTypes, ActionTypes, RootSta
 									API.MONOLITHIC.Status.Create({
 										date,
 										user_id,
-										status_id,
+										status,
 										object_id: byRevitID[revitID].id,
 									}),
 								).pipe(

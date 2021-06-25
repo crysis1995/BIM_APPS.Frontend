@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import GeneralActions from '../../../redux/work_time_evidence/general/actions';
-import { ERaportType } from '../../../redux/work_time_evidence/general/types/payload';
+import WorkersLog from '../../../types';
 
 const mapStateToProps = () => ({});
 const mapDispatchToProps = {
@@ -13,7 +13,7 @@ type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 function Financial(props: Props) {
 	const [isLoading, setIsLoading] = useState(false);
 	const handleClick = () => {
-		props.generateRaport(ERaportType.Financial);
+		props.generateRaport(WorkersLog.WorkTimeEvidence.General.Payload.ERaportType.Financial);
 	};
 
 	return (

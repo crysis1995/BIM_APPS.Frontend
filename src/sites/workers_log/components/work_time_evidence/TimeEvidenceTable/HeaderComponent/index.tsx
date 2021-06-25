@@ -1,15 +1,11 @@
 import DatesComponent from './DatesComponent';
 import React from 'react';
 import DailySummary from './DailySummary';
-import { CrewState } from '../../../../redux/work_time_evidence/crew/types/state';
-import { WorkersState } from '../../../../redux/work_time_evidence/worker/types/state';
 import { connect } from 'react-redux';
-import { GeneralState } from '../../../../redux/work_time_evidence/general/types/state';
 import { v4 } from 'uuid';
+import { RootState } from '../../../../../../store';
 
-const mapStateToProps = (state: {
-	WorkersLog: { WorkTimeEvidence: { Crews: CrewState; Workers: WorkersState; General: GeneralState } };
-}) => ({
+const mapStateToProps = (state: RootState) => ({
 	by_date: state.WorkersLog.WorkTimeEvidence.General.calendar.by_date,
 });
 const mapDispatchToProps = {};

@@ -10,7 +10,6 @@ import USER_PROJECTS, { UserProjectsType } from './CONSTANTS/Queries/UserProject
 import CREATE_STATUS, { CreateStatusType } from './CONSTANTS/Mutations/CreateStatus';
 import CREATE_DELAY, { CreateDelayType } from './CONSTANTS/Mutations/CreateDelay';
 import GET_DELAYS, { GetDelaysType } from './CONSTANTS/Queries/GetDelays';
-import GET_STATUSES, { GetStatusesType } from './CONSTANTS/Queries/GetStatuses';
 import GET_ALL_CREWS, { GetAllCrewsType } from './CONSTANTS/Queries/GetAllCrews';
 import GET_ALL_WORKERS, { GetAllWorkersType } from './CONSTANTS/Queries/GetAllWorkers';
 import CREATE_HOUSE_CREW, { CreateHouseCrewType } from './CONSTANTS/Mutations/CreateHouseCrew';
@@ -165,11 +164,6 @@ export default class GraphQLAPIService {
 			Create: (data: CreateStatusType.Request) => {
 				return this.mutateClient<CreateStatusType.Response, CreateStatusType.Request>(CREATE_STATUS, data).then(
 					(e) => e?.createAcceptanceObjectStatus.acceptanceObjectStatus,
-				);
-			},
-			Get: () => {
-				return this.queryClient<GetStatusesType.Response, GetStatusesType.Request>(GET_STATUSES).then(
-					(e) => e.acceptanceStatuses,
 				);
 			},
 		},

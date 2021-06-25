@@ -1,13 +1,10 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import { CrewState } from '../../../../redux/work_time_evidence/crew/types/state';
-import { WorkersState } from '../../../../redux/work_time_evidence/worker/types/state';
-import { TimeEvidenceState } from '../../../../redux/work_time_evidence/time_evidence/types/state';
+import { RootState } from '../../../../../../store';
+
 
 const mapStateToProps = (
-	state: {
-		WorkersLog: { WorkTimeEvidence: { Crews: CrewState; Workers: WorkersState; TimeEvidence: TimeEvidenceState } };
-	},
+	state: RootState,
 	componentProps: { day: string },
 ) => ({
 	daily_summary: state.WorkersLog.WorkTimeEvidence.TimeEvidence.summary.by_dates?.[componentProps.day],

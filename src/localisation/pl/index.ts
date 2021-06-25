@@ -11,9 +11,9 @@ const translation: ITranslation = {
 	PLANNED_START: 'Data planowanego zakończenia wg. PB',
 	PLANNED_FINISH: 'Planowana data zakończenia',
 
-	carpenter: 'Cieśla',
+	carpenter: 'Cieśle',
 	general_construction: 'Pracownik ogólnobudowlany',
-	steel_fixer: 'Zbrojarz',
+	steel_fixer: 'Zbrojarze',
 	additional: 'Prace dodatkowe',
 	helper: 'Prace pomocnicze',
 	elements: 'Elementy modelu',
@@ -161,15 +161,15 @@ const translation: ITranslation = {
 	volume: 'Objętość',
 	running_meter: 'Metry bieżące',
 
-	current: 'Zaplanowany',
-	planned: 'Planowany',
-	delayed: 'Opóźniony',
-	finished: 'Zakończony',
-	in_progress: 'W trakcie',
-	none: 'Brak',
+	wp_statuses_current: 'Zaplanowany',
+	wp_statuses_planned: 'Planowany',
+	wp_statuses_delayed: 'Opóźniony',
+	wp_statuses_finished: 'Zakończony',
+	wp_statuses_in_progress: 'W trakcie',
+	wp_statuses_none: 'Brak',
 
-	'In progress': 'W trakcie',
-	Finished: 'Zakończono',
+	in_progress: 'W trakcie',
+	finished: 'Zakończono',
 };
 
 export default translation;

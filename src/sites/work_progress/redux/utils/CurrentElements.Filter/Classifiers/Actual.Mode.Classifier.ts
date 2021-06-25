@@ -2,17 +2,14 @@ import ModeClassifierInterface from '../Types/Mode.Classifier.Interface';
 import { Options } from '../Types/Options';
 import { GetObjectsByLevelType } from '../../../../../../services/graphql.api.service/CONSTANTS/Queries/GetObjectsByLevel';
 import CurrentElementsFilter from '../index';
-import WorkProgress from '../../../../types';
-import { GetStatusesType } from '../../../../../../services/graphql.api.service/CONSTANTS/Queries/GetStatuses';
 import ForgeViewer from '../../../../../../components/ForgeViewer/types';
 import { Constants } from '../../../constants';
 import { hexToRgba } from '../../../../../../utils/hexToRgb';
 
 export class ActualModeClassifier extends ModeClassifierInterface {
 	private readonly _rotationDay: number;
-	private readonly _statuses: NonNullable<WorkProgress.Monolithic.General.Redux.IStore['statuses']>;
 	private readonly _rotationDate: string;
-	private readonly _statusName: GetStatusesType.DBStatuses | undefined;
+	private readonly _statusName: GetObjectsByLevelType.StatusEnum | undefined;
 	private readonly _storedLevel: string;
 	constructor(
 		element: GetObjectsByLevelType.AcceptanceObject,
@@ -20,7 +17,6 @@ export class ActualModeClassifier extends ModeClassifierInterface {
 		obj: ReturnType<typeof CurrentElementsFilter.validateData>,
 	) {
 		super(element, forgeID, obj);
-		this._statuses = obj.statuses;
 		this._rotationDate = obj.rotationDate;
 		this._rotationDay = obj.rotationDay;
 		this._statusName = this.ExtractLatestStatusName();
@@ -38,8 +34,8 @@ export class ActualModeClassifier extends ModeClassifierInterface {
 						ForgeViewer.Payload.ElementOperationTypesEnum.VISIBLE,
 					],
 					color: null,
-				}
-				break
+				};
+				break;
 			case this.ElementIsFinished():
 				if (this.ElementPlannedRotationDay().sameDayAsActualGlobal()) {
 					options = {
@@ -114,11 +110,11 @@ export class ActualModeClassifier extends ModeClassifierInterface {
 		return elementLevel?.id === this._storedLevel;
 	}
 	private ElementIsFinished() {
-		return this._statusName === GetStatusesType.DBStatuses.Finished;
+		return this._statusName === GetObjectsByLevelType.StatusEnum.Finished;
 	}
 
 	private ElementIsInProgress() {
-		return this._statusName === GetStatusesType.DBStatuses.InProgress;
+		return this._statusName === GetObjectsByLevelType.StatusEnum.InProgress;
 	}
 	private ExtractLatestStatus(): GetObjectsByLevelType.Status | undefined {
 		if (this._element.statuses.length > 0) {
@@ -126,9 +122,9 @@ export class ActualModeClassifier extends ModeClassifierInterface {
 		}
 	}
 
-	private ExtractLatestStatusName(): GetStatusesType.DBStatuses | undefined {
+	private ExtractLatestStatusName(): GetObjectsByLevelType.StatusEnum | undefined {
 		const status = this.ExtractLatestStatus();
-		if (status) return this._statuses[status.status.id].name;
+		if (status) return status.status;
 	}
 
 	private ElementPlannedRotationDay() {

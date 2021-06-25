@@ -1,6 +1,5 @@
 import { combineEpics, Epic, ofType } from 'redux-observable';
-import { LabourInput } from '../types';
-import { filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import ForgeViewerActions from '../../../../../components/ForgeViewer/redux/actions';
 import { concat, EMPTY, from, of } from 'rxjs';
 import dayjs from 'dayjs';
@@ -13,13 +12,14 @@ import LabourInputTimeEvidenceActions from '../time_evidence/actions';
 import normalize from '../../../../../utils/Normalize';
 import ForgeViewer from '../../../../../components/ForgeViewer/types';
 import { RootState } from '../../../../../store';
+import WorkersLog from '../../../types';
 
 dayjs.extend(isBetween);
 
 type ActionType =
-	| LabourInput.Redux.General.Actions
-	| LabourInput.Redux.Objects.Actions
-	| LabourInput.Redux.TimeEvidence.Actions
+	| WorkersLog.LabourInput.Redux.General.Actions
+	| WorkersLog.LabourInput.Redux.Objects.Actions
+	| WorkersLog.LabourInput.Redux.TimeEvidence.Actions
 	| ForgeViewer.Redux.Actions
 	| ModalType.Redux.Actions;
 
@@ -27,36 +27,21 @@ type ActionType =
 const OnInitializeComponent: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
-			(data): data is ReturnType<LabourInput.Redux.General.IActions['InitializeComponent']> =>
-				data.type === LabourInput.Redux.General.Types.INITIALIZE,
+			(data): data is ReturnType<WorkersLog.LabourInput.Redux.General.IActions['InitializeComponent']> =>
+				data.type === WorkersLog.LabourInput.Redux.General.Types.INITIALIZE,
 		),
 		withLatestFrom(state$),
 		mergeMap(([_, state]) =>
 			concat(
 				of(LabourInputGeneralActions.SetDate(dayjs())),
-				of(LabourInputGeneralActions.FetchStatusesStart()),
 				of(LabourInputGeneralActions.FetchOtherWorksStart()),
-			),
-		),
-	);
-
-const FetchStatuses: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
-	action$.pipe(
-		filter(
-			(data): data is ReturnType<LabourInput.Redux.General.IActions['FetchStatusesStart']> =>
-				data.type === LabourInput.Redux.General.Types.FETCH_STATUSES_START,
-		),
-		withLatestFrom(state$),
-		switchMap(([_, state]) =>
-			from(new GraphQLAPIService(state.CMSLogin.credentials?.access_token).MONOLITHIC.Status.Get()).pipe(
-				map((data) => LabourInputGeneralActions.FetchStatusesEnd(normalize(data, 'id'))),
 			),
 		),
 	);
 
 const FetchOtherWorks: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
 	action$.pipe(
-		ofType(LabourInput.Redux.General.Types.FETCH_OTHER_WORKS_START),
+		ofType(WorkersLog.LabourInput.Redux.General.Types.FETCH_OTHER_WORKS_START),
 		withLatestFrom(state$),
 		switchMap(([_, state]) =>
 			from(
@@ -86,8 +71,8 @@ const FetchOtherWorks: Epic<ActionType, ActionType, RootState> = (action$, state
 const onChooseLevel: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
-			(data): data is ReturnType<LabourInput.Redux.General.IActions['ChooseLevel']> =>
-				data.type === LabourInput.Redux.General.Types.CHOOSE_LEVEL,
+			(data): data is ReturnType<WorkersLog.LabourInput.Redux.General.IActions['ChooseLevel']> =>
+				data.type === WorkersLog.LabourInput.Redux.General.Types.CHOOSE_LEVEL,
 		),
 		withLatestFrom(state$),
 		mergeMap(([action, state]) => {
@@ -110,13 +95,13 @@ const OnChangeDateWorkerTypeOrCrew: Epic<ActionType, ActionType, RootState> = (a
 			(
 				data,
 			): data is ReturnType<
-				| LabourInput.Redux.General.IActions['SetDate']
-				| LabourInput.Redux.General.IActions['SelectWorkerType']
-				| LabourInput.Redux.General.IActions['SelectCrew']
+				| WorkersLog.LabourInput.Redux.General.IActions['SetDate']
+				| WorkersLog.LabourInput.Redux.General.IActions['SelectWorkerType']
+				| WorkersLog.LabourInput.Redux.General.IActions['SelectCrew']
 			> =>
-				LabourInput.Redux.General.Types.SET_DATE === data.type ||
-				LabourInput.Redux.General.Types.SELECT_WORKER_TYPE === data.type ||
-				LabourInput.Redux.General.Types.SELECT_CREW == data.type,
+				WorkersLog.LabourInput.Redux.General.Types.SET_DATE === data.type ||
+				WorkersLog.LabourInput.Redux.General.Types.SELECT_WORKER_TYPE === data.type ||
+				WorkersLog.LabourInput.Redux.General.Types.SELECT_CREW == data.type,
 		),
 		withLatestFrom(state$),
 		mergeMap(([_, state]) => {
@@ -167,10 +152,4 @@ const OnChangeDateWorkerTypeOrCrew: Epic<ActionType, ActionType, RootState> = (a
 		}),
 	);
 
-export default combineEpics(
-	OnInitializeComponent,
-	FetchStatuses,
-	onChooseLevel,
-	OnChangeDateWorkerTypeOrCrew,
-	FetchOtherWorks,
-);
+export default combineEpics(OnInitializeComponent, onChooseLevel, OnChangeDateWorkerTypeOrCrew, FetchOtherWorks);

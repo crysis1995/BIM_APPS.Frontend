@@ -137,12 +137,12 @@ export namespace Constants {
 	}
 
 	export enum WorkProgressElementStatus {
-		Finished = 'finished',
-		InProgress = 'in_progress',
-		Planned = 'planned',
-		Delayed = 'delayed',
-		None = 'none',
-		Current = 'current',
+		Finished = 'wp_statuses_finished',
+		InProgress = 'wp_statuses_in_progress',
+		Planned = 'wp_statuses_planned',
+		Delayed = 'wp_statuses_delayed',
+		None = 'wp_statuses_none',
+		Current = 'wp_statuses_current',
 	}
 
 	export type WorkProgressMonolithicStatusLegendType = {
@@ -159,7 +159,7 @@ export namespace Constants {
 			[WorkProgressElementStatus.Current]: { color: '#FFCC1B', alpha: 0.7 },
 			[WorkProgressElementStatus.InProgress]: { color: '#009b03', alpha: 0.7 },
 			[WorkProgressElementStatus.Delayed]: { color: '#EF233C', alpha: 0.7 },
-			[WorkProgressElementStatus.Finished]: { color: '#494949', alpha: 0.7 },
+			[WorkProgressElementStatus.Finished]: { color: '#172ce0', alpha: 0.7 },
 			[WorkProgressElementStatus.None]: { color: '#848484', alpha: 0.7 },
 		},
 		[MonolithicTabs.SCHEDULED]: {

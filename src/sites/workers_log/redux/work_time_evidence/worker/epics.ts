@@ -1,16 +1,9 @@
 import { combineEpics, Epic, ofType } from 'redux-observable';
-import { IWorkersAction, WorkersActionTypes } from './types/actions';
-import WorkersLogActions from '../../types';
 import { concat, EMPTY, from, of } from 'rxjs';
-import { IWarbudWorkersMap } from './types/payload';
 import { filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import WorkersAction from './actions';
 import RestAPIService from '../../../../../services/rest.api.service';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
-import { TimeEvidenceActionTypes } from '../time_evidence/types/actions';
-import { RootState } from '../crew/epics';
-import CrewActions from '../crew/actions';
-import { CrewActionsTypes } from '../crew/types/actions';
 import { PrepareDataForReducer } from '../crew/utils/PrepareDataForReducer';
 import { UpdateCrewSummaryType } from '../../../../../services/graphql.api.service/CONSTANTS/Mutations/UpdateCrewSummary';
 import { GetAllWorkersType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/GetAllWorkers';
@@ -18,14 +11,19 @@ import { CreateWorkerType } from '../../../../../services/graphql.api.service/CO
 import normalize from '../../../../../utils/Normalize';
 import ModalActions from '../../../../../components/Modal/redux/actions';
 import { ModalType } from '../../../../../components/Modal/type';
+import WorkersLog from '../../../types';
+import { RootState } from '../../../../../store';
+import CrewActions from '../crew/actions';
 
-type ActionType = WorkersActionTypes | TimeEvidenceActionTypes | CrewActionsTypes | ModalType.Redux.Actions;
+type ActionType = ModalType.Redux.Actions | WorkersLog.WorkTimeEvidence.Worker.Redux.Actions | WorkersLog.WorkTimeEvidence.Crew.Redux.Actions;
 
 const OnFetchWorkersMapStartEpic: Epic<ActionType, ActionType, any> = ($action) =>
 	$action.pipe(
-		ofType(WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_MAP_START),
+		ofType(WorkersLog.WorkTimeEvidence.Worker.Redux.Types.FETCH_WORKERS_MAP_START),
 		switchMap(() =>
-			from(new RestAPIService().WORKERS_LOG.GENERAL.fetchWorkersMap() as Promise<IWarbudWorkersMap>).pipe(
+			from(
+				new RestAPIService().WORKERS_LOG.GENERAL.fetchWorkersMap() as Promise<WorkersLog.WorkTimeEvidence.Worker.Payload.IWarbudWorkersMap>,
+			).pipe(
 				switchMap((data) => {
 					try {
 						return of(WorkersAction.fetchWorkersMapEnd(normalize(data.data, 'EmplId')));
@@ -45,7 +43,7 @@ const OnFetchWorkersMapStartEpic: Epic<ActionType, ActionType, any> = ($action) 
 
 const OnFetchWorkersStartEpic: Epic<ActionType, ActionType, any> = (action$) =>
 	action$.pipe(
-		ofType(WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_START),
+		ofType(WorkersLog.WorkTimeEvidence.Worker.Redux.Types.FETCH_WORKERS_START),
 		switchMap(() =>
 			from(new GraphQLAPIService().WorkersLog.WorkTimeEvidence.CountWorkers()).pipe(
 				mergeMap((data) => {
@@ -70,7 +68,7 @@ const OnFetchWorkersStartEpic: Epic<ActionType, ActionType, any> = (action$) =>
 	);
 
 function ExtractToUpdateCrewSummary(
-	worker: ReturnType<IWorkersAction['addWorker']>['payload']['worker'],
+	worker: ReturnType<WorkersLog.WorkTimeEvidence.Worker.Redux.IActions['addWorker']>['payload']['worker'],
 	state: RootState,
 ): UpdateCrewSummaryType.Request | undefined {
 	if (state.WorkersLog.WorkTimeEvidence.Crews.summary)
@@ -97,8 +95,8 @@ function UpdateCrewSummaryFetchEpic(state: RootState, data: UpdateCrewSummaryTyp
 const OnAddWorkerEpic: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
-			(data): data is ReturnType<IWorkersAction['addWorker']> =>
-				data.type === WorkersLogActions.WorkTimeEvidence.Workers.ADD,
+			(data): data is ReturnType<WorkersLog.WorkTimeEvidence.Worker.Redux.IActions['addWorker']> =>
+				data.type === WorkersLog.WorkTimeEvidence.Worker.Redux.Types.ADD,
 		),
 		withLatestFrom(state$),
 		mergeMap(([action, state]) => {
@@ -109,7 +107,7 @@ const OnAddWorkerEpic: Epic<ActionType, ActionType, RootState> = (action$, state
 	);
 
 function ExtractToCreateWorker(
-	action: ReturnType<IWorkersAction['createWorker']>,
+	action: ReturnType<WorkersLog.WorkTimeEvidence.Worker.Redux.IActions['createWorker']>,
 	state: RootState,
 ): CreateWorkerType.Request | undefined {
 	if (state.CMSLogin.user)
@@ -123,8 +121,8 @@ function ExtractToCreateWorker(
 const OnCreateWorkerEpic: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
-			(data): data is ReturnType<IWorkersAction['createWorker']> =>
-				data.type === WorkersLogActions.WorkTimeEvidence.Workers.CREATE,
+			(data): data is ReturnType<WorkersLog.WorkTimeEvidence.Worker.Redux.IActions['createWorker']> =>
+				data.type === WorkersLog.WorkTimeEvidence.Worker.Redux.Types.CREATE,
 		),
 		withLatestFrom(state$),
 		mergeMap(([action, state]) => {
@@ -154,7 +152,7 @@ const OnCreateWorkerEpic: Epic<ActionType, ActionType, RootState> = (action$, st
 	);
 
 function ExtractToDeleteWorkerFromCrewSummary(
-	worker: ReturnType<IWorkersAction['addWorker']>['payload']['worker'],
+	worker: ReturnType<WorkersLog.WorkTimeEvidence.Worker.Redux.IActions['addWorker']>['payload']['worker'],
 	state: RootState,
 ): UpdateCrewSummaryType.Request | undefined {
 	if (state.WorkersLog.WorkTimeEvidence.Crews.summary)
@@ -167,8 +165,8 @@ function ExtractToDeleteWorkerFromCrewSummary(
 const OnDeleteWorker: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
-			(data): data is ReturnType<IWorkersAction['deleteWorker']> =>
-				data.type === WorkersLogActions.WorkTimeEvidence.Workers.DELETE,
+			(data): data is ReturnType<WorkersLog.WorkTimeEvidence.Worker.Redux.IActions['deleteWorker']> =>
+				data.type === WorkersLog.WorkTimeEvidence.Worker.Redux.Types.DELETE,
 		),
 		withLatestFrom(state$),
 		mergeMap(([action, state]) => {
@@ -179,7 +177,7 @@ const OnDeleteWorker: Epic<ActionType, ActionType, RootState> = (action$, state$
 	);
 
 function ExtractToCopyWorkersToCrewSummary(
-	worker: ReturnType<IWorkersAction['copyWorkersToCrew']>['payload'],
+	worker: ReturnType<WorkersLog.WorkTimeEvidence.Worker.Redux.IActions['copyWorkersToCrew']>['payload'],
 	state: RootState,
 ): UpdateCrewSummaryType.Request | undefined {
 	if (state.WorkersLog.WorkTimeEvidence.Crews.summary)
@@ -192,8 +190,8 @@ function ExtractToCopyWorkersToCrewSummary(
 const OnCopyWorkers: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
-			(data): data is ReturnType<IWorkersAction['copyWorkersToCrew']> =>
-				data.type === WorkersLogActions.WorkTimeEvidence.Workers.COPY_WORKERS,
+			(data): data is ReturnType<WorkersLog.WorkTimeEvidence.Worker.Redux.IActions['copyWorkersToCrew']> =>
+				data.type === WorkersLog.WorkTimeEvidence.Worker.Redux.Types.COPY_WORKERS,
 		),
 		withLatestFrom(state$),
 		mergeMap(([action, state]) => {

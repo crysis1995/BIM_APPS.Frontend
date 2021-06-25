@@ -18,7 +18,6 @@ export default class CurrentElementsFilter {
 	private readonly _level: string;
 	private readonly _rotationDate: string;
 	private readonly _rotationDay: number;
-	private readonly _statuses: NonNullable<WorkProgress.Monolithic.General.Redux.IStore['statuses']>;
 
 	constructor(obj: ReturnType<typeof CurrentElementsFilter.validateData>) {
 		this._mode = obj.mode;
@@ -27,7 +26,6 @@ export default class CurrentElementsFilter {
 		this._level = obj.level;
 		this._rotationDate = obj.rotationDate;
 		this._rotationDay = obj.rotationDay;
-		this._statuses = obj.statuses;
 
 		this.run();
 	}
@@ -43,7 +41,6 @@ export default class CurrentElementsFilter {
 			objects: this._objects,
 			rotationDate: this._rotationDate,
 			rotationDay: this._rotationDay,
-			statuses: this._statuses,
 		};
 	}
 
@@ -101,11 +98,8 @@ export default class CurrentElementsFilter {
 			forgeElements: ForgeViewer.Redux.IStore['model_elements'],
 			level: string,
 			rotationDate: string,
-			rotationDay: number,
-			statuses: NonNullable<WorkProgress.Monolithic.General.Redux.IStore['statuses']>;
+			rotationDay: number
 
-		if (!rootState.WorkProgress.Monolithic.General.statuses) throw new Error('Empty Statuses');
-		statuses = rootState.WorkProgress.Monolithic.General.statuses;
 
 		if (!rootState.WorkProgress.Monolithic.General.active_level) throw new Error('Empty Level');
 		level = rootState.WorkProgress.Monolithic.General.active_level;
@@ -132,7 +126,6 @@ export default class CurrentElementsFilter {
 			level,
 			rotationDate,
 			rotationDay,
-			statuses,
 		};
 	}
 

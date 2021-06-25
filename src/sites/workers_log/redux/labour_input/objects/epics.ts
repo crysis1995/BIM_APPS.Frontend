@@ -1,5 +1,4 @@
 import { combineEpics, Epic, ofType } from 'redux-observable';
-import { LabourInput } from '../types';
 import { ModalType } from '../../../../../components/Modal/type';
 import { catchError, combineAll, filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { combineLatest, concat, EMPTY, from, iif, of } from 'rxjs';
@@ -12,14 +11,15 @@ import dayjs from 'dayjs';
 import LabourInputTimeEvidenceActions from '../time_evidence/actions';
 import normalize from '../../../../../utils/Normalize';
 import { RootState } from '../../../../../store';
-import CurrentElementsFilter from '../../utils/CurrentElements.Filter';
+import CurrentElementsFilter from '../../work_time_evidence/utils/CurrentElements.Filter';
 import ForgeViewerActions from '../../../../../components/ForgeViewer/redux/actions';
 import ForgeViewer from '../../../../../components/ForgeViewer/types';
+import WorkersLog from '../../../types';
 
 type ActionType =
-	| LabourInput.Redux.Objects.Actions
-	| LabourInput.Redux.General.Actions
-	| LabourInput.Redux.TimeEvidence.Actions
+	| WorkersLog.LabourInput.Redux.Objects.Actions
+	| WorkersLog.LabourInput.Redux.General.Actions
+	| WorkersLog.LabourInput.Redux.TimeEvidence.Actions
 	| ModalType.Redux.Actions
 	| ForgeViewer.Redux.Actions;
 const OnChangeLevelOrDate: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
@@ -28,10 +28,10 @@ const OnChangeLevelOrDate: Epic<ActionType, ActionType, RootState> = (action$, s
 			(
 				data,
 			): data is ReturnType<
-				LabourInput.Redux.General.IActions['SetDate'] | LabourInput.Redux.General.IActions['ChooseLevel']
+				WorkersLog.LabourInput.Redux.General.IActions['SetDate'] | WorkersLog.LabourInput.Redux.General.IActions['ChooseLevel']
 			> =>
-				data.type === LabourInput.Redux.General.Types.SET_DATE ||
-				data.type === LabourInput.Redux.General.Types.CHOOSE_LEVEL,
+				data.type === WorkersLog.LabourInput.Redux.General.Types.SET_DATE ||
+				data.type === WorkersLog.LabourInput.Redux.General.Types.CHOOSE_LEVEL,
 		),
 		withLatestFrom(state$),
 		mergeMap(([_, state]) => {
@@ -44,14 +44,14 @@ const OnChangeLevelOrDate: Epic<ActionType, ActionType, RootState> = (action$, s
 							new RestAPIService(
 								state.CMSLogin.credentials?.access_token,
 							).WORKERS_LOG.LABOUR_INPUT.GetObjectsFilteredByStatuses({ date, project }) as Promise<
-								LabourInput.Payload.Objects.ObjectWithStatus[]
+								WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus[]
 							>,
 						).pipe(
 							withLatestFrom(state$),
 							mergeMap(([data, state]) => {
 								const level = state.WorkersLog.LabourInput.General.ActiveLevel;
 								const objects = normalize(data, 'id') as {
-									[key: string]: LabourInput.Payload.Objects.ObjectWithStatus;
+									[key: string]: WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus;
 								};
 								return concat(
 									of(LabourInputObjectsActions.FetchObjectsEnd(objects)),
@@ -83,7 +83,7 @@ const OnChangeLevelOrDate: Epic<ActionType, ActionType, RootState> = (action$, s
 
 const OnSetFilteredObjects: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
 	combineLatest(
-		action$.pipe(ofType(LabourInput.Redux.Objects.Types.SET_FILTERED_OBJECTS)),
+		action$.pipe(ofType(WorkersLog.LabourInput.Redux.Objects.Types.SET_FILTERED_OBJECTS)),
 		action$.pipe(ofType(ForgeViewer.Redux.Types.SET_MODEL_ELEMENTS)),
 	).pipe(
 		withLatestFrom(state$),
@@ -151,10 +151,10 @@ const onFetchObjectsEnd: Epic<ActionType, ActionType, RootState> = (action$, sta
 			(
 				data,
 			): data is ReturnType<
-				LabourInput.Redux.Objects.IActions['FetchObjectsEnd'] | LabourInput.Redux.General.IActions['SelectCrew']
+				WorkersLog.LabourInput.Redux.Objects.IActions['FetchObjectsEnd'] | WorkersLog.LabourInput.Redux.General.IActions['SelectCrew']
 			> =>
-				data.type === LabourInput.Redux.Objects.Types.SET_FILTERED_OBJECTS ||
-				data.type === LabourInput.Redux.General.Types.SELECT_CREW,
+				data.type === WorkersLog.LabourInput.Redux.Objects.Types.SET_FILTERED_OBJECTS ||
+				data.type === WorkersLog.LabourInput.Redux.General.Types.SELECT_CREW,
 		),
 		withLatestFrom(state$),
 		switchMap(([_, state]) => {
@@ -189,8 +189,8 @@ const CreateOrUpdateObjectTimeEvidence: Epic<ActionType, ActionType, RootState> 
 		filter(
 			(
 				data,
-			): data is ReturnType<LabourInput.Redux.TimeEvidence.IActions['CreateOrUpdateObjectTimeEvidenceStart']> =>
-				data.type === LabourInput.Redux.TimeEvidence.Types.CREATE_OR_UPDATE_OBJECT_TIME_EVIDENCE_START,
+			): data is ReturnType<WorkersLog.LabourInput.Redux.TimeEvidence.IActions['CreateOrUpdateObjectTimeEvidenceStart']> =>
+				data.type === WorkersLog.LabourInput.Redux.TimeEvidence.Types.CREATE_OR_UPDATE_OBJECT_TIME_EVIDENCE_START,
 		),
 		withLatestFrom(state$),
 		mergeMap(([action, state]) => {
@@ -209,7 +209,7 @@ const CreateOrUpdateObjectTimeEvidence: Epic<ActionType, ActionType, RootState> 
 								LabourInputTimeEvidenceActions.CreateOrUpdateObjectTimeEvidenceEnd(
 									response.updateWorkersLogObjectTimeEvidence.workersLogObjectTimeEvidence,
 									objectID,
-								)
+								),
 							);
 						return EMPTY;
 					}),

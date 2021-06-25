@@ -1,17 +1,19 @@
-import { CrewState } from '../../../../../redux/work_time_evidence/crew/types/state';
-import { WorkersState } from '../../../../../redux/work_time_evidence/worker/types/state';
 import { connect } from 'react-redux';
-import { IWarbudWorkerMapData, WorkerPayload } from '../../../../../redux/work_time_evidence/worker/types/payload';
 import React from 'react';
+import { RootState } from '../../../../../../../store';
+import WorkersLog from '../../../../../types';
 
-const mapStateToProps = (state: { WorkersLog: { WorkTimeEvidence: { Crews: CrewState; Workers: WorkersState } } }) => ({
+const mapStateToProps = (state: RootState) => ({
 	workers: state.WorkersLog.WorkTimeEvidence.Workers.all,
 	warbud_workers_map: state.WorkersLog.WorkTimeEvidence.Workers.warbud_workers_map,
 });
 const mapDispatchToProps = {};
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & { dbID: string };
 
-function GetWorkerName(worker: WorkerPayload, warbud_workers_map: { [p: string]: IWarbudWorkerMapData }) {
+function GetWorkerName(
+	worker: WorkersLog.WorkTimeEvidence.Worker.Payload.WorkerPayload,
+	warbud_workers_map: { [p: string]: WorkersLog.WorkTimeEvidence.Worker.Payload.IWarbudWorkerMapData },
+) {
 	if (worker.is_house_worker) {
 		if (worker.warbud_id) return warbud_workers_map[worker.warbud_id].Nazwa;
 		else return 'BRAK WARBUD ID';

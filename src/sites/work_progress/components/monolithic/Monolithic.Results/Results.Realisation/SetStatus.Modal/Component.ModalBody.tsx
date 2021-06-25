@@ -5,10 +5,11 @@ import { Col, Row } from 'react-bootstrap';
 import ComponentSelectedElementPropsSummary from './Component.SelectedElementPropsSummary';
 import StatusFormInput from './Component.StatusFormInput';
 import { DayFormInput } from './Component.DayFormInput';
+import { GetObjectsByLevelType } from '../../../../../../../services/graphql.api.service/CONSTANTS/Queries/GetObjectsByLevel';
 
 type ComponentProps = {
-	setStatus: (data: string | null) => void;
-	status: string | null;
+	setStatus: (data: GetObjectsByLevelType.StatusEnum | null) => void;
+	status: GetObjectsByLevelType.StatusEnum | null;
 	date: string;
 	setDate: (date: string) => void;
 };

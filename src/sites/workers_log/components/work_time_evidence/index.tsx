@@ -9,11 +9,11 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import { connect } from 'react-redux';
 import './table.css';
 import Loader from '../../../../components/Loader';
-import { RootState } from '../../redux/work_time_evidence/crew/epics';
 import SelectorComponents from './SelectorComponents';
 import RaportGeneratorsComponent from './RaportGenerators';
 import WorkerCrewActionsTab from './WorkerCrewActionsTab';
 import TimeEvidenceTable from './TimeEvidenceTable';
+import { RootState } from '../../../../store';
 
 dayjs.extend(arraySupport);
 dayjs.extend(localeData);
@@ -37,11 +37,8 @@ const mapDispatchToProps = {};
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 function WorkTimeEvidenceComponent(props: Props) {
-	// const [workerInit, addWorkerInit] = useState(false);
 	useEffect(() => {
-		return () => {
-
-		};
+		return () => {};
 	}, []);
 	return (
 		<>

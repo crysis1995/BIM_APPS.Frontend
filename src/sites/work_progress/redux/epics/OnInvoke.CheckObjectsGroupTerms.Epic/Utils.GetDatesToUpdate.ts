@@ -7,11 +7,10 @@ import { DatesToUpdate } from './index';
 export function GetDatesToUpdate(
 	term: GetAllAcceptanceTermsType.AcceptanceTerm,
 	objects: GetObjectsByLevelType.AcceptanceObject[],
-	finishedID: string,
 ): DatesToUpdate {
-	let start = new StartUpdateIsNeeded(objects.length, finishedID, term);
+	let start = new StartUpdateIsNeeded(objects.length, term);
 	start.isNeedToUpdate();
-	let finish = new FinishUpdateIsNeeded(objects.length, finishedID, term);
+	let finish = new FinishUpdateIsNeeded(objects.length, term);
 	finish.isNeedToUpdate();
 	objects.forEach((item) => {
 		start.qualifiedStatus(item);

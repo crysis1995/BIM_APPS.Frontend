@@ -3,7 +3,6 @@ import GeneralActions from '../../monolithic/general/actions';
 import { map, switchMap } from 'rxjs/operators';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import { GetProjectRotationDaysType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/GetProjectRotationDays';
-import { HandleError } from '../HandleError.Epic';
 
 export function FetchRotationDaysEpic(GRAPHQL: GraphQLAPIService, project: string) {
 	return merge(

@@ -1,22 +1,17 @@
 import React from 'react';
-import { CMSLoginType } from '../../../../../components/CMSLogin/type';
-import WorkersLogRedux from '../../../redux';
 import { connect } from 'react-redux';
 import HideComponent from '../../../../../components/HideComponent';
 import ObjectsTimeInputColector from './ObjectTableComponent';
 import LoaderComponent from '../../../../../components/Loader/LoaderComponent';
+import { RootState } from '../../../../../store';
 
-const mapStateToProps = (state: {
-	CMSLogin: CMSLoginType.Redux.Store;
-	WorkersLog: ReturnType<typeof WorkersLogRedux.reducer>;
-}) => ({
+const mapStateToProps = (state: RootState) => ({
 	isHide:
 		!state.WorkersLog.LabourInput.Objects.AllObjects ||
 		!state.WorkersLog.LabourInput.General.ActualCrew ||
 		!state.WorkersLog.LabourInput.General.ActiveWorkType ||
 		!state.WorkersLog.LabourInput.General.ActiveLevel,
 	isLoading:
-		state.WorkersLog.LabourInput.General.StatusesLoading ||
 		state.WorkersLog.LabourInput.General.OtherWorksLoading ||
 		state.WorkersLog.LabourInput.Objects.Loading ||
 		state.WorkersLog.LabourInput.TimeEvidence.LabourSummaryWorkTimeLoading ||

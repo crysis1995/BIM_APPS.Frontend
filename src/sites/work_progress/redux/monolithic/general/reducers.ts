@@ -5,7 +5,6 @@ import normalize from '../../../../../utils/Normalize';
 
 const INITIAL_STATE: WorkProgress.Monolithic.General.Redux.IStore = {
 	active: false,
-	statuses: null,
 	active_level: null,
 	active_tab: Constants.MonolithicTabs.SCHEDULED,
 	calendar_all: null,
@@ -19,7 +18,6 @@ const INITIAL_STATE: WorkProgress.Monolithic.General.Redux.IStore = {
 	levels: null,
 	levels_loading: false,
 	rotation_day: 0,
-	statuses_loading: false,
 };
 
 function GeneralReducer(state = INITIAL_STATE, action: WorkProgress.Monolithic.General.Redux.Actions) {
@@ -51,11 +49,6 @@ function GeneralReducer(state = INITIAL_STATE, action: WorkProgress.Monolithic.G
 			return ReduxAction.calendar_loading.Set(state, action, false);
 		case WorkProgress.Monolithic.General.Redux.Types.SET_ACTIVE_TAB:
 			return ReduxAction.active_tab.Set(state, action);
-		case WorkProgress.Monolithic.General.Redux.Types.FETCH_STATUSES_START:
-			return ReduxAction.statuses_loading.Set(state, action, true);
-		case WorkProgress.Monolithic.General.Redux.Types.FETCH_STATUSES_END:
-			state = ReduxAction.statuses.Set(state, action);
-			return ReduxAction.statuses_loading.Set(state, action, false);
 		default:
 			return state;
 	}
@@ -176,32 +169,7 @@ class ReduxAction {
 		},
 	};
 
-	static statuses = {
-		Set: (
-			state: WorkProgress.Monolithic.General.Redux.IStore,
-			action: ReturnType<WorkProgress.Monolithic.General.Redux.IActions['FetchStatusesEnd']>,
-		): WorkProgress.Monolithic.General.Redux.IStore => {
-			return {
-				...state,
-				statuses: action.payload,
-			};
-		},
-	};
-	static statuses_loading = {
-		Set: (
-			state: WorkProgress.Monolithic.General.Redux.IStore,
-			action: ReturnType<
-				| WorkProgress.Monolithic.General.Redux.IActions['FetchStatusesStart']
-				| WorkProgress.Monolithic.General.Redux.IActions['FetchStatusesEnd']
-			>,
-			value: boolean,
-		): WorkProgress.Monolithic.General.Redux.IStore => {
-			return {
-				...state,
-				statuses_loading: value,
-			};
-		},
-	};
+
 	static date = {
 		Set: (
 			state: WorkProgress.Monolithic.General.Redux.IStore,

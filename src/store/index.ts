@@ -8,13 +8,8 @@ import { AutodeskLogin } from '../components/AutodeskLogin/type';
 import WorkProgress from '../sites/work_progress/types';
 import { ModalType } from '../components/Modal/type';
 import { CMSLoginType } from '../components/CMSLogin/type';
-import { GeneralState as WKEGeneralState } from '../sites/workers_log/redux/work_time_evidence/general/types/state';
-import { CrewState } from '../sites/workers_log/redux/work_time_evidence/crew/types/state';
-import { WorkersState } from '../sites/workers_log/redux/work_time_evidence/worker/types/state';
-import { TimeEvidenceState } from '../sites/workers_log/redux/work_time_evidence/time_evidence/types/state';
-import { WorkersLogGeneral } from '../sites/workers_log/redux/general/types';
-import { LabourInput } from '../sites/workers_log/redux/labour_input/types';
 import ForgeViewer from '../components/ForgeViewer/types';
+import WorkersLog from '../sites/workers_log/types';
 
 const epicMiddleware = createEpicMiddleware();
 let store = createStore(rootReducer, composeWithDevTools(applyMiddleware(epicMiddleware)));
@@ -37,17 +32,17 @@ export type RootState = {
 	Modal: ModalType.Redux.Store;
 	CMSLogin: CMSLoginType.Redux.Store;
 	WorkersLog: {
-		General: WorkersLogGeneral.Redux.Store;
+		General: WorkersLog.General.Redux.Store;
 		WorkTimeEvidence: {
-			Crews: CrewState;
-			Workers: WorkersState;
-			General: WKEGeneralState;
-			TimeEvidence: TimeEvidenceState;
+			Crews: WorkersLog.WorkTimeEvidence.Crew.Redux.Store;
+			Workers: WorkersLog.WorkTimeEvidence.Worker.Redux.Store;
+			General: WorkersLog.WorkTimeEvidence.General.Redux.Store;
+			TimeEvidence: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Store;
 		};
 		LabourInput: {
-			TimeEvidence: LabourInput.Redux.TimeEvidence.Store;
-			General: LabourInput.Redux.General.Store;
-			Objects: LabourInput.Redux.Objects.Store;
+			TimeEvidence: WorkersLog.LabourInput.Redux.TimeEvidence.Store;
+			General: WorkersLog.LabourInput.Redux.General.Store;
+			Objects: WorkersLog.LabourInput.Redux.Objects.Store;
 		};
 	};
 };

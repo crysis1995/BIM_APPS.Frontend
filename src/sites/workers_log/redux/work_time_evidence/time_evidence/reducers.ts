@@ -1,11 +1,9 @@
-import { ITimeEvidence, TimeEvidenceActionTypes } from './types/actions';
-import { ISummaryByDate, ISummaryByWorker, TimeEvidenceState } from './types/state';
-import WorkersLogActions from '../../types';
 import { AddToAll } from './utils/AddToAll';
 import { AddToWorkEvidence } from './utils/AddToWorkEvidence';
 import { AddToAllWorkersAndDates } from './utils/AddToAllWorkersAndDates';
+import WorkersLog from '../../../types';
 
-export const INITIAL_STATE: TimeEvidenceState = {
+export const INITIAL_STATE: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Store = {
 	all_by_days: null,
 	all_by_workers: null,
 	loading: false,
@@ -16,7 +14,9 @@ export const INITIAL_STATE: TimeEvidenceState = {
 	editing: null,
 };
 
-function AddToSummary(state: TimeEvidenceState): TimeEvidenceState {
+function AddToSummary(
+	state: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Store,
+): WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Store {
 	function CountSum(ids: string[]) {
 		return ids.reduce(
 			(previousValue, currentValue) =>
@@ -27,14 +27,18 @@ function AddToSummary(state: TimeEvidenceState): TimeEvidenceState {
 	return {
 		...state,
 		summary: {
-			by_workers: Object.entries(state.all_by_workers || {}).reduce<ISummaryByWorker>(
+			by_workers: Object.entries(
+				state.all_by_workers || {},
+			).reduce<WorkersLog.WorkTimeEvidence.TimeEvidence.Payload.ISummaryByWorker>(
 				(previousValue, [worker, ids]) => {
 					previousValue[worker] = CountSum(ids);
 					return previousValue;
 				},
 				{},
 			),
-			by_dates: Object.entries(state.all_by_days || {}).reduce<ISummaryByDate>((previousValue, [date, ids]) => {
+			by_dates: Object.entries(
+				state.all_by_days || {},
+			).reduce<WorkersLog.WorkTimeEvidence.TimeEvidence.Payload.ISummaryByDate>((previousValue, [date, ids]) => {
 				previousValue[date] = CountSum(ids);
 				return previousValue;
 			}, {}),
@@ -43,8 +47,11 @@ function AddToSummary(state: TimeEvidenceState): TimeEvidenceState {
 }
 
 function OnEditingWorkedTimeSucceed(
-	state: TimeEvidenceState,
-	action: ReturnType<ITimeEvidence['fetchWorkerWorkEvidenceEnd'] | ITimeEvidence['editingWorkedTimeSucceed']>,
+	state: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Store,
+	action: ReturnType<
+		| WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.IActions['fetchWorkerWorkEvidenceEnd']
+		| WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.IActions['editingWorkedTimeSucceed']
+	>,
 ) {
 	state = AddToAll(state, action);
 	state = AddToWorkEvidence(state, action);
@@ -54,8 +61,11 @@ function OnEditingWorkedTimeSucceed(
 }
 
 function OnEndFetchWorkerTimeEvidence(
-	state: TimeEvidenceState,
-	action: ReturnType<ITimeEvidence['fetchWorkerWorkEvidenceEnd'] | ITimeEvidence['editingWorkedTimeSucceed']>,
+	state: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Store,
+	action: ReturnType<
+		| WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.IActions['fetchWorkerWorkEvidenceEnd']
+		| WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.IActions['editingWorkedTimeSucceed']
+	>,
 ) {
 	state = AddToAll(state, action);
 	state = AddToWorkEvidence(state, action);
@@ -64,7 +74,7 @@ function OnEndFetchWorkerTimeEvidence(
 	return { ...state };
 }
 
-function OnFetchWorkerTimeEvidenceFinishAll(state: TimeEvidenceState) {
+function OnFetchWorkerTimeEvidenceFinishAll(state: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Store) {
 	state = AddToSummary(state);
 	return {
 		...state,
@@ -72,21 +82,21 @@ function OnFetchWorkerTimeEvidenceFinishAll(state: TimeEvidenceState) {
 	};
 }
 
-function TimeEvidenceReducer(state = INITIAL_STATE, action: TimeEvidenceActionTypes) {
+function TimeEvidenceReducer(state = INITIAL_STATE, action: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Actions) {
 	switch (action.type) {
-		case WorkersLogActions.WorkTimeEvidence.TimeEvidence.SET_INITIAL:
+		case WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.SET_INITIAL:
 			return { ...INITIAL_STATE };
-		case WorkersLogActions.WorkTimeEvidence.TimeEvidence.FETCH_WORKER_TIME_EVIDENCE_START:
+		case WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.FETCH_WORKER_TIME_EVIDENCE_START:
 			return { ...state, loading: true };
-		case WorkersLogActions.WorkTimeEvidence.TimeEvidence.FETCH_WORKER_TIME_EVIDENCE_FINISH_ALL:
+		case WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.FETCH_WORKER_TIME_EVIDENCE_FINISH_ALL:
 			return OnFetchWorkerTimeEvidenceFinishAll(state);
-		case WorkersLogActions.WorkTimeEvidence.TimeEvidence.FETCH_WORKER_TIME_EVIDENCE_END:
+		case WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.FETCH_WORKER_TIME_EVIDENCE_END:
 			return OnEndFetchWorkerTimeEvidence(state, action);
-		case WorkersLogActions.WorkTimeEvidence.TimeEvidence.EDITING_START:
+		case WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.EDITING_START:
 			return { ...state, editing: action.payload.data };
-		case WorkersLogActions.WorkTimeEvidence.TimeEvidence.EDITING_CANCEL:
+		case WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.EDITING_CANCEL:
 			return { ...state, editing: null };
-		case WorkersLogActions.WorkTimeEvidence.TimeEvidence.EDITING_WORKED_TIME_SUCCEED:
+		case WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.EDITING_WORKED_TIME_SUCCEED:
 			return OnEditingWorkedTimeSucceed(state, action);
 		default:
 			return { ...state };

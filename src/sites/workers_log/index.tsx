@@ -4,18 +4,15 @@ import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import Components from './components';
 import { WORKERS_LOG } from './redux/constants';
-import { CrewState } from './redux/work_time_evidence/crew/types/state';
-import { WorkersState } from './redux/work_time_evidence/worker/types/state';
 import WorkersLogGeneralActions from './redux/general/actions';
 import Viewer from '../../components/ForgeViewer/components';
 import { Props } from '../../types/PropsType';
+import { RootState } from '../../store';
 
 type ComponentProps = {};
-const mapStateToProps = (state: {
-	WorkersLog: { WorkTimeEvidence: { Crews: CrewState; Workers: WorkersState } };
-}) => ({});
+const mapStateToProps = (state: RootState) => ({});
 const mapDispatchToProps = {
-	workersLogInitialize: WorkersLogGeneralActions.workersLogInitialize,
+	workersLogInitialize: WorkersLogGeneralActions.Initialize,
 };
 function WorkersLog(props: Props<typeof mapStateToProps, typeof mapDispatchToProps, ComponentProps>) {
 	props.workersLogInitialize();

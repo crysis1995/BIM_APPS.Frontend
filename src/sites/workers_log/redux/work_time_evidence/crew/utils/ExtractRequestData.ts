@@ -1,4 +1,5 @@
-import { RootState } from '../epics';
+import { RootState } from '../../../../../../store';
+
 export interface CrewSummariesData {
 	crew_id: string;
 	start_date: string;

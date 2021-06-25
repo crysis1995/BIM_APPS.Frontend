@@ -14,9 +14,6 @@ function UISelectorsComponent() {
 				<DateSelectorComponent />
 			</div>
 			<div className={'flex-fill pr-2'}>
-				<CrewTypeSelectorComponent />
-			</div>
-			<div className={'flex-fill'}>
 				<CrewSelectorComponent />
 			</div>
 		</div>

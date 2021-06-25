@@ -2,14 +2,10 @@ import { Col, Form } from 'react-bootstrap';
 import React from 'react';
 import { connect } from 'react-redux';
 import { PL_DICTIONARY, WORKER_TYPES } from '../../../redux/constants';
-import { CrewState } from '../../../redux/work_time_evidence/crew/types/state';
-import { WorkersState } from '../../../redux/work_time_evidence/worker/types/state';
-import { GeneralState } from '../../../redux/work_time_evidence/general/types/state';
 import GeneralActions from '../../../redux/work_time_evidence/general/actions';
+import { RootState } from '../../../../../store';
 
-const mapStateToProps = (state: {
-	WorkersLog: { WorkTimeEvidence: { Crews: CrewState; Workers: WorkersState; General: GeneralState } };
-}) => ({
+const mapStateToProps = (state: RootState) => ({
 	worker_type: state.WorkersLog.WorkTimeEvidence.General.worker_type,
 });
 const mapDispatchToProps = { selectWorkerType: GeneralActions.selectWorkerType };

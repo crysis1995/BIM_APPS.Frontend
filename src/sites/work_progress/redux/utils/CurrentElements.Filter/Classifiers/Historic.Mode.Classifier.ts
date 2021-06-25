@@ -3,16 +3,12 @@ import ForgeViewer from '../../../../../../components/ForgeViewer/types';
 import { Options } from '../Types/Options';
 import { GetObjectsByLevelType } from '../../../../../../services/graphql.api.service/CONSTANTS/Queries/GetObjectsByLevel';
 import CurrentElementsFilter from '../index';
-import { GetStatusesType } from '../../../../../../services/graphql.api.service/CONSTANTS/Queries/GetStatuses';
 import { Constants } from '../../../constants';
 import { hexToRgba } from '../../../../../../utils/hexToRgb';
-import WorkProgress from '../../../../types';
 import dayjs from 'dayjs';
 
 export class HistoricModeClassifier extends ModeClassifierInterface {
 	private readonly _rotationDate: string;
-	private readonly _statusName: GetStatusesType.DBStatuses | undefined;
-	private readonly _statuses: NonNullable<WorkProgress.Monolithic.General.Redux.IStore['statuses']>;
 	constructor(
 		element: GetObjectsByLevelType.AcceptanceObject,
 		forgeID: number | undefined,
@@ -20,7 +16,6 @@ export class HistoricModeClassifier extends ModeClassifierInterface {
 	) {
 		super(element, forgeID, obj);
 		this._rotationDate = obj.rotationDate;
-		this._statuses = obj.statuses;
 	}
 
 	Classify(callback: (revitID: string, forgeID: number | undefined, options: Options) => void): void {
@@ -30,7 +25,7 @@ export class HistoricModeClassifier extends ModeClassifierInterface {
 				options = {
 					valid: true,
 					addTo: [ForgeViewer.Payload.ElementOperationTypesEnum.VISIBLE],
-					color: this.ExtractColor(Constants.WorkProgressElementStatus.Finished,0.5) || null,
+					color: this.ExtractColor(Constants.WorkProgressElementStatus.Finished, 0.5) || null,
 					status: Constants.WorkProgressElementStatus.Finished,
 				};
 				break;
@@ -41,14 +36,14 @@ export class HistoricModeClassifier extends ModeClassifierInterface {
 						ForgeViewer.Payload.ElementOperationTypesEnum.DISABLED,
 						ForgeViewer.Payload.ElementOperationTypesEnum.VISIBLE,
 					],
-					color: this.ExtractColor(Constants.WorkProgressElementStatus.Finished,1) || null,
+					color: this.ExtractColor(Constants.WorkProgressElementStatus.Finished, 1) || null,
 				};
 				break;
 			case this.isContainStatusInProgress():
 				options = {
 					valid: true,
 					addTo: [ForgeViewer.Payload.ElementOperationTypesEnum.VISIBLE],
-					color: this.ExtractColor(Constants.WorkProgressElementStatus.InProgress,0.5) || null,
+					color: this.ExtractColor(Constants.WorkProgressElementStatus.InProgress, 0.5) || null,
 					status: Constants.WorkProgressElementStatus.InProgress,
 				};
 				break;
@@ -60,7 +55,7 @@ export class HistoricModeClassifier extends ModeClassifierInterface {
 						ForgeViewer.Payload.ElementOperationTypesEnum.DISABLED,
 						ForgeViewer.Payload.ElementOperationTypesEnum.VISIBLE,
 					],
-					color: this.ExtractColor(Constants.WorkProgressElementStatus.InProgress,1) || null,
+					color: this.ExtractColor(Constants.WorkProgressElementStatus.InProgress, 1) || null,
 				};
 				break;
 
@@ -76,7 +71,7 @@ export class HistoricModeClassifier extends ModeClassifierInterface {
 		callback(this._element.revit_id.toString(), this._forgeID, options);
 	}
 
-	ExtractColor(key: Constants.WorkProgressElementStatus,alpha?:number): ForgeViewer.Payload.Color | undefined {
+	ExtractColor(key: Constants.WorkProgressElementStatus, alpha?: number): ForgeViewer.Payload.Color | undefined {
 		const color = Constants.WorkProgressMonolithicColorMap[Constants.MonolithicTabs.HISTORICAL]?.[key];
 		if (color) return hexToRgba(color.color, alpha || color.alpha, true);
 	}
@@ -85,7 +80,7 @@ export class HistoricModeClassifier extends ModeClassifierInterface {
 		return !!this._element.statuses.find(
 			(x) =>
 				(isToday ? this.isRotationDateEqualStatusDate(x) : this.isRotationDayBeforeStatusDate(x)) &&
-				this._statuses[x.status.id].name === GetStatusesType.DBStatuses.Finished,
+				x.status === GetObjectsByLevelType.StatusEnum.Finished,
 		);
 	}
 
@@ -93,7 +88,7 @@ export class HistoricModeClassifier extends ModeClassifierInterface {
 		return !!this._element.statuses.find(
 			(x) =>
 				(isToday ? this.isRotationDateEqualStatusDate(x) : this.isRotationDayBeforeStatusDate(x)) &&
-				this._statuses[x.status.id].name === GetStatusesType.DBStatuses.InProgress,
+				x.status === GetObjectsByLevelType.StatusEnum.InProgress,
 		);
 	}
 

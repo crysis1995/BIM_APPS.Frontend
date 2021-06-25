@@ -10,7 +10,6 @@ import { Constants } from '../../constants';
 import TermsActions from '../../monolithic/terms/actions';
 import { GetTermByPassedGroup } from './Utils.GetTermByPassedGroup';
 import { GetObjectsIncludedInPassedGroup } from './Utils.GetObjectsIncludedInPassedGroup';
-import { ExtractFinishedStatusID } from './Utils.ExtractFinishedStatusID';
 import { isUpgradingNeeded } from './Utils.IsUpgradingNeeded';
 import { GetDatesToUpdate } from './Utils.GetDatesToUpdate';
 
@@ -43,11 +42,8 @@ export const OnInvokeCheckObjectsGroupTermsEpic: Epic<ActionTypes, ActionTypes, 
 					// console.log(Term);
 					if (Term && isUpgradingNeeded(Term)) {
 						const Objects = GetObjectsIncludedInPassedGroup(state, group);
-						const finishedID = ExtractFinishedStatusID(state);
-						// console.log(Objects);
-						// console.log(finishedID);
-						if (Objects && finishedID) {
-							const dates = GetDatesToUpdate(Term, Objects, finishedID);
+						if (Objects) {
+							const dates = GetDatesToUpdate(Term, Objects);
 							// console.log(dates);
 							if (Term.level && Term.crane && Object.keys(dates).length > 0) {
 								return of(

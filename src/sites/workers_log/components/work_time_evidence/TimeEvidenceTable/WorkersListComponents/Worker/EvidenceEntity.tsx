@@ -1,29 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { CrewState } from '../../../../../redux/work_time_evidence/crew/types/state';
-import { WorkersState } from '../../../../../redux/work_time_evidence/worker/types/state';
-import { EditingMode, TimeEvidenceState } from '../../../../../redux/work_time_evidence/time_evidence/types/state';
-import { GeneralState } from '../../../../../redux/work_time_evidence/general/types/state';
 import classNames from 'classnames';
 import TimeEvidenceActions from '../../../../../redux/work_time_evidence/time_evidence/actions';
 import { isEditableTimeEvidence } from '../../../Selectors/IsEditableTimeEvidence.Selector';
 import EditableCell from './EditableCell';
-import { CMSLoginType } from '../../../../../../../components/CMSLogin/type';
 import { TooltipComponent } from '../../../../../../../components/Tooltip';
 import { UserProjectsType } from '../../../../../../../services/graphql.api.service/CONSTANTS/Queries/UserProjects';
+import { RootState } from '../../../../../../../store';
+import WorkersLog from '../../../../../types';
 
 const mapStateToProps = (
-	state: {
-		CMSLogin: CMSLoginType.Redux.Store;
-		WorkersLog: {
-			WorkTimeEvidence: {
-				Crews: CrewState;
-				Workers: WorkersState;
-				TimeEvidence: TimeEvidenceState;
-				General: GeneralState;
-			};
-		};
-	},
+	state: RootState,
 	componentProps: { workerID: string; date: { date: string; is_holiday: boolean } },
 ) => ({
 	all_evidences: state.WorkersLog.WorkTimeEvidence.TimeEvidence.all,
@@ -83,7 +70,7 @@ function EvidenceEntity(props: Props) {
 						})}
 						onClick={() =>
 							props.editingStart({
-								mode: EditingMode.BY_BOTH,
+								mode: WorkersLog.WorkTimeEvidence.TimeEvidence.Payload.EditingMode.BY_BOTH,
 								coordinates: { date: props.date.date, worker: props.workerID },
 							})
 						}>
@@ -116,7 +103,7 @@ function EvidenceEntity(props: Props) {
 					})}
 					onClick={(e) =>
 						props.editingStart({
-							mode: EditingMode.BY_BOTH,
+							mode: WorkersLog.WorkTimeEvidence.TimeEvidence.Payload.EditingMode.BY_BOTH,
 							coordinates: { date: props.date.date, worker: props.workerID },
 						})
 					}

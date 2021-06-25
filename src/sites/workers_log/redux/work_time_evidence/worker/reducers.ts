@@ -1,9 +1,6 @@
-import { WorkersState } from './types/state';
-import { WorkersActionTypes } from './types/actions';
-import WorkersLogActions from '../../types';
-import { ICrewActions } from '../crew/types/actions';
+import WorkersLog from '../../../types';
 
-const INITIAL_STATE: WorkersState = {
+const INITIAL_STATE: WorkersLog.WorkTimeEvidence.Worker.Redux.Store = {
 	loading: false,
 	all: null,
 	warbud_workers_map: null,
@@ -13,23 +10,23 @@ const INITIAL_STATE: WorkersState = {
 
 function WorkersReducer(
 	state = INITIAL_STATE,
-	action: WorkersActionTypes | ReturnType<ICrewActions['fetchCrewSummariesEnd']>,
-): WorkersState {
+	action: WorkersLog.WorkTimeEvidence.Worker.Redux.Actions,
+): WorkersLog.WorkTimeEvidence.Worker.Redux.Store {
 	switch (action.type) {
-		case WorkersLogActions.WorkTimeEvidence.Workers.ADD_NEW:
+		case WorkersLog.WorkTimeEvidence.Worker.Redux.Types.ADD_NEW:
 			return {
 				...state,
 				all: { ...state.all, [action.payload.id]: action.payload },
 			};
 
-		case WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_START:
+		case WorkersLog.WorkTimeEvidence.Worker.Redux.Types.FETCH_WORKERS_START:
 			return { ...state, loading_workers: true, loading: true };
-		case WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_END:
+		case WorkersLog.WorkTimeEvidence.Worker.Redux.Types.FETCH_WORKERS_END:
 			return { ...state, loading_workers: false, all: action.payload.workers, loading: state.loading_map };
 
-		case WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_MAP_START:
+		case WorkersLog.WorkTimeEvidence.Worker.Redux.Types.FETCH_WORKERS_MAP_START:
 			return { ...state, loading_map: true, loading: true };
-		case WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_MAP_END:
+		case WorkersLog.WorkTimeEvidence.Worker.Redux.Types.FETCH_WORKERS_MAP_END:
 			return {
 				...state,
 				loading_map: false,

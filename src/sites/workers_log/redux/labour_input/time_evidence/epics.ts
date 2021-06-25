@@ -1,12 +1,5 @@
 import { combineEpics, Epic } from 'redux-observable';
-import { LabourInput } from '../types';
 import { ModalType } from '../../../../../components/Modal/type';
-import { CMSLoginType } from '../../../../../components/CMSLogin/type';
-import { WorkersLogGeneral } from '../../general/types';
-import { CrewState } from '../../work_time_evidence/crew/types/state';
-import { WorkersState } from '../../work_time_evidence/worker/types/state';
-import { GeneralState } from '../../work_time_evidence/general/types/state';
-import { TimeEvidenceState } from '../../work_time_evidence/time_evidence/types/state';
 import { filter, mergeMap, withLatestFrom } from 'rxjs/operators';
 import { concat, EMPTY, from, of } from 'rxjs';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
@@ -15,46 +8,28 @@ import LabourInputTimeEvidenceActions from './actions';
 import ModalActions from '../../../../../components/Modal/redux/actions';
 import { CreateGroupedOtherWorkTimeEvidenceType } from '../../../../../services/graphql.api.service/CONSTANTS/Mutations/CreateGroupedOtherWorkTimeEvidence';
 import { CreateOtherWorkTimeEvidenceType } from '../../../../../services/graphql.api.service/CONSTANTS/Mutations/CreateOtherWorkTimeEvidence';
+import WorkersLog from '../../../types';
+import { RootState } from '../../../../../store';
 
 type ActionType =
-	| LabourInput.Redux.Objects.Actions
-	| LabourInput.Redux.General.Actions
-	| LabourInput.Redux.TimeEvidence.Actions
+	| WorkersLog.LabourInput.Redux.Objects.Actions
+	| WorkersLog.LabourInput.Redux.General.Actions
+	| WorkersLog.LabourInput.Redux.TimeEvidence.Actions
 	| ModalType.Redux.Actions;
 
-type RootState = {
-	ForgeViewer: {
-		sheets: { index: string; name: string }[];
-	};
-	CMSLogin: CMSLoginType.Redux.Store;
-	WorkersLog: {
-		General: WorkersLogGeneral.Redux.Store;
-		LabourInput: {
-			General: LabourInput.Redux.General.Store;
-			Objects: LabourInput.Redux.Objects.Store;
-			TimeEvidence: LabourInput.Redux.TimeEvidence.Store;
-		};
-		WorkTimeEvidence: {
-			Crews: CrewState;
-			Workers: WorkersState;
-			General: GeneralState;
-			TimeEvidence: TimeEvidenceState;
-		};
-	};
-};
 const FetchGroupedOtherWorkTimeEvidencesEpic: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
 			(
 				data,
 			): data is ReturnType<
-				| LabourInput.Redux.General.IActions['SetDate']
-				| LabourInput.Redux.General.IActions['ChooseLevel']
-				| LabourInput.Redux.General.IActions['SelectCrew']
+				| WorkersLog.LabourInput.Redux.General.IActions['SetDate']
+				| WorkersLog.LabourInput.Redux.General.IActions['ChooseLevel']
+				| WorkersLog.LabourInput.Redux.General.IActions['SelectCrew']
 			> =>
-				data.type === LabourInput.Redux.General.Types.SET_DATE ||
-				data.type === LabourInput.Redux.General.Types.CHOOSE_LEVEL ||
-				data.type === LabourInput.Redux.General.Types.SELECT_CREW,
+				data.type === WorkersLog.LabourInput.Redux.General.Types.SET_DATE ||
+				data.type === WorkersLog.LabourInput.Redux.General.Types.CHOOSE_LEVEL ||
+				data.type === WorkersLog.LabourInput.Redux.General.Types.SELECT_CREW,
 		),
 		withLatestFrom(state$),
 		mergeMap(([_, state]) => {
@@ -158,7 +133,7 @@ const FetchGroupedOtherWorkTimeEvidencesEpic: Epic<ActionType, ActionType, RootS
 	);
 function GetRequestDataFrom(
 	state: RootState,
-	action: ReturnType<LabourInput.Redux.TimeEvidence.IActions['CreateOtherWorkStart']>,
+	action: ReturnType<WorkersLog.LabourInput.Redux.TimeEvidence.IActions['CreateOtherWorkStart']>,
 ): CreateOtherWorkTimeEvidenceType.Request | null {
 	if (
 		!state.WorkersLog.LabourInput.General.ActiveWorkType ||
@@ -178,8 +153,8 @@ function GetRequestDataFrom(
 const OnCreateOtherWorkEpic: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
-			(data): data is ReturnType<LabourInput.Redux.TimeEvidence.IActions['CreateOtherWorkStart']> =>
-				data.type === LabourInput.Redux.TimeEvidence.Types.CREATE_OTHER_WORK_START,
+			(data): data is ReturnType<WorkersLog.LabourInput.Redux.TimeEvidence.IActions['CreateOtherWorkStart']> =>
+				data.type === WorkersLog.LabourInput.Redux.TimeEvidence.Types.CREATE_OTHER_WORK_START,
 		),
 		withLatestFrom(state$),
 		mergeMap(([action, state]) => {
@@ -218,8 +193,8 @@ const OnCreateOtherWorkEpic: Epic<ActionType, ActionType, RootState> = (action$,
 const OnUpdateOtherWorkTimeEvidence: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
-			(data): data is ReturnType<LabourInput.Redux.TimeEvidence.IActions['UpdateOtherWorkStart']> =>
-				data.type === LabourInput.Redux.TimeEvidence.Types.UPDATE_OTHER_WORK_START,
+			(data): data is ReturnType<WorkersLog.LabourInput.Redux.TimeEvidence.IActions['UpdateOtherWorkStart']> =>
+				data.type === WorkersLog.LabourInput.Redux.TimeEvidence.Types.UPDATE_OTHER_WORK_START,
 		),
 		withLatestFrom(state$),
 		mergeMap(

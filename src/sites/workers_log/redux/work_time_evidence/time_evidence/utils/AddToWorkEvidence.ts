@@ -1,18 +1,21 @@
-import { IEvidenceByDate, TimeEvidenceState } from '../types/state';
-import { ITimeEvidence } from '../types/actions';
-import WorkersLogActions from '../../../types';
-import { WorkersLogWorkTimeEvidenceResponse } from '../types/payload';
+import WorkersLog from '../../../../types';
 
-function ReduceWorkTime(previousValue: IEvidenceByDate, currentValue: WorkersLogWorkTimeEvidenceResponse) {
+function ReduceWorkTime(
+	previousValue: WorkersLog.WorkTimeEvidence.TimeEvidence.Payload.IEvidenceByDate,
+	currentValue: WorkersLog.WorkTimeEvidence.TimeEvidence.Payload.WorkersLogWorkTimeEvidenceResponse,
+) {
 	previousValue[currentValue.date] = currentValue.id;
 	return previousValue;
 }
 
 export function AddToWorkEvidence(
-	state: TimeEvidenceState,
-	action: ReturnType<ITimeEvidence['fetchWorkerWorkEvidenceEnd'] | ITimeEvidence['editingWorkedTimeSucceed']>,
+	state: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Store,
+	action: ReturnType<
+		| WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.IActions['fetchWorkerWorkEvidenceEnd']
+		| WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.IActions['editingWorkedTimeSucceed']
+	>,
 ) {
-	if (action.type === WorkersLogActions.WorkTimeEvidence.TimeEvidence.FETCH_WORKER_TIME_EVIDENCE_END) {
+	if (action.type === WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.FETCH_WORKER_TIME_EVIDENCE_END) {
 		return {
 			...state,
 			work_evidence: {
@@ -23,13 +26,16 @@ export function AddToWorkEvidence(
 						...state.work_evidence?.by_worker[action.payload.worker_id.toString()],
 						by_date:
 							action.payload.workTimeEvidences.length > 0
-								? action.payload.workTimeEvidences.reduce<IEvidenceByDate>(ReduceWorkTime, {})
+								? action.payload.workTimeEvidences.reduce<WorkersLog.WorkTimeEvidence.TimeEvidence.Payload.IEvidenceByDate>(
+										ReduceWorkTime,
+										{},
+								  )
 								: null,
 					},
 				},
 			},
 		};
-	} else if (action.type === WorkersLogActions.WorkTimeEvidence.TimeEvidence.EDITING_WORKED_TIME_SUCCEED) {
+	} else if (action.type === WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.EDITING_WORKED_TIME_SUCCEED) {
 		return {
 			...state,
 			work_evidence: {

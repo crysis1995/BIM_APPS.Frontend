@@ -1,33 +1,31 @@
 import { gql } from 'apollo-boost';
 
 const GetObjectsByLevel = gql`
-	query GetObjectsByLevel($project_id: ID, $start: Int, $limit: Int, $level_id: ID) {
-		acceptanceObjects(where: { project: $project_id, level: $level_id }, start: $start, limit: $limit) {
-			id
-			area
-			volume
-			running_meter
-			vertical
-			revit_id
-			level {
-				id
-			}
-			crane {
-				id
-			}
-			VCF_Realisation
-			rotation_day {
-				id
-				rotation_day
-			}
-			statuses(sort: "date:DESC") {
-				status {
-					id
-				}
-				date
-			}
-		}
-	}
+    query GetObjectsByLevel($project_id: ID, $start: Int, $limit: Int, $level_id: ID) {
+        acceptanceObjects(where: { project: $project_id, level: $level_id }, start: $start, limit: $limit) {
+            id
+            area
+            volume
+            running_meter
+            vertical
+            revit_id
+            level {
+                id
+            }
+            crane {
+                id
+            }
+            VCF_Realisation
+            rotation_day {
+                id
+                rotation_day
+            }
+            statuses(sort: "date:DESC") {
+                status
+                date
+            }
+        }
+    }
 `;
 export default GetObjectsByLevel;
 
@@ -59,8 +57,13 @@ export namespace GetObjectsByLevelType {
 	}
 
 	export interface Status {
-		status: Crane;
+		status: StatusEnum;
 		date: string;
+	}
+
+	export enum StatusEnum{
+		Finished = "finished",
+		InProgress = "in_progress"
 	}
 
 	export enum Vertical {

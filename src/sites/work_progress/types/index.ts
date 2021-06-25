@@ -1,7 +1,6 @@
 import { ReturnTypeFromInterface } from '../../../types/ReturnTypeFromInterface';
 import { Constants } from '../redux/constants';
 import { CMSLoginType } from '../../../components/CMSLogin/type';
-import { GetStatusesType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetStatuses';
 import { GetProjectRotationDaysType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetProjectRotationDays';
 import { GetObjectsByLevelType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetObjectsByLevel';
 import { GetAllDelacCausesType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetAllDelayCauses';
@@ -94,7 +93,6 @@ namespace WorkProgress {
 				export type SetLevelOptions = { [key: string]: CMSLoginType.Payload.Level };
 				export type SetCraneOptions = { [key: string]: CMSLoginType.Payload.Crane };
 				export type ChangeLevel = CMSLoginType.Payload.Level['id'] | null;
-				export type FetchStatusesEnd = { [key: string]: GetStatusesType.AcceptanceStatus };
 				export type FetchRotationDaysEnd = GetProjectRotationDaysType.WarbudProjectRotationDay[];
 			}
 			export namespace Redux {
@@ -109,8 +107,6 @@ namespace WorkProgress {
 					rotation_day: number;
 					validRotationDay: boolean;
 					active_tab: Constants.MonolithicTabs;
-					statuses: null | { [key: string]: GetStatusesType.AcceptanceStatus };
-					statuses_loading: boolean;
 					calendar_by_rotation_days: null | {
 						[rotationDay: string]: GetProjectRotationDaysType.WarbudProjectRotationDay['id'];
 					};
@@ -147,15 +143,6 @@ namespace WorkProgress {
 						data: WorkProgress.Monolithic.General.Payload.ChangeLevel,
 					) => {
 						type: typeof WorkProgress.Monolithic.General.Redux.Types.SET_LEVEL;
-						payload: typeof data;
-					};
-					FetchStatusesStart: () => {
-						type: typeof WorkProgress.Monolithic.General.Redux.Types.FETCH_STATUSES_START;
-					};
-					FetchStatusesEnd: (
-						data: WorkProgress.Monolithic.General.Payload.FetchStatusesEnd,
-					) => {
-						type: typeof WorkProgress.Monolithic.General.Redux.Types.FETCH_STATUSES_END;
 						payload: typeof data;
 					};
 					FetchRotationDaysStart: () => {
@@ -493,7 +480,7 @@ namespace WorkProgress {
 				export type SetStatuses = GetObjectsByLevelType.Status;
 				export interface SetStatusesInit {
 					selectedElements: GetObjectsByLevelType.AcceptanceObject['revit_id'][];
-					status_id: string;
+					status: GetObjectsByLevelType.StatusEnum;
 					date: string;
 				}
 				export type CheckObjectsGroupTerms = GetObjectsByLevelType.AcceptanceObject['revit_id'][];

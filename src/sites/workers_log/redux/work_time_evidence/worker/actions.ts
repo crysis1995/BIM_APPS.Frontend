@@ -1,26 +1,25 @@
-import WorkersLogActions from '../../types';
-import { IWorkersAction } from './types/actions';
+import WorkersLog from '../../../types';
 
-const WorkersAction: IWorkersAction = {
-	fetchWorkersStart: () => ({ type: WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_START }),
+const WorkersAction: WorkersLog.WorkTimeEvidence.Worker.Redux.IActions = {
+	fetchWorkersStart: () => ({ type: WorkersLog.WorkTimeEvidence.Worker.Redux.Types.FETCH_WORKERS_START }),
 	fetchWorkersEnd: (workers) => ({
-		type: WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_END,
+		type: WorkersLog.WorkTimeEvidence.Worker.Redux.Types.FETCH_WORKERS_END,
 		payload: { workers },
 	}),
 	addNewWorker: (worker) => ({
-		type: WorkersLogActions.WorkTimeEvidence.Workers.ADD_NEW,
+		type: WorkersLog.WorkTimeEvidence.Worker.Redux.Types.ADD_NEW,
 		payload: worker,
 	}),
 	copyWorkersToCrew: (workerIDList) => ({
-		type: WorkersLogActions.WorkTimeEvidence.Workers.COPY_WORKERS,
+		type: WorkersLog.WorkTimeEvidence.Worker.Redux.Types.COPY_WORKERS,
 		payload: workerIDList,
 	}),
-	createWorker: (worker) => ({ type: WorkersLogActions.WorkTimeEvidence.Workers.CREATE, payload: { worker } }),
-	addWorker: (worker) => ({ type: WorkersLogActions.WorkTimeEvidence.Workers.ADD, payload: { worker } }),
-	deleteWorker: (workerID) => ({ type: WorkersLogActions.WorkTimeEvidence.Workers.DELETE, payload: workerID }),
-	fetchWorkersMapStart: () => ({ type: WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_MAP_START }),
+	createWorker: (worker) => ({ type: WorkersLog.WorkTimeEvidence.Worker.Redux.Types.CREATE, payload: { worker } }),
+	addWorker: (worker) => ({ type: WorkersLog.WorkTimeEvidence.Worker.Redux.Types.ADD, payload: { worker } }),
+	deleteWorker: (workerID) => ({ type: WorkersLog.WorkTimeEvidence.Worker.Redux.Types.DELETE, payload: workerID }),
+	fetchWorkersMapStart: () => ({ type: WorkersLog.WorkTimeEvidence.Worker.Redux.Types.FETCH_WORKERS_MAP_START }),
 	fetchWorkersMapEnd: (workersMap) => ({
-		type: WorkersLogActions.WorkTimeEvidence.Workers.FETCH_WORKERS_MAP_END,
+		type: WorkersLog.WorkTimeEvidence.Worker.Redux.Types.FETCH_WORKERS_MAP_END,
 		payload: { workers: workersMap },
 	}),
 };

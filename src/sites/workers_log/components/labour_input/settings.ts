@@ -1,4 +1,6 @@
-export const StatusesColor = {
-	'in progress': '#387bff',
-	finished: '#25ce00',
+import { GetObjectsByLevelType } from '../../../../services/graphql.api.service/CONSTANTS/Queries/GetObjectsByLevel';
+
+export const StatusesColor: { [key in GetObjectsByLevelType.StatusEnum]: string } = {
+	[GetObjectsByLevelType.StatusEnum.InProgress]: '#387bff',
+	[GetObjectsByLevelType.StatusEnum.Finished]: '#25ce00',
 };

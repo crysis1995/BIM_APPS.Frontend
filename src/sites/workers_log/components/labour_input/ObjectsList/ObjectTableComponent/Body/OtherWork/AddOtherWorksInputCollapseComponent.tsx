@@ -1,13 +1,11 @@
 import { ActualEventKeyRowViewer } from './Utils/ActualEventKeyRowViewer';
 import { Form } from 'react-bootstrap';
 import React, { useState } from 'react';
-import { CMSLoginType } from '../../../../../../../../components/CMSLogin/type';
-import WorkersLogRedux from '../../../../../../redux';
 import { connect } from 'react-redux';
 import { OTHER_WORK_TYPE } from '../../../../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
 import AcceptModalComponent from './Modal/AcceptModalComponent';
 import LabourInputTimeEvidenceActions from '../../../../../../redux/labour_input/time_evidence/actions';
-import HideComponent from '../../../../../../../../components/HideComponent';
+import { RootState } from '../../../../../../../../store';
 
 type componentProps = {
 	eventKey: string;
@@ -15,13 +13,9 @@ type componentProps = {
 	option: OTHER_WORK_TYPE;
 };
 
-const mapStateToProps = (
-	state: {
-		CMSLogin: CMSLoginType.Redux.Store;
-		WorkersLog: ReturnType<typeof WorkersLogRedux.reducer>;
-	},
-	componentProps: componentProps,
-) => ({
+// const otherWorksOptionsSelector = createSelector((state: RootState, componentProps: componentProps) =>state.WorkersLog.LabourInput.General.OtherWorks )
+
+const mapStateToProps = (state: RootState, componentProps: componentProps) => ({
 	otherWorksOptions: (() => {
 		const otherWorks = state.WorkersLog.LabourInput.General.OtherWorks;
 		const otherWorksUsedOptions =
@@ -59,7 +53,7 @@ function AddOtherWorksInputCollapseComponent(props: Props) {
 	const handleCloseButton = () => {
 		setShow(false);
 	};
-	const handleAddButton = (commentary?:string) => {
+	const handleAddButton = (commentary?: string) => {
 		setShow(false);
 		props.CreateOtherWorkStart({ id: selectedOptionId, work_type: props.option, commentary });
 		setSelectedOptionId('');
@@ -74,7 +68,7 @@ function AddOtherWorksInputCollapseComponent(props: Props) {
 
 	return (
 		<>
-			<ActualEventKeyRowViewer eventKey={props.eventKey} actualAccordion={props.actualAccordion}>
+			<ActualEventKeyRowViewer show={props.eventKey === props.actualAccordion}>
 				<td>
 					<Form.Control
 						value={selectedOptionId}

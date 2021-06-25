@@ -2,23 +2,12 @@ import { Button, Col, Form } from 'react-bootstrap';
 
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { CrewState } from '../../../redux/work_time_evidence/crew/types/state';
-import { WorkersState } from '../../../redux/work_time_evidence/worker/types/state';
 import CrewActions from '../../../redux/work_time_evidence/crew/actions';
 import { filterCrewsByWorkerTypes } from '../Selectors/Crew.Selector';
-import { GeneralState } from '../../../redux/work_time_evidence/general/types/state';
 import CrewCreatorModal from '../Modal/CrewCreator';
+import { RootState } from '../../../../../store';
 
-const mapStateToProps = (state: {
-	CMSLogin: {
-		user: { id: { id: string } };
-		project: { id: string };
-		credentials: {
-			access_token: string;
-		};
-	};
-	WorkersLog: { WorkTimeEvidence: { Crews: CrewState; Workers: WorkersState; General: GeneralState } };
-}) => ({
+const mapStateToProps = (state: RootState) => ({
 	crews: filterCrewsByWorkerTypes(state),
 	actual_crew: state.WorkersLog.WorkTimeEvidence.Crews.actual,
 });
@@ -80,5 +69,5 @@ function CrewSelectorComponent(props: CrewSelectorProps) {
 		</>
 	);
 }
-// @ts-ignore
+
 export default connect(mapStateToProps, mapDispatchToProps)(CrewSelectorComponent);

@@ -1,21 +1,14 @@
-import { LabourInput } from '../../../../../../../redux/labour_input/types';
 import React from 'react';
-import { CMSLoginType } from '../../../../../../../../../components/CMSLogin/type';
-import WorkersLogRedux from '../../../../../../../redux';
 import { connect } from 'react-redux';
+import WorkersLog from '../../../../../../../types';
+import { RootState } from '../../../../../../../../../store';
 
 type componentProps = {
 	setEditable: (data: boolean) => void;
-	otherWorkID: LabourInput.Payload.TimeEvidence.OtherWorksTimeEvidence['id'];
+	otherWorkID: WorkersLog.LabourInput.Payload.TimeEvidence.OtherWorksTimeEvidence['id'];
 };
 
-const mapStateToProps = (
-	state: {
-		CMSLogin: CMSLoginType.Redux.Store;
-		WorkersLog: ReturnType<typeof WorkersLogRedux.reducer>;
-	},
-	componentProps: componentProps,
-) => ({
+const mapStateToProps = (state: RootState, componentProps: componentProps) => ({
 	otherWork: state.WorkersLog.LabourInput.TimeEvidence.OtherWorksTimeEvidences?.[componentProps.otherWorkID],
 });
 

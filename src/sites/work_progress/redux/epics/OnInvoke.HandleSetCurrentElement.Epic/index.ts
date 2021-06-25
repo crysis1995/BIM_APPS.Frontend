@@ -28,8 +28,7 @@ export const OnInvokeHandleSetCurrentElementEpic: Epic<ActionTypes, ActionTypes,
 				!state.WorkProgress.Monolithic.Upgrading.loading ||
 				!state.WorkProgress.Monolithic.General.levels_loading ||
 				!state.WorkProgress.Monolithic.General.calendar_loading ||
-				!state.WorkProgress.Monolithic.General.cranes_loading ||
-				!state.WorkProgress.Monolithic.General.statuses_loading,
+				!state.WorkProgress.Monolithic.General.cranes_loading
 		),
 		switchMap(([action, state]) => {
 			try {

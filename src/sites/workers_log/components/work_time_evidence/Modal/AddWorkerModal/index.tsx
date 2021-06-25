@@ -7,13 +7,13 @@ import Select from 'react-select';
 import { WORKERS_LOG__WORKERS_TYPE } from '../../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
 import LocaleNameEngine from '../../../../../../localisation/LocaleName.Core';
 import { v4 } from 'uuid';
-import WorkersLogRedux from '../../../../redux';
+import { RootState } from '../../../../../../store';
 
 type ComponentProps = {
 	show: boolean;
 	setShow: (data: boolean) => void;
 };
-const mapStateToProps = (state: { WorkersLog: ReturnType<typeof WorkersLogRedux.reducer> }) => ({
+const mapStateToProps = (state: RootState) => ({
 	workersData: CombineWorkerIdWithName(state),
 });
 const mapDispatchToProps = {
@@ -83,8 +83,7 @@ function AddWorkerModal(props: Props) {
 			const newWorkerType = worker[WorkerInput.NewWorkerType];
 			if (existWorker !== null) {
 				props.addWorker(existWorker.id);
-			}
-			else if (newWorkerName && newWorkerType) {
+			} else if (newWorkerName && newWorkerType) {
 				props.createWorker({ name: newWorkerName, worker_type: newWorkerType });
 			}
 		}

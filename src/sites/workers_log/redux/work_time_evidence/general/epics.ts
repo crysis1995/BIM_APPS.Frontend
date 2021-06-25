@@ -1,11 +1,7 @@
-import { GeneralActionTypes, IGeneralAction } from './types/actions';
 import { Notification } from '../../../../../components/Notification/types';
-import { GeneralState } from './types/state';
 import { combineEpics, Epic } from 'redux-observable';
-import WorkersLogActions from '../../types';
 import { filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { concat, from, of } from 'rxjs';
-import { ERaportType } from './types/payload';
 import RestAPIService from '../../../../../services/rest.api.service';
 import NotificationActions from '../../../../../components/Notification/redux/actions';
 import { saveAs } from 'file-saver';
@@ -14,15 +10,14 @@ import { jsPDF } from 'jspdf';
 import './utils/Lato-Regular-normal';
 import html2canvas from 'html2canvas';
 import CrewActions from '../crew/actions';
-import { CrewActionsTypes } from '../crew/types/actions';
 import { ReturnTypeFromInterface } from '../../../../../types/ReturnTypeFromInterface';
-import { CMSLoginType } from '../../../../../components/CMSLogin/type';
+import { RootState } from '../../../../../store';
+import WorkersLog from '../../../types';
 
-type ActionType = GeneralActionTypes | ReturnTypeFromInterface<Notification.Redux.IActions> | CrewActionsTypes;
-export type RootState = {
-	CMSLogin: CMSLoginType.Redux.Store;
-	WorkersLog: { WorkTimeEvidence: { General: GeneralState } };
-};
+type ActionType =
+	| ReturnTypeFromInterface<Notification.Redux.IActions>
+	| WorkersLog.WorkTimeEvidence.Crew.Redux.Actions
+	| WorkersLog.WorkTimeEvidence.General.Redux.Actions;
 
 function TakeDataFromStore(state: RootState) {
 	return {
@@ -36,12 +31,12 @@ function TakeDataFromStore(state: RootState) {
 const OnFetchCrewStart: Epic<ActionType, ActionType, RootState> = ($action, $state) =>
 	$action.pipe(
 		filter(
-			(data): data is ReturnType<IGeneralAction['generateRaportStart']> =>
-				data.type === WorkersLogActions.WorkTimeEvidence.General.GENERATE_RAPORT_START,
+			(data): data is ReturnType<WorkersLog.WorkTimeEvidence.General.Redux.IActions['generateRaportStart']> =>
+				data.type === WorkersLog.WorkTimeEvidence.General.Redux.Types.GENERATE_RAPORT_START,
 		),
 		withLatestFrom($state),
 		switchMap(([action, state]) => {
-			if (action.payload.type === ERaportType.Financial) {
+			if (action.payload.type === WorkersLog.WorkTimeEvidence.General.Payload.ERaportType.Financial) {
 				return from(
 					new RestAPIService(
 						state.CMSLogin.credentials?.access_token,
@@ -114,19 +109,10 @@ const OnFetchCrewStart: Epic<ActionType, ActionType, RootState> = ($action, $sta
 const OnSelectWorkerType: Epic<ActionType, ActionType, RootState> = ($action) =>
 	$action.pipe(
 		filter(
-			(data): data is ReturnType<IGeneralAction['selectWorkerType']> =>
-				data.type === WorkersLogActions.WorkTimeEvidence.General.SELECT_WORKER_TYPE,
+			(data): data is ReturnType<WorkersLog.WorkTimeEvidence.General.Redux.IActions['selectWorkerType']> =>
+				data.type === WorkersLog.WorkTimeEvidence.General.Redux.Types.SELECT_WORKER_TYPE,
 		),
 		map(() => CrewActions.cleanSummary()),
 	);
-//
-// const OnSetCalendar: Epic<ActionType, ActionType, RootState> = ($action) =>
-// 	$action.pipe(
-// 		filter(
-// 			(data): data is ReturnType<IGeneralAction['setCalendar']> =>
-// 				data.type === WorkersLogActions.WorkTimeEvidence.General.SET_CALENDAR,
-// 		),
-// 		map(() => CrewActions.cleanSummary()),
-// 	);
 
 export default combineEpics(OnFetchCrewStart, OnSelectWorkerType);

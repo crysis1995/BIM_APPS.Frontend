@@ -1,10 +1,11 @@
 import React from 'react';
 import { EDirection } from '../../types/EDirection';
 
-export function ArrowIcon({ direction }: { direction: EDirection }) {
+export function ArrowIcon({ direction, onClick = () => {} }: { direction: EDirection; onClick?: () => void }) {
 	if (direction === EDirection.Down)
 		return (
 			<svg
+				onClick={onClick}
 				xmlns="http://www.w3.org/2000/svg"
 				width="16"
 				height="16"
@@ -20,6 +21,7 @@ export function ArrowIcon({ direction }: { direction: EDirection }) {
 	else
 		return (
 			<svg
+				onClick={onClick}
 				xmlns="http://www.w3.org/2000/svg"
 				width="16"
 				height="16"

@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { CMSLoginType } from '../../../../../../../components/CMSLogin/type';
-import WorkersLogRedux from '../../../../../redux';
 import HideComponent from '../../../../../../../components/HideComponent';
 import OtherWorks from './OtherWork';
 import Objects from './Objects';
+import { RootState } from '../../../../../../../store';
 
-const mapStateToProps = (state: {
-	CMSLogin: CMSLoginType.Redux.Store;
-	WorkersLog: ReturnType<typeof WorkersLogRedux.reducer>;
-}) => ({
+const mapStateToProps = (state: RootState) => ({
 	objectsNotLoaded:
 		!state.WorkersLog.LabourInput.Objects.AllObjects || !state.WorkersLog.LabourInput.General.OtherWorks,
 });
@@ -31,4 +27,3 @@ function TableBodyComponent(props: Props) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TableBodyComponent);
-

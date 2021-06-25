@@ -2,24 +2,13 @@ import { v4 } from 'uuid';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import React from 'react';
-import { CrewState } from '../../../../redux/work_time_evidence/crew/types/state';
-import { WorkersState } from '../../../../redux/work_time_evidence/worker/types/state';
-import { GeneralState } from '../../../../redux/work_time_evidence/general/types/state';
 import { connect } from 'react-redux';
-import { EditingMode, TimeEvidenceState } from '../../../../redux/work_time_evidence/time_evidence/types/state';
 import TimeEvidenceActions from '../../../../redux/work_time_evidence/time_evidence/actions';
 import { Button, Col, Row } from 'react-bootstrap';
+import { RootState } from '../../../../../../store';
+import WorkersLog from '../../../../types';
 
-const mapStateToProps = (state: {
-	WorkersLog: {
-		WorkTimeEvidence: {
-			Crews: CrewState;
-			Workers: WorkersState;
-			General: GeneralState;
-			TimeEvidence: TimeEvidenceState;
-		};
-	};
-}) => ({
+const mapStateToProps = (state: RootState) => ({
 	by_date: state.WorkersLog.WorkTimeEvidence.General.calendar.by_date,
 	isEditing: !!state.WorkersLog.WorkTimeEvidence.TimeEvidence.editing,
 });
@@ -60,7 +49,7 @@ function DatesComponent(props: Props) {
 					<th
 						onClick={() =>
 							props.editingStart({
-								mode: EditingMode.BY_DATE,
+								mode: WorkersLog.WorkTimeEvidence.TimeEvidence.Payload.EditingMode.BY_DATE,
 								coordinates: date,
 							})
 						}

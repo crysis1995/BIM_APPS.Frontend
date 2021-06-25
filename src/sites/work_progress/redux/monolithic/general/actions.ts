@@ -7,11 +7,6 @@ const GeneralActions: WorkProgress.Monolithic.General.Redux.IActions = {
 	SetCraneOptions: (data) => ({ type: WorkProgress.Monolithic.General.Redux.Types.SET_CRANE_OPTIONS, payload: data }),
 	SetLevelOptions: (data) => ({ type: WorkProgress.Monolithic.General.Redux.Types.SET_LEVEL_OPTIONS, payload: data }),
 	ChangeLevel: (data) => ({ type: WorkProgress.Monolithic.General.Redux.Types.SET_LEVEL, payload: data }),
-	FetchStatusesStart: () => ({ type: WorkProgress.Monolithic.General.Redux.Types.FETCH_STATUSES_START }),
-	FetchStatusesEnd: (data) => ({
-		type: WorkProgress.Monolithic.General.Redux.Types.FETCH_STATUSES_END,
-		payload: data,
-	}),
 	FetchRotationDaysStart: () => ({ type: WorkProgress.Monolithic.General.Redux.Types.FETCH_CALENDAR_START }),
 	FetchRotationDaysEnd: (data) => ({
 		type: WorkProgress.Monolithic.General.Redux.Types.FETCH_CALENDAR_END,
