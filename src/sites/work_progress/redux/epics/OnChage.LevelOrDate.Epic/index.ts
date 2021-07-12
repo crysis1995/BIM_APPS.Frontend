@@ -1,20 +1,13 @@
 import WorkProgress from '../../../types';
-import { ModalType } from '../../../../../components/Modal/type';
 import ForgeViewer from '../../../../../components/ForgeViewer/types';
 import { Epic } from 'redux-observable';
 import { RootState } from '../../../../../store';
 import { combineLatest } from 'rxjs';
 import { filter, map, withLatestFrom } from 'rxjs/operators';
 import WorkProgressMonolithicUpgradingActions from '../../monolithic/upgrading/actions';
+import { RootActions } from '../../../../../reducers/type';
 
-type ActionTypes =
-	| WorkProgress.Monolithic.General.Redux.Actions
-	| WorkProgress.Monolithic.Upgrading.Redux.Actions
-	| ModalType.Redux.Actions
-	| WorkProgress.Monolithic.Terms.Redux.Actions
-	| ForgeViewer.Redux.Actions;
-
-export const OnChangeLevelOrDateEpic: Epic<ActionTypes, ActionTypes, RootState> = (action$, state$) =>
+export const OnChangeLevelOrDateEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	combineLatest([
 		action$.pipe(
 			filter(

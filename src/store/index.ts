@@ -10,8 +10,9 @@ import { ModalType } from '../components/Modal/type';
 import { CMSLoginType } from '../components/CMSLogin/type';
 import ForgeViewer from '../components/ForgeViewer/types';
 import WorkersLog from '../sites/workers_log/types';
+import { RootActions } from '../reducers/type';
 
-const epicMiddleware = createEpicMiddleware();
+const epicMiddleware = createEpicMiddleware<RootActions, RootActions, RootState>();
 let store = createStore(rootReducer, composeWithDevTools(applyMiddleware(epicMiddleware)));
 epicMiddleware.run(rootEpic);
 

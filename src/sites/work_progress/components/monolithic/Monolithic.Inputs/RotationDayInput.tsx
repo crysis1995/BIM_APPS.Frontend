@@ -11,6 +11,7 @@ export function RotationDayInput(props: {
 		<div className="form-group ml-1 mr-2 w-100">
 			<label>Dzień rotacji </label>
 			<input
+				onFocus={(e) => e.target.select()}
 				disabled={props.disabled}
 				data-testid="data-input-2"
 				type={'number'}

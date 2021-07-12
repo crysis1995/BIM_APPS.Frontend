@@ -1,6 +1,5 @@
 import WorkProgress from '../../../types';
 import { ModalType } from '../../../../../components/Modal/type';
-import ForgeViewer from '../../../../../components/ForgeViewer/types';
 import { Epic } from 'redux-observable';
 import { RootState } from '../../../../../store';
 import { catchError, filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
@@ -10,13 +9,7 @@ import { UpdateTermType } from '../../../../../services/graphql.api.service/CONS
 import { Constants } from '../../constants';
 import TermsActions from '../../monolithic/terms/actions';
 import ModalActions from '../../../../../components/Modal/redux/actions';
-
-type ActionTypes =
-	| WorkProgress.Monolithic.General.Redux.Actions
-	| WorkProgress.Monolithic.Upgrading.Redux.Actions
-	| ModalType.Redux.Actions
-	| WorkProgress.Monolithic.Terms.Redux.Actions
-	| ForgeViewer.Redux.Actions;
+import { RootActions } from '../../../../../reducers/type';
 
 /*
  * 		Epic is invoked while user try change term date
@@ -24,7 +17,7 @@ type ActionTypes =
  *
  *
  * */
-export const OnStartUpdateTermEpic: Epic<ActionTypes, ActionTypes, RootState> = (action$, state$) =>
+export const OnStartUpdateTermEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
 			(data): data is ReturnType<WorkProgress.Monolithic.Terms.Redux.IActions['UpdateTermsByGroupInit']> =>

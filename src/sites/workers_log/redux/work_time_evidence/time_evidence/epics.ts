@@ -10,10 +10,9 @@ import ModalActions from '../../../../../components/Modal/redux/actions';
 import { ModalType } from '../../../../../components/Modal/type';
 import { RootState } from '../../../../../store';
 import WorkersLog from '../../../types';
+import { RootActions } from '../../../../../reducers/type';
 
-type ActionType = ModalType.Redux.Actions | WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Actions;
-
-const OnFetchWorkerWorkEvidenceStartEpic: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
+const OnFetchWorkerWorkEvidenceStartEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
 			(
@@ -49,7 +48,7 @@ const OnFetchWorkerWorkEvidenceStartEpic: Epic<ActionType, ActionType, RootState
 		}),
 	);
 
-const OnEditingWorkedTimeEpic: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
+const OnEditingWorkedTimeEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
 			(

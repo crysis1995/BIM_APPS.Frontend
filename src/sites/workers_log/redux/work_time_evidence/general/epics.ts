@@ -1,4 +1,3 @@
-import { Notification } from '../../../../../components/Notification/types';
 import { combineEpics, Epic } from 'redux-observable';
 import { filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { concat, from, of } from 'rxjs';
@@ -10,14 +9,9 @@ import { jsPDF } from 'jspdf';
 import './utils/Lato-Regular-normal';
 import html2canvas from 'html2canvas';
 import CrewActions from '../crew/actions';
-import { ReturnTypeFromInterface } from '../../../../../types/ReturnTypeFromInterface';
 import { RootState } from '../../../../../store';
 import WorkersLog from '../../../types';
-
-type ActionType =
-	| ReturnTypeFromInterface<Notification.Redux.IActions>
-	| WorkersLog.WorkTimeEvidence.Crew.Redux.Actions
-	| WorkersLog.WorkTimeEvidence.General.Redux.Actions;
+import { RootActions } from '../../../../../reducers/type';
 
 function TakeDataFromStore(state: RootState) {
 	return {
@@ -28,7 +22,7 @@ function TakeDataFromStore(state: RootState) {
 	};
 }
 
-const OnFetchCrewStart: Epic<ActionType, ActionType, RootState> = ($action, $state) =>
+const OnFetchCrewStart: Epic<RootActions, RootActions, RootState> = ($action, $state) =>
 	$action.pipe(
 		filter(
 			(data): data is ReturnType<WorkersLog.WorkTimeEvidence.General.Redux.IActions['generateRaportStart']> =>
@@ -106,7 +100,7 @@ const OnFetchCrewStart: Epic<ActionType, ActionType, RootState> = ($action, $sta
 		}),
 	);
 
-const OnSelectWorkerType: Epic<ActionType, ActionType, RootState> = ($action) =>
+const OnSelectWorkerType: Epic<RootActions, RootActions, RootState> = ($action) =>
 	$action.pipe(
 		filter(
 			(data): data is ReturnType<WorkersLog.WorkTimeEvidence.General.Redux.IActions['selectWorkerType']> =>

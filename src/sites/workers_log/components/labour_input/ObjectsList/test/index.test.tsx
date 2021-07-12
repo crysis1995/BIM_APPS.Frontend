@@ -1,4 +1,4 @@
-describe('epic.test ObjectsListComponent', () => {
+describe('epic.__test__ ObjectsListComponent', () => {
 	test('exist', () => {});
 	describe('render loading', () => {
 		test('when General.StatusesLoading', () => {});

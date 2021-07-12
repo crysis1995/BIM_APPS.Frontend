@@ -1,4 +1,4 @@
-import { ActualEventKeyRowViewer } from './Utils/ActualEventKeyRowViewer';
+import ActualEventKeyRowViewer from './Utils/ActualEventKeyRowViewer';
 import { Form } from 'react-bootstrap';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
@@ -12,8 +12,6 @@ type componentProps = {
 	actualAccordion: string | null;
 	option: OTHER_WORK_TYPE;
 };
-
-// const otherWorksOptionsSelector = createSelector((state: RootState, componentProps: componentProps) =>state.WorkersLog.LabourInput.General.OtherWorks )
 
 const mapStateToProps = (state: RootState, componentProps: componentProps) => ({
 	otherWorksOptions: (() => {

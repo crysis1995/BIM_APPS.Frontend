@@ -31,6 +31,6 @@ function ObjectNameComponent(props: Props) {
 				</span>
 			</>
 		);
-	else return <></>;
+	else return <>{props.objectID}</>;
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ObjectNameComponent);

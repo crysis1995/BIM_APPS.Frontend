@@ -1,6 +1,5 @@
 import React from 'react';
 import DateSelectorComponent from './DateSelectorComponent';
-import CrewTypeSelectorComponent from './CrewTypeSelectorComponent';
 import LevelSelectorComponent from './LevelSelectorComponent';
 import CrewSelectorComponent from './CrewSelectorComponent';
 

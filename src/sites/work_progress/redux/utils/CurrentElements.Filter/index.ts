@@ -70,9 +70,8 @@ export default class CurrentElementsFilter {
 				...this._currentElementsCombinedWithStatus,
 			},
 			forgeElements: {
-				[ForgeViewer.Payload.ElementOperationTypesEnum.COLORED]: this._forgeContainer[
-					ForgeViewer.Payload.ElementOperationTypesEnum.COLORED
-				],
+				[ForgeViewer.Payload.ElementOperationTypesEnum.COLORED]:
+					this._forgeContainer[ForgeViewer.Payload.ElementOperationTypesEnum.COLORED],
 				[ForgeViewer.Payload.ElementOperationTypesEnum.VISIBLE]: [
 					...this._forgeContainer[ForgeViewer.Payload.ElementOperationTypesEnum.VISIBLE],
 				],
@@ -98,8 +97,7 @@ export default class CurrentElementsFilter {
 			forgeElements: ForgeViewer.Redux.IStore['model_elements'],
 			level: string,
 			rotationDate: string,
-			rotationDay: number
-
+			rotationDay: number;
 
 		if (!rootState.WorkProgress.Monolithic.General.active_level) throw new Error('Empty Level');
 		level = rootState.WorkProgress.Monolithic.General.active_level;

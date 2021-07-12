@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { CMSLoginType } from '../../../../../components/CMSLogin/type';
 import WorkersLogRedux from '../../../redux';
-import { Col, Row, Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 import Summary from './summary';
 import HideComponent from '../../../../../components/HideComponent';
-import FillLabourInputComponent from './fillLabourInputComponent';
+
 const mapStateToProps = (state: {
 	CMSLogin: CMSLoginType.Redux.Store;
 	WorkersLog: ReturnType<typeof WorkersLogRedux.reducer>;

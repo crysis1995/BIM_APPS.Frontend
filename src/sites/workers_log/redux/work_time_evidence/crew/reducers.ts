@@ -10,6 +10,12 @@ const INITIAL_STATE: WorkersLog.WorkTimeEvidence.Crew.Redux.Store = {
 
 function CrewReducer(state = INITIAL_STATE, action: WorkersLog.WorkTimeEvidence.Crew.Redux.Actions) {
 	switch (action.type) {
+		case WorkersLog.WorkTimeEvidence.Crew.Redux.Types.DELETE_FINISH:
+			const crews = state.all;
+			if (crews) delete crews[action.payload];
+			let actual = state.actual;
+			if (actual === action.payload) actual = null;
+			return { ...state, all: crews, actual };
 		case WorkersLog.WorkTimeEvidence.Crew.Redux.Types.FETCH_START:
 			return { ...state, loading: true };
 		case WorkersLog.WorkTimeEvidence.Crew.Redux.Types.FETCH_END:
@@ -24,6 +30,7 @@ function CrewReducer(state = INITIAL_STATE, action: WorkersLog.WorkTimeEvidence.
 			return { ...state, summary: action.payload.crew_summary };
 		case WorkersLog.WorkTimeEvidence.Crew.Redux.Types.CLEAN_SUMMARY:
 			return { ...state, summary: null };
+
 		default:
 			return state;
 	}

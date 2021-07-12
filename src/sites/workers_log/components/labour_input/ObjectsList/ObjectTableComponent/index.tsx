@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, Table } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import { ObjectsTableHeaderComponent } from './Header/ObjectsTableHeaderComponent';
 import ObjectsTableBodyComponent from './Body';
 

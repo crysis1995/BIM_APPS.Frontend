@@ -29,5 +29,6 @@ export namespace UpdateObjectTimeEvidenceType {
 	export interface WorkersLogObjectTimeEvidence {
 		id: string;
 		worked_time: number;
+		objects: { id: string }[];
 	}
 }

@@ -35,7 +35,7 @@ export default class CurrentElementsFilter {
 	private readonly _forgeElements: NonNullable<ForgeViewer.Redux.IStore['model_elements']>;
 	private readonly _rotationDate: string;
 	constructor(obj: ReturnType<typeof CurrentElementsFilter.validateData>) {
-		console.time('CurrentElementsFilter'); // test solution performance
+		console.time('CurrentElementsFilter'); // __test__ solution performance
 		this._mode = obj.mode;
 		this._rotationDate = obj.rotationDate;
 		this._filteredObjects = obj.FilteredObjects;

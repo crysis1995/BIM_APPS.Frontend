@@ -4,7 +4,7 @@ import { DefaultParameterInput } from './DefaultParameterInput';
 import { SelectParameterInput } from './SelectParameterInput';
 import { InputParameterComponent } from './InputParameterComponent';
 import React from 'react';
-import { CharacteristicParametersChild, ElementType, LabourInputFormParameters, ParameterType } from './types';
+import { ElementType } from './types';
 
 export function LabourInputDescriptionForm({
 	crewType,
@@ -20,7 +20,7 @@ export function LabourInputDescriptionForm({
 	// };
 }) {
 	// object = {
-	// 	[ParameterType.Element]: 'epic.test',
+	// 	[ParameterType.Element]: 'epic.__test__',
 	// 	[ParameterType.TimeInput]: 5.5,
 	// 	[ParameterType.CharacteristicParameters]: {
 	// 		[CharacteristicParametersChild.Height]: 12,

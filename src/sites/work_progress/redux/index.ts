@@ -17,13 +17,15 @@ import { OnInvokeSetStatusesInitEpic } from './epics/OnInvoke.SetStatusesInit.Ep
 import { OnStartUpdateTermEpic } from './epics/OnStart.UpdateTerm.Epic';
 import { OnInvokeCheckObjectsGroupTermsEpic } from './epics/OnInvoke.CheckObjectsGroupTerms.Epic';
 import { HandleCleanSelectedElements } from './epics/Handle.CleanSelectedElements.Epic';
+import { RootActions } from '../../../reducers/type';
+import { RootState } from '../../../store';
 
 export default {
 	reducer: combineReducers({
 		// General: General.reducer,
 		Monolithic: Monolitic.reducer,
 	}),
-	epics: combineEpics(
+	epics: combineEpics<RootActions, RootActions, RootState>(
 		OnStartWorkProgressMonolithicComponent,
 		OnIncrementRotationDayEpic,
 		OnDecrementRotationDayEpic,

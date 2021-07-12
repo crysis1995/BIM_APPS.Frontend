@@ -1,16 +1,15 @@
-import { combineEpics, Epic, ofType } from 'redux-observable';
-import { concat, from, of } from 'rxjs';
+import { Epic, ofType } from 'redux-observable';
+import { concat, from, merge, of } from 'rxjs';
 import { catchError, filter, map, mergeMap } from 'rxjs/operators';
 import RestAPIService from '../../../services/rest.api.service';
 import NotificationActions from '../../Notification/redux/actions';
 import AutodeskLoginActions from './actions';
 import { timer } from './utils';
 import { AutodeskLogin } from '../type';
-import { Notification } from '../../Notification/types';
+import { RootState } from '../../../store';
+import { RootActions } from '../../../reducers/type';
 
-type ActionType = AutodeskLogin.Redux.Actions | Notification.Redux.Actions;
-
-const OnHandleFetchAccessToken: Epic<ActionType, ActionType> = (action$) =>
+export const OnHandleFetchAccessToken: Epic<RootActions, RootActions, RootState> = (action$) =>
 	action$.pipe(
 		ofType(AutodeskLogin.Redux.Types.HANDLE_FETCH_ACCESS_TOKEN),
 		mergeMap(() =>
@@ -20,12 +19,12 @@ const OnHandleFetchAccessToken: Epic<ActionType, ActionType> = (action$) =>
 						return AutodeskLoginActions.Login3Legged(e);
 					}),
 					catchError((err) => {
-						return concat(
+						return merge(
 							of(AutodeskLoginActions.Logout3Legged()),
 							of(
 								NotificationActions.showNotification({
 									title: 'Błąd!',
-									message: "Nie udało się połączyć z usługą BIM360!",
+									message: 'Nie udało się połączyć z usługą BIM360!',
 									triggered_time: new Date(),
 								}),
 							),
@@ -37,7 +36,7 @@ const OnHandleFetchAccessToken: Epic<ActionType, ActionType> = (action$) =>
 		),
 	);
 
-const handleTimer: Epic<ActionType, ActionType> = (action$) =>
+export const handleTimer: Epic<RootActions, RootActions, RootState> = (action$) =>
 	action$.pipe(
 		filter(
 			(data): data is ReturnType<AutodeskLogin.Redux.IActions['Login3Legged']> =>
@@ -48,5 +47,3 @@ const handleTimer: Epic<ActionType, ActionType> = (action$) =>
 			from(timer(data.payload.expires_in * 1000)).pipe(map(() => AutodeskLoginActions.HandleFetchAccessToken())),
 		),
 	);
-
-export default combineEpics(OnHandleFetchAccessToken, handleTimer);

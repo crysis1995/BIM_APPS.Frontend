@@ -1,4 +1,4 @@
-describe("epic.test CrewSelectorComponent",() => {
+describe("epic.__test__ CrewSelectorComponent",() => {
 	test("exist", () => {})
 	test("render default", () => {})
 	test("render properly filtered crew list", () => {})

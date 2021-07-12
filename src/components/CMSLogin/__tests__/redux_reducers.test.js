@@ -24,7 +24,7 @@ describe('CMS LOGIN REDUCER', () => {
 	});
 	test('USER_LOGIN_END action', () => {
 		const user = '1';
-		const credentials = 'epic.test token';
+		const credentials = 'epic.__test__ token';
 		const action = userLoginEnd(user, credentials);
 		const state = {
 			...INITIAL_STATE,
@@ -95,7 +95,7 @@ describe('CMS LOGIN REDUCER', () => {
 	});
 	test('USER_FETCH_DATA action', () => {
 		const username = 'jan';
-		const email = 'epic.test mail';
+		const email = 'epic.__test__ mail';
 		const project_roles = [];
 		const action = setUserData({ username, email, project_roles });
 		const state = {
@@ -116,7 +116,7 @@ describe('CMS LOGIN REDUCER', () => {
 	});
 	test('USER_SET_CURRENT_PROJECT action', () => {
 		const project_id = 'jan';
-		const urn = 'epic.test mail';
+		const urn = 'epic.__test__ mail';
 		const name = [];
 		const action = setCurrentProject(project_id, urn, name);
 		const state = {
@@ -133,7 +133,7 @@ describe('CMS LOGIN REDUCER', () => {
 	});
 	describe('USER_ADD_PERMISSIONS', () => {
 		test('single permission', () => {
-			const permissions = 'epic.test.perm';
+			const permissions = 'epic.__test__.perm';
 			const action = addPermissions(permissions);
 			const state = {
 				...INITIAL_STATE,
@@ -144,7 +144,7 @@ describe('CMS LOGIN REDUCER', () => {
 			});
 		});
 		test('multiple permission', () => {
-			const permissions = ['epic.test.perm', 'epic.test.perm.2'];
+			const permissions = ['epic.__test__.perm', 'epic.__test__.perm.2'];
 			const action = addPermissions(permissions);
 			const state = {
 				...INITIAL_STATE,
@@ -155,7 +155,7 @@ describe('CMS LOGIN REDUCER', () => {
 			});
 		});
 		test('single permission - when exist others', () => {
-			const permissions = 'epic.test.perm';
+			const permissions = 'epic.__test__.perm';
 			const action = addPermissions(permissions);
 			const state = {
 				...INITIAL_STATE,
@@ -167,23 +167,23 @@ describe('CMS LOGIN REDUCER', () => {
 			});
 		});
 		test('multiple permission - when duplicates', () => {
-			const action = addPermissions(['epic.test.perm', 'epic.test.perm.2']);
+			const action = addPermissions(['epic.__test__.perm', 'epic.__test__.perm.2']);
 			const state = {
 				...INITIAL_STATE,
-				permissions: ['test', 'epic.test.perm'],
+				permissions: ['test', 'epic.__test__.perm'],
 			};
 			expect(CMSLoginReducer(state, action)).toEqual({
 				...state,
-				permissions: ['test', 'epic.test.perm', 'epic.test.perm.2'],
+				permissions: ['test', 'epic.__test__.perm', 'epic.__test__.perm.2'],
 			});
 		});
 	});
 	describe('USER_DELETE_PERMISSIONS', () => {
 		test('delete single permission', () => {
-			const action = deletePermissions('epic.test.perm');
+			const action = deletePermissions('epic.__test__.perm');
 			const state = {
 				...INITIAL_STATE,
-				permissions: ['test', 'epic.test.perm'],
+				permissions: ['test', 'epic.__test__.perm'],
 			};
 			expect(CMSLoginReducer(state, action)).toEqual({
 				...state,
@@ -191,10 +191,10 @@ describe('CMS LOGIN REDUCER', () => {
 			});
 		});
 		test('delete many permission', () => {
-			const action = deletePermissions(['epic.test.perm', 'epic.test.perms.2']);
+			const action = deletePermissions(['epic.__test__.perm', 'epic.__test__.perms.2']);
 			const state = {
 				...INITIAL_STATE,
-				permissions: ['test', 'epic.test.perm', 'epic.test.perms.2'],
+				permissions: ['test', 'epic.__test__.perm', 'epic.__test__.perms.2'],
 			};
 			expect(CMSLoginReducer(state, action)).toEqual({
 				...state,
@@ -202,7 +202,7 @@ describe('CMS LOGIN REDUCER', () => {
 			});
 		});
 		test('delete many permission - when any exist', () => {
-			const action = deletePermissions(['epic.test.perm', 'epic.test.perms.2']);
+			const action = deletePermissions(['epic.__test__.perm', 'epic.__test__.perms.2']);
 			const state = {
 				...INITIAL_STATE,
 				permissions: ['test'],
@@ -213,10 +213,10 @@ describe('CMS LOGIN REDUCER', () => {
 			});
 		});
 		test('delete many permission - when one exist and one not', () => {
-			const action = deletePermissions(['epic.test.perm', 'epic.test.perms.2']);
+			const action = deletePermissions(['epic.__test__.perm', 'epic.__test__.perms.2']);
 			const state = {
 				...INITIAL_STATE,
-				permissions: ['test', 'epic.test.perm'],
+				permissions: ['test', 'epic.__test__.perm'],
 			};
 			expect(CMSLoginReducer(state, action)).toEqual({
 				...state,

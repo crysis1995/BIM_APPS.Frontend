@@ -15,11 +15,11 @@ const mapDispatchToProps = {
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 function LabourInputComponent(props: Props) {
 	useEffect(() => {
+		props.InitializeComponent(true);
 		return () => {
-			props.SetInitial();
+			props.InitializeComponent(false);
 		};
 	}, []);
-	props.InitializeComponent();
 	return (
 		<div className={'p-3 d-flex flex-column w-100'}>
 			<UISelectorsComponent />

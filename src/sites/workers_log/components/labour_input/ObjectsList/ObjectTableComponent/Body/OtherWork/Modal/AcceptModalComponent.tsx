@@ -34,39 +34,40 @@ const mapDispatchToProps = {};
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & componentProps;
 
 function AcceptModalComponent(props: Props) {
-	console.count('AcceptModalComponent');
 	const [commentary, setCommentary] = useState('');
-	return (
-		<Modal show={props.show} onHide={props.onCancel} backdrop="static" keyboard={false}>
-			<Modal.Header>
-				<Modal.Title>Uwaga!</Modal.Title>
-			</Modal.Header>
-			<Modal.Body>
-				<HideComponent when={props.option !== OTHER_WORK_TYPE.ADDITIONAL}>
-					<Form.Label>Opis dodatkowy</Form.Label>
-					<Form.Control
-						onChange={(e) => setCommentary(e.target.value)}
-						value={commentary}
-						className={'p-1'}
-						size={'sm'}
-						type={'text'}
-					/>
-					<hr />
-				</HideComponent>
-				<p>
-					Czy dodać wybraną pracę (<strong>{props.otherWorksOptionName}</strong>) do zestawienia?
-				</p>
-			</Modal.Body>
-			<Modal.Footer>
-				<Button variant="secondary" onClick={props.onCancel}>
-					Anuluj
-				</Button>
-				<Button variant="primary" onClick={() => props.onAccept(commentary)}>
-					Zatwierdź
-				</Button>
-			</Modal.Footer>
-		</Modal>
-	);
+	if (props.otherWorksOptionName)
+		return (
+			<Modal show={props.show} onHide={props.onCancel} backdrop="static" keyboard={false}>
+				<Modal.Header>
+					<Modal.Title>Uwaga!</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<HideComponent when={props.option !== OTHER_WORK_TYPE.ADDITIONAL}>
+						<Form.Label>Opis dodatkowy</Form.Label>
+						<Form.Control
+							onChange={(e) => setCommentary(e.target.value)}
+							value={commentary}
+							className={'p-1'}
+							size={'sm'}
+							type={'text'}
+						/>
+						<hr />
+					</HideComponent>
+					<p>
+						Czy dodać wybraną pracę (<strong>{props.otherWorksOptionName}</strong>) do zestawienia?
+					</p>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={props.onCancel}>
+						Anuluj
+					</Button>
+					<Button variant="primary" onClick={() => props.onAccept(commentary)}>
+						Zatwierdź
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		);
+	else return null;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AcceptModalComponent);

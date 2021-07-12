@@ -15,7 +15,7 @@
 		"isolatedModules": true,
 		"noEmit": true,
 		"composite": false,
-		"types": ["forge-viewer"]
+		"types": ["forge-viewer","jest"]
 	},
 	"include": ["src"]
 }

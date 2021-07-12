@@ -7,7 +7,7 @@ type ComponentProps = {
 	eventKey: 'elements';
 	actualAccordion: string | null;
 	groupAccordion: string | null;
-	groupedObject: WorkersLog.LabourInput.Payload.Objects.MultipleObject;
+	groupedObject: WorkersLog.LabourInput.Payload.Objects.WorkTimeGroupedObjects;
 	setGroupedAccordion: React.Dispatch<React.SetStateAction<string | null>>;
 };
 

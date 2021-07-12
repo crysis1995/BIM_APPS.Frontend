@@ -1,20 +1,12 @@
 import WorkProgress from '../../../types';
-import { ModalType } from '../../../../../components/Modal/type';
-import ForgeViewer from '../../../../../components/ForgeViewer/types';
 import { Epic } from 'redux-observable';
 import { RootState } from '../../../../../store';
 import { filter, mergeMap, withLatestFrom } from 'rxjs/operators';
 import { of } from 'rxjs';
 import ForgeViewerActions from '../../../../../components/ForgeViewer/redux/actions';
+import { RootActions } from '../../../../../reducers/type';
 
-type ActionTypes =
-	| WorkProgress.Monolithic.General.Redux.Actions
-	| WorkProgress.Monolithic.Upgrading.Redux.Actions
-	| ModalType.Redux.Actions
-	| WorkProgress.Monolithic.Terms.Redux.Actions
-	| ForgeViewer.Redux.Actions;
-
-export const OnChangeSelectElementsEpic: Epic<ActionTypes, ActionTypes, RootState> = (action$, state$) =>
+export const OnChangeSelectElementsEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
 			(data): data is ReturnType<WorkProgress.Monolithic.Upgrading.Redux.IActions['SelectElements']> =>

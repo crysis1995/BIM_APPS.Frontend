@@ -2,7 +2,7 @@ import { Form } from 'react-bootstrap';
 import React from 'react';
 import RoundHalf from '../../../../../../../utils/RoundHalf';
 
-const MAX = 14;
+const MAX = 24;
 
 export default function EditableCell({
 	classnames,

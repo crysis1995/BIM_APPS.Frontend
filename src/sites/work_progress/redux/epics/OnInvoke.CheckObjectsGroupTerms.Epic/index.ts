@@ -12,20 +12,14 @@ import { GetTermByPassedGroup } from './Utils.GetTermByPassedGroup';
 import { GetObjectsIncludedInPassedGroup } from './Utils.GetObjectsIncludedInPassedGroup';
 import { isUpgradingNeeded } from './Utils.IsUpgradingNeeded';
 import { GetDatesToUpdate } from './Utils.GetDatesToUpdate';
-
-type ActionTypes =
-	| WorkProgress.Monolithic.General.Redux.Actions
-	| WorkProgress.Monolithic.Upgrading.Redux.Actions
-	| ModalType.Redux.Actions
-	| WorkProgress.Monolithic.Terms.Redux.Actions
-	| ForgeViewer.Redux.Actions;
+import { RootActions } from '../../../../../reducers/type';
 
 /*
  * 		Epic is invoked after user successfully set objects status.
  *		Method check if is necessary to change Terms Date - REAL_START or REAL_FINISH
  *
  * */
-export const OnInvokeCheckObjectsGroupTermsEpic: Epic<ActionTypes, ActionTypes, RootState> = (action$, state$) =>
+export const OnInvokeCheckObjectsGroupTermsEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
 			(data): data is ReturnType<WorkProgress.Monolithic.Upgrading.Redux.IActions['CheckObjectsGroupTerms']> =>

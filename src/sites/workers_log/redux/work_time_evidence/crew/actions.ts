@@ -1,4 +1,3 @@
-
 import WorkersLog from '../../../types';
 
 const CrewActions: WorkersLog.WorkTimeEvidence.Crew.Redux.IActions = {
@@ -6,6 +5,14 @@ const CrewActions: WorkersLog.WorkTimeEvidence.Crew.Redux.IActions = {
 	chooseCrew: (crewId) => ({
 		type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.CHOOSE,
 		payload: { crew: crewId },
+	}),
+	DeleteCrewInit: (crew, summaries) => ({
+		type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.DELETE_INIT,
+		payload: { crew, summaries },
+	}),
+	DeleteCrewFinish: (crew) => ({
+		type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.DELETE_FINISH,
+		payload: crew,
 	}),
 	fetchCrewStart: () => ({ type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.FETCH_START }),
 	fetchCrewEnd: (crews) => ({ type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.FETCH_END, payload: { crews } }),

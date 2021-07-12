@@ -5,9 +5,9 @@ import { RootState } from '../../../../../store';
 import { filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { EMPTY, merge, of } from 'rxjs';
 import GeneralActions from '../../monolithic/general/actions';
+import { RootActions } from '../../../../../reducers/type';
 
-type ActionTypes = WorkProgress.Monolithic.General.Redux.Actions | ModalType.Redux.Actions;
-export const OnInvokeTrySetRotationDay: Epic<ActionTypes, ActionTypes, RootState> = (action$, state$) =>
+export const OnInvokeTrySetRotationDay: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
 			(data): data is ReturnType<WorkProgress.Monolithic.General.Redux.IActions['TrySetRotationDay']> =>

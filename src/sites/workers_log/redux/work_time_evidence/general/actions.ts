@@ -2,6 +2,8 @@ import { Dayjs } from 'dayjs';
 import WorkersLog from '../../../types';
 
 const GeneralActions: WorkersLog.WorkTimeEvidence.General.Redux.IActions = {
+	StartComponent: () => ({ type: WorkersLog.WorkTimeEvidence.General.Redux.Types.START }),
+	EndComponent: () => ({ type: WorkersLog.WorkTimeEvidence.General.Redux.Types.END }),
 	generateRaportStart: (type) => ({
 		payload: { type },
 		type: WorkersLog.WorkTimeEvidence.General.Redux.Types.GENERATE_RAPORT_START,

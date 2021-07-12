@@ -1,9 +1,10 @@
 import { Col, Form } from 'react-bootstrap';
 import React from 'react';
 import { connect } from 'react-redux';
-import { PL_DICTIONARY, WORKER_TYPES } from '../../../redux/constants';
+import { PL_DICTIONARY } from '../../../redux/constants';
 import GeneralActions from '../../../redux/work_time_evidence/general/actions';
 import { RootState } from '../../../../../store';
+import { WORKERS_LOG__WORKERS_TYPE } from '../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
 
 const mapStateToProps = (state: RootState) => ({
 	worker_type: state.WorkersLog.WorkTimeEvidence.General.worker_type,
@@ -12,10 +13,10 @@ const mapDispatchToProps = { selectWorkerType: GeneralActions.selectWorkerType }
 
 type WorkerTypeSelectorProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 function WorkerTypeSelector(props: WorkerTypeSelectorProps) {
-	const WorkerTypeElem = Object.keys(WORKER_TYPES) as (keyof typeof WORKER_TYPES)[];
+	const WorkerTypeElem = Object.keys(WORKERS_LOG__WORKERS_TYPE) as (keyof typeof WORKERS_LOG__WORKERS_TYPE)[];
 	const options = WorkerTypeElem.map((workerType) => ({
-		id: WORKER_TYPES[workerType],
-		name: PL_DICTIONARY[WORKER_TYPES[workerType]],
+		id: WORKERS_LOG__WORKERS_TYPE[workerType],
+		name: PL_DICTIONARY[WORKERS_LOG__WORKERS_TYPE[workerType]],
 	}));
 
 	return (
@@ -24,7 +25,7 @@ function WorkerTypeSelector(props: WorkerTypeSelectorProps) {
 			<Form.Control
 				data-testid={'Selector'}
 				onChange={(event) => {
-					const data: WORKER_TYPES = event.target.value as WORKER_TYPES;
+					const data: WORKERS_LOG__WORKERS_TYPE = event.target.value as WORKERS_LOG__WORKERS_TYPE;
 					props.selectWorkerType(data);
 				}}
 				as="select"
@@ -41,5 +42,4 @@ function WorkerTypeSelector(props: WorkerTypeSelectorProps) {
 	);
 }
 
-// @ts-ignore
 export default connect(mapStateToProps, mapDispatchToProps)(WorkerTypeSelector);

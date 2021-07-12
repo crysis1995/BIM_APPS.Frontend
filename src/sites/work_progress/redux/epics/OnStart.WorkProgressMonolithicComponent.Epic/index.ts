@@ -1,26 +1,18 @@
 import WorkProgress from '../../../types';
-import { ActionsObservable, Epic, ofType } from 'redux-observable';
+import { Epic, ofType } from 'redux-observable';
 import { RootState } from '../../../../../store';
 import { mergeMap, takeUntil, withLatestFrom } from 'rxjs/operators';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
-import { combineLatest, EMPTY, merge } from 'rxjs';
+import { combineLatest, EMPTY, merge, Observable } from 'rxjs';
 import RestAPIService from '../../../../../services/rest.api.service';
-import { ModalType } from '../../../../../components/Modal/type';
 import { FetchRotationDaysEpic } from './FetchRotationDays.Epic';
 import { FetchTermsEpic } from './FetchTerms.Epic';
 import { FetchDelayCausesEpic } from './FetchDelayCauses.Epic';
 import { SetProjectUtilsEpic } from './SetProjectUtils.Epic';
 import { CMSLoginType } from '../../../../../components/CMSLogin/type';
+import { RootActions } from '../../../../../reducers/type';
 
-type ActionTypes =
-	| WorkProgress.Monolithic.General.Redux.Actions
-	| WorkProgress.Monolithic.Delays.Redux.Actions
-	| WorkProgress.Monolithic.Upgrading.Redux.Actions
-	| ModalType.Redux.Actions
-	| CMSLoginType.Redux.Actions
-	| WorkProgress.Monolithic.Terms.Redux.Actions;
-
-export const OnStartWorkProgressMonolithicComponent: Epic<ActionTypes, ActionTypes, RootState> = (action$, state$) =>
+export const OnStartWorkProgressMonolithicComponent: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	combineLatest([
 		action$.pipe(ofType(WorkProgress.Monolithic.General.Redux.Types.COMPONENT_STARTED)),
 		action$.pipe(ofType(CMSLoginType.Redux.Types.USER_SET_CURRENT_PROJECT)),
@@ -32,6 +24,7 @@ export const OnStartWorkProgressMonolithicComponent: Epic<ActionTypes, ActionTyp
 			const REST = new RestAPIService(token);
 			const project = state.CMSLogin.actual_project?.id;
 			if (!project) return EMPTY;
+			// return EMPTY;
 			return FetchNecessary(state, GRAPHQL, project, REST, action$);
 		}),
 	);
@@ -41,7 +34,7 @@ function FetchNecessary(
 	GRAPHQL: GraphQLAPIService,
 	project: string,
 	REST: RestAPIService,
-	action$: ActionsObservable<ActionTypes>,
+	action$: Observable<RootActions>,
 ) {
 	return merge(
 		SetProjectUtilsEpic(state),

@@ -7,16 +7,9 @@ import { filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import { concat, EMPTY, from, of } from 'rxjs';
 import WorkProgressMonolithicUpgradingActions from '../../monolithic/upgrading/actions';
+import { RootActions } from '../../../../../reducers/type';
 
-type ActionTypes =
-	| WorkProgress.Monolithic.General.Redux.Actions
-	| WorkProgress.Monolithic.Delays.Redux.Actions
-	| WorkProgress.Monolithic.Upgrading.Redux.Actions
-	| ModalType.Redux.Actions
-	| CMSLoginType.Redux.Actions
-	| WorkProgress.Monolithic.Terms.Redux.Actions;
-
-export const OnInvokeSetStatusesInitEpic: Epic<ActionTypes, ActionTypes, RootState> = (action$, state$) =>
+export const OnInvokeSetStatusesInitEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
 			(data): data is ReturnType<WorkProgress.Monolithic.Upgrading.Redux.IActions['SetStatusesInit']> =>

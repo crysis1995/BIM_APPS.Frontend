@@ -2,8 +2,10 @@ import ObjectSingle from './Object.Single';
 import { v4 } from 'uuid';
 import React, { useState } from 'react';
 import { RootState } from '../../../../../../../../../store';
-import ObjectGroup from './Object.Group';
 import { connect } from 'react-redux';
+import ObjectGroup from './Object.Group';
+import ActualEventKeyRowViewer from '../../OtherWork/Utils/ActualEventKeyRowViewer';
+import ShowComponent from '../../../../../../../../../components/ShowComponent';
 
 type ComponentProps = {
 	eventKey: 'elements';
@@ -12,7 +14,9 @@ type ComponentProps = {
 
 const mapStateToProps = (state: RootState) => ({
 	ObjectsGroups: state.WorkersLog.LabourInput.Objects.ObjectsGroups,
-	// ObjectsGroups: ObjectsGroups,
+	ObjectsWorkTime: state.WorkersLog.LabourInput.TimeEvidence.ObjectsTimeEvidences
+		? Object.values(state.WorkersLog.LabourInput.TimeEvidence.ObjectsTimeEvidences)
+		: [],
 });
 
 const mapDispatchToProps = {};
@@ -21,24 +25,37 @@ type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & Co
 
 function ObjectsCollapsedListComponent(props: Props) {
 	const [groupAccordion, setGroupedAccordion] = useState<string | null>(null);
-
-	return (
-		<>
-			{props.ObjectsGroups.map((object) =>
-				typeof object === 'number' ? (
+	if (props.ObjectsGroups.length > 0 || props.ObjectsWorkTime.length > 0)
+		return (
+			<>
+				{props.ObjectsWorkTime.map(
+					(item) =>
+						item && (
+							<ObjectGroup
+								eventKey={'elements'}
+								actualAccordion={props.actualAccordion}
+								groupAccordion={groupAccordion}
+								groupedObject={item}
+								setGroupedAccordion={setGroupedAccordion}
+							/>
+						),
+				)}
+				<ShowComponent when={props.ObjectsWorkTime.length > 0}>
+					<ActualEventKeyRowViewer show={props.eventKey === props.actualAccordion}>
+						<td colSpan={4} />
+					</ActualEventKeyRowViewer>
+				</ShowComponent>
+				{props.ObjectsGroups.map((object) => (
 					<ObjectSingle key={v4()} object={object} show={props.eventKey === props.actualAccordion} />
-				) : (
-					<ObjectGroup
-						key={v4()}
-						setGroupedAccordion={setGroupedAccordion}
-						groupAccordion={groupAccordion}
-						groupedObject={object}
-						eventKey={props.eventKey}
-						actualAccordion={props.actualAccordion}
-					/>
-				),
-			)}
-		</>
+				))}
+			</>
+		);
+	return (
+		<tr>
+			<td colSpan={4} hidden={!(props.eventKey === props.actualAccordion)}>
+				Brak elementów
+			</td>
+		</tr>
 	);
 }
 

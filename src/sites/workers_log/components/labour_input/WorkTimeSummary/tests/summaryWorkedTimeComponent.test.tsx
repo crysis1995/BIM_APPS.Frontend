@@ -1,4 +1,4 @@
-describe('epic.test summaryWorkedTimeComponent', () => {
+describe('epic.__test__ summaryWorkedTimeComponent', () => {
 	test('exist', () => {});
 	test('render default', () => {});
 	test('render with different variant values', () => {});

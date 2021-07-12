@@ -1,4 +1,4 @@
-describe("epic.test LabourInputComponent", () => {
+describe("epic.__test__ LabourInputComponent", () => {
 	test("exist", () => {})
 	test("render UISelectorsComponent component", () => {})
 	test("render WorkTimeSummaryComponent component", () => {})

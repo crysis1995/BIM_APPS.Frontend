@@ -4,6 +4,8 @@ import Workers from './worker';
 import General from './general';
 import TimeEvidence from './time_evidence';
 import { combineEpics } from 'redux-observable';
+import { RootActions } from '../../../../reducers/type';
+import { RootState } from '../../../../store';
 
 export default {
 	reducer: combineReducers({
@@ -12,5 +14,5 @@ export default {
 		General: General.reducer,
 		TimeEvidence: TimeEvidence.reducer,
 	}),
-	epics: combineEpics(Crews.epics, Workers.epics, TimeEvidence.epics, General.epics),
+	epics: combineEpics<RootActions, RootActions, RootState>(Crews.epics, Workers.epics, TimeEvidence.epics, General.epics),
 };

@@ -10,9 +10,9 @@ import {
 	GetFormattedDate,
 } from '../../../../workers_log/redux/work_time_evidence/general/utils/GetFormattedDate';
 import GeneralActions from '../../monolithic/general/actions';
+import { RootActions } from '../../../../../reducers/type';
 
-type ActionTypes = WorkProgress.Monolithic.General.Redux.Actions | ModalType.Redux.Actions;
-export const OnInvokeTrySetDate: Epic<ActionTypes, ActionTypes, RootState> = (action$, state$) =>
+export const OnInvokeTrySetDate: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
 			(data): data is ReturnType<WorkProgress.Monolithic.General.Redux.IActions['TrySetDate']> =>

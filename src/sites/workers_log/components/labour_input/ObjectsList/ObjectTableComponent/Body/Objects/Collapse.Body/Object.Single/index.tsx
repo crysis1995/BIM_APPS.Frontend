@@ -1,11 +1,13 @@
 import React from 'react';
-import { ActualEventKeyRowViewer } from '../../../OtherWork/Utils/ActualEventKeyRowViewer';
+import ActualEventKeyRowViewer from '../../../OtherWork/Utils/ActualEventKeyRowViewer';
 import WorkersLog from '../../../../../../../../types';
-import ObjectTimeInputComponent from '../Components/Object.TimeInput.Component';
+import ObjectTimeInputComponent from './Object.TimeInput.Component';
 import { connect } from 'react-redux';
-import { RootState } from '../../../../../../../../../../store';
 import LabourInputObjectsActions from '../../../../../../../../redux/labour_input/objects/actions';
 import { isCheckedSelector } from './Selector.IsChecked';
+import { RootState } from '../../../../../../../../../../store';
+import ObjectNameComponent from '../Components/Object.Name.Component';
+import ObjectStatusComponent from '../Components/Object.Status.Component';
 
 export type ComponentProps = {
 	object: WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus['id'];
@@ -27,19 +29,13 @@ function ObjectSingle(props: Props) {
 
 	return (
 		<ActualEventKeyRowViewer show={props.show}>
-			<td colSpan={3} className={'pl-3'}>
+			<td colSpan={2} className={'pl-3'}>
 				<input className={'mr-2'} type="checkbox" checked={props.isChecked} onClick={HandleClick} />
-				{props.object}
+				<ObjectNameComponent objectID={props.object} />
 			</td>
-			{/*<td>*/}
-			{/*<ObjectSelectionComponent objectID={props.object} />*/}
-			{/*</td>*/}
-			{/*<td >*/}
-			{/*	<ObjectNameComponent objectID={props.object} />*/}
-			{/*</td>*/}
-			{/*<td>*/}
-			{/*	<ObjectStatusComponent objectID={props.object} />*/}
-			{/*</td>*/}
+			<td>
+				<ObjectStatusComponent objectID={props.object} />
+			</td>
 			<ObjectTimeInputComponent objectID={props.object} />
 		</ActualEventKeyRowViewer>
 	);

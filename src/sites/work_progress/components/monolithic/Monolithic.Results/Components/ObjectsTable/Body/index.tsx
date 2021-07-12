@@ -25,24 +25,26 @@ function ObjectsTableBody(props: Props) {
 		<tbody>
 			{props.objects.map((obj) => {
 				return (
-					<tr key={v4()}>
-						<HideComponent when={!props.allowSelection}>
+					!!obj && (
+						<tr key={v4()}>
+							<HideComponent when={!props.allowSelection}>
+								<td>
+									<Selection revitID={obj.revit_id} />
+								</td>
+							</HideComponent>
 							<td>
-								<Selection revitID={obj.revit_id} />
+								<LocaleNameComponent value={obj.VCF_Realisation as Constants.MonolithicTabs} />
 							</td>
-						</HideComponent>
-						<td>
-							<LocaleNameComponent value={obj.VCF_Realisation as Constants.MonolithicTabs} />
-						</td>
-						<td>{obj.volume ? <UNITS.M3>{obj.volume}</UNITS.M3> : '-'}</td>
-						<td>{obj.running_meter ? <UNITS.CM>{obj.running_meter}</UNITS.CM> : '-'}</td>
-						<td>{obj.area ? <UNITS.M2>{obj.area}</UNITS.M2> : '-'}</td>
-						<HideComponent when={!props.showStatuses}>
-							<td className="text-center">
-								<ComponentStatus revitID={obj.revit_id} />
-							</td>
-						</HideComponent>
-					</tr>
+							<td>{obj.volume ? <UNITS.M3>{obj.volume}</UNITS.M3> : '-'}</td>
+							<td>{obj.running_meter ? <UNITS.CM>{obj.running_meter}</UNITS.CM> : '-'}</td>
+							<td>{obj.area ? <UNITS.M2>{obj.area}</UNITS.M2> : '-'}</td>
+							<HideComponent when={!props.showStatuses}>
+								<td className="text-center">
+									<ComponentStatus revitID={obj.revit_id} />
+								</td>
+							</HideComponent>
+						</tr>
+					)
 				);
 			})}
 		</tbody>

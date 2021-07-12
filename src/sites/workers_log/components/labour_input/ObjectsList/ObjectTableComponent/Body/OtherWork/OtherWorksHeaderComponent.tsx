@@ -4,9 +4,9 @@ import { ArrowIcon } from './Utils/ArrowIcon';
 import { EDirection } from '../types/EDirection';
 import LocaleNameComponent from '../../../../../../../../localisation/LocaleNameComponent';
 import React from 'react';
-import { CMSLoginType } from '../../../../../../../../components/CMSLogin/type';
-import WorkersLogRedux from '../../../../../../redux';
 import { connect } from 'react-redux';
+import { RootState } from '../../../../../../../../store';
+import { summaryOtherWorkWorkedTimeSelector } from './Selector.SummaryOtherWorkWorkedTime';
 
 type ComponentProps = {
 	eventKey: string;
@@ -15,18 +15,8 @@ type ComponentProps = {
 	value: OTHER_WORK_TYPE;
 };
 
-const mapStateToProps = (
-	state: {
-		CMSLogin: CMSLoginType.Redux.Store;
-		WorkersLog: ReturnType<typeof WorkersLogRedux.reducer>;
-	},
-	componentProps: ComponentProps,
-) => ({
-	summaryWorkedTime: state.WorkersLog.LabourInput.TimeEvidence.OtherWorksTimeEvidences
-		? Object.values(state.WorkersLog.LabourInput.TimeEvidence.OtherWorksTimeEvidences)
-				.filter((e) => e.work_type === componentProps.value)
-				.reduce((previousValue, currentValue) => previousValue + currentValue.worked_time, 0)
-		: 0,
+const mapStateToProps = (state: RootState, componentProps: ComponentProps) => ({
+	summaryWorkedTime: summaryOtherWorkWorkedTimeSelector(state, componentProps),
 });
 
 const mapDispatchToProps = {};

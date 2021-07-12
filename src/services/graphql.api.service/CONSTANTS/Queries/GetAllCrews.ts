@@ -1,5 +1,5 @@
 import { gql } from 'apollo-boost';
-import { WORKER_TYPES } from '../../../../sites/workers_log/redux/constants';
+import { WORKERS_LOG__WORKERS_TYPE } from '../GeneralTypes';
 
 const GET_ALL_CREWS = gql`
 	query GetAllCrews($user_id: ID, $project_id: ID) {
@@ -21,6 +21,6 @@ export namespace GetAllCrewsType {
 		id: string;
 		name: string;
 		is_subcontractor: boolean;
-		workers_type: WORKER_TYPES;
+		workers_type: WORKERS_LOG__WORKERS_TYPE;
 	}
 }

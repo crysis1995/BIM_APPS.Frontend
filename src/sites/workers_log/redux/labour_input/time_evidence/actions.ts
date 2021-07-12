@@ -19,17 +19,37 @@ const LabourInputTimeEvidenceActions: WorkersLog.LabourInput.Redux.TimeEvidence.
 		type: WorkersLog.LabourInput.Redux.TimeEvidence.Types.FETCH_OBJECT_TIME_EVIDENCE_START,
 		payload: objectID,
 	}),
-	FetchObjectTimeEvidenceEnd: (data, objectID) => ({
+	FetchObjectTimeEvidenceEnd: (data) => ({
 		type: WorkersLog.LabourInput.Redux.TimeEvidence.Types.FETCH_OBJECT_TIME_EVIDENCE_END,
-		payload: { data, objectID },
+		payload: data,
 	}),
-	CreateOrUpdateObjectTimeEvidenceStart: (ObjectTimeEvidenceID, objectID, workedTime) => ({
-		type: WorkersLog.LabourInput.Redux.TimeEvidence.Types.CREATE_OR_UPDATE_OBJECT_TIME_EVIDENCE_START,
+	CreateObjectTimeEvidenceStart: (ObjectTimeEvidenceID, objectID, workedTime) => ({
+		type: WorkersLog.LabourInput.Redux.TimeEvidence.Types.CREATE_OBJECT_TIME_EVIDENCE_START,
 		payload: { ObjectTimeEvidenceID, objectID, workedTime },
 	}),
-	CreateOrUpdateObjectTimeEvidenceEnd: (data, objectID) => ({
-		type: WorkersLog.LabourInput.Redux.TimeEvidence.Types.CREATE_OR_UPDATE_OBJECT_TIME_EVIDENCE_END,
-		payload: { data, objectID },
+	CreateObjectTimeEvidenceEnd: (data) => ({
+		type: WorkersLog.LabourInput.Redux.TimeEvidence.Types.CREATE_OBJECT_TIME_EVIDENCE_END,
+		payload: data,
+	}),
+	UpdateObjectTimeEvidenceStart: (id, workedTime) => ({
+		type: WorkersLog.LabourInput.Redux.TimeEvidence.Types.UPDATE_OBJECT_TIME_EVIDENCE_START,
+		payload: {
+			id,
+			workedTime,
+		},
+	}),
+	UpdateObjectTimeEvidenceEnd: (data) => ({
+		type: WorkersLog.LabourInput.Redux.TimeEvidence.Types.UPDATE_OBJECT_TIME_EVIDENCE_END,
+		payload: data,
+	}),
+
+	DeleteObjectTimeEvidenceStart: (id) => ({
+		type: WorkersLog.LabourInput.Redux.TimeEvidence.Types.DELETE_OBJECT_TIME_EVIDENCE_START,
+		payload: id,
+	}),
+	DeleteObjectTimeEvidenceEnd: (id) => ({
+		type: WorkersLog.LabourInput.Redux.TimeEvidence.Types.DELETE_OBJECT_TIME_EVIDENCE_END,
+		payload: id,
 	}),
 	FetchGroupedOtherWorkTimeEvidenceStart: () => ({
 		type: WorkersLog.LabourInput.Redux.TimeEvidence.Types.FETCH_GROUPED_OTHER_WORK_TIME_EVIDENCE_START,

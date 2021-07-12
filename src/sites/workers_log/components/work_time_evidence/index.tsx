@@ -8,12 +8,13 @@ import { Col, Row } from 'react-bootstrap';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import { connect } from 'react-redux';
 import './table.css';
-import Loader from '../../../../components/Loader';
 import SelectorComponents from './SelectorComponents';
 import RaportGeneratorsComponent from './RaportGenerators';
 import WorkerCrewActionsTab from './WorkerCrewActionsTab';
 import TimeEvidenceTable from './TimeEvidenceTable';
 import { RootState } from '../../../../store';
+import LoaderComponent from '../../../../components/Loader/LoaderComponent';
+import GeneralActions from '../../redux/work_time_evidence/general/actions';
 
 dayjs.extend(arraySupport);
 dayjs.extend(localeData);
@@ -32,13 +33,19 @@ const mapStateToProps = (state: RootState) => ({
 		state.WorkersLog.WorkTimeEvidence.Workers.loading_workers ||
 		state.WorkersLog.WorkTimeEvidence.TimeEvidence.loading,
 });
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+	StartComponent: GeneralActions.StartComponent,
+	EndComponent: GeneralActions.EndComponent,
+};
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 function WorkTimeEvidenceComponent(props: Props) {
 	useEffect(() => {
-		return () => {};
+		props.StartComponent();
+		return () => {
+			props.EndComponent();
+		};
 	}, []);
 	return (
 		<>
@@ -47,15 +54,12 @@ function WorkTimeEvidenceComponent(props: Props) {
 					<SelectorComponents />
 					<RaportGeneratorsComponent />
 				</Row>
-
-				{props.loading ? (
-					<Loader height={'400px'} />
-				) : (
+				<LoaderComponent loading={props.loading}>
 					<>
 						<WorkerCrewActionsTab />
 						<TimeEvidenceTable />
 					</>
-				)}
+				</LoaderComponent>
 			</Col>
 		</>
 	);

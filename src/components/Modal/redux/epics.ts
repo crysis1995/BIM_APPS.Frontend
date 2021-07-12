@@ -3,9 +3,9 @@ import { ModalType } from '../type';
 import { filter, mergeMap } from 'rxjs/operators';
 import { concat, of } from 'rxjs';
 import ModalActions from './actions';
+import { RootActions } from '../../../reducers/type';
 
-type ActipnType = ModalType.Redux.Actions;
-const onModalInitialize: Epic<ActipnType, ActipnType> = (action$) =>
+const onModalInitialize: Epic<RootActions, RootActions> = (action$) =>
 	action$.pipe(
 		filter(
 			(data): data is ReturnType<ModalType.Redux.IActions['InitializeModal']> =>

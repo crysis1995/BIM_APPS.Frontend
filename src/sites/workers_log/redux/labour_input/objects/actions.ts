@@ -8,9 +8,20 @@ const LabourInputObjectsActions: WorkersLog.LabourInput.Redux.Objects.IActions =
 		payload: data,
 	}),
 	SelectObject: (data) => ({ type: WorkersLog.LabourInput.Redux.Objects.Types.SELECT_OBJECT, payload: data }),
+	HandleSelectObject: (data) => ({
+		type: WorkersLog.LabourInput.Redux.Objects.Types.HANDLE_SELECT_OBJECT,
+		payload: data,
+	}),
 	GroupObjects: (data) => ({ type: WorkersLog.LabourInput.Redux.Objects.Types.GROUP_OBJECTS, payload: data }),
 	UngroupObjects: (data) => ({ type: WorkersLog.LabourInput.Redux.Objects.Types.UNGROUP_OBJECTS, payload: data }),
-	GroupObjectsInit: () => ({ type: WorkersLog.LabourInput.Redux.Objects.Types.GROUP_OBJECTS_INIT }),
+	UngroupObjectsInit: (groupID, data) => ({
+		type: WorkersLog.LabourInput.Redux.Objects.Types.UNGROUP_OBJECTS_INIT,
+		payload: { data, groupID },
+	}),
+	GroupObjectsInit: (objectIds, workedTime) => ({
+		type: WorkersLog.LabourInput.Redux.Objects.Types.GROUP_OBJECTS_INIT,
+		payload: { objectIds, workedTime },
+	}),
 };
 
 export default LabourInputObjectsActions;

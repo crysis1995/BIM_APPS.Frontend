@@ -5,11 +5,12 @@ const ParseToValueLabelObject = (value: string, label: string, id: string) => ({
 
 export const CombineWorkerIdWithName = createSelector(
 	(state: RootState) => state.WorkersLog.WorkTimeEvidence.Workers.all,
+	(state: RootState) => state.WorkersLog.WorkTimeEvidence.Crews.summary,
 	(state: RootState) => state.WorkersLog.WorkTimeEvidence.Workers.warbud_workers_map,
-	(workers, warbud_workers_map) => {
+	(workers, summary, warbud_workers_map) => {
 		if (workers && warbud_workers_map) {
 			return Object.values(workers)
-				.filter((worker) => !!worker.warbud_id)
+				.filter((worker) => !!worker.warbud_id && !summary?.workers.includes(worker.id))
 				.map((worker) =>
 					worker.warbud_id
 						? ParseToValueLabelObject(

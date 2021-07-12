@@ -56,6 +56,10 @@ import GetObjectsCount, { GetObjectsCountType } from './CONSTANTS/Queries/GetObj
 import GetAllDelacCauses, { GetAllDelacCausesType } from './CONSTANTS/Queries/GetAllDelayCauses';
 import GetAllAcceptanceTerms, { GetAllAcceptanceTermsType } from './CONSTANTS/Queries/GetAcceptanceTerms';
 import CountAcceptanceTerms, { CountAcceptanceTermsType } from './CONSTANTS/Queries/CountAcceptanceTerms';
+import DeleteWorkersLogEvidence, { DeleteWorkersLogEvidenceType } from './CONSTANTS/Mutations/DeleteWorkersLogEvidence';
+import CountAllAndEmpty, { CountAllAndEmptyType } from './CONSTANTS/Queries/CountAllAndEmpty';
+import DeleteWorkersLogCrewSummary, { DeleteWorkersLogCrewSummaryType } from './CONSTANTS/Mutations/DeleteCrewSummary';
+import DeleteCrew, { DeleteCrewType } from './CONSTANTS/Mutations/DeleteCrew';
 
 export default class GraphQLAPIService {
 	private client: ApolloClient<NormalizedCacheObject>;
@@ -200,6 +204,12 @@ export default class GraphQLAPIService {
 						UpdateObjectTimeEvidenceType.Request
 					>(UpdateObjectTimeEvidence, data);
 				},
+				Delete: (data: DeleteWorkersLogEvidenceType.Request) => {
+					return this.mutateClient<
+						DeleteWorkersLogEvidenceType.Response,
+						DeleteWorkersLogEvidenceType.Request
+					>(DeleteWorkersLogEvidence, data);
+				},
 			},
 			OtherWorkOptions: {
 				GetAll: () => {
@@ -251,6 +261,25 @@ export default class GraphQLAPIService {
 			},
 		},
 		WorkTimeEvidence: {
+			CrewSummaries: {
+				CountAllAndEmpty: (data: CountAllAndEmptyType.Request) => {
+					return this.queryClient<CountAllAndEmptyType.Response, CountAllAndEmptyType.Request>(
+						CountAllAndEmpty,
+						data,
+					);
+				},
+				Delete: (data: DeleteWorkersLogCrewSummaryType.Request) => {
+					return this.mutateClient<
+						DeleteWorkersLogCrewSummaryType.Response,
+						DeleteWorkersLogCrewSummaryType.Request
+					>(DeleteWorkersLogCrewSummary, data);
+				},
+			},
+			Crew: {
+				Delete: (data: DeleteCrewType.Request) => {
+					return this.mutateClient<DeleteCrewType.Response, DeleteCrewType.Request>(DeleteCrew, data);
+				},
+			},
 			Worker: {
 				Create: (data: CreateWorkerType.Request) => {
 					return this.mutateClient<CreateWorkerType.Response, CreateWorkerType.Request>(CreateWorker, data);

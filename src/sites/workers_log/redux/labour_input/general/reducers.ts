@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
 import WorkersLog from '../../../types';
 
-const INITIAL_STATE: WorkersLog.LabourInput.Redux.General.Store = {
+export const INITIAL_STATE: WorkersLog.LabourInput.Redux.General.Store = {
+	IsActive: false,
 	ActiveLevel: null,
 	ActiveWorkType: null,
 	ActualDate: dayjs().format('YYYY-MM-DD'),
@@ -15,12 +16,14 @@ export default function GeneralReducer(
 	action: WorkersLog.LabourInput.Redux.General.Actions,
 ): WorkersLog.LabourInput.Redux.General.Store {
 	switch (action.type) {
+		case WorkersLog.LabourInput.Redux.General.Types.INITIALIZE:
+			return { ...state, IsActive: action.payload };
 		case WorkersLog.LabourInput.Redux.General.Types.SET_INITIAL:
 			return { ...INITIAL_STATE };
 		case WorkersLog.LabourInput.Redux.General.Types.CHOOSE_LEVEL:
 			return {
 				...state,
-				ActiveLevel: action.payload ? { id: action.payload.id, name: action.payload.name } : null,
+				ActiveLevel: action.payload ? action.payload : null,
 			};
 		case WorkersLog.LabourInput.Redux.General.Types.SET_DATE:
 			return { ...state, ActualDate: action.payload.format('YYYY-MM-DD') };

@@ -1,14 +1,36 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { RootState } from '../../../store';
 import ForgeViewerActions from '../redux/actions';
 import ForgeViewer from '../types';
 import WorkProgressMonolithicUpgradingActions from '../../../sites/work_progress/redux/monolithic/upgrading/actions';
+import { connect } from 'react-redux';
+import LabourInputObjectsActions from '../../../sites/workers_log/redux/labour_input/objects/actions';
+
+/*
+ * 		constants
+ *
+ * */
+
+const elementParameterLevelName = 'VCF_Etage';
+const warbudElementParameterLevelName = 'WB_Scheduled_Level';
+
+type Options = {
+	strictVisibility: boolean;
+};
+
+enum ApplicationType {
+	WorkProgress_Monolithic = 'WorkProgress_Monolithic',
+	WorkersLog_LabourInput = 'WorkersLog_LabourInput',
+	Default = 'Default',
+}
 
 const mapStateToProps = (state: RootState) => ({
 	login_3_legged: state.Autodesk.login_3_legged,
 	project_urn: state.CMSLogin.actual_project?.urn,
-	current_sheet: state.ForgeViewer.current_sheet,
+	current_sheet:
+		state.ForgeViewer.is3DMode && state.ForgeViewer.view3D
+			? state.ForgeViewer.view3D.id
+			: state.ForgeViewer.current_sheet,
 	isWorkProgressMonolithicActive: state.WorkProgress.Monolithic.General.active,
 	model_elements_loading: state.ForgeViewer.model_elements_loading,
 	visible_elements: state.ForgeViewer.visible_elements,
@@ -16,6 +38,7 @@ const mapStateToProps = (state: RootState) => ({
 	disabled_elements: state.ForgeViewer.disabled_elements,
 	selected_elements: state.ForgeViewer.selected_elements,
 	colored_elements: state.ForgeViewer.colored_elements,
+	isWorkersLogLabourInputActive: state.WorkersLog.LabourInput.General.IsActive,
 });
 
 const mapDispatchToProps = {
@@ -26,19 +49,28 @@ const mapDispatchToProps = {
 	SetElements: ForgeViewerActions.SetElements,
 	CleanElements: ForgeViewerActions.CleanElements,
 	handleSelectedElements: WorkProgressMonolithicUpgradingActions.HandleSelectElements,
+	LabourInputHandleSelectObject: LabourInputObjectsActions.HandleSelectObject,
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
-type State = {};
+type State = { currentApp: ApplicationType };
 
 class Viewer extends Component<Props, State> {
 	private doc: Autodesk.Viewing.Document | null;
 	private viewer: Autodesk.Viewing.GuiViewer3D | null;
+	private _elements: ForgeViewer.Payload.Elements | undefined;
+
+	private _options: Options = {
+		strictVisibility: false,
+	};
 
 	constructor(props: Props) {
 		super(props);
 		this.viewer = null;
 		this.doc = null;
+		this.state = {
+			currentApp: ApplicationType.Default,
+		};
 	}
 
 	componentDidMount() {
@@ -47,10 +79,10 @@ class Viewer extends Component<Props, State> {
 	componentWillUnmount() {
 		this.props.EndViewer();
 	}
-	componentDidUpdate(prevProps: Props) {
+	componentDidUpdate(prevProps: Props, prevState: Readonly<State>) {
 		this.OnProjectChange(prevProps, this.props);
 		this.OnCurrentSheetChange(prevProps, this.props);
-
+		this.ActiveAppSwitcher(this.props, prevState);
 		this.ActiveModuleSelector(prevProps, this.props);
 	}
 	private OnProjectChange(previousProps: Props, actualProps: Props) {
@@ -64,14 +96,41 @@ class Viewer extends Component<Props, State> {
 		}
 	}
 
+	private ActiveAppSwitcher(props: Readonly<Props>, state: State) {
+		let currentApp = ApplicationType.Default;
+		switch (true) {
+			case props.isWorkProgressMonolithicActive:
+				currentApp = ApplicationType.WorkProgress_Monolithic;
+				break;
+			case props.isWorkersLogLabourInputActive:
+				currentApp = ApplicationType.WorkersLog_LabourInput;
+				break;
+			default:
+				break;
+		}
+
+		if (state.currentApp !== currentApp) this.setState({ currentApp: currentApp });
+	}
+
 	private ActiveModuleSelector(prevProps: Props, props: Readonly<Props> & Readonly<{ children?: React.ReactNode }>) {
 		switch (true) {
 			case props.isWorkProgressMonolithicActive:
 				this.OnWorkProgressMonolithicModuleActive(prevProps, props);
 				break;
+			case props.isWorkersLogLabourInputActive:
+				this.OnWorkersLogLabourInputActive(prevProps, props);
+				break;
 			default:
 				this.OnDefaultActive(prevProps, props);
 		}
+	}
+
+	private OnWorkersLogLabourInputActive(
+		prevProps: Props,
+		props: Readonly<Props> & Readonly<{ children?: React.ReactNode }>,
+	) {
+		this._options.strictVisibility = true;
+		this.OnDefaultActive(prevProps, props);
 	}
 
 	private OnWorkProgressMonolithicModuleActive(
@@ -106,10 +165,6 @@ class Viewer extends Component<Props, State> {
 		}
 	}
 
-	private onWorkProgressMonolithicActive(callback: () => void) {
-		if (this.props.isWorkProgressMonolithicActive) callback();
-	}
-
 	private static isChanged(valueA: any, valueB: any) {
 		return JSON.stringify(valueA) !== JSON.stringify(valueB);
 	}
@@ -140,7 +195,11 @@ class Viewer extends Component<Props, State> {
 				const elements = viewables.map((e) => {
 					return { id: e.guid(), name: e.name() };
 				});
-				this.props.SetSheetsSuccess(elements);
+				const view3D = doc
+					.getRoot()
+					.search({ type: 'geometry' })
+					.find((x) => x.is3D() && x.name().toLowerCase().includes('wspro'));
+				this.props.SetSheetsSuccess(elements, view3D && { id: view3D.guid(), name: view3D.name() });
 				this.props.StartViewer();
 				if (!!this.props.current_sheet && this.viewer) {
 					this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.current_sheet));
@@ -183,29 +242,39 @@ class Viewer extends Component<Props, State> {
 		});
 	}
 
+	SelectFunctionApplicationMap: {
+		[key in ApplicationType]: (data: number[]) => void;
+	} = {
+		[ApplicationType.Default]: () => {},
+		[ApplicationType.WorkersLog_LabourInput]: this.props.LabourInputHandleSelectObject,
+		[ApplicationType.WorkProgress_Monolithic]: this.props.handleSelectedElements,
+	};
+
 	private OnSelectionChangedEvent(data: {
 		fragIdsArray: number[];
 		dbIdArray: number[];
 		nodeArray: number[];
 		model: Autodesk.Viewing.Model;
 	}) {
-		this.onWorkProgressMonolithicActive.call(this, () => {
-			this.OnSelectionChange(data);
-		});
+		this.OnSelectionChange(data, this.SelectFunctionApplicationMap[this.state.currentApp]);
 	}
 
-	private OnSelectionChange(data: {
-		fragIdsArray: number[];
-		dbIdArray: number[];
-		nodeArray: number[];
-		model: Autodesk.Viewing.Model;
-	}) {
+	private OnSelectionChange(
+		data: {
+			fragIdsArray: number[];
+			dbIdArray: number[];
+			nodeArray: number[];
+			model: Autodesk.Viewing.Model;
+		},
+		reduxCallback: (data: number[]) => void,
+	) {
 		if (this.viewer && Viewer.isChanged(data.dbIdArray, this.props.selected_elements)) {
 			this.props.SetElements({ selected: data.dbIdArray });
 			if (data.dbIdArray.length > 0) {
 				this.viewer.model.getBulkProperties(
 					data.dbIdArray,
-					['name'],
+
+					{ propFilter: ['name'] },
 					(r: Autodesk.Viewing.PropertyResult[]) => {
 						if (r.length > 0) {
 							const selectedElement = r
@@ -214,7 +283,7 @@ class Viewer extends Component<Props, State> {
 									if (match) return parseInt(match[1]);
 								})
 								.filter((x) => !!x) as number[];
-							this.props.handleSelectedElements(selectedElement);
+							reduxCallback(selectedElement);
 						}
 					},
 					(err) => {
@@ -222,7 +291,7 @@ class Viewer extends Component<Props, State> {
 					},
 				);
 			} else {
-				this.props.handleSelectedElements([]);
+				reduxCallback([]);
 			}
 		}
 	}
@@ -232,25 +301,45 @@ class Viewer extends Component<Props, State> {
 			try {
 				const tree = this.viewer.model.getInstanceTree();
 				const rootId = tree.getRootId();
-				let elements: ForgeViewer.Payload.Elements = [];
+				let elements: number[] = [];
 				tree.enumNodeChildren(
 					rootId,
 					(dbID) => {
 						if (tree.getChildCount(dbID) === 0) {
-							let revit_id = /.+\[(.+)\]/g.exec(tree.getNodeName(dbID));
-							if (revit_id && revit_id[1]) {
-								let Element: ForgeViewer.Payload.Element = {
-									rvtId: revit_id[1],
-									forgeId: dbID,
-								};
-								elements.push(Element);
-							}
+							elements.push(dbID);
 						}
 					},
 					true,
 				);
+				this.viewer.model.getBulkProperties(
+					elements,
+					{ propFilter: ['name', elementParameterLevelName, warbudElementParameterLevelName] },
+					(result) => {
+						console.log(result);
+						const extractedData = result
+							.map((data) => {
+								if (data.name) {
+									let revit_id = /.+\[(.+)\]/g.exec(data.name);
+									const level = data.properties.find(
+										(x) =>
+											!!x.displayValue &&
+											[elementParameterLevelName, warbudElementParameterLevelName].includes(
+												x.attributeName,
+											),
+									);
+									if (revit_id && revit_id[1] && level)
+										return {
+											forgeId: data.dbId,
+											rvtId: revit_id[1],
+											levelName: level.displayValue,
+										};
+								}
+							})
+							.filter((x) => !!x) as ForgeViewer.Payload.Element[];
+						this.props.SetViewerElements(extractedData);
+					},
+				);
 				this.viewer.hide(rootId);
-				this.props.SetViewerElements(elements);
 			} catch (e) {
 				console.error(e.message || e);
 			}
@@ -281,6 +370,7 @@ class Viewer extends Component<Props, State> {
 	handleLock(
 		prevElement: ForgeViewer.Payload.ForgeElement[],
 		this_disabled_elements: ForgeViewer.Payload.ForgeElement[],
+		options?: Options,
 	) {
 		if (this.viewer) {
 			if (this_disabled_elements.length > 0) {
@@ -304,13 +394,16 @@ class Viewer extends Component<Props, State> {
 		actual_hidden_elements: ForgeViewer.Payload.ForgeElement[],
 	) {
 		if (this.viewer) {
+			if (this._options.strictVisibility) {
+				this.viewer.hide(perv_actual_visible_elements);
+				this.viewer.hide(prev_actual_hidden_elements);
+			}
 			this.viewer.hide(actual_hidden_elements);
 			this.viewer.show(actual_visible_elements);
 		}
 	}
 
 	render() {
-		console.count('forgeViewer');
 		return <div id="forgeViewer" />;
 	}
 }

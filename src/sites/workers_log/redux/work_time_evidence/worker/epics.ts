@@ -14,10 +14,9 @@ import { ModalType } from '../../../../../components/Modal/type';
 import WorkersLog from '../../../types';
 import { RootState } from '../../../../../store';
 import CrewActions from '../crew/actions';
+import { RootActions } from '../../../../../reducers/type';
 
-type ActionType = ModalType.Redux.Actions | WorkersLog.WorkTimeEvidence.Worker.Redux.Actions | WorkersLog.WorkTimeEvidence.Crew.Redux.Actions;
-
-const OnFetchWorkersMapStartEpic: Epic<ActionType, ActionType, any> = ($action) =>
+const OnFetchWorkersMapStartEpic: Epic<RootActions, RootActions, RootState> = ($action) =>
 	$action.pipe(
 		ofType(WorkersLog.WorkTimeEvidence.Worker.Redux.Types.FETCH_WORKERS_MAP_START),
 		switchMap(() =>
@@ -41,7 +40,7 @@ const OnFetchWorkersMapStartEpic: Epic<ActionType, ActionType, any> = ($action) 
 		),
 	);
 
-const OnFetchWorkersStartEpic: Epic<ActionType, ActionType, any> = (action$) =>
+const OnFetchWorkersStartEpic: Epic<RootActions, RootActions, RootState> = (action$) =>
 	action$.pipe(
 		ofType(WorkersLog.WorkTimeEvidence.Worker.Redux.Types.FETCH_WORKERS_START),
 		switchMap(() =>
@@ -92,7 +91,7 @@ function UpdateCrewSummaryFetchEpic(state: RootState, data: UpdateCrewSummaryTyp
 	);
 }
 
-const OnAddWorkerEpic: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
+const OnAddWorkerEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
 			(data): data is ReturnType<WorkersLog.WorkTimeEvidence.Worker.Redux.IActions['addWorker']> =>
@@ -118,7 +117,7 @@ function ExtractToCreateWorker(
 		};
 }
 
-const OnCreateWorkerEpic: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
+const OnCreateWorkerEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
 			(data): data is ReturnType<WorkersLog.WorkTimeEvidence.Worker.Redux.IActions['createWorker']> =>
@@ -162,7 +161,7 @@ function ExtractToDeleteWorkerFromCrewSummary(
 		};
 }
 
-const OnDeleteWorker: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
+const OnDeleteWorker: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
 			(data): data is ReturnType<WorkersLog.WorkTimeEvidence.Worker.Redux.IActions['deleteWorker']> =>
@@ -187,7 +186,7 @@ function ExtractToCopyWorkersToCrewSummary(
 		};
 }
 
-const OnCopyWorkers: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
+const OnCopyWorkers: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
 			(data): data is ReturnType<WorkersLog.WorkTimeEvidence.Worker.Redux.IActions['copyWorkersToCrew']> =>

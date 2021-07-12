@@ -7,6 +7,6 @@ export const ObjectsSelector = createSelector(
 	(state: RootState) => state.WorkProgress.Monolithic.Upgrading.loading,
 	(actualElements, byRevitId, loading) => {
 		if (actualElements.length === 0 || !byRevitId || loading) return [];
-		else return actualElements.map((revitID) => byRevitId[revitID]);
+		else return actualElements.map((revitID) => byRevitId[revitID]).filter((x) => !!x);
 	},
 );

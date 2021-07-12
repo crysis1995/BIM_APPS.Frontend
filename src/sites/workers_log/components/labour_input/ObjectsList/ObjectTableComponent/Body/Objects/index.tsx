@@ -1,6 +1,6 @@
 import React from 'react';
-import ObjectsHeaderComponent from './Collapse.Header';
-import ObjectsCollapsedListComponent from './Collapse.Body';
+import ObjectsCollapseHeader from './Collapse.Header';
+import ObjectsCollapseBody from './Collapse.Body';
 
 type ComponentProps = {
 	setActualAccordion: (value: ((prevState: string | null) => string | null) | string | null) => void;
@@ -11,12 +11,12 @@ function ObjectsListComponent(props: ComponentProps) {
 	const eventKey: 'elements' = 'elements';
 	return (
 		<>
-			<ObjectsHeaderComponent
+			<ObjectsCollapseHeader
 				eventKey={eventKey}
 				setAccordion={props.setActualAccordion}
 				actualAccordion={props.actualAccordion}
 			/>
-			<ObjectsCollapsedListComponent eventKey={eventKey} actualAccordion={props.actualAccordion} />
+			<ObjectsCollapseBody eventKey={eventKey} actualAccordion={props.actualAccordion} />
 		</>
 	);
 }

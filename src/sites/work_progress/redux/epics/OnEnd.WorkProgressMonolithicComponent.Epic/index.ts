@@ -10,16 +10,10 @@ import ObjectsActions from '../../monolithic/objects/actions';
 import TermsActions from '../../monolithic/terms/actions';
 import ForgeViewerActions from '../../../../../components/ForgeViewer/redux/actions';
 import ForgeViewer from '../../../../../components/ForgeViewer/types';
+import { RootActions } from '../../../../../reducers/type';
 
-type ActionTypes =
-	| WorkProgress.Monolithic.General.Redux.Actions
-	| WorkProgress.Monolithic.Delays.Redux.Actions
-	| WorkProgress.Monolithic.Upgrading.Redux.Actions
-	| WorkProgress.Monolithic.Objects.Redux.Actions
-	| ForgeViewer.Redux.Actions
-	| WorkProgress.Monolithic.Terms.Redux.Actions;
 
-export const OnEndWorkProgressMonolithicComponent: Epic<ActionTypes, ActionTypes, RootState> = (action$, state$) =>
+export const OnEndWorkProgressMonolithicComponent: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
 		ofType(WorkProgress.Monolithic.General.Redux.Types.COMPONENT_ENDED),
 		mergeMap(() =>

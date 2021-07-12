@@ -1,34 +1,27 @@
-import { combineEpics, Epic, ofType } from 'redux-observable';
-import { Notification } from '../../Notification/types';
-import { catchError, filter, map, mergeMap, withLatestFrom } from 'rxjs/operators';
+import { combineEpics, Epic } from 'redux-observable';
+import { catchError, filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { CMSLoginType } from '../type';
 import { cleanCachedData, getCachedData, isExpired, resetPasswordAPI } from './utils';
-import { concat, EMPTY, from, of } from 'rxjs';
+import { concat, EMPTY, from, merge, of } from 'rxjs';
 import CMSLoginActions from './actions';
 import GraphQLAPIService from '../../../services/graphql.api.service';
-import { fromPromise } from 'rxjs/internal-compatibility';
 import NotificationActions from '../../Notification/redux/actions';
 import { UserDataType } from '../../../services/graphql.api.service/CONSTANTS/Queries/UserData';
-import WorkProgress from '../../../sites/work_progress/types';
 import { RootState } from '../../../store';
 import WorkProgressGeneralActions from '../../../sites/work_progress/redux/general/actions';
+import { RootActions } from '../../../reducers/type';
 
-type ActionType =
-	| CMSLoginType.Redux.Actions
-	| Notification.Redux.Actions
-	| WorkProgress.General.Redux.Actions
-	| WorkProgress.Monolithic.General.Redux.Actions;
 
-const handleLogout: Epic<ActionType, ActionType> = (action$) =>
+const handleLogout: Epic<RootActions, RootActions> = (action$) =>
 	action$.pipe(
-		ofType(CMSLoginType.Redux.Types.USER_LOGOUT_START),
-		mergeMap((_) => {
+		filter((data) => data.type === CMSLoginType.Redux.Types.USER_LOGOUT_START),
+		switchMap((_) => {
 			cleanCachedData();
-			return of(CMSLoginActions.UserLogoutEnd(), WorkProgressGeneralActions.SetInitial());
+			return merge(of(CMSLoginActions.UserLogoutEnd()), of(WorkProgressGeneralActions.SetInitial()));
 		}),
 	);
 
-const handleLogin: Epic<ActionType, ActionType> = (action$) =>
+const handleLogin: Epic<RootActions, RootActions> = (action$) =>
 	action$.pipe(
 		filter(
 			(data): data is ReturnType<CMSLoginType.Redux.IActions['UserLoginEnd']> =>
@@ -59,7 +52,7 @@ const handleLogin: Epic<ActionType, ActionType> = (action$) =>
 		}),
 	);
 
-const OnStartupLoginComponent: Epic<ActionType, ActionType, RootState> = (action$) =>
+const OnStartupLoginComponent: Epic<RootActions, RootActions, RootState> = (action$) =>
 	action$.pipe(
 		filter(
 			(data): data is ReturnType<CMSLoginType.Redux.IActions['StartupComponent']> =>
@@ -75,7 +68,7 @@ const OnStartupLoginComponent: Epic<ActionType, ActionType, RootState> = (action
 		}),
 	);
 
-const OnSetUserData: Epic<ActionType, ActionType, RootState> = (action$) =>
+const OnSetUserData: Epic<RootActions, RootActions, RootState> = (action$) =>
 	action$.pipe(
 		filter(
 			(data): data is ReturnType<CMSLoginType.Redux.IActions['SetUserData']> =>
@@ -126,7 +119,7 @@ const OnSetUserData: Epic<ActionType, ActionType, RootState> = (action$) =>
 		}),
 	);
 
-const OnResetPassword: Epic<ActionType, ActionType, RootState> = (action$, state$) =>
+const OnResetPassword: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
 			(data): data is ReturnType<CMSLoginType.Redux.IActions['UserResetPasswordInit']> =>
@@ -136,9 +129,7 @@ const OnResetPassword: Epic<ActionType, ActionType, RootState> = (action$, state
 		mergeMap(([value, state]) => {
 			if (state.CMSLogin.credentials?.access_token) {
 				if (value.payload.password === value.payload.passwordConfirmation) {
-					return fromPromise(
-						resetPasswordAPI(value.payload.password, state.CMSLogin.credentials.access_token),
-					).pipe(
+					return from(resetPasswordAPI(value.payload.password, state.CMSLogin.credentials.access_token)).pipe(
 						mergeMap((data) => {
 							if (data) return of(CMSLoginActions.UserResetPassword('Pomyślnie zmieniono hasło!'));
 							return EMPTY;

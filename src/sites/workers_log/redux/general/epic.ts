@@ -1,4 +1,4 @@
-import { combineEpics, Epic, ofType } from 'redux-observable';
+import { Epic, ofType } from 'redux-observable';
 import { mergeMap, withLatestFrom } from 'rxjs/operators';
 import { concat, EMPTY, from, of } from 'rxjs';
 import WorkersAction from '../work_time_evidence/worker/actions';
@@ -7,13 +7,9 @@ import GraphQLAPIService from '../../../../services/graphql.api.service';
 import WorkersLogGeneralActions from './actions';
 import WorkersLog from '../../types';
 import { RootState } from '../../../../store';
+import { RootActions } from '../../../../reducers/type';
 
-type ActionType =
-	| WorkersLog.General.Redux.Actions
-	| WorkersLog.WorkTimeEvidence.Worker.Redux.Actions
-	| WorkersLog.WorkTimeEvidence.Crew.Redux.Actions;
-
-const OnWorkersLogInitial: Epic<ActionType, ActionType, RootState> = ($action, state$) =>
+export const OnWorkersLogInitial: Epic<RootActions, RootActions, RootState> = ($action, state$) =>
 	$action.pipe(
 		ofType(WorkersLog.General.Redux.Types.WORKERS_LOG_INITIALIZE),
 		withLatestFrom(state$),
@@ -46,5 +42,3 @@ const FetchDataEpic = (state: RootState) => {
 		);
 	return EMPTY;
 };
-
-export default combineEpics(OnWorkersLogInitial);

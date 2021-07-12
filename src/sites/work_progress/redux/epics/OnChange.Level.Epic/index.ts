@@ -9,15 +9,10 @@ import WorkProgressMonolithicUpgradingActions from '../../monolithic/upgrading/a
 import { GetObjectsByLevelType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/GetObjectsByLevel';
 import ModalActions from '../../../../../components/Modal/redux/actions';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
+import { RootActions } from '../../../../../reducers/type';
 
-type ActionTypes =
-	| WorkProgress.Monolithic.General.Redux.Actions
-	| WorkProgress.Monolithic.Upgrading.Redux.Actions
-	| ModalType.Redux.Actions
-	| WorkProgress.Monolithic.Terms.Redux.Actions
-	| ForgeViewer.Redux.Actions;
 
-export const OnChangeLevelEpic: Epic<ActionTypes, ActionTypes, RootState> = (action$, state$) =>
+export const OnChangeLevelEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
 			(data): data is ReturnType<WorkProgress.Monolithic.General.Redux.IActions['ChangeLevel']> =>

@@ -3,9 +3,12 @@ import { ReturnTypeFromInterface } from '../../types/ReturnTypeFromInterface';
 namespace ForgeViewer {
 	export namespace Redux {
 		export interface IStore {
+			is3DMode: boolean;
 			sheets: { [key: string]: ForgeViewer.Payload.Sheet } | null;
+			view3D: ForgeViewer.Payload.View3D | null;
 			sheets_loaded: boolean;
 			sheets_error: boolean;
+			current_level: string | null;
 			current_sheet: string | null;
 			viewer_isInitialized: boolean;
 			model_elements: null | { [key: string]: ForgeViewer.Payload.Element };
@@ -29,37 +32,32 @@ namespace ForgeViewer {
 			};
 			SetSheetsSuccess: (
 				sheets: ForgeViewer.Payload.Sheets,
+				view3D?: ForgeViewer.Payload.View3D,
 			) => {
 				type: typeof ForgeViewer.Redux.Types.SET_SHEETS_SUCCESS;
-				payload: typeof sheets;
+				payload: { sheets: typeof sheets; view3D: typeof view3D };
 			};
-			SetSheetsError: (
-				error: string,
-			) => {
+			SetSheetsError: (error: string) => {
 				type: typeof ForgeViewer.Redux.Types.SET_SHEETS_ERROR;
 				payload: typeof error;
 			};
-			SetCurrentSheet: (
-				sheet: ForgeViewer.Payload.Sheet | null,
-			) => {
+			SetCurrentSheet: (sheet: ForgeViewer.Payload.Sheet['id']) => {
 				type: typeof ForgeViewer.Redux.Types.SET_CURRENT_SHEET;
 				payload: typeof sheet;
 			};
-			SetViewerElements: (
-				elements: ForgeViewer.Payload.Elements,
-			) => {
+			SetCurrentLevel: (levelName: string | undefined) => {
+				type: typeof ForgeViewer.Redux.Types.SET_CURRENT_LEVEL;
+				payload: typeof levelName;
+			};
+			SetViewerElements: (elements: ForgeViewer.Payload.Elements) => {
 				type: typeof ForgeViewer.Redux.Types.SET_MODEL_ELEMENTS;
 				payload: typeof elements;
 			};
-			ChangeForgePanelVisibility: (
-				data: ForgeViewer.Payload.PanelVisibilityEnum,
-			) => {
+			ChangeForgePanelVisibility: (data: ForgeViewer.Payload.PanelVisibilityEnum) => {
 				type: typeof ForgeViewer.Redux.Types.REACT_PANEL_CHANGE_VISIBILITY;
 				payload: typeof data;
 			};
-			SetElements: (
-				data: ForgeViewer.Payload.CurrentElementsFilterData,
-			) => {
+			SetElements: (data: ForgeViewer.Payload.CurrentElementsFilterData) => {
 				type: typeof ForgeViewer.Redux.Types.ELEMENTS_SET;
 				payload: typeof data;
 			};
@@ -70,8 +68,8 @@ namespace ForgeViewer {
 			Activate3DView: () => {
 				type: typeof ForgeViewer.Redux.Types.ACTIVATE_3D_VIEW;
 			};
-			Inactivate3DView: () => {
-				type: typeof ForgeViewer.Redux.Types.INACTIVATE_3D_VIEW;
+			Deactivate3DView: () => {
+				type: typeof ForgeViewer.Redux.Types.DEACTIVATE_3D_VIEW;
 			};
 		}
 		export type Actions = ReturnTypeFromInterface<ForgeViewer.Redux.IActions>;
@@ -85,11 +83,13 @@ namespace ForgeViewer {
 			SET_CURRENT_SHEET = 'forgeViewer__SET_CURRENT_SHEET',
 			REACT_PANEL_CHANGE_VISIBILITY = 'forgeViewer__REACT_PANEL_CHANGE_ACTIVITY',
 
+			SET_CURRENT_LEVEL = 'forgeViewer__SET_CURRENT_LEVEL',
+
 			ELEMENTS_SET = 'forge_viewer__ELEMENTS_SET',
 			ELEMENTS_CLEAN = 'forge_viewer__ELEMENTS_CLEAN',
 
 			ACTIVATE_3D_VIEW = 'forge_viewer__ACTIVATE_3D_VIEW',
-			INACTIVATE_3D_VIEW = 'forge_viewer__INACTIVATE_3D_VIEW',
+			DEACTIVATE_3D_VIEW = 'forge_viewer__INACTIVATE_3D_VIEW',
 		}
 	}
 	export namespace Payload {
@@ -122,6 +122,11 @@ namespace ForgeViewer {
 			VISIBLE = 'visible',
 		}
 
+		export interface View3D {
+			id: string;
+			name: string;
+		}
+
 		export type Sheets = Sheet[];
 		export type Sheet = {
 			id: string;
@@ -129,7 +134,7 @@ namespace ForgeViewer {
 		};
 
 		export type Elements = Element[];
-		export type Element = { rvtId: number | string; forgeId: number };
+		export type Element = { rvtId: number | string; forgeId: number; levelName: string };
 
 		export type Color = {
 			r: number;
