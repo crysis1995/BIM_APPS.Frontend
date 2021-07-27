@@ -35,6 +35,11 @@ function Header(props: Props) {
 			</NavLink>
 			<Navbar.Collapse>
 				<Nav className="mr-auto">
+					<NavLink
+						to={`/${EApplications.MODEL_VIEWER}`}
+						className="nav-link">
+						Przeglądarka Modelu
+					</NavLink>
 					<NavDropdown
 						disabled={isAllowedApp(EApplications.WORK_PROGRESS)}
 						rootCloseEvent={'click'}

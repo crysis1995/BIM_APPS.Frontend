@@ -18,9 +18,15 @@ type Options = {
 	strictVisibility: boolean;
 };
 
+interface ModuleMethods {
+	OnSelect?: (data: number[]) => void;
+	OnStart?: (model: ForgeViewer.Payload.View3D | undefined) => void;
+}
+
 enum ApplicationType {
 	WorkProgress_Monolithic = 'WorkProgress_Monolithic',
 	WorkersLog_LabourInput = 'WorkersLog_LabourInput',
+	ModelViewer = 'ModelViewer',
 	Default = 'Default',
 }
 
@@ -32,6 +38,7 @@ const mapStateToProps = (state: RootState) => ({
 			? state.ForgeViewer.view3D.id
 			: state.ForgeViewer.current_sheet,
 	isWorkProgressMonolithicActive: state.WorkProgress.Monolithic.General.active,
+	isModelViewerActive: state.ModelViewer.active,
 	model_elements_loading: state.ForgeViewer.model_elements_loading,
 	visible_elements: state.ForgeViewer.visible_elements,
 	hidden_elements: state.ForgeViewer.hidden_elements,
@@ -43,6 +50,7 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = {
 	SetSheetsSuccess: ForgeViewerActions.SetSheetsSuccess,
+	SetCurrentSheet: ForgeViewerActions.SetCurrentSheet,
 	StartViewer: ForgeViewerActions.StartViewer,
 	EndViewer: ForgeViewerActions.EndViewer,
 	SetViewerElements: ForgeViewerActions.SetViewerElements,
@@ -104,6 +112,9 @@ class Viewer extends Component<Props, State> {
 				break;
 			case props.isWorkersLogLabourInputActive:
 				currentApp = ApplicationType.WorkersLog_LabourInput;
+				break;
+			case props.isModelViewerActive:
+				currentApp = ApplicationType.ModelViewer;
 				break;
 			default:
 				break;
@@ -198,11 +209,21 @@ class Viewer extends Component<Props, State> {
 				const view3D = doc
 					.getRoot()
 					.search({ type: 'geometry' })
-					.find((x) => x.is3D() && x.name().toLowerCase().includes('wspro'));
-				this.props.SetSheetsSuccess(elements, view3D && { id: view3D.guid(), name: view3D.name() });
+					.find(
+						(x) =>
+							x.is3D() &&
+							(x.name().toLowerCase().includes('wspro') || x.name().toLowerCase().includes('{3d}')),
+					);
+				const model = view3D && { id: view3D?.guid(), name: view3D?.name() };
+				this.props.SetSheetsSuccess(elements, model);
 				this.props.StartViewer();
+				const { OnStart } = this[this.state.currentApp];
+				if (OnStart) {
+					OnStart(model);
+				}
 				if (!!this.props.current_sheet && this.viewer) {
-					this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.current_sheet));
+					this.loadSheet();
+					// this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.current_sheet));
 				}
 			};
 
@@ -214,7 +235,7 @@ class Viewer extends Component<Props, State> {
 			if (documentConteiner) {
 				const { Switch2D3DViewExtension } = await import('./extenstions/2D3DSwitchExtension');
 				Switch2D3DViewExtension.register();
-				// this.viewer.loadExtension('Switch2D3DViewExtension');
+				// this.model_viewer.loadExtension('Switch2D3DViewExtension');
 				this.viewer = new Autodesk.Viewing.GuiViewer3D(documentConteiner, {
 					extensions: [
 						'Autodesk.DocumentBrowser',
@@ -246,8 +267,28 @@ class Viewer extends Component<Props, State> {
 		[key in ApplicationType]: (data: number[]) => void;
 	} = {
 		[ApplicationType.Default]: () => {},
+		[ApplicationType.ModelViewer]: () => {},
 		[ApplicationType.WorkersLog_LabourInput]: this.props.LabourInputHandleSelectObject,
 		[ApplicationType.WorkProgress_Monolithic]: this.props.handleSelectedElements,
+	};
+
+	[ApplicationType.Default]: ModuleMethods = {
+		OnSelect: () => {},
+	};
+	[ApplicationType.ModelViewer]: ModuleMethods = {
+		OnSelect: () => {},
+		OnStart: (model) => {
+			if (model) {
+				this.props.SetCurrentSheet(model.id);
+			}
+		},
+	};
+	[ApplicationType.WorkersLog_LabourInput]: ModuleMethods = {
+		OnSelect: this.props.LabourInputHandleSelectObject,
+	};
+
+	[ApplicationType.WorkProgress_Monolithic]: ModuleMethods = {
+		OnSelect: this.props.handleSelectedElements,
 	};
 
 	private OnSelectionChangedEvent(data: {

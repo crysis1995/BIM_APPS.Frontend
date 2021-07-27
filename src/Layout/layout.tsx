@@ -6,6 +6,8 @@ import Loader from '../components/Loader';
 import ModalComponent from '../components/Modal/component';
 import NotificationComponent from '../components/Notification';
 import { MainComponent } from './mainComponent';
+import ModelViewer from '../sites/model_viewer';
+import { EApplications } from '../sites/types';
 
 // todo zrobić sidebar
 
@@ -37,8 +39,15 @@ function Layout() {
 						<Switch>
 							<Route path="/login" component={Login} />;
 							<Route path="/settings" component={Settings} />;
-							<Route path={['/work_progress/:type', '/work_progress']} component={WorkProgressLayout} />
-							<Route path={['/workers_log/:module', '/workers_log']} component={workersLogComponent} />
+							<Route
+								path={[`/${EApplications.WORK_PROGRESS}/:type`, `/${EApplications.WORK_PROGRESS}`]}
+								component={WorkProgressLayout}
+							/>
+							<Route
+								path={[`/${EApplications.WORKERS_LOG}/:module`, `/${EApplications.WORKERS_LOG}`]}
+								component={workersLogComponent}
+							/>
+							<Route path={`/${EApplications.MODEL_VIEWER}`} component={ModelViewer} />
 							<Route exact path="/" component={MainComponent} />
 						</Switch>
 					</Row>
