@@ -12,6 +12,8 @@ export type RootActions =
 	| ModalType.Redux.Actions
 	| ForgeViewer.Redux.Actions
 	| CMSLoginType.Redux.Actions
+	| WorkProgress.Prefabricated.General.Redux.Actions
+	| WorkProgress.Prefabricated.Objects.Redux.Actions
 	| WorkProgress.Monolithic.General.Redux.Actions
 	| WorkProgress.Monolithic.Delays.Redux.Actions
 	| WorkProgress.Monolithic.Upgrading.Redux.Actions

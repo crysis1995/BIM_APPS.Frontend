@@ -1,6 +1,7 @@
 import { ReturnTypeFromInterface } from '../../types/ReturnTypeFromInterface';
 import { UserDataType } from '../../services/graphql.api.service/CONSTANTS/Queries/UserData';
 import { UserProjectsType } from '../../services/graphql.api.service/CONSTANTS/Queries/UserProjects';
+import { EApplications, EApplicationsWithModules } from '../../sites/types';
 
 export namespace CMSLoginType {
 	export namespace Redux {
@@ -11,7 +12,7 @@ export namespace CMSLoginType {
 			actual_project: null | CMSLoginType.Payload.ActualProject;
 			projects: null | { [key: string]: UserProjectsType.Project };
 			project_roles: null | { [key: string]: UserProjectsType.ProjectRole };
-			warbud_apps: null | { [key: string]: string[] };
+			warbud_apps: null | { [key: string]: (EApplications | EApplicationsWithModules)[] };
 			is_login: boolean;
 			loading: boolean;
 			permissions: string[];
@@ -21,9 +22,7 @@ export namespace CMSLoginType {
 				type: typeof CMSLoginType.Redux.Types.STARTUP_LOGIN_COMPONENT;
 			};
 
-			UserLoginStart: (
-				data: CMSLoginType.Payload.Login,
-			) => {
+			UserLoginStart: (data: CMSLoginType.Payload.Login) => {
 				type: typeof CMSLoginType.Redux.Types.USER_LOGIN_START;
 				payload: { data: typeof data };
 			};
@@ -46,17 +45,12 @@ export namespace CMSLoginType {
 				type: typeof CMSLoginType.Redux.Types.USER_LOGOUT_END;
 			};
 
-			UserResetPasswordInit: ({
-				password,
-				passwordConfirmation,
-			}: CMSLoginType.Payload.ResetPassword) => {
+			UserResetPasswordInit: ({ password, passwordConfirmation }: CMSLoginType.Payload.ResetPassword) => {
 				type: typeof CMSLoginType.Redux.Types.USER_PASSWORD_RESET_INIT;
 				payload: CMSLoginType.Payload.ResetPassword;
 			};
 
-			UserResetPassword: (
-				info: string,
-			) => {
+			UserResetPassword: (info: string) => {
 				type: typeof CMSLoginType.Redux.Types.USER_PASSWORD_RESET;
 				payload: { info: typeof info };
 			};
@@ -72,9 +66,7 @@ export namespace CMSLoginType {
 				};
 			};
 
-			SetCurrentProject: (
-				project: CMSLoginType.Payload.ActualProject | null,
-			) => {
+			SetCurrentProject: (project: CMSLoginType.Payload.ActualProject | null) => {
 				type: typeof CMSLoginType.Redux.Types.USER_SET_CURRENT_PROJECT;
 				payload: { project: typeof project };
 			};

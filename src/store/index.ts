@@ -29,6 +29,10 @@ export type RootState = {
 			Terms: WorkProgress.Monolithic.Terms.Redux.IStore;
 			Upgrading: WorkProgress.Monolithic.Upgrading.Redux.IStore;
 		};
+		Prefabricated:{
+			General:WorkProgress.Prefabricated.General.Redux.IStore
+			Objects:WorkProgress.Prefabricated.Objects.Redux.IStore
+		}
 	};
 	ModelViewer: ModelViewer.General.Redux.Store;
 	ForgeViewer: ForgeViewer.Redux.IStore;

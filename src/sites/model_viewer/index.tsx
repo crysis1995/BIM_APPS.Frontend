@@ -4,6 +4,7 @@ import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { RootState } from '../../store';
 import ModelViewerGeneralActions from './redux/actions';
+import { EApplications } from '../types';
 
 const mapStateToProps = (state: RootState) => ({});
 const mapDispatchToProps = {
@@ -23,7 +24,7 @@ function ModelViewer(props: Props) {
 		<>
 			<Col xs={12}>
 				<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
-					<Viewer />
+					<Viewer runBy={EApplications.MODEL_VIEWER}/>
 				</div>
 			</Col>
 		</>

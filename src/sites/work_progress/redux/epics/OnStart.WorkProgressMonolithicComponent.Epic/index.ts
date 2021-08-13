@@ -24,7 +24,6 @@ export const OnStartWorkProgressMonolithicComponent: Epic<RootActions, RootActio
 			const REST = new RestAPIService(token);
 			const project = state.CMSLogin.actual_project?.id;
 			if (!project) return EMPTY;
-			// return EMPTY;
 			return FetchNecessary(state, GRAPHQL, project, REST, action$);
 		}),
 	);

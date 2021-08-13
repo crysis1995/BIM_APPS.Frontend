@@ -1,0 +1,16 @@
+.tr-class {
+    width:100%;
+    display: inline-table;
+    table-layout: fixed;
+}
+
+.table-class{
+    height: auto;
+    display: block;
+}
+.tbody-class{
+    overflow-y:scroll;
+    height: calc(100vh - 170px);
+    width: auto;
+    position: absolute;
+}

@@ -12,6 +12,7 @@ namespace ForgeViewer {
 			current_sheet: string | null;
 			viewer_isInitialized: boolean;
 			model_elements: null | { [key: string]: ForgeViewer.Payload.Element };
+			model_elementsByForgeID: null | { [key: string]: number };
 			model_elements_loading: boolean;
 			panel_visible: ForgeViewer.Payload.PanelVisibilityEnum;
 			selected_elements: ForgeViewer.Payload.Element['forgeId'][];
@@ -134,7 +135,7 @@ namespace ForgeViewer {
 		};
 
 		export type Elements = Element[];
-		export type Element = { rvtId: number | string; forgeId: number; levelName: string };
+		export type Element = { rvtId: number | string; forgeId: number; levelName?: string };
 
 		export type Color = {
 			r: number;

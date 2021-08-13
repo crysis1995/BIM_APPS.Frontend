@@ -30,7 +30,7 @@ function CMSLoginComponent(props: Props) {
 		if (selectedProjectID && props.projects && props.projects[selectedProjectID]) {
 			props.SetCurrentProject({
 				id: props.projects[selectedProjectID].id,
-				urn: props.projects[selectedProjectID].bim_models[0].model_urn,
+				urn: props.projects[selectedProjectID].bim_models?.[0]?.model_urn,
 				webcon_code: props.projects[selectedProjectID].webcon_code,
 				name: props.projects[selectedProjectID].name,
 				cranes_all: props.projects[selectedProjectID].crane_ranges.reduce<
