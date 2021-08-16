@@ -1,9 +1,20 @@
-import { LabourInput } from '../types';
-import EGeneral = LabourInput.Types.EGeneral;
+import WorkersLog from '../../../types';
 
-const LabourInputGeneralActions: LabourInput.Actions.IGeneral = {
-	setCranes: (cranes) => ({ type: EGeneral.SET_CRANES, payload: { cranes } }),
-	chooseCrane: (crane) => ({ type: EGeneral.CHOOSE_CRANE, payload: { crane } }),
+const LabourInputGeneralActions: WorkersLog.LabourInput.Redux.General.IActions = {
+	InitializeComponent: (value) => ({ type: WorkersLog.LabourInput.Redux.General.Types.INITIALIZE, payload: value }),
+	SetInitial: () => ({ type: WorkersLog.LabourInput.Redux.General.Types.SET_INITIAL }),
+	ChooseLevel: (data) => ({ type: WorkersLog.LabourInput.Redux.General.Types.CHOOSE_LEVEL, payload: data }),
+	SetDate: (data) => ({ type: WorkersLog.LabourInput.Redux.General.Types.SET_DATE, payload: data }),
+	SelectWorkerType: (data) => ({
+		type: WorkersLog.LabourInput.Redux.General.Types.SELECT_WORKER_TYPE,
+		payload: { data },
+	}),
+	SelectCrew: (data) => ({ type: WorkersLog.LabourInput.Redux.General.Types.SELECT_CREW, payload: { data } }),
+	FetchOtherWorksStart: () => ({ type: WorkersLog.LabourInput.Redux.General.Types.FETCH_OTHER_WORKS_START }),
+	FetchOtherWorksEnd: (data) => ({
+		type: WorkersLog.LabourInput.Redux.General.Types.FETCH_OTHER_WORKS_END,
+		payload: data,
+	}),
 };
 
 export default LabourInputGeneralActions;

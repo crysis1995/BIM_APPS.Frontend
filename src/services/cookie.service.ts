@@ -1,7 +1,9 @@
 import Cookie from 'js-cookie';
 
-enum CookieKeys {
-	User = 'user',
+export enum CookieKeys {
+	User = 'USER',
+	Projects = 'PROJECT_LIST',
+	UserToken = 'USER_TOKEN',
 }
 
 const DOMAIN = window.location.hostname;
@@ -16,13 +18,12 @@ export default class CookieService {
 		return Cookie.get(key);
 	}
 
-	setCookie(key: CookieKeys, value = '', expiration: number | Date = 1) {
+	setCookie(key: CookieKeys, value: any = '', expiration: number | Date = 1) {
 		Cookie.set(key, value, {
 			expires: expiration,
-			domain: DOMAIN,
 		});
 	}
 	removeCookie(key: CookieKeys) {
-		Cookie.remove(key, { domain: DOMAIN });
+		Cookie.remove(key);
 	}
 }

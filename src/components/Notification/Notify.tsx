@@ -32,7 +32,7 @@ function Notify(props: Props) {
 	}, []);
 
 	return (
-		<Toast animation={true} onClose={onClose} show={show}>
+		<Toast  onClose={onClose} show={show}>
 			<Toast.Header>
 				<strong className="mr-auto">{props.actualNotification.title}</strong>
 				<small>{dayjs(props.actualNotification.triggered_time).format('H:m:s')}</small>

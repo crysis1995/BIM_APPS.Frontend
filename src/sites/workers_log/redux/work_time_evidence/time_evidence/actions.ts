@@ -1,34 +1,33 @@
-import WorkersLogActions from '../../types';
-import { ITimeEvidence } from './types/actions';
+import WorkersLog from '../../../types';
 
-const TimeEvidenceActions: ITimeEvidence = {
-	setInitial: () => ({ type: WorkersLogActions.WorkTimeEvidence.TimeEvidence.SET_INITIAL }),
+const TimeEvidenceActions: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.IActions = {
+	setInitial: () => ({ type: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.SET_INITIAL }),
 	fetchWorkerWorkEvidenceStart: (worker_id) => ({
-		type: WorkersLogActions.WorkTimeEvidence.TimeEvidence.FETCH_WORKER_TIME_EVIDENCE_START,
+		type: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.FETCH_WORKER_TIME_EVIDENCE_START,
 		payload: { worker_id },
 	}),
 	fetchWorkerWorkEvidenceEnd: (worker_id, workTimeEvidences) => ({
-		type: WorkersLogActions.WorkTimeEvidence.TimeEvidence.FETCH_WORKER_TIME_EVIDENCE_END,
+		type: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.FETCH_WORKER_TIME_EVIDENCE_END,
 		payload: { worker_id, workTimeEvidences },
 	}),
 	fetchWorkerWorkEvidenceFinish: () => ({
-		type: WorkersLogActions.WorkTimeEvidence.TimeEvidence.FETCH_WORKER_TIME_EVIDENCE_FINISH_ALL,
+		type: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.FETCH_WORKER_TIME_EVIDENCE_FINISH_ALL,
 	}),
 	editingStart: (data) => ({
-		type: WorkersLogActions.WorkTimeEvidence.TimeEvidence.EDITING_START,
+		type: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.EDITING_START,
 		payload: { data },
 	}),
 	editingWorkedTimeInit: (worker, date, hours) => ({
-		type: WorkersLogActions.WorkTimeEvidence.TimeEvidence.EDITING_WORKED_TIME_INIT,
+		type: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.EDITING_WORKED_TIME_INIT,
 		payload: { worker, date, hours },
 	}),
-	editingCancel: () => ({ type: WorkersLogActions.WorkTimeEvidence.TimeEvidence.EDITING_CANCEL }),
+	editingCancel: () => ({ type: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.EDITING_CANCEL }),
 	editingWorkedTimeSucceed: (data, worker_id) => ({
-		type: WorkersLogActions.WorkTimeEvidence.TimeEvidence.EDITING_WORKED_TIME_SUCCEED,
+		type: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.EDITING_WORKED_TIME_SUCCEED,
 		payload: { data, worker_id },
 	}),
 	editingWorkedTimeAborted: (data, worker_id) => ({
-		type: WorkersLogActions.WorkTimeEvidence.TimeEvidence.EDITING_WORKED_TIME_ABORTED,
+		type: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.EDITING_WORKED_TIME_ABORTED,
 		payload: { data, worker_id },
 	}),
 };

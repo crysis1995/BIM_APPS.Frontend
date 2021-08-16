@@ -1,18 +1,13 @@
-import {
-	CreateWorkersLogCrewSummaryResponse,
-	CrewSummary,
-	GetAllCrewSummariesResponse,
-	WorkersLogCrewSummaryResponse,
-} from '../types/payload';
+import WorkersLog from '../../../../types';
 
 export function PrepareDataForReducer(
 	data:
-		| GetAllCrewSummariesResponse
+		| WorkersLog.WorkTimeEvidence.Crew.Payload.GetAllCrewSummariesResponse
 		| {
-				workersLogCrewSummary: WorkersLogCrewSummaryResponse;
+				workersLogCrewSummary: WorkersLog.WorkTimeEvidence.Crew.Payload.WorkersLogCrewSummaryResponse;
 		  }
-		| CreateWorkersLogCrewSummaryResponse,
-): CrewSummary | null {
+		| WorkersLog.WorkTimeEvidence.Crew.Payload.CreateWorkersLogCrewSummaryResponse,
+): WorkersLog.WorkTimeEvidence.Crew.Payload.CrewSummary | null {
 	if ('workersLogCrewSummary' in data) {
 		if (data.workersLogCrewSummary) {
 			return {

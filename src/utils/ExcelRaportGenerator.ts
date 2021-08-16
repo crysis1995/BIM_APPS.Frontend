@@ -42,7 +42,7 @@ class ExcelRaportGenerator {
 		});
 	}
 
-	SetData(data: { [key: string]: string | number }[]) {
+	SetData(data: { [key: string]: string | number | null }[]) {
 		data.forEach((row) => this.sheet.addRow(row).commit());
 		this.AutoWidth();
 	}

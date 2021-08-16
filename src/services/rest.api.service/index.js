@@ -76,5 +76,13 @@ export default class RestAPIService {
 				});
 			},
 		},
+		LABOUR_INPUT: {
+			GetObjectsFilteredByStatuses: ({ date, project }) => {
+				return this.fetchClientPost('/acceptance-objects/find-by-statuses-filter', {
+					date,
+					project,
+				}).then((e) => e.json());
+			},
+		},
 	};
 }

@@ -98,7 +98,7 @@ describe('CMS LOGIN REDUX ACTIONS SIMPLE ACTIONS', () => {
 		expect(setCurrentProject(project_id, urn, name)).toEqual(expectedAction);
 	});
 	test('addPermissions', () => {
-		const permissions = 'test.perm';
+		const permissions = 'epic.__test__.perm';
 		const expected = {
 			type: USER_ADD_PERMISSIONS,
 			permissions,
@@ -106,7 +106,7 @@ describe('CMS LOGIN REDUX ACTIONS SIMPLE ACTIONS', () => {
 		expect(addPermissions(permissions)).toEqual(expected);
 	});
 	test('deletePermissions', () => {
-		const permissions = 'test.perm';
+		const permissions = 'epic.__test__.perm';
 		const expected = {
 			type: USER_DELETE_PERMISSIONS,
 			permissions,

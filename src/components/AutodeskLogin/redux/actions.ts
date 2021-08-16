@@ -17,29 +17,4 @@ const AutodeskLoginActions: AutodeskLogin.Redux.IActions = {
 	}),
 };
 
-// const LOGIN_2_LEGGED = ({ access_token, expires_in }) => ({
-// 	type: types.LOGIN_2_LEGGED,
-// 	data: { access_token, expires_in },
-// });
-//
-// const LOGIN_3_LEGGED = ({ access_token, refresh_token, expires_in }) => ({
-// 	type: types.LOGIN_3_LEGGED,
-// 	access_token,
-// 	refresh_token,
-// 	expires_in,
-// });
-//
-// const LOGOUT_3_LEGGED = () => ({
-// 	type: types.LOGOUT_3_LEGGED,
-// });
-//
-// const FETCH_USER_INFO = (user) => ({
-// 	type: types.FETCH_USER_INFO,
-// 	user,
-// });
-//
-// const handleFetchAccessToken = () => ({
-// 	type: types.HANDLE_FETCH_ACCESS_TOKEN,
-// });
-
 export default AutodeskLoginActions;

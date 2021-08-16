@@ -1,9 +1,9 @@
 import 'jest-localstorage-mock';
 import {
-	cleanUserDataInLocalStorage,
-	getUserFromLocalStorage,
+	cleanCachedData,
+	getCachedData,
 	isExpired,
-	saveUserDataToLocalStorage,
+	setCachedData,
 } from '../redux/utils';
 describe('TEST CMS LOGIN UTILS', () => {
 	beforeEach(() => {
@@ -13,27 +13,27 @@ describe('TEST CMS LOGIN UTILS', () => {
 	});
 
 	test('function getUserFromLocalStorage should properly return local storage data', () => {
-		localStorage.setItem('user', '{"test":123}');
+		localStorage.setItem('user', '{"epic.__test__":123}');
 		localStorage.setItem('user_token', '123123');
 		localStorage.getItem.mockClear();
-		const data = getUserFromLocalStorage();
+		const data = getCachedData();
 		expect(localStorage.getItem).toBeCalledTimes(2);
 		expect(data).toStrictEqual({ user: { test: 123 }, user_token: '123123' });
 	});
 	test('function saveUserDataToLocalStorage should properly save data to local storage', () => {
 		localStorage.setItem.mockClear();
-		saveUserDataToLocalStorage('test', 'test token');
+		setCachedData('test', 'epic.__test__ token');
 		expect(localStorage.setItem).toBeCalledTimes(2);
 	});
 	test('function saveUserDataToLocalStorage should properly save data to local storage', () => {
-		saveUserDataToLocalStorage('test', 'test token');
+		setCachedData('test', 'epic.__test__ token');
 		expect(localStorage.getItem('user')).toBe('test');
-		expect(localStorage.getItem('user_token')).toBe('test token');
+		expect(localStorage.getItem('user_token')).toBe('epic.__test__ token');
 	});
 	test('function saveUserDataToLocalStorage should properly save data to local storage', () => {
-		localStorage.setItem('user', '{"test":123}');
+		localStorage.setItem('user', '{"epic.__test__":123}');
 		localStorage.setItem('user_token', '123123');
-		cleanUserDataInLocalStorage();
+		cleanCachedData();
 		expect(localStorage.getItem('user')).toBeNull();
 		expect(localStorage.getItem('user_token')).toBeNull();
 	});

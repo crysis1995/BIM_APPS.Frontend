@@ -1,29 +1,44 @@
-import { combineEpics, Epic, ofType } from 'redux-observable';
-import { WorkersLogGeneralActionsTypes } from './types/actions';
-import WorkersLogActions from '../types';
-import { mergeMap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { Epic, ofType } from 'redux-observable';
+import { mergeMap, withLatestFrom } from 'rxjs/operators';
+import { concat, EMPTY, from, of } from 'rxjs';
 import WorkersAction from '../work_time_evidence/worker/actions';
-import { WorkersActionTypes } from '../work_time_evidence/worker/types/actions';
 import CrewActions from '../work_time_evidence/crew/actions';
-import { CrewActionsTypes } from '../work_time_evidence/crew/types/actions';
+import GraphQLAPIService from '../../../../services/graphql.api.service';
+import WorkersLogGeneralActions from './actions';
+import WorkersLog from '../../types';
+import { RootState } from '../../../../store';
+import { RootActions } from '../../../../reducers/type';
 
-type ActionType = WorkersLogGeneralActionsTypes | WorkersActionTypes | CrewActionsTypes;
-type RootState = {
-	CMSLogin: {
-		user: { id: { id: string } };
-		project: { id: string };
-		credentials: {
-			access_token: string;
-		};
-	};
-};
-const OnWorkersLogInitial: Epic<ActionType, ActionType, RootState> = ($action) =>
+export const OnWorkersLogInitial: Epic<RootActions, RootActions, RootState> = ($action, state$) =>
 	$action.pipe(
-		ofType(WorkersLogActions.General.WORKERS_LOG_INITIALIZE),
-		mergeMap(() =>
-			of(WorkersAction.fetchWorkersMapStart(), WorkersAction.fetchWorkersStart(), CrewActions.fetchCrewStart()),
+		ofType(WorkersLog.General.Redux.Types.WORKERS_LOG_INITIALIZE),
+		withLatestFrom(state$),
+		mergeMap(([_, state]) =>
+			concat(
+				FetchDataEpic(state),
+				of(
+					WorkersAction.fetchWorkersMapStart(),
+					WorkersAction.fetchWorkersStart(),
+					CrewActions.fetchCrewStart(),
+				),
+			),
 		),
 	);
 
-export default combineEpics(OnWorkersLogInitial);
+const FetchDataEpic = (state: RootState) => {
+	if (state.CMSLogin.user && state.CMSLogin.actual_project)
+		return from(
+			new GraphQLAPIService(
+				state.CMSLogin.credentials?.access_token,
+			).WorkersLog.WorkTimeEvidence.GetCrewsAndTheirCrewSummaries({
+				user_id: state.CMSLogin.user.id,
+				project_id: state.CMSLogin.actual_project.id,
+			}),
+		).pipe(
+			mergeMap((response) => {
+				if (response) return of(WorkersLogGeneralActions.FetchCrewsData(response));
+				return EMPTY;
+			}),
+		);
+	return EMPTY;
+};

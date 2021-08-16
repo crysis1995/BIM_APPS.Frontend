@@ -4,21 +4,17 @@ import { useForm } from 'react-hook-form';
 import GraphQLAPIService from '../../../../../../services/graphql.api.service';
 import { connect } from 'react-redux';
 import { PL_DICTIONARY, WORKER_TYPES } from '../../../../redux/constants';
+import { WORKERS_LOG__WORKERS_TYPE } from '../../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
+import { CMSLoginType } from '../../../../../../components/CMSLogin/type';
 
 type RootState = {
-	CMSLogin: {
-		user: { id: string };
-		project: { id: string };
-		credentials: {
-			access_token: string;
-		};
-	};
+	CMSLogin: CMSLoginType.Redux.Store;
 };
 
 const mapStateToProps = (state: RootState) => ({
-	token: state.CMSLogin.credentials.access_token,
-	user_id: state.CMSLogin.user.id,
-	project_id: state.CMSLogin.project.id,
+	token: state.CMSLogin.credentials?.access_token,
+	user_id: state.CMSLogin.user?.id,
+	project_id: state.CMSLogin.actual_project?.id,
 });
 const mapDispatchToProps = {};
 
@@ -28,25 +24,27 @@ type CrewPayload = {
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-type Inputs = { crewName: string; crewType: string };
+type Inputs = { crewName: string; crewType: WORKERS_LOG__WORKERS_TYPE };
 
 function HouseCrewDBCreator(props: Props) {
 	const [valid, setValid] = useState<boolean | null>(null);
 	const { register, handleSubmit, errors, reset } = useForm<Inputs>();
 	const onSubmit = async (data: Inputs) => {
-		const api = new GraphQLAPIService();
-		const crew = await api.WorkersLog.WorkTimeEvidence.CreateHouseCrew(
-			props.project_id,
-			props.user_id,
-			data.crewName,
-			data.crewType,
-		);
-		console.log(data);
-		if (crew) {
-			setValid(true);
-			reset();
-		} else {
-			setValid(false);
+		if (!props.user_id || !props.project_id) setValid(false);
+		else {
+			const api = new GraphQLAPIService();
+			const crew = await api.WorkersLog.WorkTimeEvidence.CreateHouseCrew({
+				name: data.crewName,
+				user_id: props.user_id,
+				project_id: props.project_id,
+				work_type: data.crewType,
+			});
+			if (crew) {
+				setValid(true);
+				reset();
+			} else {
+				setValid(false);
+			}
 		}
 	};
 	const WorkerTypeElem = Object.keys(WORKER_TYPES) as (keyof typeof WORKER_TYPES)[];
@@ -54,7 +52,6 @@ function HouseCrewDBCreator(props: Props) {
 		id: WORKER_TYPES[workerType],
 		name: PL_DICTIONARY[WORKER_TYPES[workerType]],
 	}));
-	console.log(errors?.crewType?.message);
 	return (
 		<>
 			<Form onSubmit={handleSubmit(onSubmit)}>

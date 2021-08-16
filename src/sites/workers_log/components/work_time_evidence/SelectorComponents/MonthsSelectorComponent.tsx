@@ -3,16 +3,12 @@ import { Col } from 'react-bootstrap';
 import React, { useEffect } from 'react';
 import { GetRangeDaysFromMonth } from '../Utils/GetRangeDaysFromMonth';
 import { connect } from 'react-redux';
-import { CrewState } from '../../../redux/work_time_evidence/crew/types/state';
-import { WorkersState } from '../../../redux/work_time_evidence/worker/types/state';
 import GeneralActions from '../../../redux/work_time_evidence/general/actions';
-import { GeneralState } from '../../../redux/work_time_evidence/general/types/state';
 import { FormatType, GetFormattedDate } from '../../../redux/work_time_evidence/general/utils/GetFormattedDate';
+import WorkersLogRedux from '../../../redux';
 
-const mapStateToProps = (state: {
-	WorkersLog: { WorkTimeEvidence: { Crews: CrewState; Workers: WorkersState; General: GeneralState } };
-}) => ({
-	date: state.WorkersLog.WorkTimeEvidence.General.calendar.view_range.start,
+const mapStateToProps = (state: { WorkersLog: ReturnType<typeof WorkersLogRedux.reducer> }) => ({
+	date: state.WorkersLog.WorkTimeEvidence.General.calendar.view_range?.start,
 });
 const mapDispatchToProps = {
 	setCalendar: GeneralActions.setCalendar,

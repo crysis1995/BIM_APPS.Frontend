@@ -3,20 +3,18 @@ import 'dayjs/locale/pl';
 import arraySupport from 'dayjs/plugin/arraySupport';
 import localeData from 'dayjs/plugin/localeData';
 import isToday from 'dayjs/plugin/isToday';
-import React, { useState } from 'react';
-import { Col, Row, Table } from 'react-bootstrap';
+import React, { useEffect } from 'react';
+import { Col, Row } from 'react-bootstrap';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import { connect } from 'react-redux';
-import WorkerTypeSelector from './SelectorComponents/WorkerTypeSelector';
-import CrewSelectorComponent from './SelectorComponents/CrewSelectorComponent';
-import MonthsSelectorComponent from './SelectorComponents/MonthsSelectorComponent';
-import AddWorkerComponent from './AddWorkerComponent';
-import WorkersListComponents from './ViewComponents/WorkersListComponent';
-import HeadersComponent from './ViewComponents/HeadersComponent';
 import './table.css';
-import RaportGenerators from './RaportGenerators';
-import Loader from '../../../../components/Loader';
-import { RootState } from '../../redux/work_time_evidence/crew/epics';
+import SelectorComponents from './SelectorComponents';
+import RaportGeneratorsComponent from './RaportGenerators';
+import WorkerCrewActionsTab from './WorkerCrewActionsTab';
+import TimeEvidenceTable from './TimeEvidenceTable';
+import { RootState } from '../../../../store';
+import LoaderComponent from '../../../../components/Loader/LoaderComponent';
+import GeneralActions from '../../redux/work_time_evidence/general/actions';
 
 dayjs.extend(arraySupport);
 dayjs.extend(localeData);
@@ -35,41 +33,36 @@ const mapStateToProps = (state: RootState) => ({
 		state.WorkersLog.WorkTimeEvidence.Workers.loading_workers ||
 		state.WorkersLog.WorkTimeEvidence.TimeEvidence.loading,
 });
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+	StartComponent: GeneralActions.StartComponent,
+	EndComponent: GeneralActions.EndComponent,
+};
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-function WorkTimeEvidence(props: Props) {
-	const [workerInit, addWorkerInit] = useState(false);
+function WorkTimeEvidenceComponent(props: Props) {
+	useEffect(() => {
+		props.StartComponent();
+		return () => {
+			props.EndComponent();
+		};
+	}, []);
 	return (
 		<>
 			<Col className={'p-3'}>
 				<Row className="pb-3" noGutters={true}>
-					<WorkerTypeSelector />
-					<CrewSelectorComponent />
-					<MonthsSelectorComponent />
-					<RaportGenerators />
+					<SelectorComponents />
+					<RaportGeneratorsComponent />
 				</Row>
-				<Row noGutters={true} className="border-top">
-					{props.loading ? (
-						<Col className={'justify-content-center p-5 m-5'}>
-							<Loader height={'400'} />
-						</Col>
-					) : (
-						<Table size={'sm'} bordered id={'printable-report-area'}>
-							<HeadersComponent addWorkerInit={addWorkerInit} workerInit={workerInit} />
-							<tbody>
-								<WorkersListComponents />
-							</tbody>
-							<footer>
-								<AddWorkerComponent show={workerInit} />
-							</footer>
-						</Table>
-					)}
-				</Row>
+				<LoaderComponent loading={props.loading}>
+					<>
+						<WorkerCrewActionsTab />
+						<TimeEvidenceTable />
+					</>
+				</LoaderComponent>
 			</Col>
 		</>
 	);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(WorkTimeEvidence);
+export default connect(mapStateToProps, mapDispatchToProps)(WorkTimeEvidenceComponent);

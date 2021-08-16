@@ -1,27 +1,27 @@
 import PermissionDefinitions from './Definitions';
 
-describe('test PermissionDefinitions class', () => {
-	describe('test toSpecificElement method', () => {
+describe('epic.__test__ PermissionDefinitions class', () => {
+	describe('epic.__test__ toSpecificElement method', () => {
 		test('for one replacement', () => {
-			const actual = PermissionDefinitions.toSpecificElement('test.test2.asd-asd.{id}.asd.ttt', '1');
-			const expected = 'test.test2.asd-asd.{id}.asd.ttt'.replace('{id}', '1');
+			const actual = PermissionDefinitions.toSpecificElement('epic.__test__.test2.asd-asd.{id}.asd.ttt', '1');
+			const expected = 'epic.__test__.test2.asd-asd.{id}.asd.ttt'.replace('{id}', '1');
 			expect(actual).toEqual(expected);
 		});
 		test('for many replacements', () => {
 			const actual = PermissionDefinitions.toSpecificElement(
-				'test.{id}.asd-asd.{id}.asd.{id}',
+				'epic.__test__.{id}.asd-asd.{id}.asd.{id}',
 				'1',
 				'123',
 				'888',
 			);
-			let expected = 'test.{id}.asd-asd.{id}.asd.{id}'.replace('{id}', '1');
+			let expected = 'epic.__test__.{id}.asd-asd.{id}.asd.{id}'.replace('{id}', '1');
 			expected = expected.replace('{id}', '123');
 			expected = expected.replace('{id}', '888');
 			expect(actual).toEqual(expected);
 		});
 	});
 
-	describe('test class constant', () => {
+	describe('epic.__test__ class constant', () => {
 		test('Admin', () => {
 			const expected = 'warbud.admin';
 			const actual = PermissionDefinitions.Admin;

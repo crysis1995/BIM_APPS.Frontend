@@ -1,31 +1,38 @@
-import WorkersLogActions from '../../types';
-import { ICrewActions } from './types/actions';
+import WorkersLog from '../../../types';
 
-const CrewActions: ICrewActions = {
-	addCrew: () => ({ type: WorkersLogActions.WorkTimeEvidence.Crew.ADD }),
+const CrewActions: WorkersLog.WorkTimeEvidence.Crew.Redux.IActions = {
+	addCrew: () => ({ type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.ADD }),
 	chooseCrew: (crewId) => ({
-		type: WorkersLogActions.WorkTimeEvidence.Crew.CHOOSE,
+		type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.CHOOSE,
 		payload: { crew: crewId },
 	}),
-	fetchCrewStart: () => ({ type: WorkersLogActions.WorkTimeEvidence.Crew.FETCH_START }),
-	fetchCrewEnd: (crews) => ({ type: WorkersLogActions.WorkTimeEvidence.Crew.FETCH_END, payload: { crews } }),
-	fetchCrewError: (error) => ({ type: WorkersLogActions.WorkTimeEvidence.Crew.FETCH_ERROR, payload: { error } }),
+	DeleteCrewInit: (crew, summaries) => ({
+		type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.DELETE_INIT,
+		payload: { crew, summaries },
+	}),
+	DeleteCrewFinish: (crew) => ({
+		type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.DELETE_FINISH,
+		payload: crew,
+	}),
+	fetchCrewStart: () => ({ type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.FETCH_START }),
+	fetchCrewEnd: (crews) => ({ type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.FETCH_END, payload: { crews } }),
+	fetchCrewError: (error) => ({ type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.FETCH_ERROR, payload: { error } }),
 	fetchCrewSummariesStart: (data) => ({
-		type: WorkersLogActions.WorkTimeEvidence.Crew.FETCH_CREW_SUMMARIES_START,
+		type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.FETCH_CREW_SUMMARIES_START,
 		payload: { data },
 	}),
 	fetchCrewSummariesEnd: (crew_summary) => ({
-		type: WorkersLogActions.WorkTimeEvidence.Crew.FETCH_CREW_SUMMARIES_END,
+		type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.FETCH_CREW_SUMMARIES_END,
 		payload: { crew_summary },
 	}),
 	createCrewSummary: () => ({
-		type: WorkersLogActions.WorkTimeEvidence.Crew.CREATE_CREW_SUMMARY,
+		type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.CREATE_CREW_SUMMARY,
 	}),
 	updateCrewSummary: (crew_summary) => ({
-		type: WorkersLogActions.WorkTimeEvidence.Crew.UPDATE_CREW_SUMMARY,
+		type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.UPDATE_CREW_SUMMARY,
 		payload: { crew_summary },
 	}),
-	cleanSummary: () => ({ type: WorkersLogActions.WorkTimeEvidence.Crew.CLEAN_SUMMARY }),
+	cleanSummary: () => ({ type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.CLEAN_SUMMARY }),
 };
 
 export default CrewActions;

@@ -1,8 +1,12 @@
 import { combineReducers } from 'redux';
 import General from './general';
-import { combineEpics } from 'redux-observable';
+import Objects from './objects';
+import TimeEvidence from './time_evidence';
 
 export default {
-	reducer: combineReducers({ General: General.reducer }),
-	epics: combineEpics(),
+	reducer: combineReducers({
+		TimeEvidence: TimeEvidence.reducer,
+		General: General.reducer,
+		Objects: Objects.reducer,
+	}),
 };

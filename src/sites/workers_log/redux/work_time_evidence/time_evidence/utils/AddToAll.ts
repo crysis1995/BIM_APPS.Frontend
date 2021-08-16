@@ -1,31 +1,30 @@
-import { TimeEvidenceState } from "../types/state";
-import { ITimeEvidence } from "../types/actions";
-import WorkersLogActions from "../../../types";
-import { WorkersLogWorkTimeEvidenceResponse } from "../types/payload";
+import WorkersLog from '../../../../types';
 
 export function AddToAll(
-    state: TimeEvidenceState,
-    action: ReturnType<ITimeEvidence["fetchWorkerWorkEvidenceEnd"] | ITimeEvidence["editingWorkedTimeSucceed"]>
+	state: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Store,
+	action: ReturnType<
+		| WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.IActions['fetchWorkerWorkEvidenceEnd']
+		| WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.IActions['editingWorkedTimeSucceed']
+	>,
 ) {
-    if (action.type === WorkersLogActions.WorkTimeEvidence.TimeEvidence.FETCH_WORKER_TIME_EVIDENCE_END) {
-        return {
-            ...state,
-            all: {
-                ...state.all,
-                ...action.payload.workTimeEvidences.reduce<{ [id: string]: WorkersLogWorkTimeEvidenceResponse }>(
-                    (previousValue, currentValue) => {
-                        previousValue[currentValue.id] = currentValue;
-                        return previousValue;
-                    },
-                    {}
-                )
-            }
-        };
-    } else if (action.type === WorkersLogActions.WorkTimeEvidence.TimeEvidence.EDITING_WORKED_TIME_SUCCEED) {
-        return {
-            ...state,
-            all: { ...state.all, [action.payload.data.id]: action.payload.data }
-        };
-    }
-    return { ...state };
+	if (action.type === WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.FETCH_WORKER_TIME_EVIDENCE_END) {
+		return {
+			...state,
+			all: {
+				...state.all,
+				...action.payload.workTimeEvidences.reduce<{
+					[id: string]: WorkersLog.WorkTimeEvidence.TimeEvidence.Payload.WorkersLogWorkTimeEvidenceResponse;
+				}>((previousValue, currentValue) => {
+					previousValue[currentValue.id] = currentValue;
+					return previousValue;
+				}, {}),
+			},
+		};
+	} else if (action.type === WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.EDITING_WORKED_TIME_SUCCEED) {
+		return {
+			...state,
+			all: { ...state.all, [action.payload.data.id]: action.payload.data },
+		};
+	}
+	return { ...state };
 }

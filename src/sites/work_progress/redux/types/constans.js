@@ -13,6 +13,7 @@ export const CONSTANTS = {
 
 export const ACCEPTANCE_TYPE = {
 	MONOLITHIC: 'monolithic',
+	PREFABRICATED:"prefabricated",
 	STRUCTURAL: 'structural',
 	MEP: 'mep',
 	ARCHITECTURAL: 'architectural',
@@ -327,9 +328,10 @@ const PARAMETERS = {
 	running_meter: 'Długość',
 };
 const STATUS = {
-	Delayed: { id: 'Delayed', name: 'Opóźniony', color: '#f05454' },
-	Planned: { id: 'Planned', name: 'Planowany', color: '#FFCC1B' },
-	Finished: { id: 'Finished', name: 'Wykonano', color: '#00ca43' },
+	Delayed: { id: 'Delayed', name: 'Opóźniony', statusColor: '#f05454' },
+	Planned: { id: 'Planned', name: 'Planowany', statusColor: '#FFCC1B' },
+	Finished: { id: 'Finished', name: 'Wykonano', statusColor: '#00ca43' },
+	'In progress': { id: 'In progress', name: 'W realizacji', statusColor: '#008aca' },
 };
 
 const DELAY = [

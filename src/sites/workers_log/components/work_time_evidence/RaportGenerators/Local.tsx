@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
 import GeneralActions from '../../../redux/work_time_evidence/general/actions';
 import { connect } from 'react-redux';
-import { ERaportType } from '../../../redux/work_time_evidence/general/types/payload';
+import WorkersLog from '../../../types';
+
 
 const mapStateToProps = () => ({});
 const mapDispatchToProps = {
@@ -14,7 +15,7 @@ function Local(props: Props) {
 	const [isLoading, setIsLoading] = useState(false);
 	const handleClick = (e: React.MouseEvent<HTMLElement>) => {
 		setIsLoading(true);
-		props.generateRaport(ERaportType.Hourly);
+		props.generateRaport(WorkersLog.WorkTimeEvidence.General.Payload.ERaportType.Hourly);
 		setIsLoading(false);
 	};
 
