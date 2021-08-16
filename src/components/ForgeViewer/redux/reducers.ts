@@ -17,6 +17,7 @@ const INITIAL_STATE: ForgeViewer.Redux.IStore = {
 	visible_elements: [],
 	panel_visible: ForgeViewer.Payload.PanelVisibilityEnum.INVISIBLE,
 	model_elements: null,
+	model_elementsByForgeID: null,
 	model_elements_loading: false,
 };
 
@@ -61,7 +62,18 @@ const ForgeViewerReducer = (state = INITIAL_STATE, action: ForgeViewer.Redux.Act
 			return { ...state, ...newState };
 		}
 		case ForgeViewer.Redux.Types.SET_MODEL_ELEMENTS:
-			return { ...state, model_elements: normalize(action.payload, 'rvtId'), model_elements_loading: false };
+			return {
+				...state,
+				model_elements: normalize(action.payload, 'rvtId'),
+				model_elementsByForgeID: action.payload.reduce<{ [key: string]: number }>(
+					(previousValue, currentValue) => {
+						previousValue[currentValue.forgeId] = Number(currentValue.rvtId);
+						return previousValue;
+					},
+					{},
+				),
+				model_elements_loading: false,
+			};
 		case ForgeViewer.Redux.Types.SET_SHEETS_ERROR:
 			return { ...state, sheets_error: true };
 		case ForgeViewer.Redux.Types.SET_SHEETS_SUCCESS:

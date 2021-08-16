@@ -60,6 +60,10 @@ import DeleteWorkersLogEvidence, { DeleteWorkersLogEvidenceType } from './CONSTA
 import CountAllAndEmpty, { CountAllAndEmptyType } from './CONSTANTS/Queries/CountAllAndEmpty';
 import DeleteWorkersLogCrewSummary, { DeleteWorkersLogCrewSummaryType } from './CONSTANTS/Mutations/DeleteCrewSummary';
 import DeleteCrew, { DeleteCrewType } from './CONSTANTS/Mutations/DeleteCrew';
+import GetPrefabricatedObjects, { GetPrefabricatedObjectsType } from './CONSTANTS/Queries/GetPrefabObjects';
+import CountPrefabObjects, { CountPrefabObjectsType } from './CONSTANTS/Queries/CountPrefabObjects';
+import GetPrefabObjectsStatuses, { GetPrefabObjectsStatusesType } from './CONSTANTS/Queries/GetPrefabObjectsStatuses';
+import CountPrefabObjectStatuses, { CountPrefabObjectStatusesType } from './CONSTANTS/Queries/CountPrefabObjectStatses';
 
 export default class GraphQLAPIService {
 	private client: ApolloClient<NormalizedCacheObject>;
@@ -179,6 +183,39 @@ export default class GraphQLAPIService {
 			},
 			Create: (data: CreateDelayType.Request) => {
 				return this.mutateClient<CreateDelayType.Response, CreateDelayType.Request>(CREATE_DELAY, data);
+			},
+		},
+	};
+	WorkProgress = {
+		Prefabricated: {
+			AcceptanceObjectStatuses: {
+				Get: (data: GetPrefabObjectsStatusesType.Request) => {
+					return this.queryClient<
+						GetPrefabObjectsStatusesType.Response,
+						GetPrefabObjectsStatusesType.Request
+					>(GetPrefabObjectsStatuses, data);
+				},
+				Count: (data: CountPrefabObjectStatusesType.Request) => {
+					return this.queryClient<
+						CountPrefabObjectStatusesType.Response,
+						CountPrefabObjectStatusesType.Request
+					>(CountPrefabObjectStatuses, data);
+				},
+
+			},
+			AcceptanceObjects: {
+				Get: (data: GetPrefabricatedObjectsType.Request) => {
+					return this.queryClient<GetPrefabricatedObjectsType.Response, GetPrefabricatedObjectsType.Request>(
+						GetPrefabricatedObjects,
+						data,
+					);
+				},
+				Count: (data: CountPrefabObjectsType.Request) => {
+					return this.queryClient<CountPrefabObjectsType.Response, CountPrefabObjectsType.Request>(
+						CountPrefabObjects,
+						data,
+					);
+				},
 			},
 		},
 	};

@@ -11,6 +11,7 @@ import { CMSLoginType } from '../components/CMSLogin/type';
 import ForgeViewer from '../components/ForgeViewer/types';
 import WorkersLog from '../sites/workers_log/types';
 import { RootActions } from '../reducers/type';
+import ModelViewer from '../sites/model_viewer/types';
 
 const epicMiddleware = createEpicMiddleware<RootActions, RootActions, RootState>();
 let store = createStore(rootReducer, composeWithDevTools(applyMiddleware(epicMiddleware)));
@@ -28,7 +29,12 @@ export type RootState = {
 			Terms: WorkProgress.Monolithic.Terms.Redux.IStore;
 			Upgrading: WorkProgress.Monolithic.Upgrading.Redux.IStore;
 		};
+		Prefabricated:{
+			General:WorkProgress.Prefabricated.General.Redux.IStore
+			Objects:WorkProgress.Prefabricated.Objects.Redux.IStore
+		}
 	};
+	ModelViewer: ModelViewer.General.Redux.Store;
 	ForgeViewer: ForgeViewer.Redux.IStore;
 	Modal: ModalType.Redux.Store;
 	CMSLogin: CMSLoginType.Redux.Store;

@@ -9,6 +9,7 @@ import Notifications from '../components/Notification/redux';
 import WorkProgress from '../sites/work_progress/redux';
 import WorkersLog from '../sites/workers_log/redux';
 import { handleTimer, OnHandleFetchAccessToken } from '../components/AutodeskLogin/redux/epic';
+import ModelViewer from '../sites/model_viewer/redux';
 
 const rootReducer = combineReducers({
 	Notifications: Notifications.reducer,
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
 	Modal: Modal.reducer,
 	CMSLogin: CMSLogin.reducer,
 	WorkersLog: WorkersLog.reducer,
+	ModelViewer:ModelViewer.reducer
 });
 const rootEpic = combineEpics(
 	WorkProgress.epics,

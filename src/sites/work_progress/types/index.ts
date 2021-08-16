@@ -6,6 +6,8 @@ import { GetObjectsByLevelType } from '../../../services/graphql.api.service/CON
 import { GetAllDelacCausesType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetAllDelayCauses';
 import { GetAllAcceptanceTermsType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetAcceptanceTerms';
 import { UpdateTermType } from '../../../services/graphql.api.service/CONSTANTS/Mutations/UpdateTerm';
+import { GetPrefabricatedObjectsType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetPrefabObjects';
+import { GetPrefabObjectsStatusesType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetPrefabObjectsStatuses';
 
 namespace WorkProgress {
 	export namespace General {
@@ -36,24 +38,18 @@ namespace WorkProgress {
 					SetInitial: () => {
 						type: typeof WorkProgress.Monolithic.Delays.Redux.Types.SET_INITIAL;
 					};
-					CreateNew: (
-						data: WorkProgress.Monolithic.Delays.Payload.CreateNew_Payload[],
-					) => {
+					CreateNew: (data: WorkProgress.Monolithic.Delays.Payload.CreateNew_Payload[]) => {
 						type: typeof WorkProgress.Monolithic.Delays.Redux.Types.DELAYS_CREATE_NEW;
 						payload: typeof data;
 					};
-					InitCreateNew: (
-						data: WorkProgress.Monolithic.Delays.Payload.InitCreateNew_Payload,
-					) => {
+					InitCreateNew: (data: WorkProgress.Monolithic.Delays.Payload.InitCreateNew_Payload) => {
 						type: typeof WorkProgress.Monolithic.Delays.Redux.Types.DELAYS_CREATE_NEW_INIT;
 						payload: typeof data;
 					};
 					FetchStart: () => {
 						type: typeof WorkProgress.Monolithic.Delays.Redux.Types.DELAYS_FETCH_CAUSES_START;
 					};
-					FetchEnd: (
-						data: GetAllDelacCausesType.AcceptanceDelayCause[],
-					) => {
+					FetchEnd: (data: GetAllDelacCausesType.AcceptanceDelayCause[]) => {
 						type: typeof WorkProgress.Monolithic.Delays.Redux.Types.DELAYS_FETCH_CAUSES_END;
 						payload: typeof data;
 					};
@@ -127,30 +123,22 @@ namespace WorkProgress {
 						type: typeof WorkProgress.Monolithic.General.Redux.Types.SET_INITIAL;
 					};
 
-					SetCraneOptions: (
-						data: WorkProgress.Monolithic.General.Payload.SetCraneOptions,
-					) => {
+					SetCraneOptions: (data: WorkProgress.Monolithic.General.Payload.SetCraneOptions) => {
 						type: typeof WorkProgress.Monolithic.General.Redux.Types.SET_CRANE_OPTIONS;
 						payload: typeof data;
 					};
-					SetLevelOptions: (
-						data: WorkProgress.Monolithic.General.Payload.SetLevelOptions,
-					) => {
+					SetLevelOptions: (data: WorkProgress.Monolithic.General.Payload.SetLevelOptions) => {
 						type: typeof WorkProgress.Monolithic.General.Redux.Types.SET_LEVEL_OPTIONS;
 						payload: typeof data;
 					};
-					ChangeLevel: (
-						data: WorkProgress.Monolithic.General.Payload.ChangeLevel,
-					) => {
+					ChangeLevel: (data: WorkProgress.Monolithic.General.Payload.ChangeLevel) => {
 						type: typeof WorkProgress.Monolithic.General.Redux.Types.SET_LEVEL;
 						payload: typeof data;
 					};
 					FetchRotationDaysStart: () => {
 						type: typeof WorkProgress.Monolithic.General.Redux.Types.FETCH_CALENDAR_START;
 					};
-					FetchRotationDaysEnd: (
-						data: WorkProgress.Monolithic.General.Payload.FetchRotationDaysEnd,
-					) => {
+					FetchRotationDaysEnd: (data: WorkProgress.Monolithic.General.Payload.FetchRotationDaysEnd) => {
 						type: typeof WorkProgress.Monolithic.General.Redux.Types.FETCH_CALENDAR_END;
 						payload: typeof data;
 					};
@@ -160,39 +148,27 @@ namespace WorkProgress {
 					DecrementDay: () => {
 						type: typeof WorkProgress.Monolithic.General.Redux.Types.DECREMENT_DAY;
 					};
-					SetRotationDay: (
-						data: number,
-					) => {
+					SetRotationDay: (data: number) => {
 						type: typeof WorkProgress.Monolithic.General.Redux.Types.SET_ROTATION_DAY;
 						payload: typeof data;
 					};
-					TrySetRotationDay: (
-						data: number,
-					) => {
+					TrySetRotationDay: (data: number) => {
 						type: typeof WorkProgress.Monolithic.General.Redux.Types.TRY_SET_ROTATION_DAY;
 						payload: typeof data;
 					};
-					SetDate: (
-						data: string,
-					) => {
+					SetDate: (data: string) => {
 						type: typeof WorkProgress.Monolithic.General.Redux.Types.SET_DATE;
 						payload: typeof data;
 					};
-					TrySetDate: (
-						data: string,
-					) => {
+					TrySetDate: (data: string) => {
 						type: typeof WorkProgress.Monolithic.General.Redux.Types.TRY_SET_DATE;
 						payload: typeof data;
 					};
-					SetActiveTab: (
-						data: Constants.MonolithicTabs,
-					) => {
+					SetActiveTab: (data: Constants.MonolithicTabs) => {
 						type: typeof WorkProgress.Monolithic.General.Redux.Types.SET_ACTIVE_TAB;
 						payload: typeof data;
 					};
-					IsValidDatesPair: (
-						data: boolean,
-					) => {
+					IsValidDatesPair: (data: boolean) => {
 						type: typeof WorkProgress.Monolithic.General.Redux.Types.IS_VALID_DATES_PAIR;
 						payload: typeof data;
 					};
@@ -241,18 +217,14 @@ namespace WorkProgress {
 					FetchStart: () => {
 						type: typeof WorkProgress.Monolithic.Objects.Redux.Types.OBJECTS_LOADING_START;
 					};
-					FetchEnd: (
-						data: GetObjectsByLevelType.AcceptanceObject[],
-					) => {
+					FetchEnd: (data: GetObjectsByLevelType.AcceptanceObject[]) => {
 						type: typeof WorkProgress.Monolithic.Objects.Redux.Types.OBJECTS_LOADING_END;
 						payload: typeof data;
 					};
 					SetInitial: () => {
 						type: typeof WorkProgress.Monolithic.Objects.Redux.Types.OBJECTS_SET_INITIAL;
 					};
-					SetFetchedData: (
-						data: WorkProgress.Monolithic.Objects.Payload.SetFetchedData_Payload,
-					) => {
+					SetFetchedData: (data: WorkProgress.Monolithic.Objects.Payload.SetFetchedData_Payload) => {
 						type: typeof WorkProgress.Monolithic.Objects.Redux.Types.OBJECTS_SET_DATA;
 						payload: typeof data;
 					};
@@ -290,33 +262,23 @@ namespace WorkProgress {
 					FetchStart: () => {
 						type: typeof WorkProgress.Monolithic.Terms.Redux.Types.TERMS_FETCH_START;
 					};
-					FetchEnd: (
-						data: WorkProgress.Monolithic.Terms.Payload.FetchEnd,
-					) => {
+					FetchEnd: (data: WorkProgress.Monolithic.Terms.Payload.FetchEnd) => {
 						type: typeof WorkProgress.Monolithic.Terms.Redux.Types.TERMS_FETCH_END;
 						payload: typeof data;
 					};
-					SetTermsByGroupInit: (
-						data: WorkProgress.Monolithic.Terms.Payload.SetTermsByGroupInit,
-					) => {
+					SetTermsByGroupInit: (data: WorkProgress.Monolithic.Terms.Payload.SetTermsByGroupInit) => {
 						type: typeof WorkProgress.Monolithic.Terms.Redux.Types.SET_BY_GROUP_INIT;
 						payload: typeof data;
 					};
-					SetTermByGroup: (
-						data: WorkProgress.Monolithic.Terms.Payload.SetTermByGroup,
-					) => {
+					SetTermByGroup: (data: WorkProgress.Monolithic.Terms.Payload.SetTermByGroup) => {
 						type: typeof WorkProgress.Monolithic.Terms.Redux.Types.SET_BY_GROUP;
 						payload: typeof data;
 					};
-					UpdateTermsByGroupInit: (
-						data: WorkProgress.Monolithic.Terms.Payload.UpdateTermsByGroupInit,
-					) => {
+					UpdateTermsByGroupInit: (data: WorkProgress.Monolithic.Terms.Payload.UpdateTermsByGroupInit) => {
 						type: typeof WorkProgress.Monolithic.Terms.Redux.Types.UPDATE_BY_GROUP_INIT;
 						payload: typeof data;
 					};
-					UpdateTermsByGroup: (
-						data: WorkProgress.Monolithic.Terms.Payload.UpdateTermsByGroup,
-					) => {
+					UpdateTermsByGroup: (data: WorkProgress.Monolithic.Terms.Payload.UpdateTermsByGroup) => {
 						type: typeof WorkProgress.Monolithic.Terms.Redux.Types.UPDATE_BY_GROUP;
 						payload: typeof data;
 					};
@@ -409,15 +371,11 @@ namespace WorkProgress {
 							byLevel: typeof byLevel;
 						};
 					};
-					SelectElements: (
-						data: WorkProgress.Monolithic.Upgrading.Payload.SelectElements,
-					) => {
+					SelectElements: (data: WorkProgress.Monolithic.Upgrading.Payload.SelectElements) => {
 						type: typeof WorkProgress.Monolithic.Upgrading.Redux.Types.SELECT_ELEMENTS;
 						payload: typeof data;
 					};
-					HandleSelectElements: (
-						data: GetObjectsByLevelType.AcceptanceObject['revit_id'][],
-					) => {
+					HandleSelectElements: (data: GetObjectsByLevelType.AcceptanceObject['revit_id'][]) => {
 						type: typeof WorkProgress.Monolithic.Upgrading.Redux.Types.HANDLE_SELECTED_ELEMENTS;
 						payload: typeof data;
 					};
@@ -438,9 +396,7 @@ namespace WorkProgress {
 						type: typeof WorkProgress.Monolithic.Upgrading.Redux.Types.SET_STATUSES_END;
 					};
 
-					SetStatusesInit: (
-						data: WorkProgress.Monolithic.Upgrading.Payload.SetStatusesInit,
-					) => {
+					SetStatusesInit: (data: WorkProgress.Monolithic.Upgrading.Payload.SetStatusesInit) => {
 						type: typeof WorkProgress.Monolithic.Upgrading.Redux.Types.SET_STATUSES_INITIALIZER;
 						payload: typeof data;
 					};
@@ -505,6 +461,81 @@ namespace WorkProgress {
 				export type ByCrane = {
 					[crane_id: string]: GetObjectsByLevelType.AcceptanceObject['revit_id'][];
 				};
+			}
+		}
+	}
+	export namespace Prefabricated {
+		export namespace General {
+			export namespace Redux {
+				export interface IStore {
+					selection:number[],
+					focus:number[]
+				}
+				export interface IActions {
+					ComponentStart: () => {
+						type: typeof WorkProgress.Prefabricated.General.Redux.Types.COMPONENT_STARTED;
+					};
+					ComponentEnd: () => {
+						type: typeof WorkProgress.Prefabricated.General.Redux.Types.COMPONENT_ENDED;
+					};
+					// SelectElements
+				}
+				export type Actions = ReturnTypeFromInterface<WorkProgress.Prefabricated.General.Redux.IActions>;
+				export enum Types {
+					COMPONENT_STARTED = 'work_progress__prefabricated__general__COMPONENT_STARTED',
+					COMPONENT_ENDED = 'work_progress__prefabricated__general__COMPONENT_ENDED',
+				}
+			}
+		}
+
+		export namespace Objects {
+			export namespace Redux {
+				export interface IStore {
+					objectsLoading: boolean;
+					statusesLoading: boolean;
+					byRevitID: null | {
+						[key: string]: GetPrefabricatedObjectsType.AcceptanceObject;
+					};
+					statusesByRevitID: {
+						[key: string]: string;
+					} | null;
+					allStatuses: {
+						[key: string]: GetPrefabObjectsStatusesType.AcceptanceObjectStatus;
+					} | null;
+				}
+				export interface IActions {
+					FetchObjectsStart: () => {
+						type: typeof WorkProgress.Prefabricated.Objects.Redux.Types.FETCH_OBJECTS_START;
+					};
+					FetchObjectsEnd: (data: GetPrefabricatedObjectsType.AcceptanceObject[]) => {
+						type: typeof WorkProgress.Prefabricated.Objects.Redux.Types.FETCH_OBJECTS_END;
+						payload: typeof data;
+					};
+					FetchObjectsError: (error: string) => {
+						type: typeof WorkProgress.Prefabricated.Objects.Redux.Types.FETCH_OBJECTS_ERROR;
+						payload: typeof error;
+					};
+					FetchStatusesStart: () => {
+						type: typeof WorkProgress.Prefabricated.Objects.Redux.Types.FETCH_STATUSES_START;
+					};
+					FetchStatusesEnd: (data: GetPrefabObjectsStatusesType.AcceptanceObjectStatus[]) => {
+						type: typeof WorkProgress.Prefabricated.Objects.Redux.Types.FETCH_STATUSES_END;
+						payload: typeof data;
+					};
+					FetchStatusesError: (error: string) => {
+						type: typeof WorkProgress.Prefabricated.Objects.Redux.Types.FETCH_STATUSES_ERROR;
+						payload: typeof error;
+					};
+				}
+				export type Actions = ReturnTypeFromInterface<WorkProgress.Prefabricated.Objects.Redux.IActions>;
+				export enum Types {
+					FETCH_OBJECTS_START = 'work_progress__prefabricated__objects__FETCH_OBJECTS_START',
+					FETCH_OBJECTS_END = 'work_progress__prefabricated__objects__FETCH_OBJECTS_END',
+					FETCH_OBJECTS_ERROR = 'work_progress__prefabricated__objects__FETCH_OBJECTS_ERROR',
+					FETCH_STATUSES_START = 'work_progress__prefabricated__objects__FETCH_STATUSES_START',
+					FETCH_STATUSES_END = 'work_progress__prefabricated__objects__FETCH_STATUSES_END',
+					FETCH_STATUSES_ERROR = 'work_progress__prefabricated__objects__FETCH_STATUSES_ERROR',
+				}
 			}
 		}
 	}

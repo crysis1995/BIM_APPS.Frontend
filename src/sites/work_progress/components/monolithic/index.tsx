@@ -7,6 +7,7 @@ import GeneralActions from '../../redux/monolithic/general/actions';
 import MonolithicTabs from './Monolithic.Tabs';
 import MonolithicResults from './Monolithic.Results';
 import MonolithicSelectedElementsSummary from './Monolithic.SelectedElementsSummary';
+import { EApplicationsWithModules } from '../../../types';
 
 const mapStateToProps = () => ({});
 const mapDispatchToProps = {
@@ -25,7 +26,7 @@ function MonolithicLayoutComponent(props: Props) {
 		<>
 			<Col xs={6}>
 				<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
-					<Viewer />
+					<Viewer runBy={EApplicationsWithModules.WORK_PROGRESS_MONOLITHIC} />
 				</div>
 			</Col>
 			<Col xs={6}>

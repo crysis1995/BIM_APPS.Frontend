@@ -19,11 +19,13 @@ import { OnInvokeCheckObjectsGroupTermsEpic } from './epics/OnInvoke.CheckObject
 import { HandleCleanSelectedElements } from './epics/Handle.CleanSelectedElements.Epic';
 import { RootActions } from '../../../reducers/type';
 import { RootState } from '../../../store';
+import Prefabricated from './prefabricated';
 
 export default {
 	reducer: combineReducers({
 		// General: General.reducer,
 		Monolithic: Monolitic.reducer,
+		Prefabricated: Prefabricated.reducer,
 	}),
 	epics: combineEpics<RootActions, RootActions, RootState>(
 		OnStartWorkProgressMonolithicComponent,
@@ -41,5 +43,6 @@ export default {
 		OnStartUpdateTermEpic,
 		OnInvokeCheckObjectsGroupTermsEpic,
 		HandleCleanSelectedElements,
+		Prefabricated.epics,
 	),
 };

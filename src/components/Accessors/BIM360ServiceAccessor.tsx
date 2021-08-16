@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { AutodeskLogin } from '../AutodeskLogin/type';
 import { Alert, Col } from 'react-bootstrap';
+import { RootState } from '../../store';
 
-const mapStateToProps = (state: { Autodesk: AutodeskLogin.Redux.Store }) => ({
+const mapStateToProps = (state: RootState) => ({
 	Autodesk_is_login: state.Autodesk.isLogin,
 });
 

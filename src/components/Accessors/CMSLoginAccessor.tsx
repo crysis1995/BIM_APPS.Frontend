@@ -2,8 +2,9 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { CMSLoginType } from '../CMSLogin/type';
+import { RootState } from '../../store';
 
-const mapStateToProps = (state: { CMSLogin: CMSLoginType.Redux.Store }) => ({
+const mapStateToProps = (state: RootState) => ({
 	is_login: state.CMSLogin.is_login,
 });
 
