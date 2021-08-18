@@ -468,8 +468,7 @@ namespace WorkProgress {
 		export namespace General {
 			export namespace Redux {
 				export interface IStore {
-					selection:number[],
-					focus:number[]
+					isStatusOnModelVisible:boolean
 				}
 				export interface IActions {
 					ComponentStart: () => {
@@ -478,12 +477,17 @@ namespace WorkProgress {
 					ComponentEnd: () => {
 						type: typeof WorkProgress.Prefabricated.General.Redux.Types.COMPONENT_ENDED;
 					};
-					// SelectElements
+					ChangeStatusOnModelVisibility:(value:boolean) => {
+						type: typeof WorkProgress.Prefabricated.General.Redux.Types.CHANGE_STATUS_ON_MODEL_VISIBILITY;
+						payload:typeof value
+					}
 				}
 				export type Actions = ReturnTypeFromInterface<WorkProgress.Prefabricated.General.Redux.IActions>;
 				export enum Types {
 					COMPONENT_STARTED = 'work_progress__prefabricated__general__COMPONENT_STARTED',
 					COMPONENT_ENDED = 'work_progress__prefabricated__general__COMPONENT_ENDED',
+					CHANGE_STATUS_ON_MODEL_VISIBILITY = 'work_progress__prefabricated__general__CHANGE_STATUS_ON_MODEL_VISIBILITY',
+
 				}
 			}
 		}
@@ -491,13 +495,18 @@ namespace WorkProgress {
 		export namespace Objects {
 			export namespace Redux {
 				export interface IStore {
+					selection: number[];
+					focus: number[];
 					objectsLoading: boolean;
 					statusesLoading: boolean;
 					byRevitID: null | {
 						[key: string]: GetPrefabricatedObjectsType.AcceptanceObject;
 					};
 					statusesByRevitID: {
-						[key: string]: string;
+						[key: string]: string[];
+					} | null;
+					statuesLoadingByRevitID: {
+						[key: string]: boolean;
 					} | null;
 					allStatuses: {
 						[key: string]: GetPrefabObjectsStatusesType.AcceptanceObjectStatus;
@@ -526,6 +535,41 @@ namespace WorkProgress {
 						type: typeof WorkProgress.Prefabricated.Objects.Redux.Types.FETCH_STATUSES_ERROR;
 						payload: typeof error;
 					};
+					HandleSetStatuses: (
+						prefabStatusEnum: GetPrefabObjectsStatusesType.PrefabStatusEnum,
+						date: string,
+						objects: GetPrefabricatedObjectsType.AcceptanceObject[],
+					) => {
+						type: typeof WorkProgress.Prefabricated.Objects.Redux.Types.HANDLE_SET_STATUSES;
+						payload: {
+							status: typeof prefabStatusEnum;
+							date: typeof date;
+							objects: typeof objects;
+						};
+					};
+					SetStatusesStart: (revitID: number) => {
+						type: typeof WorkProgress.Prefabricated.Objects.Redux.Types.SET_STATUSES_START;
+						payload: typeof revitID;
+					};
+					SetStatusesFinish: (
+						revitID: number,
+						data: GetPrefabObjectsStatusesType.AcceptanceObjectStatus,
+					) => {
+						type: typeof WorkProgress.Prefabricated.Objects.Redux.Types.SET_STATUSES_FINISH;
+						payload: {
+							revitID: typeof revitID;
+							data: typeof data;
+						};
+					};
+
+					SelectElements: (revitID: number | number[]) => {
+						type: typeof WorkProgress.Prefabricated.Objects.Redux.Types.SELECT_ELEMENTS;
+						payload: typeof revitID;
+					};
+					HandleSelectElements: (revitID: number[]) => {
+						type: typeof WorkProgress.Prefabricated.Objects.Redux.Types.HANDLE_SELECT_ELEMENTS;
+						payload: typeof revitID;
+					};
 				}
 				export type Actions = ReturnTypeFromInterface<WorkProgress.Prefabricated.Objects.Redux.IActions>;
 				export enum Types {
@@ -535,6 +579,11 @@ namespace WorkProgress {
 					FETCH_STATUSES_START = 'work_progress__prefabricated__objects__FETCH_STATUSES_START',
 					FETCH_STATUSES_END = 'work_progress__prefabricated__objects__FETCH_STATUSES_END',
 					FETCH_STATUSES_ERROR = 'work_progress__prefabricated__objects__FETCH_STATUSES_ERROR',
+					HANDLE_SET_STATUSES = 'work_progress__prefabricated__objects__HANDLE_SET_STATUSES',
+					SET_STATUSES_START = 'work_progress__prefabricated__objects__SET_STATUSES_START',
+					SET_STATUSES_FINISH = 'work_progress__prefabricated__objects__SET_STATUSES_FINISH',
+					SELECT_ELEMENTS = 'work_progress__prefabricated__objects__SELECT_ELEMENTS',
+					HANDLE_SELECT_ELEMENTS = 'work_progress__prefabricated__objects__HANDLE_SELECT_ELEMENTS',
 				}
 			}
 		}

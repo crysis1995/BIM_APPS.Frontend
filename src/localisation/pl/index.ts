@@ -170,6 +170,12 @@ const translation: ITranslation = {
 
 	in_progress: 'W trakcie',
 	finished: 'Zakończono',
+	approved: 'Zaakceptowano',
+	created: 'Wytworzono',
+	mounted: 'Zamontowano',
+	wp_statuses_approved: 'Zaakceptowany',
+	wp_statuses_created: 'Wytworzony',
+	wp_statuses_mounted: 'Zamontowany',
 };
 
 export default translation;

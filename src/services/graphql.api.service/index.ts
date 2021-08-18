@@ -64,6 +64,9 @@ import GetPrefabricatedObjects, { GetPrefabricatedObjectsType } from './CONSTANT
 import CountPrefabObjects, { CountPrefabObjectsType } from './CONSTANTS/Queries/CountPrefabObjects';
 import GetPrefabObjectsStatuses, { GetPrefabObjectsStatusesType } from './CONSTANTS/Queries/GetPrefabObjectsStatuses';
 import CountPrefabObjectStatuses, { CountPrefabObjectStatusesType } from './CONSTANTS/Queries/CountPrefabObjectStatses';
+import CreateAcceptanceObjectStatus, {
+	CreateAcceptanceObjectStatusType,
+} from './CONSTANTS/Mutations/CreateAcceptanceObjectStatus';
 
 export default class GraphQLAPIService {
 	private client: ApolloClient<NormalizedCacheObject>;
@@ -201,7 +204,12 @@ export default class GraphQLAPIService {
 						CountPrefabObjectStatusesType.Request
 					>(CountPrefabObjectStatuses, data);
 				},
-
+				Create: (data: CreateAcceptanceObjectStatusType.Request) => {
+					return this.mutateClient<
+						CreateAcceptanceObjectStatusType.Response,
+						CreateAcceptanceObjectStatusType.Request
+					>(CreateAcceptanceObjectStatus, data);
+				},
 			},
 			AcceptanceObjects: {
 				Get: (data: GetPrefabricatedObjectsType.Request) => {

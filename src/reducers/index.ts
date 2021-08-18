@@ -19,7 +19,7 @@ const rootReducer = combineReducers({
 	Modal: Modal.reducer,
 	CMSLogin: CMSLogin.reducer,
 	WorkersLog: WorkersLog.reducer,
-	ModelViewer:ModelViewer.reducer
+	ModelViewer: ModelViewer.reducer,
 });
 const rootEpic = combineEpics(
 	WorkProgress.epics,

@@ -167,10 +167,29 @@ export namespace Constants {
 			[WorkProgressElementStatus.Finished]: { color: '#858585', alpha: 0.9 },
 			[WorkProgressElementStatus.None]: { color: '#2f2f2f', alpha: 0.9 },
 		},
-		[MonolithicTabs.HISTORICAL]:{
+		[MonolithicTabs.HISTORICAL]: {
 			[WorkProgressElementStatus.Finished]: { color: '#494949', alpha: 0.7 },
 			[WorkProgressElementStatus.InProgress]: { color: '#009b03', alpha: 0.7 },
-		}
+		},
 	};
 
+	export type WorkProgressPrefabricatedStatusLegendType = {
+		[key in WorkProgressPrefabricatedElementStatus]: {
+			color: string;
+			alpha: number;
+		};
+	};
+	export enum WorkProgressPrefabricatedElementStatus {
+		Approved = 'wp_statuses_approved',
+		Created = 'wp_statuses_created',
+		Mounted = 'wp_statuses_mounted',
+		None = 'wp_statuses_none',
+	}
+
+	export const WorkProgressPrefabricatedColorMap: WorkProgressPrefabricatedStatusLegendType = {
+		[WorkProgressPrefabricatedElementStatus.Mounted]: { color: '#009b03', alpha: 0.7 },
+		[WorkProgressPrefabricatedElementStatus.Created]: { color: '#FFCC1B', alpha: 0.7 },
+		[WorkProgressPrefabricatedElementStatus.Approved]: { color: '#172ce0', alpha: 0.7 },
+		[WorkProgressPrefabricatedElementStatus.None]: { color: '#848484', alpha: 0.7 },
+	};
 }

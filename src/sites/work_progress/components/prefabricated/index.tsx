@@ -2,25 +2,21 @@ import React, { useEffect } from 'react';
 import Viewer from '../../../../components/ForgeViewer/components';
 import { Col } from 'react-bootstrap';
 import { EApplicationsWithModules } from '../../../types';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import PrefabricatedGeneralActions from '../../redux/prefabricated/general/actions';
-import ActionButtons from "./Prefabricated.ActionButtons"
-import ObjectsTable from "./Prefabricated.ObjectsTable"
-const mapStateToProps = () => ({});
-const mapDispatchToProps = {
-	ComponentStart: PrefabricatedGeneralActions.ComponentStart,
-	ComponentEnd: PrefabricatedGeneralActions.ComponentEnd,
-};
-type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+import ActionButtons from './Prefabricated.ActionButtons';
+import ObjectsTable from './Prefabricated.ObjectsTable';
 
-function PrefabricatedLayoutComponent(props: Props) {
+function PrefabricatedLayoutComponent() {
+	const dispatch = useDispatch();
 	useEffect(() => {
-		props.ComponentStart();
+		dispatch(PrefabricatedGeneralActions.ComponentStart());
 		return () => {
-			props.ComponentEnd();
+			dispatch(PrefabricatedGeneralActions.ComponentEnd());
 		};
 	}, []);
-
+	console.count('PrefabricatedLayoutComponent');
+	// return null
 	return (
 		<>
 			<Col xs={6}>
@@ -31,8 +27,8 @@ function PrefabricatedLayoutComponent(props: Props) {
 			<Col xs={6}>
 				<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
 					<Col className="p-3">
-						<ActionButtons/>
-						<ObjectsTable/>
+						<ActionButtons />
+						<ObjectsTable />
 					</Col>
 				</div>
 			</Col>
@@ -40,4 +36,4 @@ function PrefabricatedLayoutComponent(props: Props) {
 	);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PrefabricatedLayoutComponent);
+export default PrefabricatedLayoutComponent;

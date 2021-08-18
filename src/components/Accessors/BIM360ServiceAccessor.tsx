@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { AutodeskLogin } from '../AutodeskLogin/type';
 import { Alert, Col } from 'react-bootstrap';
 import { RootState } from '../../store';
 
@@ -11,7 +10,7 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = {};
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
-const BIM360ServiceAccessor: React.FunctionComponent<Props> = (props) => {
+const BIM360ServiceAccessor: React.FunctionComponent<Props> = React.memo((props) => {
 	if (props.Autodesk_is_login) return <>{props.children}</>;
 	else
 		return (
@@ -19,6 +18,6 @@ const BIM360ServiceAccessor: React.FunctionComponent<Props> = (props) => {
 				<Alert variant={'warning'}>Usługa BIM360 niedostępna - odśwież stronę lub wróć później</Alert>
 			</Col>
 		);
-};
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(BIM360ServiceAccessor);
