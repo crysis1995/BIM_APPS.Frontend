@@ -3,7 +3,7 @@ import { ELEMENT_DESCRIPTIONS, TOOLTIPS_MESSAGES } from '../config';
 import { Constants } from '../sites/work_progress/redux/constants';
 import { ClassifierGroupEnum, ObjectParams } from '../sites/work_progress/redux/utils/ObjectGroupClassifier';
 import { GetObjectsByLevelType } from '../services/graphql.api.service/CONSTANTS/Queries/GetObjectsByLevel';
-import { WORKER_TYPES } from '../sites/workers_log/redux/constants';
+import { GetPrefabObjectsStatusesType } from '../services/graphql.api.service/CONSTANTS/Queries/GetPrefabObjectsStatuses';
 
 export type TranslationsUnion =
 	| WORKERS_LOG__WORKERS_TYPE
@@ -17,7 +17,9 @@ export type TranslationsUnion =
 	| ObjectParams
 	| ClassifierGroupEnum
 	| Constants.WorkProgressElementStatus
-	| GetObjectsByLevelType.StatusEnum;
+	| Constants.WorkProgressPrefabricatedElementStatus
+	| GetObjectsByLevelType.StatusEnum
+	| GetPrefabObjectsStatusesType.PrefabStatusEnum;
 
 export type ITranslation = {
 	[key in TranslationsUnion]: string;

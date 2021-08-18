@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Alert, Col } from 'react-bootstrap';
 import { RootState } from '../../store';
 import { createSelector } from 'reselect';
@@ -21,17 +21,10 @@ const appPermSelector = createSelector(
 	},
 );
 
-const mapStateToProps = (state: RootState, componentProps: ComponentProps) => ({
-	isHaveAppPerm: appPermSelector(state, componentProps),
-	// isHaveAppPerm: true,
-});
+function AppsPermissionAccessor(props: ComponentProps) {
+	const isHaveAppPerm = useSelector((state: RootState) => appPermSelector(state, props));
 
-const mapDispatchToProps = {};
-
-type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & ComponentProps;
-// type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps ;
-function AppsPermissionAccessor(props: Props) {
-	if (props.isHaveAppPerm) return <>{props.children || null}</>;
+	if (isHaveAppPerm) return <>{props.children || null}</>;
 	else
 		return (
 			<Col sm={'auto'} className={'p-3'}>
@@ -40,4 +33,4 @@ function AppsPermissionAccessor(props: Props) {
 		);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppsPermissionAccessor);
+export default React.memo(AppsPermissionAccessor);

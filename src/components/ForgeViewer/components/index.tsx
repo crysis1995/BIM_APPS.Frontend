@@ -9,6 +9,7 @@ import isChanged from '../../../utils/IsEqual';
 import { EApplications, EApplicationsWithModules } from '../../../sites/types';
 import { Apps, ModuleUtils, Options } from './types';
 import { modelSelector } from './modelSelector';
+import PrefabricatedObjectsActions from '../../../sites/work_progress/redux/prefabricated/objects/actions';
 
 /*
  * 		constants
@@ -51,6 +52,7 @@ const mapDispatchToProps = {
 	CleanElements: ForgeViewerActions.CleanElements,
 	handleSelectedElements: WorkProgressMonolithicUpgradingActions.HandleSelectElements,
 	LabourInputHandleSelectObject: LabourInputObjectsActions.HandleSelectObject,
+	HandleSelectElements: PrefabricatedObjectsActions.HandleSelectElements,
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & ComponentProps;
@@ -104,7 +106,9 @@ class Viewer extends Component<Props, State> {
 		},
 	};
 	[EApplicationsWithModules.WORK_PROGRESS_PREFABRICATED]: ModuleUtils = {
-		methods: {},
+		methods: {
+			OnSelect: this.props.HandleSelectElements,
+		},
 		options: {
 			...defaultOptions,
 			startupHideAll: false,
@@ -201,9 +205,9 @@ class Viewer extends Component<Props, State> {
 					.find(
 						(x) =>
 							x.is3D() &&
-							(x.name().toLowerCase().includes('wspro') || x.name().toLowerCase().includes('{3d}')),
+							(x.name().toLowerCase().includes('wspro') || x.name().toLowerCase().includes('3d')),
 					);
-				const model = view3D && { id: view3D?.guid(), name: view3D?.name() };
+				const model = view3D && { id: view3D.guid(), name: view3D.name() };
 				this.props.SetSheetsSuccess(elements, model);
 				this.props.StartViewer();
 			};
@@ -267,7 +271,6 @@ class Viewer extends Component<Props, State> {
 			if (data.dbIdArray.length > 0) {
 				this.viewer.model.getBulkProperties(
 					data.dbIdArray,
-
 					{ propFilter: ['name'] },
 					(r: Autodesk.Viewing.PropertyResult[]) => {
 						if (r.length > 0) {

@@ -19,6 +19,26 @@ const PrefabricatedObjectsActions: WorkProgress.Prefabricated.Objects.Redux.IAct
 		type: WorkProgress.Prefabricated.Objects.Redux.Types.FETCH_STATUSES_ERROR,
 		payload: error,
 	}),
+	HandleSetStatuses: (prefabStatusEnum, date, objects) => ({
+		type: WorkProgress.Prefabricated.Objects.Redux.Types.HANDLE_SET_STATUSES,
+		payload: { status: prefabStatusEnum, date, objects },
+	}),
+	SetStatusesStart: (revitID) => ({
+		type: WorkProgress.Prefabricated.Objects.Redux.Types.SET_STATUSES_START,
+		payload: revitID,
+	}),
+	SetStatusesFinish: (revitID, data) => ({
+		type: WorkProgress.Prefabricated.Objects.Redux.Types.SET_STATUSES_FINISH,
+		payload: { data, revitID },
+	}),
+	SelectElements: (revitID) => ({
+		type: WorkProgress.Prefabricated.Objects.Redux.Types.SELECT_ELEMENTS,
+		payload: revitID,
+	}),
+	HandleSelectElements: (revitID) => ({
+		type: WorkProgress.Prefabricated.Objects.Redux.Types.HANDLE_SELECT_ELEMENTS,
+		payload: revitID,
+	}),
 };
 
 export default PrefabricatedObjectsActions;
