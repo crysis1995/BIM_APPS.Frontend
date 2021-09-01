@@ -102,7 +102,7 @@ function Status(props: { revit_id: number }) {
 	return (
 		<Badge
 			className={'p-1 small'}
-			style={{ backgroundColor: statusesMatcher[status.status].color, color: '#ffffff' }}>
+			style={{ backgroundColor: statusesMatcher?.[status.status]?.color, color: '#ffffff' }}>
 			<LocaleNameComponent value={status.status} />
 		</Badge>
 	);

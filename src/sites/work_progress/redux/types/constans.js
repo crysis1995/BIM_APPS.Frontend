@@ -14,6 +14,7 @@ export const CONSTANTS = {
 export const ACCEPTANCE_TYPE = {
 	MONOLITHIC: 'monolithic',
 	PREFABRICATED:"prefabricated",
+	GENERAL_CONSTRUCTION:"general_construction",
 	STRUCTURAL: 'structural',
 	MEP: 'mep',
 	ARCHITECTURAL: 'architectural',

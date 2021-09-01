@@ -1,18 +1,13 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
-const mapStateToProps = (state: RootState) => ({
-	is_login: state.CMSLogin.is_login,
-});
-
-const mapDispatchToProps = {};
-
-type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
-const LoginAccessor: React.FunctionComponent<Props> = React.memo((props) => {
-	if (props.is_login) return <>{props.children}</>;
+const CMSIsLoginSelector = (state: RootState) => state.CMSLogin.is_login;
+function LoginAccessor(props: PropsWithChildren<{}>) {
+	const is_login = useSelector(CMSIsLoginSelector);
+	if (is_login) return <>{props.children}</>;
 	else return <Redirect to="/login" />;
-});
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginAccessor);
+export default React.memo(LoginAccessor);

@@ -60,6 +60,7 @@ function CMSLoginComponent(props: Props) {
 					}
 					return previousValue;
 				}, {}),
+				params:props.projects[selectedProjectID].params
 			});
 		} else props.SetCurrentProject(null);
 	}, [selectedProjectID]);

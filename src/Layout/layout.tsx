@@ -42,7 +42,7 @@ function Layout() {
 							<Route path="/settings" component={Settings} />;
 							<Route
 								exact
-								path={[`/${EApplications.WORK_PROGRESS}/:type`, `/${EApplications.WORK_PROGRESS}`]}
+								path={[`/${EApplications.WORK_PROGRESS}/:type`]}
 								component={WorkProgressLayout}
 							/>
 							<Route

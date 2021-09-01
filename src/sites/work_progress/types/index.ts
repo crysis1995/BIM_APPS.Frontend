@@ -8,6 +8,7 @@ import { GetAllAcceptanceTermsType } from '../../../services/graphql.api.service
 import { UpdateTermType } from '../../../services/graphql.api.service/CONSTANTS/Mutations/UpdateTerm';
 import { GetPrefabricatedObjectsType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetPrefabObjects';
 import { GetPrefabObjectsStatusesType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetPrefabObjectsStatuses';
+import { QueryAcceptanceObjectsType } from '../../../services/graphql.api.service/CONSTANTS/Queries/QueryAcceptanceObjects';
 
 namespace WorkProgress {
 	export namespace General {
@@ -468,7 +469,7 @@ namespace WorkProgress {
 		export namespace General {
 			export namespace Redux {
 				export interface IStore {
-					isStatusOnModelVisible:boolean
+					isStatusOnModelVisible: boolean;
 				}
 				export interface IActions {
 					ComponentStart: () => {
@@ -477,17 +478,16 @@ namespace WorkProgress {
 					ComponentEnd: () => {
 						type: typeof WorkProgress.Prefabricated.General.Redux.Types.COMPONENT_ENDED;
 					};
-					ChangeStatusOnModelVisibility:(value:boolean) => {
+					ChangeStatusOnModelVisibility: (value: boolean) => {
 						type: typeof WorkProgress.Prefabricated.General.Redux.Types.CHANGE_STATUS_ON_MODEL_VISIBILITY;
-						payload:typeof value
-					}
+						payload: typeof value;
+					};
 				}
 				export type Actions = ReturnTypeFromInterface<WorkProgress.Prefabricated.General.Redux.IActions>;
 				export enum Types {
 					COMPONENT_STARTED = 'work_progress__prefabricated__general__COMPONENT_STARTED',
 					COMPONENT_ENDED = 'work_progress__prefabricated__general__COMPONENT_ENDED',
 					CHANGE_STATUS_ON_MODEL_VISIBILITY = 'work_progress__prefabricated__general__CHANGE_STATUS_ON_MODEL_VISIBILITY',
-
 				}
 			}
 		}
@@ -584,6 +584,65 @@ namespace WorkProgress {
 					SET_STATUSES_FINISH = 'work_progress__prefabricated__objects__SET_STATUSES_FINISH',
 					SELECT_ELEMENTS = 'work_progress__prefabricated__objects__SELECT_ELEMENTS',
 					HANDLE_SELECT_ELEMENTS = 'work_progress__prefabricated__objects__HANDLE_SELECT_ELEMENTS',
+				}
+			}
+		}
+	}
+	export namespace GeneralConstruction {
+		export namespace General {
+			export namespace Redux {
+				export interface IStore {
+					active: boolean;
+				}
+				export interface IActions {
+					ComponentStart: () => {
+						type: typeof WorkProgress.GeneralConstruction.General.Redux.Types.COMPONENT_STARTED;
+					};
+					ComponentEnd: () => {
+						type: typeof WorkProgress.GeneralConstruction.General.Redux.Types.COMPONENT_ENDED;
+					};
+				}
+				export type Actions = ReturnTypeFromInterface<WorkProgress.GeneralConstruction.General.Redux.IActions>;
+				export enum Types {
+					COMPONENT_STARTED = 'work_progress__general_construction__general__COMPONENT_STARTED',
+					COMPONENT_ENDED = 'work_progress__general_construction__general__COMPONENT_ENDED',
+				}
+			}
+		}
+		export namespace Objects {
+			export namespace Redux {
+				export interface IStore {
+					Selection: number[];
+					ObjectsLoading: boolean;
+					ObjectsByID: null | {
+						[key: string]: QueryAcceptanceObjectsType.AcceptanceObject;
+					};
+					ObjectStatusesLoading:null | {[key:string]:boolean}
+					ObjectStatusesByID:null | {[key:string]:GetObjectsByLevelType.Status[]}
+				}
+				export interface IActions {
+					FetchObjectsStart: () => {
+						type: typeof WorkProgress.GeneralConstruction.Objects.Redux.Types.FETCH_OBJECTS_START;
+					};
+					FetchObjectsEnd: (data: QueryAcceptanceObjectsType.AcceptanceObject[]) => {
+						type: typeof WorkProgress.GeneralConstruction.Objects.Redux.Types.FETCH_OBJECTS_END;
+						payload: typeof data;
+					};
+					SelectElements: (revitID: number | number[]) => {
+						type: typeof WorkProgress.GeneralConstruction.Objects.Redux.Types.SELECT_ELEMENTS;
+						payload: typeof revitID;
+					};
+					HandleSelectElements: (revitID: number[]) => {
+						type: typeof WorkProgress.GeneralConstruction.Objects.Redux.Types.HANDLE_SELECT_ELEMENTS;
+						payload: typeof revitID;
+					};
+				}
+				export type Actions = ReturnTypeFromInterface<WorkProgress.GeneralConstruction.Objects.Redux.IActions>;
+				export enum Types {
+					FETCH_OBJECTS_START = 'work_progress__general_construction__objects__FETCH_OBJECTS_START',
+					FETCH_OBJECTS_END = 'work_progress__general_construction__objects__FETCH_OBJECTS_END',
+					SELECT_ELEMENTS = 'work_progress__general_construction__objects__SELECT_ELEMENTS',
+					HANDLE_SELECT_ELEMENTS = 'work_progress__general_construction__objects__HANDLE_SELECT_ELEMENTS',
 				}
 			}
 		}

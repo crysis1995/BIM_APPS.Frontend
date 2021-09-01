@@ -23,4 +23,5 @@ export type Apps =
 	| EApplicationsWithModules.WORKERS_LOG_LABOUR_INPUT
 	| EApplicationsWithModules.WORK_PROGRESS_PREFABRICATED
 	| EApplicationsWithModules.WORK_PROGRESS_MONOLITHIC
+	| EApplicationsWithModules.WORK_PROGRESS_GENERAL_CONSTRUCTION
 	| EApplicationsWithModules.CONSTRUCTION_MATERIALS_REINFORCEMENT;
