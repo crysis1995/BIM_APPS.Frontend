@@ -4,6 +4,7 @@ import ModelSetStatuses from '../Prefabricated.Modal/Model.SetStatuses';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../store';
 import PrefabricatedGeneralActions from '../../../redux/prefabricated/general/actions';
+import AcceptanceButton from '../../general_construction/Atoms/Button.Acceptance';
 
 function PrefabricatedActionButtons() {
 	const dispatch = useDispatch();
@@ -39,14 +40,19 @@ function PrefabricatedActionButtons() {
 				{/*	variant={'outline-primary'}>*/}
 				{/*	Pokaż tylko zaznaczone*/}
 				{/*</Button>*/}
-				<Button
-					onClick={HandleClickAccepntance}
-					disabled={CanShowModal}
+				<AcceptanceButton
+					HandleClickAcceptanceButton={HandleClickAccepntance}
+					isDisabled={CanShowModal}
 					className={'float-right'}
-					size={'sm'}
-					variant={'success'}>
-					Awansuj wybrane elementy
-				</Button>
+				/>
+				{/*<Button*/}
+				{/*	onClick={HandleClickAccepntance}*/}
+				{/*	disabled={CanShowModal}*/}
+				{/*	className={'float-right'}*/}
+				{/*	size={'sm'}*/}
+				{/*	variant={'success'}>*/}
+				{/*	Awansuj wybrane elementy*/}
+				{/*</Button>*/}
 			</Col>
 			<ModelSetStatuses showModal={showModal} setShowModal={setShowModal} />
 		</Row>

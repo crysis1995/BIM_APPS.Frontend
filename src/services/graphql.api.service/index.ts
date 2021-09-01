@@ -67,6 +67,7 @@ import CountPrefabObjectStatuses, { CountPrefabObjectStatusesType } from './CONS
 import CreateAcceptanceObjectStatus, {
 	CreateAcceptanceObjectStatusType,
 } from './CONSTANTS/Mutations/CreateAcceptanceObjectStatus';
+import { QueryAcceptanceObjects, QueryAcceptanceObjectsType } from './CONSTANTS/Queries/QueryAcceptanceObjects';
 
 export default class GraphQLAPIService {
 	private client: ApolloClient<NormalizedCacheObject>;
@@ -221,6 +222,16 @@ export default class GraphQLAPIService {
 				Count: (data: CountPrefabObjectsType.Request) => {
 					return this.queryClient<CountPrefabObjectsType.Response, CountPrefabObjectsType.Request>(
 						CountPrefabObjects,
+						data,
+					);
+				},
+			},
+		},
+		GeneralConstruction: {
+			AcceptanceObjects: {
+				Get: (data: QueryAcceptanceObjectsType.Request) => {
+					return this.queryClient<QueryAcceptanceObjectsType.Response, QueryAcceptanceObjectsType.Request>(
+						QueryAcceptanceObjects,
 						data,
 					);
 				},

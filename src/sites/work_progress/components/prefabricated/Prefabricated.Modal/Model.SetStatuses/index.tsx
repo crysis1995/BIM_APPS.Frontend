@@ -35,11 +35,13 @@ function ModelSetStatuses(props: { showModal: boolean; setShowModal: (data: bool
 
 	function HandleCloseModal() {
 		props.setShowModal(false);
+		setDate(dayjs().format('YYYY-MM-DD'));
+		setStatus(null);
 	}
 
 	function HandleSubmitModal() {
-		props.setShowModal(false);
 		if (status) {
+			props.setShowModal(false)
 			dispatch(PrefabricatedObjectsActions.HandleSetStatuses(status, date, objects));
 			dispatch(PrefabricatedObjectsActions.SelectElements([]));
 			setDate(dayjs().format('YYYY-MM-DD'));

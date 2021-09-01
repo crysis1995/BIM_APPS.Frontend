@@ -13,6 +13,7 @@ export function FetchPrefabObjects(GRAPHQL: GraphQLAPIService, project: string) 
 				const numObjects = data.acceptanceObjectsConnection.aggregate.count;
 				let arrayOfPRomises: Promise<GetPrefabricatedObjectsType.Response['acceptanceObjects']>[] = [];
 				for (let index = 0; index < Math.ceil(numObjects / N); index++) {
+
 					arrayOfPRomises.push(
 						GRAPHQL.WorkProgress.Prefabricated.AcceptanceObjects.Get({
 							project,

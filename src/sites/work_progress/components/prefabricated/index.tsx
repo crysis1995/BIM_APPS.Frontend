@@ -16,7 +16,7 @@ function PrefabricatedLayoutComponent() {
 		};
 	}, []);
 	console.count('PrefabricatedLayoutComponent');
-	// return null
+
 	return (
 		<>
 			<Col xs={6}>
@@ -25,7 +25,7 @@ function PrefabricatedLayoutComponent() {
 				</div>
 			</Col>
 			<Col xs={6}>
-				<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
+				<div className="d-flex align-items-stretch p-3" style={{ height: '100%' }}>
 					<Col className="p-3">
 						<ActionButtons />
 						<ObjectsTable />

@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import Monolitic from './monolithic';
+import Monolithic from './monolithic';
 
 import { combineEpics } from 'redux-observable';
 import { OnStartWorkProgressMonolithicComponent } from './epics/OnStart.WorkProgressMonolithicComponent.Epic';
@@ -20,12 +20,14 @@ import { HandleCleanSelectedElements } from './epics/Handle.CleanSelectedElement
 import { RootActions } from '../../../reducers/type';
 import { RootState } from '../../../store';
 import Prefabricated from './prefabricated';
+import GeneralConstruction from './general_construction';
 
 export default {
 	reducer: combineReducers({
 		// General: General.reducer,
-		Monolithic: Monolitic.reducer,
+		Monolithic: Monolithic.reducer,
 		Prefabricated: Prefabricated.reducer,
+		GeneralConstruction:GeneralConstruction.reducer
 	}),
 	epics: combineEpics<RootActions, RootActions, RootState>(
 		OnStartWorkProgressMonolithicComponent,
@@ -44,5 +46,6 @@ export default {
 		OnInvokeCheckObjectsGroupTermsEpic,
 		HandleCleanSelectedElements,
 		Prefabricated.epics,
+		GeneralConstruction.epics,
 	),
 };

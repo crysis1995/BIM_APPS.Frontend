@@ -123,6 +123,14 @@ class Viewer extends Component<Props, State> {
 		},
 	};
 
+	[EApplicationsWithModules.WORK_PROGRESS_GENERAL_CONSTRUCTION]: ModuleUtils = {
+		methods: {},
+		options: {
+			...defaultOptions,
+			startupHideAll: false
+		},
+	};
+
 	componentDidMount() {
 		this.launchViewer(this.props.project_urn);
 	}

@@ -1,32 +1,37 @@
 import React from 'react';
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import AutodeskLoginComponent from '../components/AutodeskLogin';
 import { EApplications, EApplicationsWithModules } from '../sites/types';
 import { ACCEPTANCE_TYPE } from '../sites/work_progress/redux/types/constans';
 import { WORKERS_LOG } from '../sites/workers_log/redux/constants';
-import { CMSLoginType } from '../components/CMSLogin/type';
 import CMSLoginComponent from '../components/CMSLogin';
 import { ConstructionMaterialTypes } from '../sites/construction_materials/types';
 import classNames from 'classnames';
+import { RootState } from '../store';
+import { createSelector } from 'reselect';
 
-const mapStateToProps = (state: { CMSLogin: CMSLoginType.Redux.Store }) => ({
-	warbud_apps: state.CMSLogin.warbud_apps,
-	project: state.CMSLogin?.actual_project?.id,
-});
+const WarbudAppsSelector = (state: RootState) => state.CMSLogin.warbud_apps;
+const ActualProjectSelector = (state: RootState) => state.CMSLogin?.actual_project?.id;
 
-const mapDispatchToProps = {};
-type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
-function Header(props: Props) {
+const CurrentProjectAppsSelector = createSelector(
+	WarbudAppsSelector,
+	ActualProjectSelector,
+	(warbud_apps, actual_project) => {
+		if (warbud_apps && actual_project) {
+			return warbud_apps[actual_project];
+		}
+		return [];
+	},
+);
+
+function Header() {
+	const projectApps = useSelector(CurrentProjectAppsSelector);
+
 	function isAllowedApp(app_type: EApplicationsWithModules | EApplications) {
-		return !(
-			props.project &&
-			props?.warbud_apps?.[props.project] &&
-			Array.isArray(props.warbud_apps[props.project]) &&
-			props.warbud_apps[props.project].includes(app_type)
-		);
+		return !projectApps.includes(app_type);
 	}
 
 	return (
@@ -56,7 +61,14 @@ function Header(props: Props) {
 							className={classNames('dropdown-item', {
 								disabled: isAllowedApp(EApplicationsWithModules.WORK_PROGRESS_PREFABRICATED),
 							})}>
-							Prafabrykowane
+							Prefabrykowane
+						</NavLink>
+						<NavLink
+							to={`/${EApplications.WORK_PROGRESS}/${ACCEPTANCE_TYPE.GENERAL_CONSTRUCTION}`}
+							className={classNames('dropdown-item', {
+								disabled: isAllowedApp(EApplicationsWithModules.WORK_PROGRESS_GENERAL_CONSTRUCTION),
+							})}>
+							Ogólnobudowlane
 						</NavLink>
 					</NavDropdown>
 					<NavDropdown
@@ -97,4 +109,4 @@ function Header(props: Props) {
 	);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default Header;

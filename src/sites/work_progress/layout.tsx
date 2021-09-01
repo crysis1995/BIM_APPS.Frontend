@@ -7,6 +7,8 @@ import Loader from '../../components/Loader';
 
 const MonolithicLayoutComponent = React.lazy(() => import('./components/monolithic'));
 const PrefabricatedLayoutComponent = React.lazy(() => import('./components/prefabricated'));
+const GeneralLayoutComponent = React.lazy(() => import('./components/general_construction'));
+
 function WorkProgressComponent() {
 	return (
 		<Accessors.CMSLoginAccessor>
@@ -24,6 +26,12 @@ function WorkProgressComponent() {
 								<Accessors.AppsPermissionAccessor
 									requiredApp={EApplicationsWithModules.WORK_PROGRESS_PREFABRICATED}>
 									<PrefabricatedLayoutComponent />
+								</Accessors.AppsPermissionAccessor>
+							</Route>
+							<Route path={`/work_progress/general_construction`}>
+								<Accessors.AppsPermissionAccessor
+									requiredApp={EApplicationsWithModules.WORK_PROGRESS_GENERAL_CONSTRUCTION}>
+									<GeneralLayoutComponent />
 								</Accessors.AppsPermissionAccessor>
 							</Route>
 						</Switch>

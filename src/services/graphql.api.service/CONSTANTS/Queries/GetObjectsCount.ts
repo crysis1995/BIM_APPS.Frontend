@@ -13,7 +13,7 @@ export default GetObjectsCount;
 
 export namespace GetObjectsCountType {
 	export type Response = { acceptanceObjectsConnection: AcceptanceObjectsConnection };
-	export type Request = { project_id: string; level_id: string };
+	export type Request = { project_id: string; level_id?: string };
 
 	export interface AcceptanceObjectsConnection {
 		aggregate: Aggregate;

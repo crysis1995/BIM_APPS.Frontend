@@ -11,7 +11,6 @@ import { RootState } from '../../../store';
 import WorkProgressGeneralActions from '../../../sites/work_progress/redux/general/actions';
 import { RootActions } from '../../../reducers/type';
 
-
 const handleLogout: Epic<RootActions, RootActions> = (action$) =>
 	action$.pipe(
 		filter((data) => data.type === CMSLoginType.Redux.Types.USER_LOGOUT_START),
@@ -112,6 +111,7 @@ const OnSetUserData: Epic<RootActions, RootActions, RootState> = (action$) =>
 							}
 							return previousValue;
 						}, {}),
+						params: data.project.params,
 					}),
 				);
 			}

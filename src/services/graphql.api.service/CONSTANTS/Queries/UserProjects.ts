@@ -17,6 +17,7 @@ const USER_PROJECTS = gql`
 				bim_models {
 					model_urn
 				}
+                params
 				crane_ranges {
 					crane {
 						id
@@ -52,6 +53,7 @@ export namespace UserProjectsType {
 		webcon_code: string;
 		bim_models: BimModel[];
 		crane_ranges: CraneRange[];
+		params: Param[] | null;
 	}
 
 	export interface BimModel {
@@ -81,4 +83,17 @@ export namespace UserProjectsType {
 	export interface WarbudApp {
 		name: string;
 	}
+
+	export interface Param {
+		key?:         string;
+		valueTypes:   ValueType[];
+		description?: string;
+	}
+
+	export enum ValueType {
+		Null = "null",
+		Number = "number",
+		String = "string",
+	}
+
 }

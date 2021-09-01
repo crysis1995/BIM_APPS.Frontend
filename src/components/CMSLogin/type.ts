@@ -99,6 +99,8 @@ export namespace CMSLoginType {
 		// 	project_roles: {};
 		// }
 
+		export type Params = UserProjectsType.Param[] | null;
+
 		export interface Credentials {
 			access_token: string;
 			// expires_in: number;
@@ -113,6 +115,7 @@ export namespace CMSLoginType {
 			crane_ranges: {
 				[key: string]: CMSLoginType.Payload.Level['id'][];
 			};
+			params: CMSLoginType.Payload.Params;
 		}
 		export interface Project {
 			id: string;
