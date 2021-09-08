@@ -38,7 +38,7 @@
 		"js-logger": "^1.6.1",
 		"jspdf": "^2.3.1",
 		"jwt-decode": "^3.1.2",
-		"lodash": "^4.17.20",
+		"lodash": "^4.17.21",
 		"node-sass": "^4.14.1",
 		"prettier": "^2.3.2",
 		"prop-types": "^15.7.2",

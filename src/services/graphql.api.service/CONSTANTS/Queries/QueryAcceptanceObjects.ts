@@ -7,7 +7,6 @@ export const QueryAcceptanceObjects = gql`
 		$volume: Boolean = false
 		$running_meter: Boolean = false
 		$vertical: Boolean = false
-		$revit_id: Boolean = false
 		$VCF_Realisation: Boolean = false
 		$details: Boolean = false
 		$statuses: Boolean = false
@@ -21,7 +20,7 @@ export const QueryAcceptanceObjects = gql`
 			volume @include(if: $volume)
 			running_meter @include(if: $running_meter)
 			vertical @include(if: $vertical)
-			revit_id @include(if: $revit_id)
+			revit_id
 			VCF_Realisation @include(if: $VCF_Realisation)
 			details @include(if: $details)
 			statuses @include(if: $statuses) {
@@ -45,7 +44,6 @@ export namespace QueryAcceptanceObjectsType {
 		volume?: boolean;
 		running_meter?: boolean;
 		vertical?: boolean;
-		revit_id?: boolean;
 		VCF_Realisation?: boolean;
 		details?: boolean;
 		statuses?: boolean;
@@ -62,7 +60,7 @@ export namespace QueryAcceptanceObjectsType {
 		volume?: number | null;
 		running_meter?: number | null;
 		vertical?: GetObjectsByLevelType.Vertical | null;
-		revit_id?: number;
+		revit_id: number;
 		statuses?: GetObjectsByLevelType.Status[];
 		VCF_Realisation?: string | null;
 		details?: { [key: string]: any };

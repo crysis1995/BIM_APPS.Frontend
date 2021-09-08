@@ -16,6 +16,21 @@ const GeneralConstructionObjectActions: WorkProgress.GeneralConstruction.Objects
 		type: WorkProgress.GeneralConstruction.Objects.Redux.Types.HANDLE_SELECT_ELEMENTS,
 		payload: revitID,
 	}),
+	SetSortingOptions: (data) => ({
+		type: WorkProgress.GeneralConstruction.Objects.Redux.Types.SET_SORTING_OPTIONS,
+		payload: data,
+	}),
+	HandleSetStatuses: (status, date, objects) => ({
+		type: WorkProgress.GeneralConstruction.Objects.Redux.Types.HANDLE_SET_STATUSES,
+		payload: { status, date, objects },
+	}),
+	SetStatusesStart: (revitID) => ({
+		type: WorkProgress.GeneralConstruction.Objects.Redux.Types.SET_STATUSES_START,
+		payload: revitID,
+	}),
+	SetStatusesFinish: (revitID, data) => ({
+		type: WorkProgress.GeneralConstruction.Objects.Redux.Types.SET_STATUSES_FINISH,
+		payload: { revitID, data },
+	}),
 };
-
 export default GeneralConstructionObjectActions;

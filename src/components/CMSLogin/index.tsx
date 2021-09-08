@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { v4 } from 'uuid';
 import CMSLoginActions from './redux/actions';
 import { CMSLoginType } from './type';
+import PermissionProvider from '../Permissions';
 
 const mapStateToProps = (state: { CMSLogin: CMSLoginType.Redux.Store }) => ({
 	is_login: state.CMSLogin.is_login,
@@ -60,7 +61,7 @@ function CMSLoginComponent(props: Props) {
 					}
 					return previousValue;
 				}, {}),
-				params:props.projects[selectedProjectID].params
+				params: props.projects[selectedProjectID].params,
 			});
 		} else props.SetCurrentProject(null);
 	}, [selectedProjectID]);
@@ -88,10 +89,17 @@ function CMSLoginComponent(props: Props) {
 				title={<span>Witaj, {props.user?.username || ''}</span>}
 				id="nav-dropdown">
 				<NavDropdown.Item>
-					<Link className="" to="/settings">
+					<Link to="/settings" className={"text-dark"}>
 						Ustawienia konta
 					</Link>
 				</NavDropdown.Item>
+				<PermissionProvider.Show when={PermissionProvider.PermissionEnum.UserIsAdmin}>
+					<NavDropdown.Item>
+						<Link to="/projects" className={"text-dark"}>
+							Zarządzanie projektami
+						</Link>
+					</NavDropdown.Item>
+				</PermissionProvider.Show>
 				<NavDropdown.Item onClick={() => props.UserLogoutStart()}>Wyloguj</NavDropdown.Item>
 			</NavDropdown>
 		</>

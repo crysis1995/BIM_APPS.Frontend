@@ -9,6 +9,7 @@ import { UpdateTermType } from '../../../services/graphql.api.service/CONSTANTS/
 import { GetPrefabricatedObjectsType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetPrefabObjects';
 import { GetPrefabObjectsStatusesType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetPrefabObjectsStatuses';
 import { QueryAcceptanceObjectsType } from '../../../services/graphql.api.service/CONSTANTS/Queries/QueryAcceptanceObjects';
+import { CreateStatusType } from '../../../services/graphql.api.service/CONSTANTS/Mutations/CreateStatus';
 
 namespace WorkProgress {
 	export namespace General {
@@ -592,7 +593,8 @@ namespace WorkProgress {
 		export namespace General {
 			export namespace Redux {
 				export interface IStore {
-					active: boolean;
+					Active: boolean;
+					ShowStatusesOnModel:boolean
 				}
 				export interface IActions {
 					ComponentStart: () => {
@@ -601,15 +603,25 @@ namespace WorkProgress {
 					ComponentEnd: () => {
 						type: typeof WorkProgress.GeneralConstruction.General.Redux.Types.COMPONENT_ENDED;
 					};
+					ToggleStatusOnModelVisibility: () => {
+						type: typeof WorkProgress.GeneralConstruction.General.Redux.Types.TOGGLE_STATUS_ON_MODEL_VISIBILITY;
+					};
 				}
 				export type Actions = ReturnTypeFromInterface<WorkProgress.GeneralConstruction.General.Redux.IActions>;
 				export enum Types {
 					COMPONENT_STARTED = 'work_progress__general_construction__general__COMPONENT_STARTED',
 					COMPONENT_ENDED = 'work_progress__general_construction__general__COMPONENT_ENDED',
+					TOGGLE_STATUS_ON_MODEL_VISIBILITY = 'work_progress__general_construction__general__TOGGLE_STATUS_ON_MODEL_VISIBILITY',
 				}
 			}
 		}
 		export namespace Objects {
+			export namespace Payload {
+				export type SortingOptionsType = {
+					asc: boolean;
+					key: keyof QueryAcceptanceObjectsType.DataType;
+				} | null;
+			}
 			export namespace Redux {
 				export interface IStore {
 					Selection: number[];
@@ -617,8 +629,9 @@ namespace WorkProgress {
 					ObjectsByID: null | {
 						[key: string]: QueryAcceptanceObjectsType.AcceptanceObject;
 					};
-					ObjectStatusesLoading:null | {[key:string]:boolean}
-					ObjectStatusesByID:null | {[key:string]:GetObjectsByLevelType.Status[]}
+					ObjectStatusLoading: { [key: string]: boolean };
+					ObjectStatusAll: null | { [key: string]: GetObjectsByLevelType.Status };
+					Sorting: WorkProgress.GeneralConstruction.Objects.Payload.SortingOptionsType;
 				}
 				export interface IActions {
 					FetchObjectsStart: () => {
@@ -636,13 +649,47 @@ namespace WorkProgress {
 						type: typeof WorkProgress.GeneralConstruction.Objects.Redux.Types.HANDLE_SELECT_ELEMENTS;
 						payload: typeof revitID;
 					};
+					SetSortingOptions: (data: keyof QueryAcceptanceObjectsType.DataType) => {
+						type: typeof WorkProgress.GeneralConstruction.Objects.Redux.Types.SET_SORTING_OPTIONS;
+						payload: typeof data;
+					};
+					HandleSetStatuses: (
+						StatusEnum: GetObjectsByLevelType.StatusEnum,
+						date: string,
+						objects: Pick<QueryAcceptanceObjectsType.AcceptanceObject, 'id' | 'revit_id'>[],
+					) => {
+						type: typeof WorkProgress.GeneralConstruction.Objects.Redux.Types.HANDLE_SET_STATUSES;
+						payload: {
+							status: typeof StatusEnum;
+							date: typeof date;
+							objects: typeof objects;
+						};
+					};
+					SetStatusesStart: (revitID: number) => {
+						type: typeof WorkProgress.GeneralConstruction.Objects.Redux.Types.SET_STATUSES_START;
+						payload: typeof revitID;
+					};
+					SetStatusesFinish: (
+						revitID: number,
+						data: CreateStatusType.Status,
+					) => {
+						type: typeof WorkProgress.GeneralConstruction.Objects.Redux.Types.SET_STATUSES_FINISH;
+						payload: {
+							revitID: typeof revitID;
+							data: typeof data;
+						};
+					};
 				}
 				export type Actions = ReturnTypeFromInterface<WorkProgress.GeneralConstruction.Objects.Redux.IActions>;
 				export enum Types {
+					SET_SORTING_OPTIONS = 'work_progress__general_construction__objects__SET_SORTING_OPTIONS',
 					FETCH_OBJECTS_START = 'work_progress__general_construction__objects__FETCH_OBJECTS_START',
 					FETCH_OBJECTS_END = 'work_progress__general_construction__objects__FETCH_OBJECTS_END',
 					SELECT_ELEMENTS = 'work_progress__general_construction__objects__SELECT_ELEMENTS',
 					HANDLE_SELECT_ELEMENTS = 'work_progress__general_construction__objects__HANDLE_SELECT_ELEMENTS',
+					HANDLE_SET_STATUSES = 'work_progress__general_construction__objects__HANDLE_SET_STATUSES',
+					SET_STATUSES_START = 'work_progress__general_construction__objects__SET_STATUSES_START',
+					SET_STATUSES_FINISH = 'work_progress__general_construction__objects__SET_STATUSES_FINISH',
 				}
 			}
 		}

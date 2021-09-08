@@ -1,22 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ButtonGroup from '../Molecules/ButtonGroup';
-import { RootState } from '../../../../../store';
-import { useDispatch } from 'react-redux';
-
-
-
-
-
+import ModelAcceptance from './Model.Acceptance';
 
 function ButtonGroupWithActions() {
-	const dispatch = useDispatch();
+	const [modalActive, setModalActive] = useState(false);
+
+	function ClickAcceptanceButton() {
+		setModalActive(true);
+	}
 	return (
-		<ButtonGroup
-			ToggleStatusesOnModelButtonSelector={(state: RootState) => state.CMSLogin.is_login}
-			OnClickToggleStatusesOnModelButton={() => {}}
-			IsDisabledAcceptanceButtonSelector={(state: RootState) => state.CMSLogin.is_login}
-			OnClickAcceptanceButton={() => {}}
-		/>
+		<>
+			<ButtonGroup OnClickAcceptanceButton={ClickAcceptanceButton} />
+			{modalActive && <ModelAcceptance setModalActive={setModalActive} />}
+		</>
 	);
 }
 

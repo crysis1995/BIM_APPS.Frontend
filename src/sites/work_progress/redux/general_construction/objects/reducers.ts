@@ -5,9 +5,10 @@ import { GetObjectsByLevelType } from '../../../../../services/graphql.api.servi
 const INITIAL_STATE: WorkProgress.GeneralConstruction.Objects.Redux.IStore = {
 	ObjectsByID: null,
 	ObjectsLoading: false,
-	ObjectStatusesLoading: null,
-	ObjectStatusesByID: null,
+	ObjectStatusLoading: {},
+	ObjectStatusAll: null,
 	Selection: [],
+	Sorting: null,
 };
 
 function GeneralConstructionObjectsReducer(
@@ -19,11 +20,19 @@ function GeneralConstructionObjectsReducer(
 			return StoreActions.ObjectsLoading.Set(state, action, true);
 		case WorkProgress.GeneralConstruction.Objects.Redux.Types.FETCH_OBJECTS_END:
 			state = StoreActions.ObjectsByID.Set(state, action);
-			state = StoreActions.ObjectStatusesByID.SetForAll(state, action);
-			state = StoreActions.ObjectsLoading.Set(state, action, false);
-			return state;
+			state = StoreActions.ObjectStatusAll.SetForAll(state, action);
+			return StoreActions.ObjectsLoading.Set(state, action, false);
 		case WorkProgress.GeneralConstruction.Objects.Redux.Types.SELECT_ELEMENTS:
 			return StoreActions.Selection.Update(state, action);
+		case WorkProgress.GeneralConstruction.Objects.Redux.Types.HANDLE_SELECT_ELEMENTS:
+			return StoreActions.Selection.Handle(state, action);
+		case WorkProgress.GeneralConstruction.Objects.Redux.Types.SET_SORTING_OPTIONS:
+			return StoreActions.Sorting.Set(state, action);
+		case WorkProgress.GeneralConstruction.Objects.Redux.Types.SET_STATUSES_START:
+			return StoreActions.ObjectStatusLoading.Set(state, action, true);
+		case WorkProgress.GeneralConstruction.Objects.Redux.Types.SET_STATUSES_FINISH:
+			state = StoreActions.ObjectStatusAll.Set(state, action);
+			return StoreActions.ObjectStatusLoading.Set(state, action, false);
 		default:
 			return state;
 	}
@@ -32,12 +41,34 @@ function GeneralConstructionObjectsReducer(
 export default GeneralConstructionObjectsReducer;
 
 const StoreActions = {
+	Sorting: {
+		Set: (
+			state: WorkProgress.GeneralConstruction.Objects.Redux.IStore,
+			action: ReturnType<WorkProgress.GeneralConstruction.Objects.Redux.IActions['SetSortingOptions']>,
+		): typeof state => {
+			const sortingOptions = state.Sorting;
+			let newSortingOptions: typeof sortingOptions;
+
+			if (sortingOptions === null) {
+				newSortingOptions = { asc: true, key: action.payload };
+			} else {
+				if (sortingOptions.key === action.payload) {
+					if (sortingOptions.asc) newSortingOptions = { ...sortingOptions, asc: false };
+					else newSortingOptions = null;
+				} else {
+					newSortingOptions = { asc: true, key: action.payload };
+				}
+			}
+
+			return { ...state, Sorting: newSortingOptions };
+		},
+	},
 	ObjectsByID: {
 		Set: (
 			state: WorkProgress.GeneralConstruction.Objects.Redux.IStore,
 			action: ReturnType<WorkProgress.GeneralConstruction.Objects.Redux.IActions['FetchObjectsEnd']>,
 		): typeof state => {
-			return { ...state, ObjectsByID: normalize(action.payload, 'id') };
+			return { ...state, ObjectsByID: normalize(action.payload, 'revit_id') };
 		},
 	},
 	ObjectsLoading: {
@@ -94,43 +125,47 @@ const StoreActions = {
 			return { ...state, Selection: [...currentSelectedElements] };
 		},
 	},
-	ObjectStatusesLoading: {
-		// Set: (
-		// 	state: WorkProgress.GeneralConstruction.Objects.Redux.IStore,
-		// 	action: ReturnType<WorkProgress.GeneralConstruction.Objects.Redux.IActions['FetchObjectsEnd']>,
-		// 	value: boolean,
-		// ): typeof state => {
-		// 	return {
-		// 		...state,
-		// 		ObjectStatusesByID: {
-		// 			...state.ObjectStatusesLoading,
-		// 			[action.payload.]: value,
-		// 		},
-		// 	};
-		// },
+	ObjectStatusLoading: {
+		Set: (
+			state: WorkProgress.GeneralConstruction.Objects.Redux.IStore,
+			action: ReturnType<
+				| WorkProgress.GeneralConstruction.Objects.Redux.IActions['SetStatusesStart']
+				| WorkProgress.GeneralConstruction.Objects.Redux.IActions['SetStatusesFinish']
+			>,
+			value: boolean,
+		): typeof state => {
+			let ObjectStatusLoading = { ...state.ObjectStatusLoading };
+			if (typeof action.payload === 'number') ObjectStatusLoading[action.payload] = value;
+			else ObjectStatusLoading[action.payload.revitID] = value;
+			return {
+				...state,
+				ObjectStatusLoading,
+			};
+		},
 	},
-	ObjectStatusesByID: {
+	ObjectStatusAll: {
 		SetForAll: (
 			state: WorkProgress.GeneralConstruction.Objects.Redux.IStore,
 			action: ReturnType<WorkProgress.GeneralConstruction.Objects.Redux.IActions['FetchObjectsEnd']>,
 		): typeof state => {
 			return {
 				...state,
-				ObjectStatusesByID: action.payload.reduce<{ [p: string]: GetObjectsByLevelType.Status[] }>(
-					(prev, acc) => {
-						if (acc.revit_id && acc.statuses) prev[acc.revit_id] = acc.statuses;
-						return prev;
-					},
-					{},
-				),
+				ObjectStatusAll: action.payload.reduce<{ [p: string]: GetObjectsByLevelType.Status }>((prev, acc) => {
+					if (acc.revit_id && acc.statuses) prev[acc.revit_id] = acc.statuses[acc.statuses.length - 1];
+					return prev;
+				}, {}),
 			};
 		},
 		Set: (
 			state: WorkProgress.GeneralConstruction.Objects.Redux.IStore,
-			action: ReturnType<WorkProgress.GeneralConstruction.Objects.Redux.IActions['FetchObjectsEnd']>,
+			action: ReturnType<WorkProgress.GeneralConstruction.Objects.Redux.IActions['SetStatusesFinish']>,
 		): typeof state => {
 			return {
 				...state,
+				ObjectStatusAll: {
+					...state.ObjectStatusAll,
+					[action.payload.revitID]: action.payload.data,
+				},
 			};
 		},
 	},

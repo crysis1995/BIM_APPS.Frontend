@@ -5,7 +5,8 @@ import { createSelector } from 'reselect';
 import { RootState } from '../../../../../store';
 import { Table } from 'react-bootstrap';
 import TableBody from '../Molecules/Table.Body';
-
+import _ from 'lodash';
+import "./style.scss"
 const projectHeaderSelector = createSelector(
 	(state: RootState) => state.CMSLogin.actual_project?.params,
 	(params) => {
@@ -29,15 +30,12 @@ const projectHeaderSelector = createSelector(
 );
 
 function ElementContainer() {
-	const headerList = useSelector(projectHeaderSelector);
-	console.count('ElementContainer');
+	const headerList = useSelector(projectHeaderSelector, _.isEqual);
 	return (
 		<>
-			<Table size={'sm'}>
+			<Table size={'sm'} className={'table_GC'}>
 				<TableHeader headerList={headerList} />
-				<TableBody
-					headerList={headerList}
-				/>
+				<TableBody headerList={headerList} />
 			</Table>
 		</>
 	);

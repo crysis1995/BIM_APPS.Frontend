@@ -10,6 +10,7 @@ import { EApplications, EApplicationsWithModules } from '../../../sites/types';
 import { Apps, ModuleUtils, Options } from './types';
 import { modelSelector } from './modelSelector';
 import PrefabricatedObjectsActions from '../../../sites/work_progress/redux/prefabricated/objects/actions';
+import GeneralConstructionObjectActions from '../../../sites/work_progress/redux/general_construction/objects/actions';
 
 /*
  * 		constants
@@ -53,6 +54,7 @@ const mapDispatchToProps = {
 	handleSelectedElements: WorkProgressMonolithicUpgradingActions.HandleSelectElements,
 	LabourInputHandleSelectObject: LabourInputObjectsActions.HandleSelectObject,
 	HandleSelectElements: PrefabricatedObjectsActions.HandleSelectElements,
+	GeneralConstructionHandleSelectElements: GeneralConstructionObjectActions.HandleSelectElements,
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & ComponentProps;
@@ -124,10 +126,12 @@ class Viewer extends Component<Props, State> {
 	};
 
 	[EApplicationsWithModules.WORK_PROGRESS_GENERAL_CONSTRUCTION]: ModuleUtils = {
-		methods: {},
+		methods: {
+			OnSelect: this.props.GeneralConstructionHandleSelectElements,
+		},
 		options: {
 			...defaultOptions,
-			startupHideAll: false
+			startupHideAll: false,
 		},
 	};
 

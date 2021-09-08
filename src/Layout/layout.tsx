@@ -8,7 +8,6 @@ import NotificationComponent from '../components/Notification';
 import { MainComponent } from './mainComponent';
 import { EApplications } from '../sites/types';
 
-// todo zrobić sidebar
 
 const Header = React.lazy(() => import('./header'));
 const WorkProgressLayout = React.lazy(() => import('../sites/work_progress/layout'));

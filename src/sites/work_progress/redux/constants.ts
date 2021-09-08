@@ -1,3 +1,5 @@
+import { Color } from '../../../config';
+
 export namespace Constants {
 	export enum MonolithicTabs {
 		SCHEDULED = 'monolithic_tab_scheduled',
@@ -171,6 +173,18 @@ export namespace Constants {
 			[WorkProgressElementStatus.Finished]: { color: '#494949', alpha: 0.7 },
 			[WorkProgressElementStatus.InProgress]: { color: '#009b03', alpha: 0.7 },
 		},
+	};
+
+	export type WorkProgressGeneralConstructionStatusLegendType = {
+		[key in WorkProgressElementStatus]?: {
+			color: string;
+			alpha: number;
+		};
+	};
+
+	export const WorkProgressGeneralConstructionColorMap: WorkProgressGeneralConstructionStatusLegendType = {
+		[WorkProgressElementStatus.InProgress]: { color: Color.Yellow, alpha: 0.8 },
+		[WorkProgressElementStatus.Finished]: { color: Color.Blue, alpha: 0.8 },
 	};
 
 	export type WorkProgressPrefabricatedStatusLegendType = {

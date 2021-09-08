@@ -13,7 +13,6 @@ import {
 	GetFormattedDate,
 } from '../../../../../workers_log/redux/work_time_evidence/general/utils/GetFormattedDate';
 import PrefabricatedObjectsActions from '../../../../redux/prefabricated/objects/actions';
-import PrefabricatedGeneralActions from '../../../../redux/prefabricated/general/actions';
 
 const selectedObjectsSelector = createSelector(
 	(state: RootState) => state.WorkProgress.Prefabricated.Objects.selection,
@@ -41,7 +40,7 @@ function ModelSetStatuses(props: { showModal: boolean; setShowModal: (data: bool
 
 	function HandleSubmitModal() {
 		if (status) {
-			props.setShowModal(false)
+			props.setShowModal(false);
 			dispatch(PrefabricatedObjectsActions.HandleSetStatuses(status, date, objects));
 			dispatch(PrefabricatedObjectsActions.SelectElements([]));
 			setDate(dayjs().format('YYYY-MM-DD'));

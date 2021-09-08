@@ -3,16 +3,15 @@ import Loader from '../../../../../components/Loader';
 import { useSelector } from 'react-redux';
 import ObjectSelectors from '../../../redux/general_construction/objects/selectors';
 import { TableBodyRow } from './Table.Body.Row';
+import _ from 'lodash';
 
 type ComponentProps = {
 	headerList: ({ key?: string; description: string } | { key: string; description?: string })[];
 };
 
 function TableBody(props: ComponentProps) {
-	const isDataLoading = useSelector(ObjectSelectors.ObjectsIsLoading);
-	const DataList = useSelector(ObjectSelectors.Objects);
-
-	if (isDataLoading)
+	const isLoadingStore = useSelector(ObjectSelectors.ObjectsIsLoading, _.isEqual);
+	if (isLoadingStore)
 		return (
 			<tbody>
 				<tr>
@@ -22,9 +21,15 @@ function TableBody(props: ComponentProps) {
 				</tr>
 			</tbody>
 		);
+	return <TableBodyElementList headerList={props.headerList} />;
+}
+
+function TableBodyElementList(props: ComponentProps) {
+	const dataList = useSelector(ObjectSelectors.SortedObjectsSelector, _.isEqual);
+
 	return (
-		<tbody>
-			{DataList.map((item, index) => (
+		<tbody className={'tbody_GC'}>
+			{dataList.map((item, index) => (
 				<TableBodyRow key={index} headerList={props.headerList} item={item} />
 			))}
 		</tbody>

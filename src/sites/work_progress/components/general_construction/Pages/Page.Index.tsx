@@ -1,11 +1,9 @@
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 import Viewer from '../../../../../components/ForgeViewer/components';
 import { EApplicationsWithModules } from '../../../../types';
 import ButtonGroupWithActions from '../Organisms/ButtonGroupWithActions';
 import ElementContainer from '../Organisms/ElementContainer';
-
-
 
 function PageIndex() {
 	return (
@@ -17,18 +15,18 @@ function PageIndex() {
 			</Col>
 			<Col xs={6}>
 				<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
-					<Col className={'p-3'}>
-						<Row className={'pb-3'}>
-							<Col>
+					<div className={'d-flex flex-column w-100 p-3'}>
+						<div className={'d-flex flex-row pb-3'}>
+							<Col className={'p-0'}>
 								<ButtonGroupWithActions />
 							</Col>
-						</Row>
-						<Row>
-							<Col>
+						</div>
+						<div className={'d-flex flex-row align-items-stretch'} style={{ height: '100%' }}>
+							<div className={'d-flex flex-column'}>
 								<ElementContainer />
-							</Col>
-						</Row>
-					</Col>
+							</div>
+						</div>
+					</div>
 				</div>
 			</Col>
 		</>

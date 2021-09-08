@@ -62,8 +62,8 @@ export namespace GetObjectsByLevelType {
 	}
 
 	export enum StatusEnum{
+		InProgress = "in_progress",
 		Finished = "finished",
-		InProgress = "in_progress"
 	}
 
 	export enum Vertical {
