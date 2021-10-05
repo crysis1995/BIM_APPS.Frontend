@@ -27,7 +27,7 @@ export default function FetchObjects(GRAPHQL: GraphQLAPIService, project: CMSLog
 								...numb,
 							}),
 						(data1) => data1.acceptanceObjects,
-						200,
+						500,
 					),
 				).pipe(map((data) => GeneralConstructionObjectActions.FetchObjectsEnd(data))),
 			),
