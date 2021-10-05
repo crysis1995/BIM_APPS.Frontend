@@ -7,27 +7,39 @@ type ComponentProps = {
 	item: QueryAcceptanceObjectsType.AcceptanceObject;
 	header: { key?: string; description: string } | { key: string; description?: string };
 };
+
+const KeyToComponentMap: {
+	[K in keyof QueryAcceptanceObjectsType.AcceptanceObject]?: (
+		item: QueryAcceptanceObjectsType.AcceptanceObject,
+	) => React.ReactElement;
+} = {
+	revit_id: (item) => {
+		return <>{item?.revit_id}</>;
+	},
+	VCF_Realisation: (item) => <>{item?.VCF_Realisation}</>,
+	vertical: (item) => <>{item?.vertical}</>,
+	area: (item) => {
+		const areaValue = item?.area;
+		return areaValue ? <UNITS.M2 children={areaValue} /> : <></>;
+	},
+	volume: (item) => {
+		const volumeValue = item?.volume;
+		return volumeValue ? <UNITS.M3 children={volumeValue} /> : <></>;
+	},
+	running_meter: (item) => {
+		const runningMetreValue = item?.running_meter;
+		return runningMetreValue ? <UNITS.CM children={runningMetreValue} /> : <></>;
+	},
+	statuses: (item) => {
+		const revit_id = item.revit_id;
+		return revit_id ? <Status item={revit_id} /> : <></>;
+	},
+};
+
 export function CellContent({ item, header }: ComponentProps) {
 	if (header.key) {
 		const key = header.key as keyof QueryAcceptanceObjectsType.AcceptanceObject;
-		switch (key) {
-			case 'revit_id' || 'vertical':
-				return item?.[key];
-			case 'area':
-				const areaValue = item?.[key];
-				return areaValue ? <UNITS.M2 children={areaValue} /> : null;
-			case 'volume':
-				const volumeValue = item?.[key];
-				return volumeValue ? <UNITS.M3 children={volumeValue} /> : null;
-			case 'running_meter':
-				const runningMetreValue = item?.[key];
-				return runningMetreValue ? <UNITS.CM children={runningMetreValue} /> : null;
-			case 'statuses':
-				const revit_id = item.revit_id;
-				return revit_id ? <Status item={revit_id} /> : null;
-			default:
-				return null;
-		}
+		return KeyToComponentMap[key]?.(item);
 	}
 	if (header.description) return item.details?.[header.description];
 	return null;

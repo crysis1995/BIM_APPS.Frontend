@@ -112,6 +112,7 @@ const OnSetUserData: Epic<RootActions, RootActions, RootState> = (action$) =>
 							return previousValue;
 						}, {}),
 						params: data.project.params,
+						defaultViewName: data.project.bim_models[0]?.defaultViewName,
 					}),
 				);
 			}

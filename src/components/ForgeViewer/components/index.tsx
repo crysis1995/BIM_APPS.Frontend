@@ -34,6 +34,8 @@ type ComponentProps = {
 const mapStateToProps = (state: RootState) => ({
 	login_3_legged: state.Autodesk.login_3_legged,
 	project_urn: state.CMSLogin.actual_project?.urn,
+	defaultViewName: state.CMSLogin.actual_project?.defaultViewName,
+	model_elementsByForgeID: state.ForgeViewer.model_elementsByForgeID,
 	current_sheet: modelSelector(state),
 	model_elements_loading: state.ForgeViewer.model_elements_loading,
 	visible_elements: state.ForgeViewer.visible_elements,
@@ -60,9 +62,17 @@ const mapDispatchToProps = {
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & ComponentProps;
 type State = { currentApp: Apps };
 
+enum ModelType {
+	RVT = 'rvt',
+	NWD = 'nwd',
+	NWC = 'nwc',
+}
+
 class Viewer extends Component<Props, State> {
 	private doc: Autodesk.Viewing.Document | null;
 	private viewer: Autodesk.Viewing.GuiViewer3D | null;
+
+	private modelType: ModelType | null = null;
 
 	get currentAppUtils() {
 		return this[this.state.currentApp];
@@ -190,6 +200,13 @@ class Viewer extends Component<Props, State> {
 			this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.current_sheet));
 	}
 
+	IterateOverChildren(children: Autodesk.Viewing.BubbleNode[], Guids: { id: string; name: string }[]) {
+		children.forEach((child) => {
+			if (child.is3D()) Guids.push({ id: child.guid(), name: child.name() });
+			if (child.children && child.children.length > 0) this.IterateOverChildren(child.children, Guids);
+		});
+	}
+
 	launchViewer(urn: string | undefined) {
 		const options: Autodesk.Viewing.InitializerOptions = {
 			env: 'AutodeskProduction',
@@ -211,16 +228,25 @@ class Viewer extends Component<Props, State> {
 				const elements = viewables.map((e) => {
 					return { id: e.guid(), name: e.name() };
 				});
-				const view3D = doc
-					.getRoot()
-					.search({ type: 'geometry' })
-					.find(
-						(x) =>
-							x.is3D() &&
-							(x.name().toLowerCase().includes('wspro') || x.name().toLowerCase().includes('3d')),
-					);
-				const model = view3D && { id: view3D.guid(), name: view3D.name() };
-				this.props.SetSheetsSuccess(elements, model);
+
+				const root = doc.getRoot();
+				let Guids: { id: string; name: string }[] = [];
+				this.IterateOverChildren(root.children, Guids);
+
+				const viewName = this.props.defaultViewName;
+				function Get3DModel(): { id: string; name: string } | undefined {
+					if (Guids.length === 0) return;
+					let wsproModel = Guids.find((e) => e.name.toLowerCase().includes('wspro'));
+					if (wsproModel) return wsproModel;
+					if (viewName) {
+						let defaultNameModel = Guids.find((e) => e.name === viewName);
+						if (defaultNameModel) return defaultNameModel;
+					}
+					return Guids.find((e) => e.name.toLowerCase().includes('3d'));
+				}
+
+				let view3D = Get3DModel();
+				this.props.SetSheetsSuccess(elements, view3D);
 				this.props.StartViewer();
 			};
 
@@ -281,80 +307,156 @@ class Viewer extends Component<Props, State> {
 		if (this.viewer && isChanged(data.dbIdArray, this.props.selected_elements)) {
 			this.props.SetElements({ selected: data.dbIdArray });
 			if (data.dbIdArray.length > 0) {
-				this.viewer.model.getBulkProperties(
-					data.dbIdArray,
-					{ propFilter: ['name'] },
-					(r: Autodesk.Viewing.PropertyResult[]) => {
-						if (r.length > 0) {
-							const selectedElement = r
-								.map((dat) => {
-									const match = dat.name?.match(/^.+\[(.+)\]$/);
-									if (match) return parseInt(match[1]);
-								})
-								.filter((x) => !!x) as number[];
-							reduxCallback(selectedElement);
-						}
-					},
-					(err) => {
-						console.log(err);
-					},
-				);
+				if (this.modelType === ModelType.RVT) {
+					let revitIDS = data.dbIdArray
+						.map((db) => this.props.model_elementsByForgeID?.[db])
+						.filter((x) => !!x) as number[];
+					reduxCallback(revitIDS);
+				} else if (this.modelType === ModelType.NWC || this.modelType === ModelType.NWD) {
+					let revitIDS = data.dbIdArray
+						.map((item) => {
+							const id = this.viewer?.model.getInstanceTree().getNodeParentId(item);
+							return id && this.props.model_elementsByForgeID?.[id];
+						})
+						.filter((x) => !!x) as number[];
+					reduxCallback(revitIDS);
+				}
 			} else {
 				reduxCallback([]);
 			}
 		}
 	}
+	private async GetElementSchemaName(rootId: number, viewer: Autodesk.Viewing.GuiViewer3D) {
+		return new Promise<Autodesk.Viewing.PropertyResult>((resolve, reject) => {
+			viewer.model.getBulkProperties(
+				[rootId],
+				{ propFilter: ['schema_name'] },
+				(data) => resolve(data[0]),
+				(err) => reject(err),
+			);
+		});
+	}
 
-	private OnObjectTreeCreatedEvent() {
+	private async SetModelType(viewer: Autodesk.Viewing.GuiViewer3D) {
+		const tree = viewer.model.getInstanceTree();
+		const rootId = tree.getRootId();
+		let rootElement = await this.GetElementSchemaName(rootId, viewer);
+		if (!rootElement) return;
+		const schemaName = rootElement.properties.find((prop) => prop.displayName === 'schema_name')?.displayValue;
+		this.modelType = schemaName ? (schemaName as ModelType) : null;
+	}
+
+	private async OnObjectTreeCreatedEvent() {
+		const GetElementsFromNavisworksModel = (
+			tree: Autodesk.Viewing.InstanceTree,
+			rootId: number,
+			viewer: Autodesk.Viewing.GuiViewer3D,
+		) => {
+			let elements = new Set<number>();
+			tree.enumNodeChildren(
+				rootId,
+				(dbID) => {
+					elements.add(dbID);
+				},
+				true,
+			);
+			viewer.model.getBulkProperties(
+				[...elements],
+				{
+					propFilter: ['Value', elementParameterLevelName, warbudElementParameterLevelName, 'Level'],
+				},
+				(result) => {
+					const extractedData = result
+						.map((data) => {
+							let output: Partial<ForgeViewer.Payload.Element> | undefined = {
+								forgeId: data.dbId,
+							};
+							if (this.currentAppUtils.options.isLevelNecessary) {
+								const level = data.properties.find(
+									(x) =>
+										!!x.displayValue &&
+										[elementParameterLevelName, warbudElementParameterLevelName, 'Level'].includes(
+											x.attributeName,
+										) &&
+										typeof x.displayValue === 'string',
+								);
+								if (level) output.levelName = level.displayValue;
+							}
+							const propertyValue = data.properties.find((prop) => prop.displayName === 'Value');
+							if (propertyValue) {
+								output.rvtId = parseInt(propertyValue.displayValue);
+							}
+							if (output) return output;
+						})
+						.filter((x) => !!x) as ForgeViewer.Payload.Element[];
+					this.props.SetViewerElements(extractedData);
+				},
+			);
+		};
+
+		const GetElementsFromRevitModel = (
+			tree: Autodesk.Viewing.InstanceTree,
+			rootId: number,
+			viewer: Autodesk.Viewing.GuiViewer3D,
+		) => {
+			let elements = new Set<number>();
+			tree.enumNodeChildren(
+				rootId,
+				(dbID) => {
+					if (tree.getChildCount(dbID) === 0) {
+						elements.add(dbID);
+					}
+				},
+				true,
+			);
+			viewer.model.getBulkProperties(
+				[...elements],
+				{
+					propFilter: ['name', elementParameterLevelName, warbudElementParameterLevelName, 'Level', 'Value'],
+				},
+				(result) => {
+					const extractedData = result
+						.map((data) => {
+							if (data.name) {
+								let output: Partial<ForgeViewer.Payload.Element> | undefined;
+								let revit_id = /.+\[(.+)\]/g.exec(data.name);
+								if (revit_id && revit_id[1]) {
+									output = {
+										forgeId: data.dbId,
+										rvtId: revit_id[1],
+									};
+									if (this.currentAppUtils.options.isLevelNecessary) {
+										const level = data.properties.find(
+											(x) =>
+												!!x.displayValue &&
+												[
+													elementParameterLevelName,
+													warbudElementParameterLevelName,
+													'Level',
+												].includes(x.attributeName) &&
+												typeof x.displayValue === 'string',
+										);
+										if (level) output.levelName = level.displayValue;
+									}
+								}
+								return output;
+							}
+						})
+						.filter((x) => !!x) as ForgeViewer.Payload.Element[];
+					this.props.SetViewerElements(extractedData);
+				},
+			);
+		};
+
 		if (this.viewer) {
 			try {
 				const tree = this.viewer.model.getInstanceTree();
 				const rootId = tree.getRootId();
-				let elements: number[] = [];
-				tree.enumNodeChildren(
-					rootId,
-					(dbID) => {
-						if (tree.getChildCount(dbID) === 0) {
-							elements.push(dbID);
-						}
-					},
-					true,
-				);
-				this.viewer.model.getBulkProperties(
-					elements,
-					{ propFilter: ['name', elementParameterLevelName, warbudElementParameterLevelName, 'Level'] },
-					(result) => {
-						const extractedData = result
-							.map((data) => {
-								if (data.name) {
-									let output: Partial<ForgeViewer.Payload.Element> | undefined;
-									let revit_id = /.+\[(.+)\]/g.exec(data.name);
-									if (revit_id && revit_id[1]) {
-										output = {
-											forgeId: data.dbId,
-											rvtId: revit_id[1],
-										};
-										if (this.currentAppUtils.options.isLevelNecessary) {
-											const level = data.properties.find(
-												(x) =>
-													!!x.displayValue &&
-													[
-														elementParameterLevelName,
-														warbudElementParameterLevelName,
-														'Level',
-													].includes(x.attributeName) &&
-													typeof x.displayValue === 'string',
-											);
-											if (level) output.levelName = level.displayValue;
-										}
-									}
-									return output;
-								}
-							})
-							.filter((x) => !!x) as ForgeViewer.Payload.Element[];
-						this.props.SetViewerElements(extractedData);
-					},
-				);
+				await this.SetModelType(this.viewer);
+				if (this.modelType === ModelType.RVT) GetElementsFromRevitModel(tree, rootId, this.viewer);
+				if (this.modelType === ModelType.NWD || this.modelType === ModelType.NWC)
+					GetElementsFromNavisworksModel(tree, rootId, this.viewer);
+
 				this.currentAppUtils.options.startupHideAll && this.viewer.hide(rootId);
 			} catch (e) {
 				console.error(e.message || e);
@@ -372,14 +474,28 @@ class Viewer extends Component<Props, State> {
 			// @ts-ignore
 			this.viewer.clearThemingColors();
 			if (this_colored_elements.length > 0) {
+				// if (this.modelType === ModelType.NWC || this.modelType === ModelType.NWD) {
+				// this_colored_elements = [
+				// 	...this_colored_elements.map((elem) => {
+				// 		elem.element = this.viewer!.model.getInstanceTree().getNodeParentId(elem.element);
+				// 		return elem;
+				// 	}),
+				// ];
+				// }
 				for (const { color, element } of this_colored_elements) {
+					let id =
+						this.modelType === ModelType.NWC || this.modelType === ModelType.NWD
+							? this.viewer!.model.getInstanceTree().getNodeParentId(element)
+							: element;
 					this.viewer.setThemingColor(
-						element,
+						id,
 						new THREE.Vector4(color.r, color.g, color.b, color.a || 1),
 						this.viewer.model,
+						true,
 					);
 				}
 			}
+			this.viewer.refresh(false);
 		}
 	}
 

@@ -62,6 +62,7 @@ function CMSLoginComponent(props: Props) {
 					return previousValue;
 				}, {}),
 				params: props.projects[selectedProjectID].params,
+				defaultViewName:props.projects[selectedProjectID].bim_models?.[0]?.defaultViewName
 			});
 		} else props.SetCurrentProject(null);
 	}, [selectedProjectID]);

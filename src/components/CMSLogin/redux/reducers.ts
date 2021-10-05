@@ -77,6 +77,7 @@ const CMSLoginReducer = (state = INITIAL_STATE, action: CMSLoginType.Redux.Actio
 							cranes_all: action.payload.project.cranes_all,
 							crane_ranges: action.payload.project.crane_ranges,
 							params: action.payload.project.params,
+							defaultViewName: action.payload.project.defaultViewName,
 					  }
 					: null,
 			};

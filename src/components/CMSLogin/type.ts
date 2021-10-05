@@ -116,6 +116,7 @@ export namespace CMSLoginType {
 				[key: string]: CMSLoginType.Payload.Level['id'][];
 			};
 			params: CMSLoginType.Payload.Params;
+			defaultViewName:string|null
 		}
 		export interface Project {
 			id: string;

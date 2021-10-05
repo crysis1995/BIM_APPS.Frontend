@@ -30,7 +30,7 @@ function TableBodyElementList(props: ComponentProps) {
 	return (
 		<tbody className={'tbody_GC'}>
 			{dataList.map((item, index) => (
-				<TableBodyRow key={index} headerList={props.headerList} item={item} />
+				<TableBodyRow key={index} headerList={props.headerList} data={item} />
 			))}
 		</tbody>
 	);

@@ -16,6 +16,7 @@ const USER_PROJECTS = gql`
 				webcon_code
 				bim_models {
 					model_urn
+                    defaultViewName
 				}
                 params
 				crane_ranges {
@@ -58,6 +59,7 @@ export namespace UserProjectsType {
 
 	export interface BimModel {
 		model_urn: string;
+		defaultViewName:string | null
 	}
 
 	export interface CraneRange {

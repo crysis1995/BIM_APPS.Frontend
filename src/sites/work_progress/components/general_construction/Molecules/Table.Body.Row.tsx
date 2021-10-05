@@ -11,28 +11,28 @@ import _ from 'lodash';
 
 type ComponentProps = {
 	headerList: ({ key?: string; description: string } | { key: string; description?: string })[];
-	item: QueryAcceptanceObjectsType.AcceptanceObject;
+	data: QueryAcceptanceObjectsType.AcceptanceObject;
 };
 
 export function TableBodyRow(props: ComponentProps) {
 	const dispatch = useDispatch();
 	const isSelected = useSelector(
 		(state: RootState) =>
-			props.item.revit_id ? ObjectSelectors.ObjectIsSelected(state, { item: props.item.revit_id }) : false,
+			props.data.revit_id ? ObjectSelectors.ObjectIsSelected(state, { item: props.data.revit_id }) : false,
 		_.isEqual,
 	);
 	function OnClickSelectButton() {
-		dispatch(GeneralConstructionObjectActions.SelectElements(props.item.revit_id));
+		dispatch(GeneralConstructionObjectActions.SelectElements(props.data.revit_id));
 	}
 
 	return (
 		<tr className={classNames({ 'table-active': isSelected }, 'tr_GC')}>
-			<td style={{width:50}}>
+			<td style={{ width: 50 }}>
 				<Input OnClick={OnClickSelectButton} checked={isSelected} />
 			</td>
 			{props.headerList.map((header, headerIndex) => (
 				<td key={headerIndex}>
-					<CellContent header={header} item={props.item} />
+					<CellContent header={header} item={props.data} />
 				</td>
 			))}
 		</tr>
