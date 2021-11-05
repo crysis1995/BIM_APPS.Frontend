@@ -1,25 +1,31 @@
 import { createSelector } from 'reselect';
 import { RootState } from '../../../../../store';
 import { QueryAcceptanceObjectsType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/QueryAcceptanceObjects';
+import _ from 'lodash';
+import { RoundNumber } from '../../../../../utils/RoundNumber';
 
-const ObjectListSelector = (state: RootState) =>
+export const ObjectListSelector = (state: RootState) =>
 	state.WorkProgress.GeneralConstruction.Objects.ObjectsByID
 		? Object.values(state.WorkProgress.GeneralConstruction.Objects.ObjectsByID)
 		: [];
-const ObjectDictSelector = (state: RootState) => state.WorkProgress.GeneralConstruction.Objects.ObjectsByID || {};
-const ObjectsLoadingSelector = (state: RootState) => state.WorkProgress.GeneralConstruction.Objects.ObjectsLoading;
-const ObjectsStatusLoadingSelector = (state: RootState, props: { item: number }) =>
+export const ObjectDictSelector = (state: RootState) =>
+	state.WorkProgress.GeneralConstruction.Objects.ObjectsByID || {};
+export const ObjectsLoadingSelector = (state: RootState) =>
+	state.WorkProgress.GeneralConstruction.Objects.ObjectsLoading;
+export const ObjectsStatusLoadingSelector = (state: RootState, props: { item: number }) =>
 	state.WorkProgress.GeneralConstruction.Objects.ObjectStatusLoading?.[props.item];
-const ObjectStatusesSelector = (state: RootState) => state.WorkProgress.GeneralConstruction.Objects.ObjectStatusAll;
-const SelectionSelector = (state: RootState) => state.WorkProgress.GeneralConstruction.Objects.Selection;
-const ObjectsSorting = (state: RootState) => state.WorkProgress.GeneralConstruction.Objects.Sorting;
+export const ObjectStatusesSelector = (state: RootState) =>
+	state.WorkProgress.GeneralConstruction.Objects.ObjectStatusAll;
+export const SelectionSelector = (state: RootState) => state.WorkProgress.GeneralConstruction.Objects.Selection;
+export const ObjectsSorting = (state: RootState) => state.WorkProgress.GeneralConstruction.Objects.Sorting;
 
 const SortedObjectsSelector = createSelector(
 	ObjectListSelector,
 	ObjectsSorting,
 	ObjectStatusesSelector,
-	(Objects, sortingOptions, objectStatuses) => {
-		let objectsToOutput = Objects;
+	SelectionSelector,
+	(Objects, sortingOptions, objectStatuses, selectedElements) => {
+		let objectsToOutput = Objects.sort((a, b) => (selectedElements.includes(a.revit_id) ? -1 : 1));
 		if (sortingOptions) {
 			if (
 				(
@@ -44,8 +50,8 @@ const SortedObjectsSelector = createSelector(
 			}
 			if (sortingOptions.key === 'statuses' && objectStatuses) {
 				objectsToOutput = Objects.sort((a, b) => {
-					const aRevitID = a.revit_id
-					const bRevitID = b.revit_id
+					const aRevitID = a.revit_id;
+					const bRevitID = b.revit_id;
 					const aStatus = objectStatuses[aRevitID]?.status;
 					const bStatus = objectStatuses[bRevitID]?.status;
 					if (aStatus === bStatus) return 0;
@@ -78,6 +84,15 @@ const ObjectSelectors = {
 			}
 		},
 	),
+	ObjectsSumBy: createSelector(
+		ObjectDictSelector,
+		SelectionSelector,
+		(state: RootState, key: keyof QueryAcceptanceObjectsType.AcceptanceObject) => key,
+		(allElements, selected, key) => {
+			const selectedElements = selected.map((revitId) => allElements?.[revitId]).filter((e) => !!e);
+			return RoundNumber(_.sumBy(selectedElements, key) || 0);
+		},
+	),
 	ObjectIsSelected: createSelector(
 		SelectionSelector,
 		(state: RootState, props: { item: number }) => props.item,
@@ -88,6 +103,11 @@ const ObjectSelectors = {
 	SortedObjectsSelector,
 	ObjectsSelected: createSelector(ObjectDictSelector, SelectionSelector, (objects, selection) =>
 		selection.map((revitID) => objects[revitID]).filter((item) => !!item),
+	),
+	ObjectsSelectedCount: createSelector(
+		ObjectDictSelector,
+		SelectionSelector,
+		(objects, selection) => selection.map((revitID) => objects[revitID]).filter((item) => !!item).length,
 	),
 };
 

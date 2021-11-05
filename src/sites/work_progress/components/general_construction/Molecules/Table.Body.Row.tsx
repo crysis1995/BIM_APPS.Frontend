@@ -1,5 +1,4 @@
 import { QueryAcceptanceObjectsType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/QueryAcceptanceObjects';
-import { Input } from '../../Utils/Atoms/Input';
 import { CellContent } from '../Atoms/Table.Body.Cell';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,7 +23,6 @@ export function TableBodyRow(props: ComponentProps) {
 	function OnClickSelectButton() {
 		dispatch(GeneralConstructionObjectActions.SelectElements(props.data.revit_id));
 	}
-
 	return (
 		<tr className={classNames({ 'table-active': isSelected }, 'tr_GC')}>
 			<td style={{ width: 50 }}>
@@ -37,4 +35,11 @@ export function TableBodyRow(props: ComponentProps) {
 			))}
 		</tr>
 	);
+}
+
+function Input(props: { checked?: boolean; OnClick?: () => void }) {
+	function HandleClick() {
+		if (props.OnClick) props.OnClick();
+	}
+	return <input type="checkbox" onClick={HandleClick} checked={props.checked} />;
 }

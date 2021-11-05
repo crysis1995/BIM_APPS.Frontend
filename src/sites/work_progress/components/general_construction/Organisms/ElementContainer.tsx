@@ -6,25 +6,30 @@ import { RootState } from '../../../../../store';
 import { Table } from 'react-bootstrap';
 import TableBody from '../Molecules/Table.Body';
 import _ from 'lodash';
-import "./style.scss"
+import './style.scss';
+import { UserProjectsType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/UserProjects';
+
 const projectHeaderSelector = createSelector(
 	(state: RootState) => state.CMSLogin.actual_project?.params,
 	(params) => {
 		if (!params) return [];
 		return params
-			.map<{ key?: string; description?: string }>((param) => {
-				let data: { key?: string; description?: string } = {};
+			.map<{ key?: string; description?: string; valueTypes?: UserProjectsType.ValueType[] }>((param) => {
+				let data: { key?: string; description?: string; valueTypes?: UserProjectsType.ValueType[] } = {};
 				if (param.key) {
 					data.key = param.key;
 				}
 				if (param.description) {
 					data.description = param.description;
 				}
+				if (param.valueTypes){
+					data.valueTypes = param.valueTypes
+				}
 				return data;
 			})
 			.filter((x) => Boolean(x.key) || Boolean(x.description)) as (
-			| { key?: string; description: string }
-			| { key: string; description?: string }
+			| { key?: string; description: string,valueTypes?: UserProjectsType.ValueType[] }
+			| { key: string; description?: string,valueTypes?: UserProjectsType.ValueType[] }
 		)[];
 	},
 );
