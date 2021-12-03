@@ -21,7 +21,11 @@ export type RootState = {
 	Notifications: Notification.Redux.IStore;
 	Autodesk: AutodeskLogin.Redux.Store;
 	WorkProgress: {
-		// General: General.reducer,
+		General: any,
+		Delays: any,
+		Objects: any,
+		Terms: any,
+		Upgrading: any,
 		Monolithic: {
 			General: WorkProgress.Monolithic.General.Redux.IStore;
 			Delays: WorkProgress.Monolithic.Delays.Redux.IStore;
@@ -37,6 +41,7 @@ export type RootState = {
 			General: WorkProgress.GeneralConstruction.General.Redux.IStore;
 			Objects: WorkProgress.GeneralConstruction.Objects.Redux.IStore;
 		};
+
 	};
 	ModelViewer: ModelViewer.General.Redux.Store;
 	ForgeViewer: ForgeViewer.Redux.IStore;

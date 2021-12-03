@@ -11,6 +11,8 @@ export namespace Constants {
 	}
 	export enum AcceptanceType {
 		MONOLITHIC = 'monolithic',
+		PREFABRICATED = 'prefabricated',
+		GENERAL_CONSTRUCTION = 'general_construction'
 	}
 	export enum ClassificationDefinitions {
 		/*VCG REALISATION*/

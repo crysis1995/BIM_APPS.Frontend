@@ -22,13 +22,13 @@ function WorkProgressComponent() {
 									<MonolithicLayoutComponent />
 								</Accessors.AppsPermissionAccessor>
 							</Route>
-							<Route path={`/work_progress/prefabricated`}>
+							<Route path={`/work_progress/${Constants.AcceptanceType.PREFABRICATED}`}>
 								<Accessors.AppsPermissionAccessor
 									requiredApp={EApplicationsWithModules.WORK_PROGRESS_PREFABRICATED}>
 									<PrefabricatedLayoutComponent />
 								</Accessors.AppsPermissionAccessor>
 							</Route>
-							<Route path={`/work_progress/general_construction`}>
+							<Route path={`/work_progress/${Constants.AcceptanceType.GENERAL_CONSTRUCTION}`}>
 								<Accessors.AppsPermissionAccessor
 									requiredApp={EApplicationsWithModules.WORK_PROGRESS_GENERAL_CONSTRUCTION}>
 									<GeneralLayoutComponent />

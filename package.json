@@ -92,6 +92,7 @@
 		]
 	},
 	"devDependencies": {
+		"@apollo/rover": "^0.4.1",
 		"@babel/core": "^7.14.6",
 		"@testing-library/user-event": "^13.1.9",
 		"@types/debounce": "^1.2.0",
