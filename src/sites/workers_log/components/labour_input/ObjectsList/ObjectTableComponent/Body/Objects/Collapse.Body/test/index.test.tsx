@@ -1,16 +1,23 @@
 import React from 'react';
 import { render } from '../../../../../../../../../../test/test-utils';
 import ObjectsCollapsedListComponent from '../index';
-import { RootState } from '../../../../../../../../../../store';
+
 import { RecursivePartial } from '../../../../../../../../../../test/recursivePartial';
 import WorkersLog from '../../../../../../../../types';
+import { RootState } from '../../../../../../../../../../state';
 
-jest.mock('../Object.Single', () => ({ object }: { object: number }) => <div>single - {object}</div>);
+jest.mock('../Object.Single', () => ({ object }: { object: number }) => (
+	<div>single - {object}</div>
+));
 jest.mock(
 	'../Object.Group',
-	() => ({ groupedObject }: { groupedObject: WorkersLog.LabourInput.Payload.Objects.WorkTimeGroupedObjects }) => (
-		<div>grouped - {groupedObject.id}</div>
-	),
+	() =>
+		({
+			groupedObject,
+		}: {
+			groupedObject: WorkersLog.LabourInput.Payload.Objects.WorkTimeGroupedObjects;
+		}) =>
+			<div>grouped - {groupedObject.id}</div>,
 );
 
 describe('__test__ ObjectsCollapsedListComponent', function () {
@@ -46,7 +53,9 @@ describe('__test__ ObjectsCollapsedListComponent', function () {
 				LabourInput: {
 					Objects: {
 						ObjectsGroups: [
+							// @ts-ignore
 							{ id: 'a', objects: [1, 2, 3], name: 'aaa' },
+							// @ts-ignore
 							{ id: 'b', objects: [4, 5, 6], name: 'bbb' },
 						],
 					},
@@ -72,7 +81,9 @@ describe('__test__ ObjectsCollapsedListComponent', function () {
 							1,
 							2,
 							3,
+							// @ts-ignore
 							{ id: 'a', objects: [1, 2, 3], name: 'aaa' },
+							// @ts-ignore
 							{ id: 'b', objects: [4, 5, 6], name: 'bbb' },
 						],
 					},
@@ -85,12 +96,10 @@ describe('__test__ ObjectsCollapsedListComponent', function () {
 			initialState,
 		);
 
-
 		expect(component.getAllByText(/single/i).length).toBe(3);
 		expect(component.getAllByText(/single - 1/i).length).toBe(1);
 		expect(component.getAllByText(/single - 2/i).length).toBe(1);
 		expect(component.getAllByText(/single - 3/i).length).toBe(1);
-
 
 		expect(component.getAllByText(/grouped/i).length).toBe(2);
 		expect(component.getAllByText(/grouped - a/i).length).toBe(1);

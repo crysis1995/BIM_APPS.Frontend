@@ -1,17 +1,18 @@
 import { Epic } from 'redux-observable';
-import { RootState } from '../../../../../../store';
+
 import WorkersLog from '../../../../types';
 import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { from, merge, of } from 'rxjs';
-import ModalActions from '../../../../../../components/Modal/redux/actions';
-import { ModalType } from '../../../../../../components/Modal/type';
+import ModalActions from '../../../../../../state/Modal/actions';
+import { ModalType } from '../../../../../../state/Modal/type';
 import dayjs from 'dayjs';
 import GraphQLAPIService from '../../../../../../services/graphql.api.service';
 import { CreateObjectTimeEvidenceType } from '../../../../../../services/graphql.api.service/CONSTANTS/Mutations/CreateObjectTimeEvidence';
 import LabourInputTimeEvidenceActions from '../../time_evidence/actions';
 import LabourInputObjectsActions from '../../objects/actions';
 import { Constants } from '../../../../../work_progress/redux/constants';
-import { RootActions } from '../../../../../../reducers/type';
+import { RootActions } from '../../../../../../state/types/RootActions';
+import { RootState } from '../../../../../../state';
 
 function ExtractRequestData(
 	action: ReturnType<WorkersLog.LabourInput.Redux.Objects.IActions['GroupObjectsInit']>,
@@ -77,7 +78,7 @@ export const OnInvokeGroupObjectInitEpic: Epic<RootActions, RootActions, RootSta
 						title: 'Uwaga!',
 					}),
 				);
-			const api = new GraphQLAPIService(state.CMSLogin.credentials?.access_token);
+			const api = new GraphQLAPIService(state.CMSLogin.credentials?.token);
 			return merge(
 				of(LabourInputObjectsActions.GroupObjects(requestData.objects)),
 				from(api.WorkersLog.LabourInput.ObjectTimeEvidences.Create(requestData)).pipe(

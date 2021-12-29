@@ -1,11 +1,12 @@
 import { Epic } from 'redux-observable';
-import { RootActions } from '../../../../../../reducers/type';
-import { RootState } from '../../../../../../store';
+
 import WorkProgress from '../../../../types';
 import { filter, mergeMap, withLatestFrom } from 'rxjs/operators';
 import { concat, EMPTY, from, of } from 'rxjs';
 import GraphQLAPIService from '../../../../../../services/graphql.api.service';
 import GeneralConstructionObjectActions from '../../objects/actions';
+import { RootActions } from '../../../../../../state/types/RootActions';
+import { RootState } from '../../../../../../state';
 
 export const HandleSetStatusesEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
@@ -21,7 +22,7 @@ export const HandleSetStatusesEpic: Epic<RootActions, RootActions, RootState> = 
 			const user_id = state.CMSLogin.user?.id;
 			const project_id = state.CMSLogin.actual_project?.id;
 			if (user_id && project_id) {
-				const API = new GraphQLAPIService(state.CMSLogin.credentials?.access_token).MONOLITHIC.Status;
+				const API = new GraphQLAPIService(state.CMSLogin.credentials?.token).MONOLITHIC.Status;
 				return from(objects).pipe(
 					mergeMap(({ id, revit_id }) =>
 						concat(

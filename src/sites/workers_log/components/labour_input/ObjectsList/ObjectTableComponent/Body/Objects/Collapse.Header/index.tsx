@@ -2,7 +2,7 @@ import { ArrowIcon } from '../../OtherWork/Utils/ArrowIcon';
 import { EDirection } from '../../types/EDirection';
 import LocaleNameComponent from '../../../../../../../../../localisation/LocaleNameComponent';
 import React from 'react';
-import { RootState } from '../../../../../../../../../store';
+
 import { connect } from 'react-redux';
 import LabourInputObjectsActions from '../../../../../../../redux/labour_input/objects/actions';
 import { isGroupCreatorDisabledSelector } from './Selector.IsGroupCreatorDisabled';
@@ -10,6 +10,7 @@ import ShowComponent from '../../../../../../../../../components/ShowComponent';
 import { summaryWorkedTimeSelector } from './Selector.SummaryWorkedTime';
 import { GroupButton } from './Utils/Group.Button';
 import { SelectButton } from './Utils/Select.Button';
+import { RootState } from '../../../../../../../../../state';
 
 type ComponentProps = {
 	eventKey: 'elements';

@@ -1,12 +1,13 @@
 import WorkersLog from '../../../../types';
-import { RootState } from '../../../../../../store';
+
 import { GetObjectTimeEvidencesType } from '../../../../../../services/graphql.api.service/CONSTANTS/Queries/GetObjectTimeEvidences';
 import { EMPTY, from, merge, of } from 'rxjs';
 import GraphQLAPIService from '../../../../../../services/graphql.api.service';
 import { filter, map, repeatWhen, switchMap, withLatestFrom } from 'rxjs/operators';
 import { Epic } from 'redux-observable';
 import LabourInputTimeEvidenceActions from '../../time_evidence/actions';
-import { RootActions } from '../../../../../../reducers/type';
+import { RootActions } from '../../../../../../state/types/RootActions';
+import { RootState } from '../../../../../../state';
 
 function GetDataPayload(state: RootState): GetObjectTimeEvidencesType.Request {
 	const date = state.WorkersLog.LabourInput.General.ActualDate;
@@ -48,7 +49,7 @@ export const OnEndFetchObjectsEpic: Epic<RootActions, RootActions, RootState> = 
 						of(LabourInputTimeEvidenceActions.FetchAllObjectTimeEvidenceStart()),
 						from(
 							new GraphQLAPIService(
-								state.CMSLogin.credentials?.access_token,
+								state.CMSLogin.credentials?.token,
 							).WorkersLog.LabourInput.ObjectTimeEvidences.Get(payloadDataWithoutObjectID),
 						).pipe(
 							map((data) => {

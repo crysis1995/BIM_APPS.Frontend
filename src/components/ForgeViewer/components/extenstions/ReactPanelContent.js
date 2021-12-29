@@ -1,9 +1,10 @@
+import classNames from 'classnames';
 import React from 'react';
 import { connect } from 'react-redux';
 import { v4 } from 'uuid';
 import { config } from '../../../../config';
-import classNames from 'classnames';
 import { reactPanelContent } from '../SELECTOR';
+
 
 class ReactPanelContent extends React.Component {
 	render() {

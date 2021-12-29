@@ -2,8 +2,9 @@ import { connect } from 'react-redux';
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import LabourInputTimeEvidenceActions from '../../../../../../../../../redux/labour_input/time_evidence/actions';
-import { RootState } from '../../../../../../../../../../../store';
+
 import RoundHalf from '../../../../../../../../../../../utils/RoundHalf';
+import { RootState } from '../../../../../../../../../../../state';
 
 type ComponentProps = {
 	setEditable: (data: boolean) => void;

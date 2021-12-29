@@ -1,6 +1,7 @@
 import React from 'react';
 import { Alert } from 'react-bootstrap';
 
+
 export default class ErrorBoundary extends React.Component {
 	constructor(props) {
 		super(props);

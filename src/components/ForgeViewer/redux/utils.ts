@@ -1,5 +1,6 @@
 import ForgeViewer from '../types';
-import { RootState } from '../../../store';
+import { RootState } from '../../../state';
+
 
 export type EmptyForgeViewerPayloadOptions = {
 	keepSelected: boolean;

@@ -1,10 +1,11 @@
 import React from 'react';
 import { Badge } from 'react-bootstrap';
-import { RootState } from '../../../../../../../../store';
+
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { Constants } from '../../../../../../redux/constants';
 import LocaleNameComponent from '../../../../../../../../localisation/LocaleNameComponent';
+import { RootState } from '../../../../../../../../state';
 
 type ComponentProps = {
 	revitID: number;

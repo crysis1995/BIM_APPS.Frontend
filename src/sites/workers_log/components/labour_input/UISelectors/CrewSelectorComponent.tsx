@@ -5,7 +5,7 @@ import { Form } from 'react-bootstrap';
 import { v4 } from 'uuid';
 import LocaleNameEngine from '../../../../../localisation/LocaleName.Core';
 import { GetCrewsAndTheirCrewSummariesType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/GetCrewsAndTheirCrewSummaries';
-import { RootState } from '../../../../../store';
+import { RootState } from '../../../../../state';
 
 const mapStateToProps = (state: RootState) => ({
 	ActualCrew: state.WorkersLog.LabourInput.General.ActualCrew,
@@ -42,7 +42,11 @@ function CrewTypeSelectorComponent(props: Props) {
 	return (
 		<>
 			<Form.Label>Brygada</Form.Label>
-			<Form.Control as="select" value={props.ActualCrew || ''} onChange={HandleChangeCrew} size={'sm'}>
+			<Form.Control
+				as="select"
+				value={props.ActualCrew || ''}
+				onChange={HandleChangeCrew}
+				size={'sm'}>
 				<option key={v4()} value={''}>
 					Wybierz brygadę...
 				</option>

@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../../../../../store';
+
 import { ComponentProps } from './Component.TermsTable.Body.Row';
+import { RootState } from '../../../../../../state';
 
 export const getTermObjectSelector = createSelector(
 	(state: RootState, componentProps: ComponentProps) =>

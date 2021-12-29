@@ -30,6 +30,7 @@ function TableBodyElementList(props: ComponentProps) {
 	return (
 		<tbody className={'tbody_GC'}>
 			{dataList.map((item, index) => (
+				// @ts-ignore
 				<TableBodyRow key={index} headerList={props.headerList} data={item} />
 			))}
 		</tbody>

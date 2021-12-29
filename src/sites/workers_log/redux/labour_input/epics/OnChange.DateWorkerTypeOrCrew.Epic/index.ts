@@ -1,15 +1,16 @@
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import WorkersLog from '../../../../types';
-import { ModalType } from '../../../../../../components/Modal/type';
+import { ModalType } from '../../../../../../state/Modal/type';
 import { Epic } from 'redux-observable';
-import { RootState } from '../../../../../../store';
+
 import { filter, mergeMap, withLatestFrom } from 'rxjs/operators';
 import { concat, EMPTY, from, of } from 'rxjs';
 import LabourInputTimeEvidenceActions from '../../time_evidence/actions';
 import GraphQLAPIService from '../../../../../../services/graphql.api.service';
-import ModalActions from '../../../../../../components/Modal/redux/actions';
-import { RootActions } from '../../../../../../reducers/type';
+import ModalActions from '../../../../../../state/Modal/actions';
+import { RootActions } from '../../../../../../state/types/RootActions';
+import { RootState } from '../../../../../../state';
 
 dayjs.extend(isBetween);
 
@@ -32,7 +33,7 @@ export const OnChangeDateWorkerTypeOrCrewEpic: Epic<RootActions, RootActions, Ro
 			const ActualCrew = state.WorkersLog.LabourInput.General.ActualCrew;
 			const ActualDate = state.WorkersLog.LabourInput.General.ActualDate;
 			const ActiveWorkType = state.WorkersLog.LabourInput.General.ActiveWorkType;
-			const access_token = state.CMSLogin.credentials?.access_token;
+			const access_token = state.CMSLogin.credentials?.token;
 			if (ActualDate && ActiveWorkType && ActualCrew && access_token) {
 				const all_crews = state.WorkersLog.General.all_crews;
 				const crewSummary =

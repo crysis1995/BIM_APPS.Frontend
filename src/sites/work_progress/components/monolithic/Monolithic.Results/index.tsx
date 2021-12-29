@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Row } from 'react-bootstrap';
-import { RootState } from '../../../../../store';
+
 import { Constants } from '../../../redux/constants';
 import ResultsBasePlan from './Results.BasePlan';
 import ResultsRealisation from './Results.Realisation';
@@ -9,6 +9,7 @@ import ResultsHistorical from './Results.Historical';
 import ResultsTerms from './Results.Terms';
 import ResultsDelayCreate from './Results.Delay.Create';
 import ResultsDelayList from './Results.Delay.List';
+import { RootState } from '../../../../../state';
 
 const mapStateToProps = (state: RootState) => ({
 	active_tab: state.WorkProgress.Monolithic.General.active_tab,

@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { RootState } from '../../../../../../../../../../store';
+
 import WorkersLog from '../../../../../../../../types';
+import { RootState } from '../../../../../../../../../../state';
 
 const mapStateToProps = (
 	state: RootState,

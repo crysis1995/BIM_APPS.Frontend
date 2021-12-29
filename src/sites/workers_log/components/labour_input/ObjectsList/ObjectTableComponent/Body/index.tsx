@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import HideComponent from '../../../../../../../components/HideComponent';
 import OtherWorks from './OtherWork';
 import Objects from './Objects';
-import { RootState } from '../../../../../../../store';
+import { RootState } from '../../../../../../../state';
+
 
 const mapStateToProps = (state: RootState) => ({
 	objectsNotLoaded:

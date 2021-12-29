@@ -1,12 +1,13 @@
 import WorkersLog from '../../../../../../../../types';
 import React from 'react';
-import { RootState } from '../../../../../../../../../../store';
+
 import { objectGroupNameSelector } from './Selector.ObjectGroupName';
 import LabourInputObjectsActions from '../../../../../../../../redux/labour_input/objects/actions';
 import { connect } from 'react-redux';
 import ShowComponent from '../../../../../../../../../../components/ShowComponent';
 import ComponentObjectRevitID from '../Components/Component.Object.RevitID';
 import { TooltipComponent } from '../../../../../../../../../../components/Tooltip';
+import { RootState } from '../../../../../../../../../../state';
 
 type ComponentProps = {
 	groupedObject: WorkersLog.LabourInput.Payload.Objects.WorkTimeGroupedObjects;

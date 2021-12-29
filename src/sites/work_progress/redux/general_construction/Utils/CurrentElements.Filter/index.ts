@@ -3,21 +3,27 @@ import { TabClassifier } from './Types/TabClassifier.Interface';
 import { CurrentElementsFilterData } from './Types/CurrentElementsFilterData.Interface';
 import WorkProgress from '../../../../types';
 import ForgeViewer from '../../../../../../components/ForgeViewer/types';
-import { RootState } from '../../../../../../store';
+
 import { Constants } from '../../../../../work_progress/redux/constants';
 import { GeneralConstructionClassifier } from './Classifiers/LabourInput.Classifier';
 import { ElementType } from './Types/ElementType';
 import { DefaultOptions } from './Types/OptionsType';
+import { RootState } from '../../../../../../state';
 
 export default class CurrentElementsFilter {
-	private readonly _objects: NonNullable<WorkProgress.GeneralConstruction.Objects.Redux.IStore['ObjectsByID']>;
+	private readonly _objects: NonNullable<
+		WorkProgress.GeneralConstruction.Objects.Redux.IStore['ObjectsByID']
+	>;
 	private readonly _forgeElements: NonNullable<ForgeViewer.Redux.IStore['model_elements']>;
 	private readonly _statusesByRevitID: NonNullable<
 		WorkProgress.GeneralConstruction.Objects.Redux.IStore['ObjectStatusAll']
 	>;
 
 	private _mode = 'default' as const;
-	constructor(obj: ReturnType<typeof CurrentElementsFilter.validateData>,options=DefaultOptions) {
+	constructor(
+		obj: ReturnType<typeof CurrentElementsFilter.validateData>,
+		options = DefaultOptions,
+	) {
 		this._objects = obj.objects;
 		this._forgeElements = obj.forgeElements;
 		this._statusesByRevitID = obj.statusesByRevitID;
@@ -39,7 +45,9 @@ export default class CurrentElementsFilter {
 		default: GeneralConstructionClassifier,
 	};
 	private _currentElements = new Set<number>();
-	private _currentElementsCombinedWithStatus: { [key: string]: Constants.WorkProgressElementStatus } = {};
+	private _currentElementsCombinedWithStatus: {
+		[key: string]: Constants.WorkProgressElementStatus;
+	} = {};
 	protected _forgeContainer: Required<ForgeViewer.Payload.CurrentElementsFilterData> = {
 		[ForgeViewer.Payload.ElementOperationTypesEnum.COLORED]: {},
 		[ForgeViewer.Payload.ElementOperationTypesEnum.DISABLED]: [],
@@ -81,16 +89,24 @@ export default class CurrentElementsFilter {
 	 * 		Check if every needed values is provided
 	 * */
 	public static validateData(rootState: RootState) {
-		let objects: NonNullable<WorkProgress.GeneralConstruction.Objects.Redux.IStore['ObjectsByID']>,
+		let objects: NonNullable<
+				WorkProgress.GeneralConstruction.Objects.Redux.IStore['ObjectsByID']
+			>,
 			forgeElements: ForgeViewer.Redux.IStore['model_elements'],
-			statusesByRevitID: NonNullable<WorkProgress.GeneralConstruction.Objects.Redux.IStore['ObjectStatusAll']>;
+			statusesByRevitID: NonNullable<
+				WorkProgress.GeneralConstruction.Objects.Redux.IStore['ObjectStatusAll']
+			>;
 
-		if (!rootState.WorkProgress.GeneralConstruction.Objects.ObjectsByID || !rootState.ForgeViewer.model_elements)
+		if (
+			!rootState.WorkProgress.GeneralConstruction.Objects.ObjectsByID ||
+			!rootState.ForgeViewer.model_elements
+		)
 			throw new Error('Empty Objects');
 		objects = rootState.WorkProgress.GeneralConstruction.Objects.ObjectsByID;
 		forgeElements = rootState.ForgeViewer.model_elements;
 
-		if (!rootState.WorkProgress.GeneralConstruction.Objects.ObjectStatusAll) throw new Error('Empty Statuses');
+		if (!rootState.WorkProgress.GeneralConstruction.Objects.ObjectStatusAll)
+			throw new Error('Empty Statuses');
 
 		statusesByRevitID = rootState.WorkProgress.GeneralConstruction.Objects.ObjectStatusAll;
 
@@ -164,7 +180,8 @@ export default class CurrentElementsFilter {
 	 *		ForgeID extractor
 	 * */
 	private extractForgeId(revitID: string) {
-		if (this._forgeElements.hasOwnProperty(revitID)) return this._forgeElements[revitID].forgeId;
+		if (this._forgeElements.hasOwnProperty(revitID))
+			return this._forgeElements[revitID].forgeId;
 	}
 
 	/*
@@ -173,8 +190,8 @@ export default class CurrentElementsFilter {
 	private handleTabClassifier(element: ElementType, forgeID: number | undefined) {
 		const classifier = this._tabClassifier[this._mode];
 		if (classifier) {
-			new classifier(element, forgeID, this.classifierData).Classify((revitID, forgeID1, options) =>
-				this.addElementToOutput(revitID, forgeID1, options),
+			new classifier(element, forgeID, this.classifierData).Classify(
+				(revitID, forgeID1, options) => this.addElementToOutput(revitID, forgeID1, options),
 			);
 		}
 	}

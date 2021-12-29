@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../../../../../../../store';
+
 import { ObjectsSelector } from '../Body/objects.Selector';
+import { RootState } from '../../../../../../../../state';
 
 export const CountSum = createSelector(
 	(state: RootState) => ObjectsSelector(state),

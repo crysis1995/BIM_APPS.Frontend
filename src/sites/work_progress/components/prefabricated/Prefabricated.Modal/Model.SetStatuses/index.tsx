@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import { RootState } from '../../../../../../store';
+
 import dayjs from 'dayjs';
 import { GetPrefabObjectsStatusesType } from '../../../../../../services/graphql.api.service/CONSTANTS/Queries/GetPrefabObjectsStatuses';
 import { v4 } from 'uuid';
@@ -13,13 +13,16 @@ import {
 	GetFormattedDate,
 } from '../../../../../workers_log/redux/work_time_evidence/general/utils/GetFormattedDate';
 import PrefabricatedObjectsActions from '../../../../redux/prefabricated/objects/actions';
+import { RootState } from '../../../../../../state';
 
 const selectedObjectsSelector = createSelector(
 	(state: RootState) => state.WorkProgress.Prefabricated.Objects.selection,
 	(state: RootState) => state.WorkProgress.Prefabricated.Objects.byRevitID,
 	(selection, byRevitID) => {
 		if (byRevitID && selection.length > 0) {
-			const selectedObjects = selection.map((revitID) => byRevitID[revitID]).filter((x) => !!x); // potrzeba odfiltrować, bo nie wszystkie elementy są w zestawieniu
+			const selectedObjects = selection
+				.map((revitID) => byRevitID[revitID])
+				.filter((x) => !!x); // potrzeba odfiltrować, bo nie wszystkie elementy są w zestawieniu
 			return selectedObjects;
 		}
 		return [];
@@ -30,7 +33,9 @@ function ModelSetStatuses(props: { showModal: boolean; setShowModal: (data: bool
 	const objects = useSelector(selectedObjectsSelector);
 	const dispatch = useDispatch();
 	const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'));
-	const [status, setStatus] = useState<null | GetPrefabObjectsStatusesType.PrefabStatusEnum>(null);
+	const [status, setStatus] = useState<null | GetPrefabObjectsStatusesType.PrefabStatusEnum>(
+		null,
+	);
 
 	function HandleCloseModal() {
 		props.setShowModal(false);
@@ -49,7 +54,12 @@ function ModelSetStatuses(props: { showModal: boolean; setShowModal: (data: bool
 	}
 
 	return (
-		<Modal show={props.showModal} onClose={HandleCloseModal} backdrop={true} keyboard={false} centered>
+		<Modal
+			show={props.showModal}
+			onClose={HandleCloseModal}
+			backdrop={true}
+			keyboard={false}
+			centered>
 			<Modal.Header>
 				<Modal.Title>Awansowanie elementów prefabrykowanych</Modal.Title>
 			</Modal.Header>

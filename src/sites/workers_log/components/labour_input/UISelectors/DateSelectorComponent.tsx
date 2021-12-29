@@ -1,15 +1,11 @@
 import React from 'react';
-import { CMSLoginType } from '../../../../../components/CMSLogin/type';
-import WorkersLogRedux from '../../../redux';
 import { connect } from 'react-redux';
 import LabourInputGeneralActions from '../../../redux/labour_input/general/actions';
 import { Form } from 'react-bootstrap';
 import dayjs from 'dayjs';
+import { RootState } from '../../../../../state';
 
-const mapStateToProps = (state: {
-	CMSLogin: CMSLoginType.Redux.Store;
-	WorkersLog: ReturnType<typeof WorkersLogRedux.reducer>;
-}) => ({
+const mapStateToProps = (state: RootState) => ({
 	loading: state.CMSLogin.loading,
 	levels: state.CMSLogin.actual_project?.levels_all,
 	ActualDate: state.WorkersLog.LabourInput.General.ActualDate,

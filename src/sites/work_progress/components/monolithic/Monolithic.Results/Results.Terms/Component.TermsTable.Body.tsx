@@ -1,9 +1,10 @@
 import React from 'react';
-import { RootState } from '../../../../../../store';
+
 import { connect } from 'react-redux';
 import { v4 } from 'uuid';
 import ComponentTermsTableBodyRow from './Component.TermsTable.Body.Row';
 import { selectTerms } from './Selector.SelectTerms';
+import { RootState } from '../../../../../../state';
 
 const mapStateToProps = (state: RootState) => ({
 	selectTerms: selectTerms(state),
@@ -15,6 +16,7 @@ function ComponentTermsTableBody(props: Props) {
 	return (
 		<>
 			{props.selectTerms.map((x) => (
+				// @ts-ignore
 				<ComponentTermsTableBodyRow key={v4()} objectId={x} />
 			))}
 		</>

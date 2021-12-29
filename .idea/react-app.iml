@@ -9,6 +9,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/sites/work_progress/components/Tools" />
       <excludeFolder url="file://$MODULE_DIR$/src/sites/work_progress/components/Upgradings" />
       <excludeFolder url="file://$MODULE_DIR$/src/sites/work_progress/components/Terms" />
+      <excludeFolder url="file://$MODULE_DIR$/src/sites" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

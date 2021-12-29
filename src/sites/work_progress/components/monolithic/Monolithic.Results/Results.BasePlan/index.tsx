@@ -1,9 +1,10 @@
 import React from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { RootState } from '../../../../../../store';
+
 import { IsDataLoadingSelector } from './isDataLoading.Selector';
 import ObjectsTable from '../Components/ObjectsTable';
+import { RootState } from '../../../../../../state';
 
 const mapStateToProps = (state: RootState) => ({
 	isDataLoading: IsDataLoadingSelector(state),

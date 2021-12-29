@@ -1,6 +1,6 @@
-import { ReturnTypeFromInterface } from '../../../types/ReturnTypeFromInterface';
+
 import { GetCrewsAndTheirCrewSummariesType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetCrewsAndTheirCrewSummaries';
-import { CMSLoginType } from '../../../components/CMSLogin/type';
+
 import {
 	OTHER_WORK_TYPE,
 	WORKERS_LOG__WORKERS_TYPE,
@@ -11,6 +11,8 @@ import { WORKER_TYPES } from '../redux/constants';
 import { CrewSummariesData } from '../redux/work_time_evidence/crew/utils/ExtractRequestData';
 import { GetObjectsByLevelType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetObjectsByLevel';
 import { CountAllAndEmptyType } from '../../../services/graphql.api.service/CONSTANTS/Queries/CountAllAndEmpty';
+import { CMSLoginType } from '../../../state/CMSLogin/type';
+import { ReturnTypeFromInterface } from '../../../utils/types/ReturnTypeFromInterface';
 
 namespace WorkersLog {
 	export namespace General {
@@ -18,7 +20,9 @@ namespace WorkersLog {
 			export interface Store {
 				initialized: boolean;
 				last_initialized: Date;
-				all_crews: { [key: string]: GetCrewsAndTheirCrewSummariesType.WorkersLogCrew } | null;
+				all_crews: {
+					[key: string]: GetCrewsAndTheirCrewSummariesType.WorkersLogCrew;
+				} | null;
 			}
 			export interface IActions {
 				Initialize: () => { type: WorkersLog.General.Redux.Types.WORKERS_LOG_INITIALIZE };
@@ -45,7 +49,9 @@ namespace WorkersLog {
 					ActualDate: string;
 					ActiveWorkType: WORKERS_LOG__WORKERS_TYPE | null;
 					ActualCrew: string | null;
-					OtherWorks: null | { [key: string]: LabourInput.Payload.General.OtherWorksData };
+					OtherWorks: null | {
+						[key: string]: LabourInput.Payload.General.OtherWorksData;
+					};
 					OtherWorksLoading: boolean;
 				}
 
@@ -81,7 +87,9 @@ namespace WorkersLog {
 					FetchOtherWorksStart: () => {
 						type: typeof LabourInput.Redux.General.Types.FETCH_OTHER_WORKS_START;
 					};
-					FetchOtherWorksEnd: (data: { [key: string]: LabourInput.Payload.General.OtherWorksData }) => {
+					FetchOtherWorksEnd: (data: {
+						[key: string]: LabourInput.Payload.General.OtherWorksData;
+					}) => {
 						type: typeof LabourInput.Redux.General.Types.FETCH_OTHER_WORKS_END;
 						payload: typeof data;
 					};
@@ -102,8 +110,12 @@ namespace WorkersLog {
 			}
 			export namespace Objects {
 				export interface Store {
-					ByRevitID: { [key: string]: LabourInput.Payload.Objects.ObjectWithStatus['id'] };
-					AllObjects: null | { [key: string]: LabourInput.Payload.Objects.ObjectWithStatus };
+					ByRevitID: {
+						[key: string]: LabourInput.Payload.Objects.ObjectWithStatus['id'];
+					};
+					AllObjects: null | {
+						[key: string]: LabourInput.Payload.Objects.ObjectWithStatus;
+					};
 					Loading: boolean;
 					FilteredObjects: LabourInput.Payload.Objects.ObjectWithStatus['id'][];
 					ObjectsGroups: LabourInput.Payload.Objects.ObjectWithStatus['id'][];
@@ -114,7 +126,9 @@ namespace WorkersLog {
 					FetchObjectsStart: () => {
 						type: typeof LabourInput.Redux.Objects.Types.FETCH_OBJECTS_START;
 					};
-					FetchObjectsEnd: (data: { [key: string]: LabourInput.Payload.Objects.ObjectWithStatus }) => {
+					FetchObjectsEnd: (data: {
+						[key: string]: LabourInput.Payload.Objects.ObjectWithStatus;
+					}) => {
 						type: typeof LabourInput.Redux.Objects.Types.FETCH_OBJECTS_END;
 						payload: typeof data;
 					};
@@ -141,7 +155,9 @@ namespace WorkersLog {
 							workedTime: typeof workedTime;
 						};
 					};
-					GroupObjects: (data: WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus['id'][]) => {
+					GroupObjects: (
+						data: WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus['id'][],
+					) => {
 						type: typeof LabourInput.Redux.Objects.Types.GROUP_OBJECTS;
 						payload: typeof data;
 					};
@@ -153,7 +169,9 @@ namespace WorkersLog {
 						type: typeof LabourInput.Redux.Objects.Types.UNGROUP_OBJECTS_INIT;
 						payload: { data: typeof data; groupID: typeof groupID };
 					};
-					UngroupObjects: (data: WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus['id'][]) => {
+					UngroupObjects: (
+						data: WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus['id'][],
+					) => {
 						type: typeof LabourInput.Redux.Objects.Types.UNGROUP_OBJECTS;
 						payload: typeof data;
 					};
@@ -212,20 +230,28 @@ namespace WorkersLog {
 						type: typeof LabourInput.Redux.TimeEvidence.Types.FETCH_ALL_OBJECTS_TIME_EVIDENCE_START;
 					};
 
-					FetchAllObjectTimeEvidenceEnd: (data: LabourInput.Payload.TimeEvidence.ObjectTimeEvidence[]) => {
+					FetchAllObjectTimeEvidenceEnd: (
+						data: LabourInput.Payload.TimeEvidence.ObjectTimeEvidence[],
+					) => {
 						type: typeof LabourInput.Redux.TimeEvidence.Types.FETCH_ALL_OBJECTS_TIME_EVIDENCE_END;
 						payload: typeof data;
 					};
-					FetchObjectTimeEvidenceStart: (objectID: LabourInput.Payload.Objects.ObjectWithStatus['id'][]) => {
+					FetchObjectTimeEvidenceStart: (
+						objectID: LabourInput.Payload.Objects.ObjectWithStatus['id'][],
+					) => {
 						type: typeof LabourInput.Redux.TimeEvidence.Types.FETCH_OBJECT_TIME_EVIDENCE_START;
 						payload: typeof objectID;
 					};
-					FetchObjectTimeEvidenceEnd: (data: LabourInput.Payload.TimeEvidence.ObjectTimeEvidence) => {
+					FetchObjectTimeEvidenceEnd: (
+						data: LabourInput.Payload.TimeEvidence.ObjectTimeEvidence,
+					) => {
 						type: typeof LabourInput.Redux.TimeEvidence.Types.FETCH_OBJECT_TIME_EVIDENCE_END;
 						payload: typeof data;
 					};
 					CreateObjectTimeEvidenceStart: (
-						ObjectTimeEvidenceID: LabourInput.Payload.TimeEvidence.ObjectTimeEvidence['id'] | null,
+						ObjectTimeEvidenceID:
+							| LabourInput.Payload.TimeEvidence.ObjectTimeEvidence['id']
+							| null,
 						objectID: LabourInput.Payload.Objects.ObjectWithStatus['id'],
 						workedTime: number,
 					) => {
@@ -236,7 +262,9 @@ namespace WorkersLog {
 							objectID: typeof objectID;
 						};
 					};
-					CreateObjectTimeEvidenceEnd: (data: LabourInput.Payload.TimeEvidence.ObjectTimeEvidence) => {
+					CreateObjectTimeEvidenceEnd: (
+						data: LabourInput.Payload.TimeEvidence.ObjectTimeEvidence,
+					) => {
 						type: typeof LabourInput.Redux.TimeEvidence.Types.CREATE_OBJECT_TIME_EVIDENCE_END;
 						payload: typeof data;
 					};
@@ -251,17 +279,23 @@ namespace WorkersLog {
 							workedTime: typeof workedTime;
 						};
 					};
-					UpdateObjectTimeEvidenceEnd: (data: LabourInput.Payload.TimeEvidence.ObjectTimeEvidence) => {
+					UpdateObjectTimeEvidenceEnd: (
+						data: LabourInput.Payload.TimeEvidence.ObjectTimeEvidence,
+					) => {
 						type: typeof LabourInput.Redux.TimeEvidence.Types.UPDATE_OBJECT_TIME_EVIDENCE_END;
 						payload: typeof data;
 					};
 
-					DeleteObjectTimeEvidenceStart: (id: LabourInput.Payload.TimeEvidence.ObjectTimeEvidence['id']) => {
+					DeleteObjectTimeEvidenceStart: (
+						id: LabourInput.Payload.TimeEvidence.ObjectTimeEvidence['id'],
+					) => {
 						type: typeof LabourInput.Redux.TimeEvidence.Types.DELETE_OBJECT_TIME_EVIDENCE_START;
 						payload: typeof id;
 					};
 
-					DeleteObjectTimeEvidenceEnd: (id: LabourInput.Payload.TimeEvidence.ObjectTimeEvidence['id']) => {
+					DeleteObjectTimeEvidenceEnd: (
+						id: LabourInput.Payload.TimeEvidence.ObjectTimeEvidence['id'],
+					) => {
 						type: typeof LabourInput.Redux.TimeEvidence.Types.DELETE_OBJECT_TIME_EVIDENCE_END;
 						payload: typeof id;
 					};
@@ -276,11 +310,15 @@ namespace WorkersLog {
 						payload: typeof data;
 					};
 
-					CreateOtherWorkStart: (data: LabourInput.Payload.TimeEvidence.CreateOtherWorkPayload) => {
+					CreateOtherWorkStart: (
+						data: LabourInput.Payload.TimeEvidence.CreateOtherWorkPayload,
+					) => {
 						type: typeof LabourInput.Redux.TimeEvidence.Types.CREATE_OTHER_WORK_START;
 						payload: typeof data;
 					};
-					CreateOtherWorkEnd: (data: LabourInput.Payload.TimeEvidence.OtherWorksTimeEvidence) => {
+					CreateOtherWorkEnd: (
+						data: LabourInput.Payload.TimeEvidence.OtherWorksTimeEvidence,
+					) => {
 						type: typeof LabourInput.Redux.TimeEvidence.Types.CREATE_OTHER_WORK_END;
 						payload: typeof data;
 					};
@@ -292,12 +330,15 @@ namespace WorkersLog {
 						type: typeof LabourInput.Redux.TimeEvidence.Types.UPDATE_OTHER_WORK_START;
 						payload: typeof data;
 					};
-					UpdateOtherWorkEnd: (data: LabourInput.Payload.TimeEvidence.OtherWorksTimeEvidence) => {
+					UpdateOtherWorkEnd: (
+						data: LabourInput.Payload.TimeEvidence.OtherWorksTimeEvidence,
+					) => {
 						type: typeof LabourInput.Redux.TimeEvidence.Types.UPDATE_OTHER_WORK_END;
 						payload: typeof data;
 					};
 				}
-				export type Actions = ReturnTypeFromInterface<LabourInput.Redux.TimeEvidence.IActions>;
+				export type Actions =
+					ReturnTypeFromInterface<LabourInput.Redux.TimeEvidence.IActions>;
 				export enum Types {
 					SET_SUMMARY_WORK_TIME_START = 'labour_input__SET_SUMMARY_WORK_TIME_START',
 					SET_SUMMARY_WORK_TIME_END = 'labour_input__SET_SUMMARY_WORK_TIME_END',
@@ -375,7 +416,8 @@ namespace WorkersLog {
 
 				export type GroupedOtherWorkTimeEvidence =
 					GetGroupedOtherWorksTimeEvidencesType.WorkersLogGroupedOtherWorksTimeEvidence;
-				export type OtherWorksTimeEvidence = GetGroupedOtherWorksTimeEvidencesType.OtherWorksTimeEvidence;
+				export type OtherWorksTimeEvidence =
+					GetGroupedOtherWorksTimeEvidencesType.OtherWorksTimeEvidence;
 			}
 		}
 	}
@@ -408,7 +450,9 @@ namespace WorkersLog {
 
 				export interface WorkersLogCrewSummaryResponse {
 					id: string;
-					workers: { id: WorkersLog.WorkTimeEvidence.Worker.Payload.WorkerPayload['id'] }[];
+					workers: {
+						id: WorkersLog.WorkTimeEvidence.Worker.Payload.WorkerPayload['id'];
+					}[];
 				}
 
 				export interface GQLUpdateCrewSummary {
@@ -419,7 +463,9 @@ namespace WorkersLog {
 			}
 			export namespace Redux {
 				export interface Store {
-					all: null | { [key: string]: WorkersLog.WorkTimeEvidence.Crew.Payload.CrewPayload };
+					all: null | {
+						[key: string]: WorkersLog.WorkTimeEvidence.Crew.Payload.CrewPayload;
+					};
 					loading: boolean;
 					actual: WorkersLog.WorkTimeEvidence.Crew.Payload.CrewPayload['id'] | null;
 					loading_summary: boolean;
@@ -429,7 +475,9 @@ namespace WorkersLog {
 					addCrew: () => {
 						type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.ADD;
 					};
-					chooseCrew: (crew: WorkersLog.WorkTimeEvidence.Crew.Payload.CrewPayload['id']) => {
+					chooseCrew: (
+						crew: WorkersLog.WorkTimeEvidence.Crew.Payload.CrewPayload['id'],
+					) => {
 						type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.CHOOSE;
 						payload: { crew: typeof crew };
 					};
@@ -440,14 +488,18 @@ namespace WorkersLog {
 						type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.DELETE_INIT;
 						payload: { crew: typeof crew; summaries: typeof summaries };
 					};
-					DeleteCrewFinish: (crew: WorkersLog.WorkTimeEvidence.Crew.Payload.CrewPayload['id']) => {
+					DeleteCrewFinish: (
+						crew: WorkersLog.WorkTimeEvidence.Crew.Payload.CrewPayload['id'],
+					) => {
 						type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.DELETE_FINISH;
 						payload: typeof crew;
 					};
 					fetchCrewStart: () => {
 						type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.FETCH_START;
 					};
-					fetchCrewEnd: (crews: { [key: string]: WorkersLog.WorkTimeEvidence.Crew.Payload.CrewPayload }) => {
+					fetchCrewEnd: (crews: {
+						[key: string]: WorkersLog.WorkTimeEvidence.Crew.Payload.CrewPayload;
+					}) => {
 						type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.FETCH_END;
 						payload: {
 							crews: typeof crews;
@@ -471,7 +523,9 @@ namespace WorkersLog {
 					createCrewSummary: () => {
 						type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.CREATE_CREW_SUMMARY;
 					};
-					updateCrewSummary: (crew_summary: WorkersLog.WorkTimeEvidence.Crew.Payload.CrewSummary | null) => {
+					updateCrewSummary: (
+						crew_summary: WorkersLog.WorkTimeEvidence.Crew.Payload.CrewSummary | null,
+					) => {
 						type: WorkersLog.WorkTimeEvidence.Crew.Redux.Types.UPDATE_CREW_SUMMARY;
 						payload: { crew_summary: typeof crew_summary };
 					};
@@ -480,7 +534,8 @@ namespace WorkersLog {
 					};
 				}
 
-				export type Actions = ReturnTypeFromInterface<WorkersLog.WorkTimeEvidence.Crew.Redux.IActions>;
+				export type Actions =
+					ReturnTypeFromInterface<WorkersLog.WorkTimeEvidence.Crew.Redux.IActions>;
 				export enum Types {
 					FETCH_START = 'workers_log__FETCH_CREW_START',
 					FETCH_END = 'workers_log__FETCH_CREW_END',
@@ -544,14 +599,17 @@ namespace WorkersLog {
 						payload: { days: typeof days };
 					};
 
-					generateRaportStart: (type: WorkersLog.WorkTimeEvidence.General.Payload.ERaportType) => {
+					generateRaportStart: (
+						type: WorkersLog.WorkTimeEvidence.General.Payload.ERaportType,
+					) => {
 						type: typeof WorkersLog.WorkTimeEvidence.General.Redux.Types.GENERATE_RAPORT_START;
 						payload: {
 							type: typeof type;
 						};
 					};
 				}
-				export type Actions = ReturnTypeFromInterface<WorkersLog.WorkTimeEvidence.General.Redux.IActions>;
+				export type Actions =
+					ReturnTypeFromInterface<WorkersLog.WorkTimeEvidence.General.Redux.IActions>;
 				export enum Types {
 					START = 'workers_log__workTimeEvidence__START',
 					END = 'workers_log__workTimeEvidence__END',
@@ -676,12 +734,17 @@ namespace WorkersLog {
 						workTimeEvidences: WorkersLog.WorkTimeEvidence.TimeEvidence.Payload.WorkersLogWorkTimeEvidenceResponse[],
 					) => {
 						type: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.FETCH_WORKER_TIME_EVIDENCE_END;
-						payload: { worker_id: typeof worker_id; workTimeEvidences: typeof workTimeEvidences };
+						payload: {
+							worker_id: typeof worker_id;
+							workTimeEvidences: typeof workTimeEvidences;
+						};
 					};
 					fetchWorkerWorkEvidenceFinish: () => {
 						type: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.FETCH_WORKER_TIME_EVIDENCE_FINISH_ALL;
 					};
-					editingStart: (data: WorkersLog.WorkTimeEvidence.TimeEvidence.Payload.EditingData) => {
+					editingStart: (
+						data: WorkersLog.WorkTimeEvidence.TimeEvidence.Payload.EditingData,
+					) => {
 						type: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.EDITING_START;
 						payload: { data: typeof data };
 					};
@@ -715,7 +778,8 @@ namespace WorkersLog {
 						type: WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.EDITING_CANCEL;
 					};
 				}
-				export type Actions = ReturnTypeFromInterface<WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.IActions>;
+				export type Actions =
+					ReturnTypeFromInterface<WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.IActions>;
 				export enum Types {
 					SET_INITIAL = 'workers_log__TIME_EVIDENCE__SET_INITIAL',
 
@@ -736,12 +800,16 @@ namespace WorkersLog {
 		export namespace Worker {
 			export namespace Redux {
 				export interface Store {
-					all: null | { [key: string]: WorkersLog.WorkTimeEvidence.Worker.Payload.WorkerPayload };
+					all: null | {
+						[key: string]: WorkersLog.WorkTimeEvidence.Worker.Payload.WorkerPayload;
+					};
 					loading: boolean;
 					loading_map: boolean;
 					loading_workers: boolean;
 					warbud_workers_map: null | {
-						[key: string]: WorkersLog.WorkTimeEvidence.Worker.Payload.IWarbudWorkerMapData;
+						[
+							key: string
+						]: WorkersLog.WorkTimeEvidence.Worker.Payload.IWarbudWorkerMapData;
 					};
 				}
 
@@ -755,19 +823,28 @@ namespace WorkersLog {
 						type: WorkersLog.WorkTimeEvidence.Worker.Redux.Types.FETCH_WORKERS_END;
 						payload: { workers: typeof workers };
 					};
-					createWorker: (worker: { name: string; worker_type: WORKERS_LOG__WORKERS_TYPE }) => {
+					createWorker: (worker: {
+						name: string;
+						worker_type: WORKERS_LOG__WORKERS_TYPE;
+					}) => {
 						type: WorkersLog.WorkTimeEvidence.Worker.Redux.Types.CREATE;
 						payload: { worker: typeof worker };
 					};
-					addNewWorker: (worker: WorkersLog.WorkTimeEvidence.Worker.Payload.WorkerPayload) => {
+					addNewWorker: (
+						worker: WorkersLog.WorkTimeEvidence.Worker.Payload.WorkerPayload,
+					) => {
 						type: WorkersLog.WorkTimeEvidence.Worker.Redux.Types.ADD_NEW;
 						payload: typeof worker;
 					};
-					addWorker: (workerID: WorkersLog.WorkTimeEvidence.Worker.Payload.WorkerPayload['id']) => {
+					addWorker: (
+						workerID: WorkersLog.WorkTimeEvidence.Worker.Payload.WorkerPayload['id'],
+					) => {
 						type: WorkersLog.WorkTimeEvidence.Worker.Redux.Types.ADD;
 						payload: { worker: typeof workerID };
 					};
-					deleteWorker: (workerID: WorkersLog.WorkTimeEvidence.Worker.Payload.WorkerPayload['id']) => {
+					deleteWorker: (
+						workerID: WorkersLog.WorkTimeEvidence.Worker.Payload.WorkerPayload['id'],
+					) => {
 						type: WorkersLog.WorkTimeEvidence.Worker.Redux.Types.DELETE;
 						payload: typeof workerID;
 					};
@@ -781,7 +858,9 @@ namespace WorkersLog {
 						type: WorkersLog.WorkTimeEvidence.Worker.Redux.Types.FETCH_WORKERS_MAP_START;
 					};
 					fetchWorkersMapEnd: (workers: {
-						[key: string]: WorkersLog.WorkTimeEvidence.Worker.Payload.IWarbudWorkerMapData;
+						[
+							key: string
+						]: WorkersLog.WorkTimeEvidence.Worker.Payload.IWarbudWorkerMapData;
 					}) => {
 						type: WorkersLog.WorkTimeEvidence.Worker.Redux.Types.FETCH_WORKERS_MAP_END;
 						payload: {
@@ -790,7 +869,8 @@ namespace WorkersLog {
 					};
 				}
 
-				export type Actions = ReturnTypeFromInterface<WorkersLog.WorkTimeEvidence.Worker.Redux.IActions>;
+				export type Actions =
+					ReturnTypeFromInterface<WorkersLog.WorkTimeEvidence.Worker.Redux.IActions>;
 				export enum Types {
 					FETCH_WORKERS_START = 'workers_log__FETCH_WORKERS_START',
 					FETCH_WORKERS_END = 'workers_log__FETCH_WORKERS_END',

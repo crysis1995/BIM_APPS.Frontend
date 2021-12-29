@@ -17,10 +17,11 @@ import { OnInvokeSetStatusesInitEpic } from './epics/OnInvoke.SetStatusesInit.Ep
 import { OnStartUpdateTermEpic } from './epics/OnStart.UpdateTerm.Epic';
 import { OnInvokeCheckObjectsGroupTermsEpic } from './epics/OnInvoke.CheckObjectsGroupTerms.Epic';
 import { HandleCleanSelectedElements } from './epics/Handle.CleanSelectedElements.Epic';
-import { RootActions } from '../../../reducers/type';
-import { RootState } from '../../../store';
+
 import Prefabricated from './prefabricated';
 import GeneralConstruction from './general_construction';
+import { RootActions } from '../../../state/types/RootActions';
+import { RootState } from '../../../state';
 
 export default {
 	reducer: combineReducers({

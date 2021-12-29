@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Col, Form } from 'react-bootstrap';
-import { RootState } from '../../../../../store';
+
 import { v4 } from 'uuid';
 import GeneralActions from '../../../redux/monolithic/general/actions';
 import { SelectorLevelInputOptions } from './Selector.LevelInputOptions';
 import { SelectorLevelInputIsDisabled } from './Selector.LevelInputIsDisabled';
+import { RootState } from '../../../../../state';
 
 const mapStateToProps = (state: RootState) => ({
 	isDisabled: SelectorLevelInputIsDisabled(state),
@@ -26,7 +27,9 @@ function LevelSelector(props: Props) {
 					<Form.Control
 						data-testid={'Selector'}
 						onChange={(event) => {
-							props.ChangeLevel(event.target.value === '' ? null : event.target.value);
+							props.ChangeLevel(
+								event.target.value === '' ? null : event.target.value,
+							);
 						}}
 						disabled={props.isDisabled}
 						as="select"
@@ -35,8 +38,17 @@ function LevelSelector(props: Props) {
 						custom>
 						<option value="">Wybierz...</option>
 						{props.levels.map((e) => (
-							<option data-testid="options" key={v4()} value={e.id}>
-								{e.name}
+							<option
+								data-testid="options"
+								key={v4()}
+								value={
+									//@ts-ignore
+									e.id
+								}>
+								{
+									//@ts-ignore
+									e.name
+								}
 							</option>
 						))}
 					</Form.Control>

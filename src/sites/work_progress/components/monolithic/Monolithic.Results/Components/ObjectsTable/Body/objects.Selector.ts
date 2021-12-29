@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../../../../../../../store';
+import { RootState } from '../../../../../../../../state';
+
 
 export const ObjectsSelector = createSelector(
 	(state: RootState) => state.WorkProgress.Monolithic.Upgrading.actualElements,

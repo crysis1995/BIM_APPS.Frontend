@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import React, { useState } from 'react';
 import Editable from './Editable';
-import { RootState } from '../../../../../../../../../../../store';
+import { RootState } from '../../../../../../../../../../../state';
+
 
 type componentProps = { objectID: number };
 const mapStateToProps = (state: RootState, componentProps: componentProps) => ({});

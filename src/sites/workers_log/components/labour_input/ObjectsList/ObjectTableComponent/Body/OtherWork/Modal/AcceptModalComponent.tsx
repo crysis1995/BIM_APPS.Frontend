@@ -1,10 +1,11 @@
 import { Button, Form, Modal } from 'react-bootstrap';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { CMSLoginType } from '../../../../../../../../../components/CMSLogin/type';
+
 import WorkersLogRedux from '../../../../../../../redux';
 import { OTHER_WORK_TYPE } from '../../../../../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
 import HideComponent from '../../../../../../../../../components/HideComponent';
+import { CMSLoginType } from '../../../../../../../../../state/CMSLogin/type';
 
 type componentProps = {
 	show: boolean;

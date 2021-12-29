@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../../../../../../../../store';
+import { RootState } from '../../../../../../../../../state';
 
 export const isGroupCreatorDisabledSelector = createSelector(
 	(state: RootState) => state.WorkersLog.LabourInput.Objects.Selection,

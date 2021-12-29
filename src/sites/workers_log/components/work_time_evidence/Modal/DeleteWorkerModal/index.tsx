@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, Col, Form, Modal, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import WorkersLogRedux from '../../../../redux';
 import WorkersInCrew from './WorkersInCrew.Selector';
 import Select from 'react-select';
 import GraphQLAPIService from '../../../../../../services/graphql.api.service';
-import { CMSLoginType } from '../../../../../../components/CMSLogin/type';
+
 import WorkersAction from '../../../../redux/work_time_evidence/worker/actions';
+import { RootState } from '../../../../../../state';
 
 type ComponentProps = {
 	show: boolean;
 	setShow: (data: boolean) => void;
 };
-const mapStateToProps = (state: {
-	WorkersLog: ReturnType<typeof WorkersLogRedux.reducer>;
-	CMSLogin: CMSLoginType.Redux.Store;
-}) => ({
+const mapStateToProps = (state: RootState) => ({
 	workersInCrew: WorkersInCrew(state),
-	access_token: state.CMSLogin.credentials?.access_token,
+	access_token: state.CMSLogin.credentials?.token,
 	crew_summary_id: state.WorkersLog.WorkTimeEvidence.Crews.summary?.id,
 });
 const mapDispatchToProps = {
@@ -26,7 +23,9 @@ const mapDispatchToProps = {
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & ComponentProps;
 
 function DeleteWorkerModal(props: Props) {
-	const [workerToDelete, setWorkerToDelete] = useState<{ label: string; value: string } | null>(null);
+	const [workerToDelete, setWorkerToDelete] = useState<{ label: string; value: string } | null>(
+		null,
+	);
 	const [canDelete, setCanDelete] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
 	useEffect(() => {
@@ -39,7 +38,8 @@ function DeleteWorkerModal(props: Props) {
 					crew_summary_id: props.crew_summary_id,
 				});
 				if (response) {
-					const sum = response.workersLogWorkTimeEvidencesConnection.aggregate.sum.worked_time;
+					const sum =
+						response.workersLogWorkTimeEvidencesConnection.aggregate.sum.worked_time;
 					if (sum === null || sum === 0) {
 						setCanDelete(true);
 						setErrorMessage('');
@@ -66,7 +66,11 @@ function DeleteWorkerModal(props: Props) {
 		props.setShow(false);
 	};
 	return (
-		<Modal show={props.show} onHide={() => props.setShow(false)} backdrop="static" keyboard={false}>
+		<Modal
+			show={props.show}
+			onHide={() => props.setShow(false)}
+			backdrop="static"
+			keyboard={false}>
 			<Modal.Header>
 				<Modal.Title>Usuwanie pracownika z brygady</Modal.Title>
 			</Modal.Header>

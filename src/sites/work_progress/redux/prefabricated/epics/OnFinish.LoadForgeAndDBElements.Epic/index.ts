@@ -1,10 +1,11 @@
 import { Epic, ofType } from 'redux-observable';
-import { RootActions } from '../../../../../../reducers/type';
-import { RootState } from '../../../../../../store';
+
 import { combineLatest, EMPTY } from 'rxjs';
 import ForgeViewer from '../../../../../../components/ForgeViewer/types';
 import WorkProgress from '../../../../types';
 import { mergeMap, withLatestFrom } from 'rxjs/operators';
+import { RootActions } from '../../../../../../state/types/RootActions';
+import { RootState } from '../../../../../../state';
 
 export const OnFinishLoadForgeAndDBElementsEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	combineLatest([

@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import Store from '../../../../store';
-import ReactPanelContent from './ReactPanelContent';
 
 import './ReactPanel.scss';
+import ReactPanelContent from './ReactPanelContent';
+
 
 const Autodesk = window.Autodesk;
 

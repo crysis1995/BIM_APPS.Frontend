@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../../../../../../../store';
+
 import { OTHER_WORK_TYPE } from '../../../../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
+import { RootState } from '../../../../../../../../state';
 
 export const summaryOtherWorkWorkedTimeSelector = createSelector(
 	(state: RootState) => state.WorkersLog.LabourInput.TimeEvidence.OtherWorksTimeEvidences,

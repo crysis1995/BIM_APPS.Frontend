@@ -1,5 +1,7 @@
-import { RootState } from '../../../../../store';
+
+
 import { TermGroup } from './Utils.ExtractGroupFromObjects';
+import { RootState } from '../../../../../state';
 
 export function GetTermByPassedGroup(state: RootState, group: TermGroup) {
 	const { craneID, levelID, vertical } = group;

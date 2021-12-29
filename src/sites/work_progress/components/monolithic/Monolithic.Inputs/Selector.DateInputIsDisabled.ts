@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../../../../store';
+import { RootState } from '../../../../../state';
+
 import { Constants } from '../../../redux/constants';
 
 export const SelectorDateInputIsDisabled = createSelector(

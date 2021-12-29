@@ -1,9 +1,10 @@
 import HideComponent from '../../../../../../../../components/HideComponent';
 import React from 'react';
 import { connect } from 'react-redux';
-import { RootState } from '../../../../../../../../store';
+
 import UNITS from '../../../../../../../../components/Units';
 import { CountSum } from './CountSum.Selector';
+import { RootState } from '../../../../../../../../state';
 
 type ComponentProps = {
 	allowSelection: boolean;

@@ -3,7 +3,7 @@ import React from 'react';
 import DailySummary from './DailySummary';
 import { connect } from 'react-redux';
 import { v4 } from 'uuid';
-import { RootState } from '../../../../../../store';
+import { RootState } from '../../../../../../state';
 
 const mapStateToProps = (state: RootState) => ({
 	by_date: state.WorkersLog.WorkTimeEvidence.General.calendar.by_date,
@@ -28,13 +28,18 @@ function HeadersComponent(props: Props) {
 						<span className="float-right">[dzień]</span>
 					</th>
 					{Object.values(props.by_date).map(({ date }) => (
-						<th className={'align-top text-center border-top border-bottom'} rowSpan={2} key={v4()}>
+						<th
+							className={'align-top text-center border-top border-bottom'}
+							rowSpan={2}
+							key={v4()}>
 							<DailySummary day={date} />
 						</th>
 					))}
 				</tr>
 				<tr>
-					<th className={'text-center border-bottom'} style={{ maxWidth: 60, minWidth: 50 }}>
+					<th
+						className={'text-center border-bottom'}
+						style={{ maxWidth: 60, minWidth: 50 }}>
 						[miesiąc]
 					</th>
 				</tr>

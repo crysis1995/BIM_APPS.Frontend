@@ -1,13 +1,13 @@
 import React, { PropsWithChildren } from 'react';
-import { Redirect } from 'react-router-dom';
+import { CMSLoginSelectors } from '../../state/CMSLogin/selectors';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import { Navigate } from 'react-router';
 
-const CMSIsLoginSelector = (state: RootState) => state.CMSLogin.is_login;
+
 function LoginAccessor(props: PropsWithChildren<{}>) {
-	const is_login = useSelector(CMSIsLoginSelector);
+	const is_login = useSelector(CMSLoginSelectors.IsLogin);
 	if (is_login) return <>{props.children}</>;
-	else return <Redirect to="/login" />;
+	else return <Navigate replace to="/login" />;
 }
 
 export default React.memo(LoginAccessor);

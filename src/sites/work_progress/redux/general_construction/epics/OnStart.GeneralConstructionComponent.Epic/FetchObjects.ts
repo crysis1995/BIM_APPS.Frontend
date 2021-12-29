@@ -1,13 +1,19 @@
 import { EMPTY, from, merge, of } from 'rxjs';
 import GraphQLAPIService from '../../../../../../services/graphql.api.service';
-import { CMSLoginType } from '../../../../../../components/CMSLogin/type';
+
 import { QueryAcceptanceObjectsType } from '../../../../../../services/graphql.api.service/CONSTANTS/Queries/QueryAcceptanceObjects';
 import GeneralConstructionObjectActions from '../../objects/actions';
 import { map, mergeMap } from 'rxjs/operators';
+import { CMSLoginType } from '../../../../../../state/CMSLogin/type';
 
-export default function FetchObjects(GRAPHQL: GraphQLAPIService, project: CMSLoginType.Payload.ActualProject) {
+export default function FetchObjects(
+	GRAPHQL: GraphQLAPIService,
+	project: CMSLoginType.Payload.ActualProject,
+) {
 	if (!project.params) return EMPTY;
-	const standardParamKeys = project.params.map((value) => value.key).filter((x) => !!x) as string[];
+	const standardParamKeys = project.params
+		.map((value) => value.key)
+		.filter((x) => !!x) as string[];
 	const isDetailsNeeded = project.params.some((value) => !value.key && value.description !== '');
 	const data: QueryAcceptanceObjectsType.DataType = { details: isDetailsNeeded };
 	(standardParamKeys as (keyof QueryAcceptanceObjectsType.DataType)[]).forEach((val) => {

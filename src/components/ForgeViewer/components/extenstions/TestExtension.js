@@ -2,6 +2,7 @@ import { ACCEPTANCE_TYPE } from '../../../../sites/work_progress/redux/types/con
 import Store from '../../../../store';
 import ReactPanel from './ReactPanel';
 
+
 const Autodesk = window.Autodesk;
 
 class ReactPanelExtension extends Autodesk.Viewing.Extension {

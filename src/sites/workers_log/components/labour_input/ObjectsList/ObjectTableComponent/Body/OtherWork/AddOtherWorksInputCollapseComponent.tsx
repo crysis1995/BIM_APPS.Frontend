@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { OTHER_WORK_TYPE } from '../../../../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
 import AcceptModalComponent from './Modal/AcceptModalComponent';
 import LabourInputTimeEvidenceActions from '../../../../../../redux/labour_input/time_evidence/actions';
-import { RootState } from '../../../../../../../../store';
+import { RootState } from '../../../../../../../../state';
 
 type componentProps = {
 	eventKey: string;
@@ -19,9 +19,9 @@ const mapStateToProps = (state: RootState, componentProps: componentProps) => ({
 		const otherWorksUsedOptions =
 			state.WorkersLog.LabourInput.TimeEvidence.OtherWorksTimeEvidences &&
 			componentProps.option === OTHER_WORK_TYPE.HELPER
-				? Object.values(state.WorkersLog.LabourInput.TimeEvidence.OtherWorksTimeEvidences).map(
-						(x) => x.other_works_option.id,
-				  )
+				? Object.values(
+						state.WorkersLog.LabourInput.TimeEvidence.OtherWorksTimeEvidences,
+				  ).map((x) => x.other_works_option.id)
 				: [];
 
 		if (otherWorks) {
@@ -29,7 +29,8 @@ const mapStateToProps = (state: RootState, componentProps: componentProps) => ({
 				.filter(
 					(x) =>
 						x.work_type === componentProps.option &&
-						(x.crew_type === null || x.crew_type === state.WorkersLog.LabourInput.General.ActiveWorkType),
+						(x.crew_type === null ||
+							x.crew_type === state.WorkersLog.LabourInput.General.ActiveWorkType),
 				)
 				.filter((x) => !otherWorksUsedOptions.includes(x.id))
 				.map((x) => ({ id: x.id, label: x.name }));

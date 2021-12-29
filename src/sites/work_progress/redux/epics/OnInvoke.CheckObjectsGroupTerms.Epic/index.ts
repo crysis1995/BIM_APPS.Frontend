@@ -1,8 +1,6 @@
 import WorkProgress from '../../../types';
-import { ModalType } from '../../../../../components/Modal/type';
-import ForgeViewer from '../../../../../components/ForgeViewer/types';
 import { Epic } from 'redux-observable';
-import { RootState } from '../../../../../store';
+
 import { filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { EMPTY, from, of } from 'rxjs';
 import { ExtractGroupFromObjects } from './Utils.ExtractGroupFromObjects';
@@ -12,18 +10,26 @@ import { GetTermByPassedGroup } from './Utils.GetTermByPassedGroup';
 import { GetObjectsIncludedInPassedGroup } from './Utils.GetObjectsIncludedInPassedGroup';
 import { isUpgradingNeeded } from './Utils.IsUpgradingNeeded';
 import { GetDatesToUpdate } from './Utils.GetDatesToUpdate';
-import { RootActions } from '../../../../../reducers/type';
+import { RootActions, RootState } from '../../../../../state';
 
 /*
  * 		Epic is invoked after user successfully set objects status.
  *		Method check if is necessary to change Terms Date - REAL_START or REAL_FINISH
  *
  * */
-export const OnInvokeCheckObjectsGroupTermsEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
+export const OnInvokeCheckObjectsGroupTermsEpic: Epic<RootActions, RootActions, RootState> = (
+	action$,
+	state$,
+) =>
 	action$.pipe(
 		filter(
-			(data): data is ReturnType<WorkProgress.Monolithic.Upgrading.Redux.IActions['CheckObjectsGroupTerms']> =>
-				data.type === WorkProgress.Monolithic.Upgrading.Redux.Types.CHECK_OBJECT_GROUP_TERMS,
+			(
+				data,
+			): data is ReturnType<
+				WorkProgress.Monolithic.Upgrading.Redux.IActions['CheckObjectsGroupTerms']
+			> =>
+				data.type ===
+				WorkProgress.Monolithic.Upgrading.Redux.Types.CHECK_OBJECT_GROUP_TERMS,
 		),
 		withLatestFrom(state$),
 		switchMap(([action, state]) => {

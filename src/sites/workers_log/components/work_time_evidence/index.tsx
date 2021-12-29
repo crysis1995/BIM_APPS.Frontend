@@ -5,16 +5,17 @@ import localeData from 'dayjs/plugin/localeData';
 import isToday from 'dayjs/plugin/isToday';
 import React, { useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+// import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import { connect } from 'react-redux';
 import './table.css';
 import SelectorComponents from './SelectorComponents';
 import RaportGeneratorsComponent from './RaportGenerators';
 import WorkerCrewActionsTab from './WorkerCrewActionsTab';
 import TimeEvidenceTable from './TimeEvidenceTable';
-import { RootState } from '../../../../store';
+
 import LoaderComponent from '../../../../components/Loader/LoaderComponent';
 import GeneralActions from '../../redux/work_time_evidence/general/actions';
+import { RootState } from '../../../../state';
 
 dayjs.extend(arraySupport);
 dayjs.extend(localeData);

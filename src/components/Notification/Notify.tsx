@@ -1,45 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import { Toast } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import { Notification } from './types';
-import NotificationActions from './redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import NotificationActions from '../../state/Notifications/actions';
 import dayjs from 'dayjs';
+import { RootState } from '../../state';
+import { NotificationByIdSelector } from '../../state/Notifications/selectors';
+import _ from 'lodash';
 
-const mapStateToProps = (state: { Notifications: Notification.Redux.IStore }, componentProps: { id: string }) => ({
-	actualNotification: state.Notifications.notifications_detailed[componentProps.id],
-});
+export type ComponentProps = { id: string };
 
-const mapDispatchToProps = {
-	deleteNotification: NotificationActions.deleteNotification,
-};
+const NOTIFICATION_DURATION_MS = 5000;
 
-const timeMS = 5000;
+function Notify(props: ComponentProps) {
+	const dispatch = useDispatch();
 
-type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & { id: string };
-function Notify(props: Props) {
-	const [show, setShow] = useState(false);
+	const currentNotification = useSelector(
+		(state: RootState) => NotificationByIdSelector(state, props.id),
+		_.isEqual,
+	);
+
+	const [show, setShow] = useState(true);
 
 	const onClose = () => {
 		setShow(false);
-		setTimeout(() => props.deleteNotification(props.id), 500);
+		setTimeout(() => dispatch(NotificationActions.deleteNotification(props.id)), 500);
 	};
 
 	useEffect(() => {
-		setShow(true);
 		setTimeout(() => {
 			onClose();
-		}, timeMS);
+		}, NOTIFICATION_DURATION_MS);
 	}, []);
 
 	return (
-		<Toast  onClose={onClose} show={show}>
+		<Toast onClose={onClose} show={show}>
 			<Toast.Header>
-				<strong className="mr-auto">{props.actualNotification.title}</strong>
-				<small>{dayjs(props.actualNotification.triggered_time).format('H:m:s')}</small>
+				<strong className="mr-auto">{currentNotification.title}</strong>
+				<small>{dayjs(currentNotification.triggered_time).format('H:m:s')}</small>
 			</Toast.Header>
-			<Toast.Body>{props.actualNotification.message}</Toast.Body>
+			<Toast.Body>{currentNotification.message}</Toast.Body>
 		</Toast>
 	);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Notify);
+export default Notify;

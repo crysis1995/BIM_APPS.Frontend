@@ -6,8 +6,9 @@ import { isEditableTimeEvidence } from '../../../Selectors/IsEditableTimeEvidenc
 import EditableCell from './EditableCell';
 import { TooltipComponent } from '../../../../../../../components/Tooltip';
 import { UserProjectsType } from '../../../../../../../services/graphql.api.service/CONSTANTS/Queries/UserProjects';
-import { RootState } from '../../../../../../../store';
+
 import WorkersLog from '../../../../../types';
+import { RootState } from '../../../../../../../state';
 
 const mapStateToProps = (
 	state: RootState,

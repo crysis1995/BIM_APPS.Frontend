@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../../../../../../../../../store';
+
 import WorkersLog from '../../../../../../../../types';
+import { RootState } from '../../../../../../../../../../state';
 
 export const isCheckedSelector = createSelector(
 	(state: RootState) => state.WorkersLog.LabourInput.Objects.Selection,
@@ -13,5 +14,7 @@ export const isCheckedSelector = createSelector(
 		},
 	) => componentProps.object,
 	(selectionArray, object) =>
-		selectionArray.includes(typeof object === 'number' ? object : parseInt(object.objects?.[0].id)),
+		selectionArray.includes(
+			typeof object === 'number' ? object : parseInt(object.objects?.[0].id),
+		),
 );

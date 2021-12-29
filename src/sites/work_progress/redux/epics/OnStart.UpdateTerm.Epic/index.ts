@@ -1,15 +1,15 @@
 import WorkProgress from '../../../types';
-import { ModalType } from '../../../../../components/Modal/type';
+import { ModalType } from '../../../../../state/Modal/type';
 import { Epic } from 'redux-observable';
-import { RootState } from '../../../../../store';
+
 import { catchError, filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import { EMPTY, from, of } from 'rxjs';
 import { UpdateTermType } from '../../../../../services/graphql.api.service/CONSTANTS/Mutations/UpdateTerm';
 import { Constants } from '../../constants';
 import TermsActions from '../../monolithic/terms/actions';
-import ModalActions from '../../../../../components/Modal/redux/actions';
-import { RootActions } from '../../../../../reducers/type';
+import ModalActions from '../../../../../state/Modal/actions';
+import { RootActions, RootState } from '../../../../../state';
 
 /*
  * 		Epic is invoked while user try change term date
@@ -20,16 +20,24 @@ import { RootActions } from '../../../../../reducers/type';
 export const OnStartUpdateTermEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
-			(data): data is ReturnType<WorkProgress.Monolithic.Terms.Redux.IActions['UpdateTermsByGroupInit']> =>
-				data.type === WorkProgress.Monolithic.Terms.Redux.Types.UPDATE_BY_GROUP_INIT,
+			(
+				data,
+			): data is ReturnType<
+				WorkProgress.Monolithic.Terms.Redux.IActions['UpdateTermsByGroupInit']
+			> => data.type === WorkProgress.Monolithic.Terms.Redux.Types.UPDATE_BY_GROUP_INIT,
 		),
 		withLatestFrom(state$),
 		switchMap(([action, state]) => {
-			const TermAPI = new GraphQLAPIService(state.CMSLogin.credentials?.access_token).MONOLITHIC.Term;
+			const TermAPI = new GraphQLAPIService(state.CMSLogin.credentials?.token).MONOLITHIC
+				.Term;
 			const responseData = ExtractDataToUpdate(state, action);
 			if (responseData) {
 				return from(TermAPI.Update(responseData)).pipe(
-					map((response) => TermsActions.UpdateTermsByGroup(response.updateAcceptanceTerm.acceptanceTerm)),
+					map((response) =>
+						TermsActions.UpdateTermsByGroup(
+							response.updateAcceptanceTerm.acceptanceTerm,
+						),
+					),
 					catchError((error) =>
 						of(
 							ModalActions.InitializeModal({
@@ -46,7 +54,9 @@ export const OnStartUpdateTermEpic: Epic<RootActions, RootActions, RootState> = 
 	);
 
 const termTypeMap: {
-	[key in Constants.TermTypes]: keyof Required<Omit<UpdateTermType.Request, 'term_id' | 'object_ids'>> | null;
+	[key in Constants.TermTypes]:
+		| keyof Required<Omit<UpdateTermType.Request, 'term_id' | 'object_ids'>>
+		| null;
 } = {
 	[Constants.TermTypes.PLANNED_START]: 'PLANNED_START_Date',
 	[Constants.TermTypes.PLANNED_FINISH]: 'PLANNED_FINISH_Date',
@@ -67,7 +77,8 @@ function ExtractDataToUpdate(
 	const toUpdate = action.payload.toUpdate;
 
 	const termID =
-		state.WorkProgress.Monolithic.Terms.termsNorm?.byLevel?.[level]?.byVertical?.[vertical]?.byCrane?.[crane];
+		state.WorkProgress.Monolithic.Terms.termsNorm?.byLevel?.[level]?.byVertical?.[vertical]
+			?.byCrane?.[crane];
 	if (termID && allTerms) {
 		const { id } = allTerms[termID];
 		let Output: UpdateTermType.Request = {

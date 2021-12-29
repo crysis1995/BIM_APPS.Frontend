@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../../../../../store';
+import { RootState } from '../../../../../../state';
+
+
 
 export const selectTerms = createSelector(
 	(state: RootState) => state.WorkProgress.Monolithic.General.active_level,

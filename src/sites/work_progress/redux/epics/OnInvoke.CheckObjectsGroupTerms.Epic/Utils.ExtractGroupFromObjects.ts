@@ -1,6 +1,7 @@
 import WorkProgress from '../../../types';
-import { RootState } from '../../../../../store';
+
 import { GetAllAcceptanceTermsType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/GetAcceptanceTerms';
+import { RootState } from '../../../../../state';
 
 export function ExtractGroupFromObjects(
 	action: ReturnType<WorkProgress.Monolithic.Upgrading.Redux.IActions['CheckObjectsGroupTerms']>,

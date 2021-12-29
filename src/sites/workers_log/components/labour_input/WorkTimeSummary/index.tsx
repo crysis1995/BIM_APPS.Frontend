@@ -1,15 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { CMSLoginType } from '../../../../../components/CMSLogin/type';
+
 import WorkersLogRedux from '../../../redux';
 import { Spinner } from 'react-bootstrap';
 import Summary from './summary';
 import HideComponent from '../../../../../components/HideComponent';
+import { RootState } from '../../../../../state';
 
-const mapStateToProps = (state: {
-	CMSLogin: CMSLoginType.Redux.Store;
-	WorkersLog: ReturnType<typeof WorkersLogRedux.reducer>;
-}) => ({
+const mapStateToProps = (state: RootState) => ({
 	loading:
 		state.WorkersLog.LabourInput.TimeEvidence.LabourSummaryWorkTimeLoading ||
 		state.WorkersLog.LabourInput.Objects.Loading ||

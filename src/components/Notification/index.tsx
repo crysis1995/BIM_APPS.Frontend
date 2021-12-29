@@ -1,16 +1,11 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Notification } from './types';
+import { useSelector } from 'react-redux';
 import Notify from './Notify';
+import { notificationsSelector } from '../../state/Notifications/selectors';
+import _ from 'lodash';
 
-const mapStateToProps = (state: { Notifications: Notification.Redux.IStore }) => ({
-	notifications: state.Notifications.notifications,
-});
-
-const mapDispatchToProps = {};
-
-type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
-function NotificationComponent(props: Props) {
+function NotificationComponent() {
+	const notifications = useSelector(notificationsSelector, _.isEqual);
 	return (
 		<div
 			aria-live="polite"
@@ -20,11 +15,11 @@ function NotificationComponent(props: Props) {
 				bottom: 50,
 				right: 50,
 			}}>
-			{props.notifications.map((id) => (
+			{notifications.map((id) => (
 				<Notify id={id} key={id} />
 			))}
 		</div>
 	);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NotificationComponent);
+export default NotificationComponent;

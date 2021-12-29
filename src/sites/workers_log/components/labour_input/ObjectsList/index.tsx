@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import HideComponent from '../../../../../components/HideComponent';
 import ObjectsTimeInputColector from './ObjectTableComponent';
 import LoaderComponent from '../../../../../components/Loader/LoaderComponent';
-import { RootState } from '../../../../../store';
+import { RootState } from '../../../../../state';
+
 
 const mapStateToProps = (state: RootState) => ({
 	isHide:

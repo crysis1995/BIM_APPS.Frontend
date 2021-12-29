@@ -4,10 +4,11 @@ import { Badge } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import WorkersLog from '../../../../../../../../types';
-import { RootState } from '../../../../../../../../../../store';
+
 import LocaleNameComponent from '../../../../../../../../../../localisation/LocaleNameComponent';
 import { ActualStatusSelector } from './Selector.ActualStatus';
 import { WorkersLogLabourInputColorMap } from '../../../../../../../../redux/labour_input/utils/Constants';
+import { RootState } from '../../../../../../../../../../state';
 
 dayjs.extend(isSameOrBefore);
 
@@ -23,6 +24,7 @@ const mapDispatchToProps = {};
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & ComponentProps;
 function ObjectStatusComponent(props: Props) {
 	if (props.status) {
+		// @ts-ignore
 		const color = WorkersLogLabourInputColorMap.default?.[props.status]?.color;
 		return (
 			<Badge

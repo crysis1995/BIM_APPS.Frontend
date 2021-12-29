@@ -38,7 +38,7 @@ function PrefabricatedObjectsReducer(state = INITIAL_STATE, action: WorkProgress
 				allStatuses: normalize(action.payload, 'id'),
 				statusesByRevitID: action.payload.reduce<{ [key: string]: string[] }>((previousValue, currentValue) => {
 					if (!(currentValue.object.revit_id in previousValue)) {
-						previousValue[currentValue.object.revit_id] = new Array();
+						previousValue[currentValue.object.revit_id] = [];
 					}
 					previousValue[currentValue.object.revit_id].push(currentValue.id);
 					return previousValue;

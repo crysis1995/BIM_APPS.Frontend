@@ -1,10 +1,11 @@
 import WorkProgress from '../../../types';
 import { Epic, ofType } from 'redux-observable';
-import { RootState } from '../../../../../store';
+
 import { combineLatest, EMPTY, of } from 'rxjs';
 import { mergeMap, withLatestFrom } from 'rxjs/operators';
 import WorkProgressMonolithicUpgradingActions from '../../monolithic/upgrading/actions';
-import { RootActions } from '../../../../../reducers/type';
+import { RootActions } from '../../../../../state/types/RootActions';
+import { RootState } from '../../../../../state';
 
 export const HandleCleanSelectedElements: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	combineLatest([

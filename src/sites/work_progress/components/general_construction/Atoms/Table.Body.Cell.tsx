@@ -1,6 +1,6 @@
 import React from 'react';
 import { QueryAcceptanceObjectsType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/QueryAcceptanceObjects';
-import UNITS from '../../../../../components/Units';
+import { EUnit, Units } from '../../../../../components/Units';
 import Status from './Status';
 
 type ComponentProps = {
@@ -20,15 +20,15 @@ const KeyToComponentMap: {
 	vertical: (item) => <>{item?.vertical}</>,
 	area: (item) => {
 		const areaValue = item?.area;
-		return areaValue ? <UNITS.M2 children={areaValue} /> : <></>;
+		return areaValue ? <Units unit={EUnit.M2}>{areaValue}</Units> : <></>;
 	},
 	volume: (item) => {
 		const volumeValue = item?.volume;
-		return volumeValue ? <UNITS.M3 children={volumeValue} /> : <></>;
+		return volumeValue ? <Units unit={EUnit.M3}>{volumeValue}</Units> : <></>;
 	},
 	running_meter: (item) => {
 		const runningMetreValue = item?.running_meter;
-		return runningMetreValue ? <UNITS.CM children={runningMetreValue} /> : <></>;
+		return runningMetreValue ? <Units unit={EUnit.CM}>{runningMetreValue}</Units> : <></>;
 	},
 	statuses: (item) => {
 		const revit_id = item.revit_id;

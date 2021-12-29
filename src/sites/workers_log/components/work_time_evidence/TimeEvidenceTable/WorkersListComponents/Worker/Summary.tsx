@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { RootState } from '../../../../../../../store';
+import { RootState } from '../../../../../../../state';
+
 
 const mapStateToProps = (state: RootState, componentProps: { workerID: string }) => ({
 	worker_summary: state.WorkersLog.WorkTimeEvidence.TimeEvidence.summary.by_workers?.[componentProps.workerID],

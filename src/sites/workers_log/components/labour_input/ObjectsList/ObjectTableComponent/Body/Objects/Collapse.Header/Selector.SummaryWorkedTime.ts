@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../../../../../../../../store';
+import { RootState } from '../../../../../../../../../state';
+
 
 export const summaryWorkedTimeSelector = createSelector(
 	(state: RootState) => state.WorkersLog.LabourInput.TimeEvidence.ObjectsTimeEvidences,

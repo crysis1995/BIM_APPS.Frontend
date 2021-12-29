@@ -1,8 +1,9 @@
 import ForgeViewer from '../../../../../components/ForgeViewer/types';
-import { RootState } from '../../../../../store';
+
 import dayjs from 'dayjs';
 import WorkersLog from '../../../types';
 import { GetObjectsByLevelType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/GetObjectsByLevel';
+import { RootState } from '../../../../../state';
 
 export type AddToContainersOptions = Omit<
 	ForgeViewer.Payload.ElementOperationTypesEnum,
@@ -31,7 +32,9 @@ export interface Options {
 export default class CurrentElementsFilter {
 	private readonly _mode: Mode;
 	private readonly _filteredObjects: number[];
-	private readonly _allObjects: { [p: string]: WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus };
+	private readonly _allObjects: {
+		[p: string]: WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus;
+	};
 	private readonly _forgeElements: NonNullable<ForgeViewer.Redux.IStore['model_elements']>;
 	private readonly _rotationDate: string;
 	constructor(obj: ReturnType<typeof CurrentElementsFilter.validateData>) {
@@ -56,9 +59,11 @@ export default class CurrentElementsFilter {
 			forgeElements: NonNullable<ForgeViewer.Redux.IStore['model_elements']>,
 			rotationDate: string;
 
-		if (!rootState.WorkersLog.LabourInput.Objects.FilteredObjects) throw new Error('Empty Filtered Objects');
+		if (!rootState.WorkersLog.LabourInput.Objects.FilteredObjects)
+			throw new Error('Empty Filtered Objects');
 		FilteredObjects = rootState.WorkersLog.LabourInput.Objects.FilteredObjects;
-		if (!rootState.WorkersLog.LabourInput.Objects.AllObjects) throw new Error('Empty AllObjects');
+		if (!rootState.WorkersLog.LabourInput.Objects.AllObjects)
+			throw new Error('Empty AllObjects');
 		AllObjects = rootState.WorkersLog.LabourInput.Objects.AllObjects;
 
 		if (!rootState.WorkersLog.LabourInput.General.ActualDate) throw new Error('Empty Date');
@@ -89,9 +94,8 @@ export default class CurrentElementsFilter {
 		return {
 			currentElements: [...this._currentElements],
 			forgeElements: {
-				[ForgeViewer.Payload.ElementOperationTypesEnum.COLORED]: this._forgeContainer[
-					ForgeViewer.Payload.ElementOperationTypesEnum.COLORED
-				],
+				[ForgeViewer.Payload.ElementOperationTypesEnum.COLORED]:
+					this._forgeContainer[ForgeViewer.Payload.ElementOperationTypesEnum.COLORED],
 				[ForgeViewer.Payload.ElementOperationTypesEnum.VISIBLE]: [
 					...this._forgeContainer[ForgeViewer.Payload.ElementOperationTypesEnum.VISIBLE],
 				],
@@ -125,11 +129,17 @@ export default class CurrentElementsFilter {
 		}
 	}
 
-	private handleClassifier(element: WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus, forgeID: number) {
+	private handleClassifier(
+		element: WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus,
+		forgeID: number,
+	) {
 		this._tabClassifier[this._mode].call(this, element, forgeID);
 	}
 
-	private defaultClassifier(element: WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus, forgeID: number) {
+	private defaultClassifier(
+		element: WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus,
+		forgeID: number,
+	) {
 		const status = this.extractLatestElementStatus(element);
 		if (status) {
 			switch (status.status) {
@@ -153,21 +163,26 @@ export default class CurrentElementsFilter {
 		}
 	}
 
-	private extractLatestElementStatus(element: WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus) {
+	private extractLatestElementStatus(
+		element: WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus,
+	) {
 		const globalRotationDate = this._rotationDate;
 		if (element && element.statuses.length > 0 && globalRotationDate) {
-			const latestStatus = element.statuses.reduce<null | typeof element.statuses[0]>((prev, acc) => {
-				if (prev) {
-					if (dayjs(prev.date).isBefore(dayjs(acc.date))) {
-						prev = acc;
+			const latestStatus = element.statuses.reduce<null | typeof element.statuses[0]>(
+				(prev, acc) => {
+					if (prev) {
+						if (dayjs(prev.date).isBefore(dayjs(acc.date))) {
+							prev = acc;
+						}
+					} else {
+						if (dayjs(acc.date).isSameOrBefore(dayjs(globalRotationDate))) {
+							prev = acc;
+						}
 					}
-				} else {
-					if (dayjs(acc.date).isSameOrBefore(dayjs(globalRotationDate))) {
-						prev = acc;
-					}
-				}
-				return prev;
-			}, null);
+					return prev;
+				},
+				null,
+			);
 			if (latestStatus) return latestStatus;
 		}
 	}
@@ -215,11 +230,13 @@ export default class CurrentElementsFilter {
 			});
 		} else {
 			const key = options.addTo as ForgeViewer.Payload.ElementOperationTypesEnum;
-			if (key !== ForgeViewer.Payload.ElementOperationTypesEnum.COLORED) this._forgeContainer[key].push(forgeID);
+			if (key !== ForgeViewer.Payload.ElementOperationTypesEnum.COLORED)
+				this._forgeContainer[key].push(forgeID);
 		}
 	}
 
 	private getForgeId(revitID: string) {
-		if (this._forgeElements.hasOwnProperty(revitID)) return this._forgeElements[revitID].forgeId;
+		if (this._forgeElements.hasOwnProperty(revitID))
+			return this._forgeElements[revitID].forgeId;
 	}
 }

@@ -4,8 +4,8 @@ import { HeaderSelectionCell } from './Table.Header.SelectionCell';
 import { useSelector } from 'react-redux';
 import ObjectSelectors from '../../../redux/general_construction/objects/selectors';
 import { UserProjectsType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/UserProjects';
-import { RootState } from '../../../../../store';
 import { QueryAcceptanceObjectsType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/QueryAcceptanceObjects';
+import { RootState } from '../../../../../state';
 
 type Header =
 	| { key?: string; description: string; valueTypes?: UserProjectsType.ValueType[] }

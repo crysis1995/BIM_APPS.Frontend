@@ -1,11 +1,12 @@
 import AddOtherWorksInputCollapseComponent from './AddOtherWorksInputCollapseComponent';
 import React from 'react';
 import { connect } from 'react-redux';
-import { CMSLoginType } from '../../../../../../../../components/CMSLogin/type';
+
 import WorkersLogRedux from '../../../../../../redux';
 import { v4 } from 'uuid';
 import OtherWorksCollapseComponent from './OtherWorksCollapseComponent';
 import { OTHER_WORK_TYPE } from '../../../../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
+import { RootState } from '../../../../../../../../state';
 
 type componentProps = {
 	eventKey: string;
@@ -14,10 +15,7 @@ type componentProps = {
 };
 
 const mapStateToProps = (
-	state: {
-		CMSLogin: CMSLoginType.Redux.Store;
-		WorkersLog: ReturnType<typeof WorkersLogRedux.reducer>;
-	},
+	state: RootState,
 	componentProps: componentProps,
 ) => ({
 	otherWorks: state.WorkersLog.LabourInput.TimeEvidence.OtherWorksTimeEvidences

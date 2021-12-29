@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { RootState } from '../../../../../../../../store';
+
 import { connect } from 'react-redux';
 import WorkProgressMonolithicUpgradingActions from '../../../../../../redux/monolithic/upgrading/actions';
 import { createSelector } from 'reselect';
 import { Constants } from '../../../../../../redux/constants';
+import { RootState } from '../../../../../../../../state';
 
 const GetElementsToSelect = createSelector(
 	(state: RootState) => state.WorkProgress.Monolithic.Upgrading.byRevitIdWithStatuses,
 	(state: RootState) => state.WorkProgress.Monolithic.Upgrading.actualElements,
 	(byRevitIdWithStatuses, actualElements) => {
 		return actualElements.filter(
-			(revitID) => byRevitIdWithStatuses?.[revitID] !== Constants.WorkProgressElementStatus.Finished,
+			(revitID) =>
+				byRevitIdWithStatuses?.[revitID] !== Constants.WorkProgressElementStatus.Finished,
 		);
 	},
 );
@@ -30,16 +32,21 @@ function HeaderSelection(props: Props) {
 	const ref = React.useRef<HTMLInputElement>(null);
 
 	function handleSelectAll() {
-		if (props.selectedElements.length < props.elementsToSelect.length) props.SelectElements(props.elementsToSelect);
+		if (props.selectedElements.length < props.elementsToSelect.length)
+			props.SelectElements(props.elementsToSelect);
 		else props.SelectElements([]);
 	}
 
 	useEffect(() => {
-		if (props.selectedElements.length === props.elementsToSelect.length && props.selectedElements.length !== 0) {
+		if (
+			props.selectedElements.length === props.elementsToSelect.length &&
+			props.selectedElements.length !== 0
+		) {
 			setIsSelect(true);
 			ref.current && (ref.current.indeterminate = false);
 		} else {
-			if (props.selectedElements.length === 0) ref.current && (ref.current.indeterminate = false);
+			if (props.selectedElements.length === 0)
+				ref.current && (ref.current.indeterminate = false);
 			else ref.current && (ref.current.indeterminate = true);
 			setIsSelect(false);
 		}

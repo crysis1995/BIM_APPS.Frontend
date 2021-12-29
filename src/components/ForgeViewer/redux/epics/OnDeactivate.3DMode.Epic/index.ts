@@ -1,14 +1,17 @@
 import { Epic, ofType } from 'redux-observable';
-import { RootActions } from '../../../../../reducers/type';
-import { RootState } from '../../../../../store';
+
 import ForgeViewer from '../../../types';
 import { mergeMap, withLatestFrom } from 'rxjs/operators';
 import { of } from 'rxjs';
 import ForgeViewerActions from '../../actions';
-import ModalActions from '../../../../Modal/redux/actions';
-import { ModalType } from '../../../../Modal/type';
+import ModalActions from '../../../../../state/Modal/actions';
+import { ModalType } from '../../../../../state/Modal/type';
+import { RootActions, RootState } from '../../../../../state';
 
-export const OnDeactivate3DModeEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
+export const OnDeactivate3DModeEpic: Epic<RootActions, RootActions, RootState> = (
+	action$,
+	state$,
+) =>
 	action$.pipe(
 		ofType(ForgeViewer.Redux.Types.DEACTIVATE_3D_VIEW),
 		withLatestFrom(state$),

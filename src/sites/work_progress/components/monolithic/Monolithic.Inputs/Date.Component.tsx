@@ -1,5 +1,5 @@
 import React from 'react';
-import { RootState } from '../../../../../store';
+
 import GeneralActions from '../../../redux/monolithic/general/actions';
 import { selectorIsRotationDayInputHidden } from './Selector.IsRotationDayInputHidden';
 import { selectorIsDateInputHidden } from './Selector.IsDateInputHidden';
@@ -8,6 +8,7 @@ import { IncrementDecrementButton, IncrementDecrementEnum } from './IncrementDec
 import { DateInput } from './DateInput';
 import { RotationDayInput } from './RotationDayInput';
 import { connect } from 'react-redux';
+import { RootState } from '../../../../../state';
 
 function Hidden({ when, children }: { when: boolean; children: JSX.Element }) {
 	if (!when) return children;

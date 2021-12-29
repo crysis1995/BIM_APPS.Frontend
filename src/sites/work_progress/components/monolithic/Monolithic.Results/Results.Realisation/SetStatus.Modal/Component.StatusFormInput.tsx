@@ -4,8 +4,9 @@ import { v4 } from 'uuid';
 import LocaleNameEngine from '../../../../../../../localisation/LocaleName.Core';
 import { Lang } from '../../../../../../../localisation/Lang';
 import { connect } from 'react-redux';
-import { RootState } from '../../../../../../../store';
+
 import { GetObjectsByLevelType } from '../../../../../../../services/graphql.api.service/CONSTANTS/Queries/GetObjectsByLevel';
+import { RootState } from '../../../../../../../state';
 
 type ComponentProps = {
 	setStatus: (data: GetObjectsByLevelType.StatusEnum | null) => void;

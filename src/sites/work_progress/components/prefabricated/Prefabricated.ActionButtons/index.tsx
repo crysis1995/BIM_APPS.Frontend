@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import ModelSetStatuses from '../Prefabricated.Modal/Model.SetStatuses';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../../../store';
+
 import PrefabricatedGeneralActions from '../../../redux/prefabricated/general/actions';
 import AcceptanceButton from '../../general_construction/Atoms/Button.Acceptance';
+import { RootState } from '../../../../../state';
 
 function PrefabricatedActionButtons() {
 	const dispatch = useDispatch();
@@ -27,7 +28,11 @@ function PrefabricatedActionButtons() {
 				<Button
 					active={StatusOnModelVisibility}
 					onClick={() =>
-						dispatch(PrefabricatedGeneralActions.ChangeStatusOnModelVisibility(!StatusOnModelVisibility))
+						dispatch(
+							PrefabricatedGeneralActions.ChangeStatusOnModelVisibility(
+								!StatusOnModelVisibility,
+							),
+						)
 					}
 					size={'sm'}
 					variant={'outline-primary'}>

@@ -22,6 +22,7 @@ describe('__test__ ObjectGroup component', function () {
 			const groupedObject: WorkersLog.LabourInput.Payload.Objects.WorkTimeGroupedObjects = {
 				id: '762c53c0-d6c7-431f-a8b3-60b60597a945',
 				name: 'royalty',
+				// @ts-ignore
 				objects: [628, 765, 237, 819, 405],
 			};
 			const { getByText } = render(
@@ -39,6 +40,7 @@ describe('__test__ ObjectGroup component', function () {
 		it('should render when actualAccordion is different than "element"', function () {
 			const {} = render(
 				<ObjectGroup
+					// @ts-ignore
 					groupedObject={{ id: '', objects: [], name: '' }}
 					eventKey={'elements'}
 					actualAccordion={null}

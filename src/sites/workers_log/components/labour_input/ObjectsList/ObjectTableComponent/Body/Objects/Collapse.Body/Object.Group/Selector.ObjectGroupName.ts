@@ -1,9 +1,10 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../../../../../../../../../store';
+
 import { Constants } from '../../../../../../../../../work_progress/redux/constants';
 import LocaleNameCore from '../../../../../../../../../../localisation/LocaleName.Core';
 import { Lang } from '../../../../../../../../../../localisation/Lang';
 import WorkersLog from '../../../../../../../../types';
+import { RootState } from '../../../../../../../../../../state';
 
 function ConcatStringArrayByMaxStringLength(strings: Array<string>): { long: string; short: string } {
 	const MAX_TITLE_LENGTH = 50;

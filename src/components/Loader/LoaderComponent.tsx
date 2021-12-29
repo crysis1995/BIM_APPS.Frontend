@@ -1,5 +1,6 @@
 import React from 'react';
 import { Spinner } from 'react-bootstrap';
+
 type Props = { loading: boolean };
 
 const LoaderComponent: React.FunctionComponent<Props> = ({ loading, children }) => {

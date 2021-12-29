@@ -2,16 +2,17 @@ import { combineEpics, Epic } from 'redux-observable';
 import { filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { concat, from, of } from 'rxjs';
 import RestAPIService from '../../../../../services/rest.api.service';
-import NotificationActions from '../../../../../components/Notification/redux/actions';
+import NotificationActions from '../../../../../state/Notifications/actions';
 import { saveAs } from 'file-saver';
 import dayjs from 'dayjs';
 import { jsPDF } from 'jspdf';
 import './utils/Lato-Regular-normal';
 import html2canvas from 'html2canvas';
 import CrewActions from '../crew/actions';
-import { RootState } from '../../../../../store';
+
 import WorkersLog from '../../../types';
-import { RootActions } from '../../../../../reducers/type';
+import { RootActions, RootState } from '../../../../../state';
+
 
 function TakeDataFromStore(state: RootState) {
 	return {
@@ -33,7 +34,7 @@ const OnFetchCrewStart: Epic<RootActions, RootActions, RootState> = ($action, $s
 			if (action.payload.type === WorkersLog.WorkTimeEvidence.General.Payload.ERaportType.Financial) {
 				return from(
 					new RestAPIService(
-						state.CMSLogin.credentials?.access_token,
+						state.CMSLogin.credentials?.token,
 					).WORKERS_LOG.WORK_TIME_EVIDENCE.GenerateFinancialRaport(TakeDataFromStore(state)),
 				).pipe(
 					mergeMap((response) =>

@@ -5,8 +5,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import TimeEvidenceActions from '../../../../redux/work_time_evidence/time_evidence/actions';
 import { Button, Col, Row } from 'react-bootstrap';
-import { RootState } from '../../../../../../store';
+
 import WorkersLog from '../../../../types';
+import { RootState } from '../../../../../../state';
 
 const mapStateToProps = (state: RootState) => ({
 	by_date: state.WorkersLog.WorkTimeEvidence.General.calendar.by_date,

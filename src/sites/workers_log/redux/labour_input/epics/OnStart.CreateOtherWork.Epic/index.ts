@@ -1,14 +1,15 @@
 import { Epic } from 'redux-observable';
-import { RootState } from '../../../../../../store';
+
 import { filter, mergeMap, withLatestFrom } from 'rxjs/operators';
 import WorkersLog from '../../../../types';
 import { EMPTY, from, of } from 'rxjs';
 import GraphQLAPIService from '../../../../../../services/graphql.api.service';
 import LabourInputTimeEvidenceActions from '../../time_evidence/actions';
-import ModalActions from '../../../../../../components/Modal/redux/actions';
-import { ModalType } from '../../../../../../components/Modal/type';
+import ModalActions from '../../../../../../state/Modal/actions';
+import { ModalType } from '../../../../../../state/Modal/type';
 import { CreateOtherWorkTimeEvidenceType } from '../../../../../../services/graphql.api.service/CONSTANTS/Mutations/CreateOtherWorkTimeEvidence';
-import { RootActions } from '../../../../../../reducers/type';
+import { RootActions, RootState } from '../../../../../../state';
+
 
 
 export const OnStartCreateOtherWorkEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
@@ -23,7 +24,7 @@ export const OnStartCreateOtherWorkEpic: Epic<RootActions, RootActions, RootStat
 			if (data) {
 				return from(
 					new GraphQLAPIService(
-						state.CMSLogin.credentials?.access_token,
+						state.CMSLogin.credentials?.token,
 					).WorkersLog.LabourInput.OtherWorkTimeEvidence.Create(data),
 				).pipe(
 					mergeMap((responseData) => {

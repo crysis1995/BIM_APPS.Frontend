@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../../store';
+import { RootState } from '../../../state';
 
 export const modelSelector = createSelector(
 	(state: RootState) => state.ForgeViewer.is3DMode,

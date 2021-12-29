@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { RootState } from '../../../store';
+
 import ForgeViewerActions from '../redux/actions';
 import ForgeViewer from '../types';
 import WorkProgressMonolithicUpgradingActions from '../../../sites/work_progress/redux/monolithic/upgrading/actions';
@@ -10,10 +10,18 @@ import { EApplications, EApplicationsWithModules } from '../../../sites/types';
 import { Apps, ModuleUtils, Options } from './types';
 import { modelSelector } from './modelSelector';
 import PrefabricatedObjectsActions from '../../../sites/work_progress/redux/prefabricated/objects/actions';
-import GeneralConstructionObjectActions from '../../../sites/work_progress/redux/general_construction/objects/actions';
+// import GeneralConstructionObjectActions from '../../../sites/work_progress/redux/general_construction/objects/actions';
+import { RootState } from '../../../state';
+import { ModelSelector } from '../redux/selector';
+import { WorkProgress } from '../../../state/WorkProgress';
 
 /*
  * 		constants
+ *
+ * */
+
+/*
+ * 		TODO PRZEROBIĆ NA COŚ LŻEJSZEGO, NA ZASADZIE FABRYKI?
  *
  * */
 
@@ -33,7 +41,7 @@ type ComponentProps = {
 
 const mapStateToProps = (state: RootState) => ({
 	login_3_legged: state.Autodesk.login_3_legged,
-	project_urn: state.CMSLogin.actual_project?.urn,
+	models: ModelSelector(state),
 	defaultViewName: state.CMSLogin.actual_project?.defaultViewName,
 	model_elementsByForgeID: state.ForgeViewer.model_elementsByForgeID,
 	current_sheet: modelSelector(state),
@@ -44,6 +52,7 @@ const mapStateToProps = (state: RootState) => ({
 	selected_elements: state.ForgeViewer.selected_elements,
 	colored_elements: state.ForgeViewer.colored_elements,
 });
+
 
 const mapDispatchToProps = {
 	SetSheetsSuccess: ForgeViewerActions.SetSheetsSuccess,
@@ -56,7 +65,7 @@ const mapDispatchToProps = {
 	handleSelectedElements: WorkProgressMonolithicUpgradingActions.HandleSelectElements,
 	LabourInputHandleSelectObject: LabourInputObjectsActions.HandleSelectObject,
 	HandleSelectElements: PrefabricatedObjectsActions.HandleSelectElements,
-	GeneralConstructionHandleSelectElements: GeneralConstructionObjectActions.HandleSelectElements,
+	GeneralConstructionHandleSelectElements: WorkProgress.Actions.Elements.HandleSelectElements,
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & ComponentProps;
@@ -146,7 +155,7 @@ class Viewer extends Component<Props, State> {
 	};
 
 	componentDidMount() {
-		this.launchViewer(this.props.project_urn);
+		this.launchViewer(this.props.models?.[0].modelUrn);
 	}
 	componentWillUnmount() {
 		this.props.EndViewer();
@@ -157,8 +166,8 @@ class Viewer extends Component<Props, State> {
 		this.OnDefaultActive(prevProps, this.props);
 	}
 	private OnProjectChange(previousProps: Props, actualProps: Props) {
-		if (actualProps.project_urn !== previousProps.project_urn) {
-			this.launchViewer(this.props.project_urn);
+		if (actualProps.models?.[0].modelUrn !== previousProps.models?.[0].modelUrn) {
+			this.launchViewer(this.props.models?.[0].modelUrn);
 		}
 	}
 	private OnCurrentSheetChange(
@@ -170,8 +179,12 @@ class Viewer extends Component<Props, State> {
 		}
 	}
 
-	private OnDefaultActive(prevProps: Props, props: Readonly<Props> & Readonly<{ children?: React.ReactNode }>) {
-		if (this.currentAppUtils.options.setContextNull && this.viewer) this.viewer.setContextMenu(null);
+	private OnDefaultActive(
+		prevProps: Props,
+		props: Readonly<Props> & Readonly<{ children?: React.ReactNode }>,
+	) {
+		if (this.currentAppUtils.options.setContextNull && this.viewer)
+			this.viewer.setContextMenu(null);
 		if (this.props.current_sheet && !this.props.model_elements_loading) {
 			if (
 				isChanged(prevProps.visible_elements, props.visible_elements) ||
@@ -197,13 +210,20 @@ class Viewer extends Component<Props, State> {
 
 	loadSheet() {
 		if (this.viewer && this.doc && this.props.current_sheet)
-			this.viewer.loadDocumentNode(this.doc, this.doc.getRoot().findByGuid(this.props.current_sheet));
+			this.viewer.loadDocumentNode(
+				this.doc,
+				this.doc.getRoot().findByGuid(this.props.current_sheet),
+			);
 	}
 
-	IterateOverChildren(children: Autodesk.Viewing.BubbleNode[], Guids: { id: string; name: string }[]) {
+	IterateOverChildren(
+		children: Autodesk.Viewing.BubbleNode[],
+		Guids: { id: string; name: string }[],
+	) {
 		children.forEach((child) => {
 			if (child.is3D()) Guids.push({ id: child.guid(), name: child.name() });
-			if (child.children && child.children.length > 0) this.IterateOverChildren(child.children, Guids);
+			if (child.children && child.children.length > 0)
+				this.IterateOverChildren(child.children, Guids);
 		});
 	}
 
@@ -213,7 +233,10 @@ class Viewer extends Component<Props, State> {
 			getAccessToken: (callback) =>
 				this.props.login_3_legged &&
 				callback &&
-				callback(this.props.login_3_legged.access_token, this.props.login_3_legged.expires_in),
+				callback(
+					this.props.login_3_legged.access_token,
+					this.props.login_3_legged.expires_in,
+				),
 		};
 
 		Autodesk.Viewing.Initializer(options, async () => {
@@ -230,7 +253,7 @@ class Viewer extends Component<Props, State> {
 				});
 
 				const root = doc.getRoot();
-				let Guids: { id: string; name: string }[] = [];
+				const Guids: { id: string; name: string }[] = [];
 				this.IterateOverChildren(root.children, Guids);
 
 				const viewName = this.props.defaultViewName;
@@ -256,7 +279,9 @@ class Viewer extends Component<Props, State> {
 
 			const documentConteiner = document.getElementById('forgeViewer');
 			if (documentConteiner) {
-				const { Switch2D3DViewExtension } = await import('./extenstions/2D3DSwitchExtension');
+				const { Switch2D3DViewExtension } = await import(
+					'./extenstions/2D3DSwitchExtension'
+				);
 				Switch2D3DViewExtension.register();
 				this.viewer = new Autodesk.Viewing.GuiViewer3D(documentConteiner, {
 					extensions: [
@@ -272,7 +297,11 @@ class Viewer extends Component<Props, State> {
 
 				this.viewer.start();
 				var documentId = 'urn:' + urn;
-				Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+				Autodesk.Viewing.Document.load(
+					documentId,
+					onDocumentLoadSuccess,
+					onDocumentLoadFailure,
+				);
 				this.viewer.addEventListener(
 					Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT,
 					this.OnObjectTreeCreatedEvent.bind(this),
@@ -342,7 +371,9 @@ class Viewer extends Component<Props, State> {
 		const rootId = tree.getRootId();
 		let rootElement = await this.GetElementSchemaName(rootId, viewer);
 		if (!rootElement) return;
-		const schemaName = rootElement.properties.find((prop) => prop.displayName === 'schema_name')?.displayValue;
+		const schemaName = rootElement.properties.find(
+			(prop) => prop.displayName === 'schema_name',
+		)?.displayValue;
 		this.modelType = schemaName ? (schemaName as ModelType) : null;
 	}
 
@@ -363,7 +394,12 @@ class Viewer extends Component<Props, State> {
 			viewer.model.getBulkProperties(
 				[...elements],
 				{
-					propFilter: ['Value', elementParameterLevelName, warbudElementParameterLevelName, 'Level'],
+					propFilter: [
+						'Value',
+						elementParameterLevelName,
+						warbudElementParameterLevelName,
+						'Level',
+					],
 				},
 				(result) => {
 					const extractedData = result
@@ -375,14 +411,18 @@ class Viewer extends Component<Props, State> {
 								const level = data.properties.find(
 									(x) =>
 										!!x.displayValue &&
-										[elementParameterLevelName, warbudElementParameterLevelName, 'Level'].includes(
-											x.attributeName,
-										) &&
+										[
+											elementParameterLevelName,
+											warbudElementParameterLevelName,
+											'Level',
+										].includes(x.attributeName) &&
 										typeof x.displayValue === 'string',
 								);
 								if (level) output.levelName = level.displayValue;
 							}
-							const propertyValue = data.properties.find((prop) => prop.displayName === 'Value');
+							const propertyValue = data.properties.find(
+								(prop) => prop.displayName === 'Value',
+							);
 							if (propertyValue) {
 								output.rvtId = parseInt(propertyValue.displayValue);
 							}
@@ -412,7 +452,13 @@ class Viewer extends Component<Props, State> {
 			viewer.model.getBulkProperties(
 				[...elements],
 				{
-					propFilter: ['name', elementParameterLevelName, warbudElementParameterLevelName, 'Level', 'Value'],
+					propFilter: [
+						'name',
+						elementParameterLevelName,
+						warbudElementParameterLevelName,
+						'Level',
+						'Value',
+					],
 				},
 				(result) => {
 					const extractedData = result
@@ -453,13 +499,14 @@ class Viewer extends Component<Props, State> {
 				const tree = this.viewer.model.getInstanceTree();
 				const rootId = tree.getRootId();
 				await this.SetModelType(this.viewer);
-				if (this.modelType === ModelType.RVT) GetElementsFromRevitModel(tree, rootId, this.viewer);
+				if (this.modelType === ModelType.RVT)
+					GetElementsFromRevitModel(tree, rootId, this.viewer);
 				if (this.modelType === ModelType.NWD || this.modelType === ModelType.NWC)
 					GetElementsFromNavisworksModel(tree, rootId, this.viewer);
 
 				this.currentAppUtils.options.startupHideAll && this.viewer.hide(rootId);
 			} catch (e) {
-				console.error(e.message || e);
+				console.error((e as Error).message || e);
 			}
 		}
 	}
@@ -509,7 +556,9 @@ class Viewer extends Component<Props, State> {
 				this.viewer.lockSelection(this_disabled_elements, true);
 				if (prevElement.length > 0) {
 					// @ts-ignore
-					this.viewer.unlockSelection(prevElement.filter((e) => !this_disabled_elements.includes(e)));
+					this.viewer.unlockSelection(
+						prevElement.filter((e) => !this_disabled_elements.includes(e)),
+					);
 				}
 			} else {
 				// @ts-ignore

@@ -1,5 +1,5 @@
 import React from 'react';
-import { RootState } from '../../../../../store';
+
 import { connect } from 'react-redux';
 import { SummaryGroupedObjectsSelector } from '../Monolithic.Results/Selectors/SummaryGroupedObjectsSelector';
 import { Col } from 'react-bootstrap';
@@ -7,6 +7,7 @@ import { v4 } from 'uuid';
 import { ObjectParams } from '../../../redux/utils/ObjectGroupClassifier';
 import { ParamSummaryView } from './ParamSummaryView.Component';
 import LocaleNameComponent from '../../../../../localisation/LocaleNameComponent';
+import { RootState } from '../../../../../state';
 
 const mapStateToProps = (state: RootState) => ({
 	elements: SummaryGroupedObjectsSelector(state, { isFiltered: true }),

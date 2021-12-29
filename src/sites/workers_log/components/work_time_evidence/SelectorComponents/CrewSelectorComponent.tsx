@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import CrewActions from '../../../redux/work_time_evidence/crew/actions';
-import { RootState } from '../../../../../store';
+
 import { Col, Form } from 'react-bootstrap';
 import { ButtonRefresh } from './Button.Refresh';
 import GeneralActions from '../../../redux/work_time_evidence/general/actions';
 import { Name } from '../Utils/Crew.Name';
+import { RootState } from '../../../../../state';
 
 const mapStateToProps = (state: RootState) => ({
 	crews: state.WorkersLog.WorkTimeEvidence.Crews.all
@@ -34,7 +35,11 @@ function CrewSelectorComponent(props: Props) {
 			<label>Wybierz brygadę/podwykonawcę</label>
 			<Form.Row>
 				<Col>
-					<Form.Control onChange={HandleSelectCrew} value={props.actual_crew || ''} size={'sm'} as="select">
+					<Form.Control
+						onChange={HandleSelectCrew}
+						value={props.actual_crew || ''}
+						size={'sm'}
+						as="select">
 						<option value={''}>Wybierz...</option>
 						{props.crews.map((e) => (
 							<Name key={e.id} object={e} />

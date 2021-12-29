@@ -4,12 +4,13 @@ import classNames from 'classnames';
 import { ArrowIcon } from '../../../OtherWork/Utils/ArrowIcon';
 import { EDirection } from '../../../types/EDirection';
 import { Badge, Button } from 'react-bootstrap';
-import { RootState } from '../../../../../../../../../../store';
+
 import LabourInputObjectsActions from '../../../../../../../../redux/labour_input/objects/actions';
 import { connect } from 'react-redux';
 import ShowComponent from '../../../../../../../../../../components/ShowComponent';
 import ObjectTimeInputComponent from './Object.TimeInput.Component';
 import GroupHeaderNameComponent from './Group.Header.Name.Component';
+import { RootState } from '../../../../../../../../../../state';
 
 type ComponentProps = {
 	show: boolean;

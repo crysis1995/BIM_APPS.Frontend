@@ -5,8 +5,9 @@ import { v4 } from 'uuid';
 import dayjs, { Dayjs } from 'dayjs';
 import WorkProgressMonolithicDelaysActions from '../../../../redux/monolithic/delays/actions';
 import Loader from '../../../../../../components/Loader';
-import { RootState } from '../../../../../../store';
+
 import WorkProgress from '../../../../types';
+import { RootState } from '../../../../../../state';
 
 const baseMargin = 25;
 
@@ -20,7 +21,12 @@ const mapDispatchToProps = { InitCreateNew: WorkProgressMonolithicDelaysActions.
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-function ResultsDelayCreate({ InitCreateNew, delay_causes_loading, delay_causes, active_level }: Props) {
+function ResultsDelayCreate({
+	InitCreateNew,
+	delay_causes_loading,
+	delay_causes,
+	active_level,
+}: Props) {
 	const [date, setDate] = useState<Dayjs>(dayjs());
 	const [comment, setComment] = useState<string>('');
 	const [message, setMessage] = useState<string>('');
@@ -46,7 +52,10 @@ function ResultsDelayCreate({ InitCreateNew, delay_causes_loading, delay_causes,
 						onChange={(e) =>
 							setCauses((prevState) => {
 								if (causes.length < 1)
-									setError((data) => ({ ...data, causes: 'Wybierz co najmniej jeden powód!' }));
+									setError((data) => ({
+										...data,
+										causes: 'Wybierz co najmniej jeden powód!',
+									}));
 								else
 									setError((data) => {
 										delete data.comment;
@@ -83,7 +92,10 @@ function ResultsDelayCreate({ InitCreateNew, delay_causes_loading, delay_causes,
 					onChange={(e) =>
 						setCauses((prevState) => {
 							if (causes.length < 1)
-								setError((data) => ({ ...data, causes: 'Wybierz co najmniej jeden powód!' }));
+								setError((data) => ({
+									...data,
+									causes: 'Wybierz co najmniej jeden powód!',
+								}));
 							else
 								setError((data) => {
 									delete data.comment;
@@ -178,7 +190,10 @@ function ResultsDelayCreate({ InitCreateNew, delay_causes_loading, delay_causes,
 						isInvalid={!!error.comment}
 						onChange={(event) => {
 							event.target.value.length > 250 &&
-								setError((error) => ({ ...error, comment: 'Komentarz jest za długi!' }));
+								setError((error) => ({
+									...error,
+									comment: 'Komentarz jest za długi!',
+								}));
 							setComment(event.target.value);
 						}}
 						value={comment}

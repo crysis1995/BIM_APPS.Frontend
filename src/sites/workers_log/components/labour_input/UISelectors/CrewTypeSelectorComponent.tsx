@@ -1,17 +1,13 @@
 import React from 'react';
-import { CMSLoginType } from '../../../../../components/CMSLogin/type';
-import WorkersLogRedux from '../../../redux';
 import { connect } from 'react-redux';
 import LabourInputGeneralActions from '../../../redux/labour_input/general/actions';
 import { Form } from 'react-bootstrap';
 import { WORKERS_LOG__WORKERS_TYPE } from '../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
 import { PL_DICTIONARY, WORKER_TYPES } from '../../../redux/constants';
 import { v4 } from 'uuid';
+import { RootState } from '../../../../../state';
 
-const mapStateToProps = (state: {
-	CMSLogin: CMSLoginType.Redux.Store;
-	WorkersLog: ReturnType<typeof WorkersLogRedux.reducer>;
-}) => ({
+const mapStateToProps = (state: RootState) => ({
 	ActiveWorkType: state.WorkersLog.LabourInput.General.ActiveWorkType,
 });
 

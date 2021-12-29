@@ -1,4 +1,4 @@
-import { ReturnTypeFromInterface } from '../../types/ReturnTypeFromInterface';
+import { ReturnTypeFromInterface } from '../../utils/types/ReturnTypeFromInterface';
 
 namespace ForgeViewer {
 	export namespace Redux {

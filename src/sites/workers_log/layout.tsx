@@ -7,8 +7,10 @@ import Components from './components';
 import { WORKERS_LOG } from './redux/constants';
 import WorkersLogGeneralActions from './redux/general/actions';
 import Viewer from '../../components/ForgeViewer/components';
-import { RootState } from '../../store';
+
 import { EApplicationsWithModules } from '../types';
+import { RootState } from '../../state';
+import { AppEnum } from '../../generated/graphql';
 
 type ComponentProps = {};
 const mapStateToProps = (state: RootState) => ({});
@@ -22,22 +24,28 @@ function WorkersLog(props: Props) {
 		<Accessors.CMSLoginAccessor>
 			<Accessors.ProjectAccessor>
 				<Accessors.BIM360ServiceAccessor>
-					<Route exact path={`/workers_log/${WORKERS_LOG.WORK_TIME_EVIDENCE}`}>
+					<Route path={`/workers_log/${WORKERS_LOG.WORK_TIME_EVIDENCE}`}>
 						<Accessors.AppsPermissionAccessor
-							requiredApp={EApplicationsWithModules.WORKERS_LOG_WORK_TIME_EVIDENCE}>
+							requiredApp={AppEnum.WorkersLogWorkTimeEvidence}>
 							<Components.Layout.WorkTimeEvidence />
 						</Accessors.AppsPermissionAccessor>
 					</Route>
-					<Route exact path={`/workers_log/${WORKERS_LOG.LABOUR_INPUT}`}>
+					<Route path={`/workers_log/${WORKERS_LOG.LABOUR_INPUT}`}>
 						<Accessors.AppsPermissionAccessor
-							requiredApp={EApplicationsWithModules.WORKERS_LOG_LABOUR_INPUT}>
+							requiredApp={AppEnum.WorkersLogLabourInput}>
 							<Col xs={6}>
-								<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
-									<Viewer runBy={EApplicationsWithModules.WORKERS_LOG_LABOUR_INPUT}/>
+								<div
+									className="d-flex align-items-stretch"
+									style={{ height: '100%' }}>
+									<Viewer
+										runBy={EApplicationsWithModules.WORKERS_LOG_LABOUR_INPUT}
+									/>
 								</div>
 							</Col>
 							<Col xs={6}>
-								<div className="d-flex align-items-stretch" style={{ height: '100%' }}>
+								<div
+									className="d-flex align-items-stretch"
+									style={{ height: '100%' }}>
 									<Components.Layout.LabourInput />
 								</div>
 							</Col>

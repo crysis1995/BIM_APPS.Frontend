@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { RootState } from '../../../../../store';
+
 import ObjectsTableBodyRow from './ObjectsTable.Body.Row';
 import ObjectSelectors from '../../../redux/prefabricated/objects/selectors';
+import { RootState } from '../../../../../state';
 
 const mapStateToProps = (state: RootState) => ({
 	objects: ObjectSelectors.ByRevitID_Objects(state),

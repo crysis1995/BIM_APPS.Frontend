@@ -1,5 +1,4 @@
 import { gql } from 'apollo-boost';
-import { WORKERS_LOG__WORKERS_TYPE } from '../GeneralTypes';
 
 const UpdateGroupedOtherWorkTimeEvidence = gql`
 	mutation UpdateGroupedOtherWorkTimeEvidence($grouped_other_works_time_evidence: ID!, $other_works_ids: [ID]) {

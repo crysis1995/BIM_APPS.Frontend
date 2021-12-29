@@ -1,20 +1,21 @@
 import WorkersLog from '../../../../types';
-import { ModalType } from '../../../../../../components/Modal/type';
+import { ModalType } from '../../../../../../state/Modal/type';
 import { Epic } from 'redux-observable';
-import { RootState } from '../../../../../../store';
+
 import { filter, mergeMap, withLatestFrom } from 'rxjs/operators';
 import GraphQLAPIService from '../../../../../../services/graphql.api.service';
 import { EMPTY, from, merge, of } from 'rxjs';
 import LabourInputTimeEvidenceActions from '../../time_evidence/actions';
 import { GetGroupedOtherWorksTimeEvidencesType } from '../../../../../../services/graphql.api.service/CONSTANTS/Queries/GetGroupedOtherWorksTimeEvidences';
 import { CreateGroupedOtherWorkTimeEvidenceType } from '../../../../../../services/graphql.api.service/CONSTANTS/Mutations/CreateGroupedOtherWorkTimeEvidence';
-import ModalActions from '../../../../../../components/Modal/redux/actions';
-import { RootActions } from '../../../../../../reducers/type';
+import ModalActions from '../../../../../../state/Modal/actions';
+import { RootActions, RootState } from '../../../../../../state';
 
-export const HandleFetchGroupedOtherWorkTimeEvidenceEpic: Epic<RootActions, RootActions, RootState> = (
-	action$,
-	state$,
-) =>
+export const HandleFetchGroupedOtherWorkTimeEvidenceEpic: Epic<
+	RootActions,
+	RootActions,
+	RootState
+> = (action$, state$) =>
 	action$.pipe(
 		filter(
 			(
@@ -30,8 +31,8 @@ export const HandleFetchGroupedOtherWorkTimeEvidenceEpic: Epic<RootActions, Root
 		),
 		withLatestFrom(state$),
 		mergeMap(([_, state]) => {
-			const API = new GraphQLAPIService(state.CMSLogin.credentials?.access_token).WorkersLog.LabourInput
-				.GroupedOtherWorkTimeEvidence;
+			const API = new GraphQLAPIService(state.CMSLogin.credentials?.token).WorkersLog
+				.LabourInput.GroupedOtherWorkTimeEvidence;
 			if (
 				state.WorkersLog.LabourInput.General.ActualDate &&
 				state.WorkersLog.LabourInput.General.ActualCrew &&
@@ -48,9 +49,15 @@ export const HandleFetchGroupedOtherWorkTimeEvidenceEpic: Epic<RootActions, Root
 											response.workersLogGroupedOtherWorksTimeEvidences[0],
 										),
 									);
-								} else if (response.workersLogGroupedOtherWorksTimeEvidences.length === 0) {
+								} else if (
+									response.workersLogGroupedOtherWorksTimeEvidences.length === 0
+								) {
 									try {
-										return from(API.Create(GetCreateGroupedOtherWorkTimeEvidenceData(state))).pipe(
+										return from(
+											API.Create(
+												GetCreateGroupedOtherWorkTimeEvidenceData(state),
+											),
+										).pipe(
 											mergeMap((response) => {
 												if (response)
 													return of(
@@ -70,6 +77,7 @@ export const HandleFetchGroupedOtherWorkTimeEvidenceEpic: Epic<RootActions, Root
 										);
 									} catch (e) {
 										console.log(e);
+										// @ts-ignore
 										return ErrorModalWithMessage(e.message);
 									}
 								}
@@ -98,7 +106,9 @@ function GetData(state: RootState): GetGroupedOtherWorksTimeEvidencesType.Reques
 	return { date, crew_id, project_id, crew_type, level_id };
 }
 
-function GetCreateGroupedOtherWorkTimeEvidenceData(state: RootState): CreateGroupedOtherWorkTimeEvidenceType.Request {
+function GetCreateGroupedOtherWorkTimeEvidenceData(
+	state: RootState,
+): CreateGroupedOtherWorkTimeEvidenceType.Request {
 	const project_id = state.CMSLogin.actual_project?.id,
 		crew_id = state.WorkersLog.LabourInput.General.ActualCrew,
 		date = state.WorkersLog.LabourInput.General.ActualDate,

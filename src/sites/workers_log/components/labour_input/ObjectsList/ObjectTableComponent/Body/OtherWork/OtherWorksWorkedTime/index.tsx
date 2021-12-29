@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { Spinner } from 'react-bootstrap';
 import TimeVievable from './TimeVievable';
 import TimeEditableInput from './TimeEditableInput';
-import { RootState } from '../../../../../../../../../store';
+
 import WorkersLog from '../../../../../../../types';
+import { RootState } from '../../../../../../../../../state';
 
 type componentProps = { otherWorkID: WorkersLog.LabourInput.Payload.TimeEvidence.OtherWorksTimeEvidence['id'] };
 

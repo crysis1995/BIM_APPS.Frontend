@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import { RootState } from '../../../../../../store';
+import { RootState } from '../../../../../../state';
+
 
 
 const mapStateToProps = (

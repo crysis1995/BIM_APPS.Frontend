@@ -1,6 +1,6 @@
-import { ReturnTypeFromInterface } from '../../../types/ReturnTypeFromInterface';
+
 import { Constants } from '../redux/constants';
-import { CMSLoginType } from '../../../components/CMSLogin/type';
+
 import { GetProjectRotationDaysType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetProjectRotationDays';
 import { GetObjectsByLevelType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetObjectsByLevel';
 import { GetAllDelacCausesType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetAllDelayCauses';
@@ -10,6 +10,8 @@ import { GetPrefabricatedObjectsType } from '../../../services/graphql.api.servi
 import { GetPrefabObjectsStatusesType } from '../../../services/graphql.api.service/CONSTANTS/Queries/GetPrefabObjectsStatuses';
 import { QueryAcceptanceObjectsType } from '../../../services/graphql.api.service/CONSTANTS/Queries/QueryAcceptanceObjects';
 import { CreateStatusType } from '../../../services/graphql.api.service/CONSTANTS/Mutations/CreateStatus';
+import { CMSLoginType } from '../../../state/CMSLogin/type';
+import { ReturnTypeFromInterface } from '../../../utils/types/ReturnTypeFromInterface';
 
 namespace WorkProgress {
 	export namespace General {

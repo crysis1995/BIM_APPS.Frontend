@@ -1,3 +1,0 @@
-export enum PermissionEnum {
-	UserIsAdmin,
-}

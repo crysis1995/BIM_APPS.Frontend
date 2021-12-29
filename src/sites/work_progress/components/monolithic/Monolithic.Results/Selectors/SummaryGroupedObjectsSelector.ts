@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../../../../../store';
+
 import { Classifier, ClassifierGroupEnum, ObjectParams } from '../../../../redux/utils/ObjectGroupClassifier';
 import { GetObjectsByLevelType } from '../../../../../../services/graphql.api.service/CONSTANTS/Queries/GetObjectsByLevel';
+import { RootState } from '../../../../../../state';
 
 export type ClassifiedObjects = {
 	[key in ClassifierGroupEnum]?: GetObjectsByLevelType.AcceptanceObject[];

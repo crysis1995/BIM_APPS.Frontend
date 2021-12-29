@@ -2,7 +2,8 @@ import ActualEventKeyRowViewer from './Utils/ActualEventKeyRowViewer';
 import React from 'react';
 import { connect } from 'react-redux';
 import OtherWorksWorkedTime from './OtherWorksWorkedTime';
-import { RootState } from '../../../../../../../../store';
+import { RootState } from '../../../../../../../../state';
+
 
 type ComponentProps = {
 	eventKey: string;

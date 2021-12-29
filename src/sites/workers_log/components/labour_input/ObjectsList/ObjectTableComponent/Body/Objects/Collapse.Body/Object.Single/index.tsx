@@ -5,9 +5,10 @@ import ObjectTimeInputComponent from './Object.TimeInput.Component';
 import { connect } from 'react-redux';
 import LabourInputObjectsActions from '../../../../../../../../redux/labour_input/objects/actions';
 import { isCheckedSelector } from './Selector.IsChecked';
-import { RootState } from '../../../../../../../../../../store';
+
 import ObjectNameComponent from '../Components/Object.Name.Component';
 import ObjectStatusComponent from '../Components/Object.Status.Component';
+import { RootState } from '../../../../../../../../../../state';
 
 export type ComponentProps = {
 	object: WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus['id'];

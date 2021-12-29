@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Worker from './Worker';
 import TimeEvidenceActions from '../../../../redux/work_time_evidence/time_evidence/actions';
-import { RootState } from '../../../../../../store';
+
 import WorkersLog from '../../../../types';
+import { RootState } from '../../../../../../state';
 
 const mapStateToProps = (state: RootState) => ({
 	crewsSummary: state.WorkersLog.WorkTimeEvidence.Crews.summary,

@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import Editable from './Editable';
 import View from './View';
 import { Spinner } from 'react-bootstrap';
-import { RootState } from '../../../../../../../../../../../store';
+import { RootState } from '../../../../../../../../../../../state';
+
 
 type componentProps = { objectID: string };
 const mapStateToProps = (state: RootState, componentProps: componentProps) => ({

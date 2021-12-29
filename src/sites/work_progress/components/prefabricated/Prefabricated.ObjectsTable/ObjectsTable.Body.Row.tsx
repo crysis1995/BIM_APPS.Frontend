@@ -3,7 +3,7 @@ import Input from './Input.CheckBox';
 import { Badge, Button, Spinner } from 'react-bootstrap';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../../../store';
+
 import { GetPrefabricatedObjectsType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/GetPrefabObjects';
 import { createSelector } from 'reselect';
 import LocaleNameComponent from '../../../../../localisation/LocaleNameComponent';
@@ -11,6 +11,7 @@ import { Constants } from '../../../redux/constants';
 import { GetPrefabObjectsStatusesType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/GetPrefabObjectsStatuses';
 import PrefabricatedObjectsActions from '../../../redux/prefabricated/objects/actions';
 import ObjectSelectors from '../../../redux/prefabricated/objects/selectors';
+import { RootState } from '../../../../../state';
 
 type ComponentProps = {
 	object: GetPrefabricatedObjectsType.AcceptanceObject;

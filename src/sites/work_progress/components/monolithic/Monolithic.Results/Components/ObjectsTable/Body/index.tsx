@@ -4,11 +4,12 @@ import Selection from './selection';
 import React from 'react';
 import UNITS from '../../../../../../../../components/Units';
 import { connect } from 'react-redux';
-import { RootState } from '../../../../../../../../store';
+
 import { ObjectsSelector } from './objects.Selector';
 import LocaleNameComponent from '../../../../../../../../localisation/LocaleNameComponent';
 import { Constants } from '../../../../../../redux/constants';
 import ComponentStatus from './Component.Status';
+import { RootState } from '../../../../../../../../state';
 
 type ComponentProps = {
 	allowSelection: boolean;

@@ -1,14 +1,15 @@
 import WorkersLog from '../../../../types';
-import { ModalType } from '../../../../../../components/Modal/type';
-import { RootState } from '../../../../../../store';
+import { ModalType } from '../../../../../../state/Modal/type';
+
 import { Epic } from 'redux-observable';
 import { from, merge, of } from 'rxjs';
-import ModalActions from '../../../../../../components/Modal/redux/actions';
+import ModalActions from '../../../../../../state/Modal/actions';
 import LabourInputObjectsActions from '../../objects/actions';
 import GraphQLAPIService from '../../../../../../services/graphql.api.service';
 import LabourInputTimeEvidenceActions from '../../time_evidence/actions';
 import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
-import { RootActions } from '../../../../../../reducers/type';
+import { RootActions } from '../../../../../../state/types/RootActions';
+import { RootState } from '../../../../../../state';
 
 export const OnInvokeUngroupObjectInitEpic: Epic<RootActions, RootActions, RootState, any> = (action$, state$) =>
 	action$.pipe(
@@ -42,7 +43,7 @@ function CanDelete(
 	action: ReturnType<WorkersLog.LabourInput.Redux.Objects.IActions['UngroupObjectsInit']>,
 	state: RootState,
 ) {
-	const ObjectTimeEvidencesAPI = new GraphQLAPIService(state.CMSLogin.credentials?.access_token).WorkersLog
+	const ObjectTimeEvidencesAPI = new GraphQLAPIService(state.CMSLogin.credentials?.token).WorkersLog
 		.LabourInput.ObjectTimeEvidences;
 	return merge(
 		of(LabourInputTimeEvidenceActions.DeleteObjectTimeEvidenceStart(action.payload.groupID)),

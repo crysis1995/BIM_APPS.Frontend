@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Col } from 'react-bootstrap';
 import SetStatusModal from './SetStatus.Modal';
-import { RootState } from '../../../../../../store';
+
 import ObjectsTable from '../Components/ObjectsTable';
 import { connect } from 'react-redux';
+import { RootState } from '../../../../../../state';
 
 const mapStateToProps = (state: RootState) => ({});
 const mapDispatchToProps = {};

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import dayjs from 'dayjs';
-import { RootState } from '../../../../../../../store';
+
 import {
 	FormatType,
 	GetFormattedDate,
@@ -12,6 +12,7 @@ import { ModalHeader } from './Component.ModalHeader';
 import ComponentModalBody from './Component.ModalBody';
 import { createSelector } from 'reselect';
 import { GetObjectsByLevelType } from '../../../../../../../services/graphql.api.service/CONSTANTS/Queries/GetObjectsByLevel';
+import { RootState } from '../../../../../../../state';
 
 const selectedElementsSelector = createSelector(
 	(state: RootState) => state.WorkProgress.Monolithic.Upgrading.selectedElements,

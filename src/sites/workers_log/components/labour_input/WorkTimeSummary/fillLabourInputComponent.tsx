@@ -1,14 +1,10 @@
 import { Button } from 'react-bootstrap';
 import React, { useState } from 'react';
 import FillLabourInputModal from '../Modal/FillLabourModal';
-import { CMSLoginType } from '../../../../../components/CMSLogin/type';
-import WorkersLogRedux from '../../../redux';
 import { connect } from 'react-redux';
+import { RootState } from '../../../../../state';
 
-const mapStateToProps = (state: {
-	CMSLogin: CMSLoginType.Redux.Store;
-	WorkersLog: ReturnType<typeof WorkersLogRedux.reducer>;
-}) => ({
+const mapStateToProps = (state: RootState) => ({
 	disabled: state.WorkersLog.LabourInput.Objects.Selection.length === 0,
 });
 

@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../../../../../../../../../store';
+
 import WorkersLog from '../../../../../../../../types';
 import dayjs from 'dayjs';
+import { RootState } from '../../../../../../../../../../state';
 
 export const ActualStatusSelector = createSelector(
 	(state: RootState, componentProps: { objectID: WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus['id'] }) =>

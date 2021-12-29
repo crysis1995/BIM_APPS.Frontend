@@ -5,8 +5,9 @@ import { EDirection } from '../types/EDirection';
 import LocaleNameComponent from '../../../../../../../../localisation/LocaleNameComponent';
 import React from 'react';
 import { connect } from 'react-redux';
-import { RootState } from '../../../../../../../../store';
+
 import { summaryOtherWorkWorkedTimeSelector } from './Selector.SummaryOtherWorkWorkedTime';
+import { RootState } from '../../../../../../../../state';
 
 type ComponentProps = {
 	eventKey: string;

@@ -1,16 +1,12 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { CMSLoginType } from '../../../../../../components/CMSLogin/type';
-import WorkersLogRedux from '../../../../redux';
 import { connect } from 'react-redux';
 import ToFillTimeSummary from './ToFillTimeSummary';
 import { LabourInputDescriptionForm } from './LabourInputDescriptionForm';
 import { ElementType } from './types';
+import { RootState } from '../../../../../../state';
 
-const mapStateToProps = (state: {
-	CMSLogin: CMSLoginType.Redux.Store;
-	WorkersLog: ReturnType<typeof WorkersLogRedux.reducer>;
-}) => ({
+const mapStateToProps = (state: RootState) => ({
 	crewType: state.WorkersLog.LabourInput.General.ActiveWorkType,
 });
 

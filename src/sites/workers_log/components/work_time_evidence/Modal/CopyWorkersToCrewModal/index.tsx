@@ -2,21 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { Button, Col, Form, Modal, Row, Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import dayjs from 'dayjs';
-import { FormatType, GetFormattedDate } from '../../../../redux/work_time_evidence/general/utils/GetFormattedDate';
-import WorkersLogRedux from '../../../../redux';
+import {
+	FormatType,
+	GetFormattedDate,
+} from '../../../../redux/work_time_evidence/general/utils/GetFormattedDate';
 import GraphQLAPIService from '../../../../../../services/graphql.api.service';
-import { CMSLoginType } from '../../../../../../components/CMSLogin/type';
+
 import WorkersAction from '../../../../redux/work_time_evidence/worker/actions';
+import { RootState } from '../../../../../../state';
 
 type ComponentProps = {
 	show: boolean;
 	setShow: (data: boolean) => void;
 };
-const mapStateToProps = (state: {
-	CMSLogin: CMSLoginType.Redux.Store;
-	WorkersLog: ReturnType<typeof WorkersLogRedux.reducer>;
-}) => ({
-	access_token: state.CMSLogin.credentials?.access_token,
+const mapStateToProps = (state: RootState) => ({
+	access_token: state.CMSLogin.credentials?.token,
 	date: state.WorkersLog.WorkTimeEvidence.General.calendar.view_range?.start,
 	crew_id: state.WorkersLog.WorkTimeEvidence.Crews.actual,
 	project_id: state.CMSLogin.actual_project?.id,
@@ -41,18 +41,24 @@ function CopyWorkersToCrewModal(props: Props) {
 		async function fetchUsers() {
 			const { access_token, crew_id, project_id, user_id, actualCrewWorkers } = props;
 			if (access_token && crew_id && project_id && user_id && actualCrewWorkers) {
-				await new GraphQLAPIService(access_token).WorkersLog.WorkTimeEvidence.GetAllCrewSummaries({
+				await new GraphQLAPIService(
+					access_token,
+				).WorkersLog.WorkTimeEvidence.GetAllCrewSummaries({
 					crew_id,
 					project_id,
 					end: GetFormattedDate(dayjs(copyFromDate).endOf('month'), FormatType.Day),
 					start: GetFormattedDate(dayjs(copyFromDate).startOf('month'), FormatType.Day),
 					user_id,
 				})
-					.then((e) => (e.workersLogCrewSummaries.length > 0 ? e.workersLogCrewSummaries[0] : null))
+					.then((e) =>
+						e.workersLogCrewSummaries.length > 0 ? e.workersLogCrewSummaries[0] : null,
+					)
 					.then((data) => {
 						if (data)
 							setWorkersInFetchedCrew(
-								data.workers.map((x) => x.id).filter((worker) => !actualCrewWorkers.includes(worker)),
+								data.workers
+									.map((x) => x.id)
+									.filter((worker) => !actualCrewWorkers.includes(worker)),
 							);
 						else setWorkersInFetchedCrew([]);
 					})
@@ -83,7 +89,9 @@ function CopyWorkersToCrewModal(props: Props) {
 
 	const selectItem = (worker_id: string) => {
 		setSelectedWorkers((prevState) =>
-			prevState.includes(worker_id) ? prevState.filter((x) => x !== worker_id) : [...prevState, worker_id],
+			prevState.includes(worker_id)
+				? prevState.filter((x) => x !== worker_id)
+				: [...prevState, worker_id],
 		);
 	};
 
@@ -111,7 +119,11 @@ function CopyWorkersToCrewModal(props: Props) {
 	};
 
 	return (
-		<Modal show={props.show} onHide={() => props.setShow(false)} backdrop="static" keyboard={false}>
+		<Modal
+			show={props.show}
+			onHide={() => props.setShow(false)}
+			backdrop="static"
+			keyboard={false}>
 			<Modal.Header>
 				<Modal.Title>Kopiowanie pracowników brygady pomiędzy miesiącami</Modal.Title>
 			</Modal.Header>
@@ -125,7 +137,10 @@ function CopyWorkersToCrewModal(props: Props) {
 							className="form-control form-control-sm"
 							onChange={(selectedDay) =>
 								setCopyFromDate(
-									GetFormattedDate(dayjs(selectedDay.currentTarget.value), FormatType.Month),
+									GetFormattedDate(
+										dayjs(selectedDay.currentTarget.value),
+										FormatType.Month,
+									),
 								)
 							}
 							value={copyFromDate}
@@ -141,7 +156,8 @@ function CopyWorkersToCrewModal(props: Props) {
 											onClick={selectUnselectAll}
 											ref={ref}
 											checked={
-												workersInFetchedCrew.length === selectedWorkers.length &&
+												workersInFetchedCrew.length ===
+													selectedWorkers.length &&
 												selectedWorkers.length > 0
 											}
 											type={'checkbox'}
@@ -151,8 +167,8 @@ function CopyWorkersToCrewModal(props: Props) {
 								</tr>
 							</thead>
 							<tbody>
-								{workersInFetchedCrew.map((worker) => (
-									<tr>
+								{workersInFetchedCrew.map((worker, index) => (
+									<tr key={index}>
 										<td>
 											<Form.Check
 												onClick={() => selectItem(worker)}

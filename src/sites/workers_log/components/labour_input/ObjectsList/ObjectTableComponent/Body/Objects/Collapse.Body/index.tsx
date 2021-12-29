@@ -1,11 +1,12 @@
 import ObjectSingle from './Object.Single';
 import { v4 } from 'uuid';
 import React, { useState } from 'react';
-import { RootState } from '../../../../../../../../../store';
+
 import { connect } from 'react-redux';
 import ObjectGroup from './Object.Group';
 import ActualEventKeyRowViewer from '../../OtherWork/Utils/ActualEventKeyRowViewer';
 import ShowComponent from '../../../../../../../../../components/ShowComponent';
+import { RootState } from '../../../../../../../../../state';
 
 type ComponentProps = {
 	eventKey: 'elements';

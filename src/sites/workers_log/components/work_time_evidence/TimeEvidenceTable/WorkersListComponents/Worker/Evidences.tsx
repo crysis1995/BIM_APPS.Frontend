@@ -2,7 +2,8 @@ import { connect } from 'react-redux';
 import React from 'react';
 import { v4 } from 'uuid';
 import EvidenceEntity from './EvidenceEntity';
-import { RootState } from '../../../../../../../store';
+import { RootState } from '../../../../../../../state';
+
 
 const mapStateToProps = (state: RootState, componentProps: { workerID: string }) => ({
 	dates: state.WorkersLog.WorkTimeEvidence.General.calendar.by_date,

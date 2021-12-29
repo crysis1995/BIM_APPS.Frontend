@@ -4,34 +4,18 @@ import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import AutodeskLoginComponent from '../components/AutodeskLogin';
-import { EApplications, EApplicationsWithModules } from '../sites/types';
-import { ACCEPTANCE_TYPE } from '../sites/work_progress/redux/types/constans';
-import { WORKERS_LOG } from '../sites/workers_log/redux/constants';
 import CMSLoginComponent from '../components/CMSLogin';
-import { ConstructionMaterialTypes } from '../sites/construction_materials/types';
 import classNames from 'classnames';
-import { RootState } from '../store';
-import { createSelector } from 'reselect';
-
-const WarbudAppsSelector = (state: RootState) => state.CMSLogin.warbud_apps;
-const ActualProjectSelector = (state: RootState) => state.CMSLogin?.actual_project?.id;
-
-const CurrentProjectAppsSelector = createSelector(
-	WarbudAppsSelector,
-	ActualProjectSelector,
-	(warbud_apps, actual_project) => {
-		if (warbud_apps && actual_project) {
-			return warbud_apps[actual_project];
-		}
-		return [];
-	},
-);
+import { AppEnum } from '../generated/graphql';
+import { CurrentProjectAppsSelector } from '../state/CMSLogin/selectors';
+import AppRoutes from '../pages/appRoutes';
+import { Constants } from '../state/WorkProgress/constants';
 
 function Header() {
 	const projectApps = useSelector(CurrentProjectAppsSelector);
 
-	function isAllowedApp(app_type: EApplicationsWithModules | EApplications) {
-		return !projectApps.includes(app_type);
+	function isAllowedApp(app_type: AppEnum) {
+		return !projectApps?.some((app) => app.appName === app_type);
 	}
 
 	return (
@@ -42,63 +26,71 @@ function Header() {
 			<Navbar.Collapse>
 				<Nav className="mr-auto">
 					<NavLink
-						to={`/${EApplications.MODEL_VIEWER}`}
+						to={`/${AppRoutes.ModelViewer}`}
 						className={classNames('nav-link', {
-							disabled: isAllowedApp(EApplications.MODEL_VIEWER),
+							disabled: isAllowedApp(AppEnum.ModelViewer),
 						})}>
 						Przeglądarka Modelu
 					</NavLink>
-					<NavDropdown rootCloseEvent={'click'} title="Awansowanie robót" id={EApplications.WORK_PROGRESS}>
+					<NavDropdown
+						rootCloseEvent={'click'}
+						title="Awansowanie robót"
+						id={AppRoutes.WorkProgress}>
 						<NavLink
-							to={`/${EApplications.WORK_PROGRESS}/${ACCEPTANCE_TYPE.MONOLITHIC}`}
+							to={`/${AppRoutes.WorkProgress}/${Constants.AcceptanceType.MONOLITHIC}`}
 							className={classNames('dropdown-item', {
-								disabled: isAllowedApp(EApplicationsWithModules.WORK_PROGRESS_MONOLITHIC),
+								disabled: isAllowedApp(AppEnum.WorkProgressMonolithic),
 							})}>
 							Monolityczne
 						</NavLink>
 						<NavLink
-							to={`/${EApplications.WORK_PROGRESS}/${ACCEPTANCE_TYPE.PREFABRICATED}`}
+							to={`/${AppRoutes.WorkProgress}/${Constants.AcceptanceType.PREFABRICATED}`}
 							className={classNames('dropdown-item', {
-								disabled: isAllowedApp(EApplicationsWithModules.WORK_PROGRESS_PREFABRICATED),
+								disabled: isAllowedApp(AppEnum.WorkProgressPrecast),
 							})}>
 							Prefabrykowane
 						</NavLink>
 						<NavLink
-							to={`/${EApplications.WORK_PROGRESS}/${ACCEPTANCE_TYPE.GENERAL_CONSTRUCTION}`}
+							to={`/${AppRoutes.WorkProgress}/${Constants.AcceptanceType.GENERAL_CONSTRUCTION}`}
 							className={classNames('dropdown-item', {
-								disabled: isAllowedApp(EApplicationsWithModules.WORK_PROGRESS_GENERAL_CONSTRUCTION),
+								disabled: isAllowedApp(AppEnum.WorkProgressGeneral),
 							})}>
 							Ogólnobudowlane
 						</NavLink>
 					</NavDropdown>
-					<NavDropdown
-						rootCloseEvent={'click'}
-						title="Dzienniki brygadzistowskie"
-						id={EApplications.WORKERS_LOG}>
-						<NavLink
-							to={`/${EApplications.WORKERS_LOG}/${WORKERS_LOG.WORK_TIME_EVIDENCE}`}
-							className={classNames('dropdown-item', {
-								disabled: isAllowedApp(EApplicationsWithModules.WORKERS_LOG_WORK_TIME_EVIDENCE),
-							})}>
-							Ewidencja czasu pracy
-						</NavLink>
-						<NavLink
-							to={`/${EApplications.WORKERS_LOG}/${WORKERS_LOG.LABOUR_INPUT}`}
-							className={classNames('dropdown-item', {
-								disabled: isAllowedApp(EApplicationsWithModules.WORKERS_LOG_LABOUR_INPUT),
-							})}>
-							Nakłady pracy
-						</NavLink>
-					</NavDropdown>
-					<NavDropdown rootCloseEvent={'click'} title="Materiały budowlane" id={EApplications.WORK_PROGRESS}>
-						<NavLink
-							to={`/${EApplications.CONSTRUCTION_MATERIALS}/${ConstructionMaterialTypes.REINFORCEMENT}`}
-							className={classNames('dropdown-item', {
-								disabled: isAllowedApp(EApplicationsWithModules.CONSTRUCTION_MATERIALS_REINFORCEMENT),
-							})}>
-							Zbrojenie
-						</NavLink>
-					</NavDropdown>
+					{/*<NavDropdown*/}
+					{/*	rootCloseEvent={'click'}*/}
+					{/*	title="Dzienniki brygadzistowskie"*/}
+					{/*	id={EApplications.WORKERS_LOG}>*/}
+					{/*	<NavLink*/}
+					{/*		to={`/${EApplications.WORKERS_LOG}/${WORKERS_LOG.WORK_TIME_EVIDENCE}`}*/}
+					{/*		className={classNames('dropdown-item', {*/}
+					{/*			disabled: isAllowedApp(AppEnum.WorkersLogWorkTimeEvidence),*/}
+					{/*		})}>*/}
+					{/*		Ewidencja czasu pracy*/}
+					{/*	</NavLink>*/}
+					{/*	<NavLink*/}
+					{/*		to={`/${EApplications.WORKERS_LOG}/${WORKERS_LOG.LABOUR_INPUT}`}*/}
+					{/*		className={classNames('dropdown-item', {*/}
+					{/*			disabled: isAllowedApp(AppEnum.WorkersLogLabourInput),*/}
+					{/*		})}>*/}
+					{/*		Nakłady pracy*/}
+					{/*	</NavLink>*/}
+					{/*</NavDropdown>*/}
+					{/*<NavDropdown*/}
+					{/*	rootCloseEvent={'click'}*/}
+					{/*	title="Materiały budowlane"*/}
+					{/*	id={EApplications.WORK_PROGRESS}>*/}
+					{/*	<NavLink*/}
+					{/*		to={`/${EApplications.CONSTRUCTION_MATERIALS}/${ConstructionMaterialTypes.REINFORCEMENT}`}*/}
+					{/*		className={classNames('dropdown-item', {*/}
+					{/*			disabled: isAllowedApp(*/}
+					{/*				EApplicationsWithModules.CONSTRUCTION_MATERIALS_REINFORCEMENT,*/}
+					{/*			),*/}
+					{/*		})}>*/}
+					{/*		Zbrojenie*/}
+					{/*	</NavLink>*/}
+					{/*</NavDropdown>*/}
 				</Nav>
 				<Nav className="align-right">
 					<AutodeskLoginComponent />

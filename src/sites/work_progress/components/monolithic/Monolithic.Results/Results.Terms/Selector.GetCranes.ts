@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../../../../../store';
+import { RootState } from '../../../../../../state';
 
 export const selectorGetCranes = createSelector(
 	(state: RootState) => state.CMSLogin.actual_project?.cranes_all,

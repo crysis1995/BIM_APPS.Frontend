@@ -7,7 +7,8 @@ import Select from 'react-select';
 import { WORKERS_LOG__WORKERS_TYPE } from '../../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
 import LocaleNameEngine from '../../../../../../localisation/LocaleName.Core';
 import { v4 } from 'uuid';
-import { RootState } from '../../../../../../store';
+import { RootState } from '../../../../../../state';
+
 
 type ComponentProps = {
 	show: boolean;

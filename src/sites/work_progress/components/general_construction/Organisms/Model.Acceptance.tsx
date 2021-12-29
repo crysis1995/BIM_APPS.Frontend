@@ -36,6 +36,7 @@ function ModelAcceptance(props: ComponentProps) {
 				GeneralConstructionObjectActions.HandleSetStatuses(
 					status,
 					date,
+					// @ts-ignore
 					objects.map(({ id, revit_id }) => ({ id, revit_id })),
 				),
 			);
@@ -63,12 +64,15 @@ function ModelAcceptance(props: ComponentProps) {
 				</Row>
 				<Row>
 					<Col>
-						{objects.map((o, index) => (
-							<h6 key={index}>
-								<span className={'mr-4'}>{o.revit_id}</span>
-								{/*<span className={'mr-4'}>{o.details}</span>*/}
-							</h6>
-						))}
+						{objects.map(
+							// @ts-ignore
+							(o, index) => (
+								<h6 key={index}>
+									<span className={'mr-4'}>{o.revit_id}</span>
+									{/*<span className={'mr-4'}>{o.details}</span>*/}
+								</h6>
+							),
+						)}
 					</Col>
 				</Row>
 				<hr />

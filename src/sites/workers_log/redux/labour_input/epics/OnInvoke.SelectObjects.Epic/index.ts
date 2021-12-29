@@ -1,10 +1,11 @@
 import { Epic } from 'redux-observable';
 import { filter, switchMap, withLatestFrom } from 'rxjs/operators';
 import WorkersLog from '../../../../types';
-import { RootState } from '../../../../../../store';
+
 import { of } from 'rxjs';
 import ForgeViewerActions from '../../../../../../components/ForgeViewer/redux/actions';
-import { RootActions } from '../../../../../../reducers/type';
+import { RootActions } from '../../../../../../state/types/RootActions';
+import { RootState } from '../../../../../../state';
 
 export const OnInvokeSelectObjectsEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(

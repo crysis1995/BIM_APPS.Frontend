@@ -1,11 +1,12 @@
 import { from, merge, of } from 'rxjs';
 import LabourInputGeneralActions from '../../general/actions';
-import { RootState } from '../../../../../../store';
+
 import GraphQLAPIService from '../../../../../../services/graphql.api.service';
 import { mergeMap } from 'rxjs/operators';
 import normalize from '../../../../../../utils/Normalize';
-import ModalActions from '../../../../../../components/Modal/redux/actions';
-import { ModalType } from '../../../../../../components/Modal/type';
+import ModalActions from '../../../../../../state/Modal/actions';
+import { ModalType } from '../../../../../../state/Modal/type';
+import { RootState } from '../../../../../../state';
 
 export const FetchOtherWorkOptions = (state: RootState, GRAPHQL: GraphQLAPIService) => {
 	return merge(

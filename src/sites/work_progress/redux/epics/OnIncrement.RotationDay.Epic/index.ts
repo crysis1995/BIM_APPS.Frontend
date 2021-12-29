@@ -1,19 +1,28 @@
 import { Epic } from 'redux-observable';
-import { RootState } from '../../../../../store';
+
 import { filter, switchMap, withLatestFrom } from 'rxjs/operators';
 import WorkProgress from '../../../types';
 import { of } from 'rxjs';
 import GeneralActions from '../../monolithic/general/actions';
-import { RootActions } from '../../../../../reducers/type';
+import { RootActions, RootState } from '../../../../../state';
 
-export const OnIncrementRotationDayEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
+export const OnIncrementRotationDayEpic: Epic<RootActions, RootActions, RootState> = (
+	action$,
+	state$,
+) =>
 	action$.pipe(
 		filter(
-			(data): data is ReturnType<WorkProgress.Monolithic.General.Redux.IActions['IncrementDay']> =>
+			(
+				data,
+			): data is ReturnType<WorkProgress.Monolithic.General.Redux.IActions['IncrementDay']> =>
 				data.type === WorkProgress.Monolithic.General.Redux.Types.INCREMENT_DAY,
 		),
 		withLatestFrom(state$),
 		switchMap(([_, state]) =>
-			of(GeneralActions.TrySetRotationDay(state.WorkProgress.Monolithic.General.rotation_day + 1)),
+			of(
+				GeneralActions.TrySetRotationDay(
+					state.WorkProgress.Monolithic.General.rotation_day + 1,
+				),
+			),
 		),
 	);

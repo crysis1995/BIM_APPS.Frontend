@@ -1,15 +1,19 @@
 import WorkProgress from '../../../types';
-import { ModalType } from '../../../../../components/Modal/type';
 import { Epic } from 'redux-observable';
-import { RootState } from '../../../../../store';
+
 import { filter, switchMap, withLatestFrom } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
+import { RootActions, RootState } from '../../../../../state';
 
-type ActionTypes = WorkProgress.Monolithic.General.Redux.Actions | ModalType.Redux.Actions;
-export const OnChangeRotationDayEpic: Epic<ActionTypes, ActionTypes, RootState> = (action$, state$) =>
+export const OnChangeRotationDayEpic: Epic<RootActions, RootActions, RootState> = (
+	action$,
+	state$,
+) =>
 	action$.pipe(
 		filter(
-			(data): data is ReturnType<WorkProgress.Monolithic.General.Redux.IActions['TrySetDate']> =>
+			(
+				data,
+			): data is ReturnType<WorkProgress.Monolithic.General.Redux.IActions['TrySetDate']> =>
 				data.type === WorkProgress.Monolithic.General.Redux.Types.TRY_SET_DATE,
 		),
 		withLatestFrom(state$),

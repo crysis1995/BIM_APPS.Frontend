@@ -5,7 +5,8 @@ import RoundHalf from '../../../../../../../../../utils/RoundHalf';
 import { Form } from 'react-bootstrap';
 import LabourInputTimeEvidenceActions from '../../../../../../../redux/labour_input/time_evidence/actions';
 import WorkersLog from '../../../../../../../types';
-import { RootState } from '../../../../../../../../../store';
+import { RootState } from '../../../../../../../../../state';
+
 
 type componentProps = {
 	setEditable: (data: boolean) => void;

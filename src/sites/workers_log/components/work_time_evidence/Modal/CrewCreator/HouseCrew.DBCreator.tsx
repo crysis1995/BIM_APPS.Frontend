@@ -5,14 +5,10 @@ import GraphQLAPIService from '../../../../../../services/graphql.api.service';
 import { connect } from 'react-redux';
 import { PL_DICTIONARY, WORKER_TYPES } from '../../../../redux/constants';
 import { WORKERS_LOG__WORKERS_TYPE } from '../../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
-import { CMSLoginType } from '../../../../../../components/CMSLogin/type';
-
-type RootState = {
-	CMSLogin: CMSLoginType.Redux.Store;
-};
+import { RootState } from '../../../../../../state';
 
 const mapStateToProps = (state: RootState) => ({
-	token: state.CMSLogin.credentials?.access_token,
+	token: state.CMSLogin.credentials?.token,
 	user_id: state.CMSLogin.user?.id,
 	project_id: state.CMSLogin.actual_project?.id,
 });

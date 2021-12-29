@@ -6,20 +6,26 @@ import TimeEvidenceActions from './actions';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import RestAPIService from '../../../../../services/rest.api.service';
 import dayjs from 'dayjs';
-import ModalActions from '../../../../../components/Modal/redux/actions';
-import { ModalType } from '../../../../../components/Modal/type';
-import { RootState } from '../../../../../store';
-import WorkersLog from '../../../types';
-import { RootActions } from '../../../../../reducers/type';
+import ModalActions from '../../../../../state/Modal/actions';
+import { ModalType } from '../../../../../state/Modal/type';
 
-const OnFetchWorkerWorkEvidenceStartEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
+import WorkersLog from '../../../types';
+import { RootActions, RootState } from '../../../../../state';
+
+const OnFetchWorkerWorkEvidenceStartEpic: Epic<RootActions, RootActions, RootState> = (
+	action$,
+	state$,
+) =>
 	action$.pipe(
 		filter(
 			(
 				data,
 			): data is ReturnType<
 				WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.IActions['fetchWorkerWorkEvidenceStart']
-			> => data.type === WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.FETCH_WORKER_TIME_EVIDENCE_START,
+			> =>
+				data.type ===
+				WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types
+					.FETCH_WORKER_TIME_EVIDENCE_START,
 		),
 		withLatestFrom(state$),
 		mergeMap(([data, state]) => {
@@ -28,11 +34,13 @@ const OnFetchWorkerWorkEvidenceStartEpic: Epic<RootActions, RootActions, RootSta
 				from(data.payload.worker_id).pipe(
 					mergeMap((worker_id) =>
 						from(
-							new GraphQLAPIService().WorkersLog.WorkTimeEvidence.GetWorkerTimeEvidence({
-								worker_id: worker_id,
-								start: dayjs(viewRange?.start).format('YYYY-MM-DD'),
-								end: dayjs(viewRange?.end).format('YYYY-MM-DD'),
-							}),
+							new GraphQLAPIService().WorkersLog.WorkTimeEvidence.GetWorkerTimeEvidence(
+								{
+									worker_id: worker_id,
+									start: dayjs(viewRange?.start).format('YYYY-MM-DD'),
+									end: dayjs(viewRange?.end).format('YYYY-MM-DD'),
+								},
+							),
 						).pipe(
 							map((data) =>
 								TimeEvidenceActions.fetchWorkerWorkEvidenceEnd(
@@ -53,8 +61,11 @@ const OnEditingWorkedTimeEpic: Epic<RootActions, RootActions, RootState> = (acti
 		filter(
 			(
 				data,
-			): data is ReturnType<WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.IActions['editingWorkedTimeInit']> =>
-				data.type === WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.EDITING_WORKED_TIME_INIT,
+			): data is ReturnType<
+				WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.IActions['editingWorkedTimeInit']
+			> =>
+				data.type ===
+				WorkersLog.WorkTimeEvidence.TimeEvidence.Redux.Types.EDITING_WORKED_TIME_INIT,
 		),
 		debounceTime(500),
 		withLatestFrom(state$),
@@ -67,16 +78,19 @@ const OnEditingWorkedTimeEpic: Epic<RootActions, RootActions, RootState> = (acti
 			}
 			const { date, worker, hours, actual_project, user, summary } = ExtractData();
 			if (user && actual_project && summary) {
-				const body: WorkersLog.WorkTimeEvidence.TimeEvidence.Payload.UpdateWorkerTimePayload = {
-					date,
-					filling_engineer: user.id,
-					project: actual_project.id,
-					worked_time: hours,
-					worker,
-					crew_summary: summary.id,
-				};
+				const body: WorkersLog.WorkTimeEvidence.TimeEvidence.Payload.UpdateWorkerTimePayload =
+					{
+						date,
+						filling_engineer: user.id,
+						project: actual_project.id,
+						worked_time: hours,
+						worker,
+						crew_summary: summary.id,
+					};
 				return from(
-					new RestAPIService().WORKERS_LOG.WORK_TIME_EVIDENCE.CreateOrUpdate(body) as Promise<
+					new RestAPIService().WORKERS_LOG.WORK_TIME_EVIDENCE.CreateOrUpdate(
+						body,
+					) as Promise<
 						| WorkersLog.WorkTimeEvidence.TimeEvidence.Payload.UpdateWorkerTimeSucceedResponse
 						| WorkersLog.WorkTimeEvidence.TimeEvidence.Payload.UpdateWorkerTimeAbortedResponse
 					>,

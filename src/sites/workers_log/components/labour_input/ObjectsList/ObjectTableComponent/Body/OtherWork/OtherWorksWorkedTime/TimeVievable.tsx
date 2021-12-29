@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import WorkersLog from '../../../../../../../types';
-import { RootState } from '../../../../../../../../../store';
+import { RootState } from '../../../../../../../../../state';
+
 
 type componentProps = {
 	setEditable: (data: boolean) => void;

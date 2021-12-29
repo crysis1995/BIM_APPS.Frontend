@@ -1,19 +1,27 @@
 import WorkProgress from '../../../types';
-import { ModalType } from '../../../../../components/Modal/type';
-import { CMSLoginType } from '../../../../../components/CMSLogin/type';
+
 import { Epic } from 'redux-observable';
-import { RootState } from '../../../../../store';
+
 import { filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import { concat, EMPTY, from, of } from 'rxjs';
 import WorkProgressMonolithicUpgradingActions from '../../monolithic/upgrading/actions';
-import { RootActions } from '../../../../../reducers/type';
 
-export const OnInvokeSetStatusesInitEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
+import { RootActions, RootState } from '../../../../../state';
+
+export const OnInvokeSetStatusesInitEpic: Epic<RootActions, RootActions, RootState> = (
+	action$,
+	state$,
+) =>
 	action$.pipe(
 		filter(
-			(data): data is ReturnType<WorkProgress.Monolithic.Upgrading.Redux.IActions['SetStatusesInit']> =>
-				data.type === WorkProgress.Monolithic.Upgrading.Redux.Types.SET_STATUSES_INITIALIZER,
+			(
+				data,
+			): data is ReturnType<
+				WorkProgress.Monolithic.Upgrading.Redux.IActions['SetStatusesInit']
+			> =>
+				data.type ===
+				WorkProgress.Monolithic.Upgrading.Redux.Types.SET_STATUSES_INITIALIZER,
 		),
 		withLatestFrom(state$),
 		switchMap(
@@ -23,7 +31,7 @@ export const OnInvokeSetStatusesInitEpic: Epic<RootActions, RootActions, RootSta
 				},
 				state,
 			]) => {
-				const API = new GraphQLAPIService(state.CMSLogin.credentials?.access_token);
+				const API = new GraphQLAPIService(state.CMSLogin.credentials?.token);
 				const user_id = state.CMSLogin.user?.id;
 				const byRevitID = state.WorkProgress.Monolithic.Upgrading.byRevitId;
 				if (byRevitID && user_id) {
@@ -55,8 +63,12 @@ export const OnInvokeSetStatusesInitEpic: Epic<RootActions, RootActions, RootSta
 							),
 						),
 						of(WorkProgressMonolithicUpgradingActions.SetStatusesEnd()),
-						of(WorkProgressMonolithicUpgradingActions.CheckObjectsGroupTerms(selectedElements)),
-						of(WorkProgressMonolithicUpgradingActions.HandleSetCurrentElement())
+						of(
+							WorkProgressMonolithicUpgradingActions.CheckObjectsGroupTerms(
+								selectedElements,
+							),
+						),
+						of(WorkProgressMonolithicUpgradingActions.HandleSetCurrentElement()),
 					);
 				}
 				return EMPTY;

@@ -1,7 +1,9 @@
-import { RootState } from '../../../../../store';
+
+
 import { EMPTY, merge, of } from 'rxjs';
 import GeneralActions from '../../monolithic/general/actions';
 import { Constants } from '../../constants';
+import { RootState } from '../../../../../state';
 
 export function SetProjectUtilsEpic(state: RootState) {
 	const actualProject = state.CMSLogin.actual_project;

@@ -1,8 +1,9 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../../../../store';
+
 import { QueryAcceptanceObjectsType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/QueryAcceptanceObjects';
 import _ from 'lodash';
 import { RoundNumber } from '../../../../../utils/RoundNumber';
+import { RootState } from '../../../../../state';
 
 export const ObjectListSelector = (state: RootState) =>
 	state.WorkProgress.GeneralConstruction.Objects.ObjectsByID
@@ -16,8 +17,10 @@ export const ObjectsStatusLoadingSelector = (state: RootState, props: { item: nu
 	state.WorkProgress.GeneralConstruction.Objects.ObjectStatusLoading?.[props.item];
 export const ObjectStatusesSelector = (state: RootState) =>
 	state.WorkProgress.GeneralConstruction.Objects.ObjectStatusAll;
-export const SelectionSelector = (state: RootState) => state.WorkProgress.GeneralConstruction.Objects.Selection;
-export const ObjectsSorting = (state: RootState) => state.WorkProgress.GeneralConstruction.Objects.Sorting;
+export const SelectionSelector = (state: RootState) =>
+	state.WorkProgress.GeneralConstruction.Objects.Selection;
+export const ObjectsSorting = (state: RootState) =>
+	state.WorkProgress.GeneralConstruction.Objects.Sorting;
 
 const SortedObjectsSelector = createSelector(
 	ObjectListSelector,
@@ -25,7 +28,9 @@ const SortedObjectsSelector = createSelector(
 	ObjectStatusesSelector,
 	SelectionSelector,
 	(Objects, sortingOptions, objectStatuses, selectedElements) => {
-		let objectsToOutput = Objects.sort((a, b) => (selectedElements.includes(a.revit_id) ? -1 : 1));
+		let objectsToOutput = Objects.sort((a, b) =>
+			selectedElements.includes(a.revit_id) ? -1 : 1,
+		);
 		if (sortingOptions) {
 			if (
 				(
@@ -89,7 +94,9 @@ const ObjectSelectors = {
 		SelectionSelector,
 		(state: RootState, key: keyof QueryAcceptanceObjectsType.AcceptanceObject) => key,
 		(allElements, selected, key) => {
-			const selectedElements = selected.map((revitId) => allElements?.[revitId]).filter((e) => !!e);
+			const selectedElements = selected
+				.map((revitId) => allElements?.[revitId])
+				.filter((e) => !!e);
 			return RoundNumber(_.sumBy(selectedElements, key) || 0);
 		},
 	),
@@ -107,7 +114,8 @@ const ObjectSelectors = {
 	ObjectsSelectedCount: createSelector(
 		ObjectDictSelector,
 		SelectionSelector,
-		(objects, selection) => selection.map((revitID) => objects[revitID]).filter((item) => !!item).length,
+		(objects, selection) =>
+			selection.map((revitID) => objects[revitID]).filter((item) => !!item).length,
 	),
 };
 

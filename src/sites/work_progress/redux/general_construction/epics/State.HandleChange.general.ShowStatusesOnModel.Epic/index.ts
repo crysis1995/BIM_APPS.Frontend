@@ -1,6 +1,5 @@
 import { Epic } from 'redux-observable';
-import { RootActions } from '../../../../../../reducers/type';
-import { RootState } from '../../../../../../store';
+
 import { debounceTime, distinctUntilChanged, map, mergeMap, withLatestFrom } from 'rxjs/operators';
 import { of } from 'rxjs';
 import _ from 'lodash';
@@ -8,6 +7,8 @@ import CurrentElementsFilter from '../../Utils/CurrentElements.Filter';
 import ForgeViewerActions from '../../../../../../components/ForgeViewer/redux/actions';
 import { EmptyForgeViewerPayload } from '../../../../../../components/ForgeViewer/redux/utils';
 import ForgeViewer from '../../../../../../components/ForgeViewer/types';
+import { RootActions } from '../../../../../../state/types/RootActions';
+import { RootState } from '../../../../../../state';
 
 export const StateHandleChangeGeneralShowStatusesOnModelEpic: Epic<RootActions, RootActions, RootState> = (
 	action$,

@@ -7,13 +7,14 @@ import GraphQLAPIService from '../../../../../services/graphql.api.service';
 import { ExtractRequestData } from './utils/ExtractRequestData';
 import { PrepareDataForReducer } from './utils/PrepareDataForReducer';
 import TimeEvidenceActions from '../time_evidence/actions';
-import NotificationActions from '../../../../../components/Notification/redux/actions';
+import NotificationActions from '../../../../../state/Notifications/actions';
 import { CreateCrewSummaryType } from '../../../../../services/graphql.api.service/CONSTANTS/Mutations/CreateCrewSummary';
 import dayjs from 'dayjs';
 import normalize from '../../../../../utils/Normalize';
-import { RootState } from '../../../../../store';
+
 import WorkersLog from '../../../types';
-import { RootActions } from '../../../../../reducers/type';
+import { RootActions, RootState } from '../../../../../state';
+
 
 const OnFetchCrewStart: Epic<RootActions, RootActions, RootState> = ($action, $state) =>
 	$action.pipe(
@@ -23,7 +24,7 @@ const OnFetchCrewStart: Epic<RootActions, RootActions, RootState> = ($action, $s
 			if (state.CMSLogin.user && state.CMSLogin.actual_project)
 				return from(
 					new GraphQLAPIService(
-						state.CMSLogin.credentials?.access_token,
+						state.CMSLogin.credentials?.token,
 					).WorkersLog.WorkTimeEvidence.GetAllCrews({
 						user_id: state.CMSLogin.user.id,
 						project_id: state.CMSLogin.actual_project.id,
@@ -132,6 +133,7 @@ const OnCreateCrewSummary: Epic<RootActions, RootActions, RootState> = (action$,
 				return of(
 					NotificationActions.showNotification({
 						title: 'Błąd!',
+						// @ts-ignore
 						message: err.message,
 						triggered_time: new Date(),
 					}),

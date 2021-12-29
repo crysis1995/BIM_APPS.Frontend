@@ -3,8 +3,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { PL_DICTIONARY } from '../../../redux/constants';
 import GeneralActions from '../../../redux/work_time_evidence/general/actions';
-import { RootState } from '../../../../../store';
+
 import { WORKERS_LOG__WORKERS_TYPE } from '../../../../../services/graphql.api.service/CONSTANTS/GeneralTypes';
+import { RootState } from '../../../../../state';
 
 const mapStateToProps = (state: RootState) => ({
 	worker_type: state.WorkersLog.WorkTimeEvidence.General.worker_type,

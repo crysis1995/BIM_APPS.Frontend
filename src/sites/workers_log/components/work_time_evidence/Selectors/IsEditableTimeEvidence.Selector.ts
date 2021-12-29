@@ -1,11 +1,12 @@
 import { createSelector } from 'reselect';
 
-import { RootState } from '../../../../../store';
 import WorkersLog from '../../../types';
+import { RootState } from '../../../../../state';
 
 export const isEditableTimeEvidence = createSelector(
 	(state: RootState) => state.WorkersLog.WorkTimeEvidence.TimeEvidence.editing,
-	(state: RootState, props: { workerID: string; date: { date: string; is_holiday: boolean } }) => props,
+	(state: RootState, props: { workerID: string; date: { date: string; is_holiday: boolean } }) =>
+		props,
 	(editingData, props) => {
 		if (editingData) {
 			switch (editingData.mode) {

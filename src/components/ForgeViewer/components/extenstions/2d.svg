@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg version="1.2" baseProfile="tiny" id="Warstwa_1"
-	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 24"
-	 overflow="visible" xml:space="preserve">
+     xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 24 24"
+     overflow="visible" xml:space="preserve">
 <path fill="none" stroke="#ffffff" stroke-width="0.5" stroke-miterlimit="10" d="M2.5,5h19C22.33,5,23,5.67,23,6.5v11
 	c0,0.83-0.67,1.5-1.5,1.5h-19C1.67,19,1,18.33,1,17.5v-11C1,5.67,1.67,5,2.5,5z"/>
 <g>

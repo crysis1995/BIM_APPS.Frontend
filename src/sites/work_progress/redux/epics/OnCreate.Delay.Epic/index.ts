@@ -1,5 +1,5 @@
 import WorkProgress from '../../../types';
-import { ModalType } from '../../../../../components/Modal/type';
+import { ModalType } from '../../../../../state/Modal/type';
 
 type ActionTypes = WorkProgress.Monolithic.Delays.Redux.Actions | ModalType.Redux.Actions;
 

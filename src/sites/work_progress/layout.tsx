@@ -1,9 +1,10 @@
 import React from 'react';
-import { EApplicationsWithModules } from '../types';
 import Accessors from '../../components/Accessors';
-import { Route, Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { Constants } from './redux/constants';
 import Loader from '../../components/Loader';
+import { AppEnum } from '../../generated/graphql';
+import { Routes } from 'react-router';
 
 const MonolithicLayoutComponent = React.lazy(() => import('./components/monolithic'));
 const PrefabricatedLayoutComponent = React.lazy(() => import('./components/prefabricated'));
@@ -15,26 +16,30 @@ function WorkProgressComponent() {
 			<Accessors.ProjectAccessor>
 				<Accessors.BIM360ServiceAccessor>
 					<React.Suspense fallback={<Loader />}>
-						<Switch>
-							<Route path={`/work_progress/${Constants.AcceptanceType.MONOLITHIC}`}>
+						<Routes>
+							<Route
+								path={`/work_progress/${Constants.AcceptanceType.MONOLITHIC}`}
+								element={
+									<Accessors.AppsPermissionAccessor
+										requiredApp={AppEnum.WorkProgressMonolithic}>
+										<MonolithicLayoutComponent />
+									</Accessors.AppsPermissionAccessor>
+								}></Route>
+							<Route
+								path={`/work_progress/${Constants.AcceptanceType.PREFABRICATED}`}>
 								<Accessors.AppsPermissionAccessor
-									requiredApp={EApplicationsWithModules.WORK_PROGRESS_MONOLITHIC}>
-									<MonolithicLayoutComponent />
-								</Accessors.AppsPermissionAccessor>
-							</Route>
-							<Route path={`/work_progress/${Constants.AcceptanceType.PREFABRICATED}`}>
-								<Accessors.AppsPermissionAccessor
-									requiredApp={EApplicationsWithModules.WORK_PROGRESS_PREFABRICATED}>
+									requiredApp={AppEnum.WorkProgressPrecast}>
 									<PrefabricatedLayoutComponent />
 								</Accessors.AppsPermissionAccessor>
 							</Route>
-							<Route path={`/work_progress/${Constants.AcceptanceType.GENERAL_CONSTRUCTION}`}>
+							<Route
+								path={`/work_progress/${Constants.AcceptanceType.GENERAL_CONSTRUCTION}`}>
 								<Accessors.AppsPermissionAccessor
-									requiredApp={EApplicationsWithModules.WORK_PROGRESS_GENERAL_CONSTRUCTION}>
+									requiredApp={AppEnum.WorkProgressGeneral}>
 									<GeneralLayoutComponent />
 								</Accessors.AppsPermissionAccessor>
 							</Route>
-						</Switch>
+						</Routes>
 					</React.Suspense>
 				</Accessors.BIM360ServiceAccessor>
 			</Accessors.ProjectAccessor>

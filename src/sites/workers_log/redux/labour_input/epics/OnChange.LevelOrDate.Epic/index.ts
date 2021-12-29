@@ -1,14 +1,15 @@
 import WorkersLog from '../../../../types';
-import { ModalType } from '../../../../../../components/Modal/type';
+import { ModalType } from '../../../../../../state/Modal/type';
 import { Epic } from 'redux-observable';
-import { RootState } from '../../../../../../store';
+
 import { catchError, filter, mergeMap, withLatestFrom } from 'rxjs/operators';
 import { EMPTY, from, merge, of } from 'rxjs';
 import LabourInputObjectsActions from '../../objects/actions';
 import normalize from '../../../../../../utils/Normalize';
-import ModalActions from '../../../../../../components/Modal/redux/actions';
+import ModalActions from '../../../../../../state/Modal/actions';
 import RestAPIService from '../../../../../../services/rest.api.service';
-import { RootActions } from '../../../../../../reducers/type';
+import { RootActions, RootState } from '../../../../../../state';
+
 
 export const OnChangeLevelOrDateEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
@@ -31,7 +32,7 @@ export const OnChangeLevelOrDateEpic: Epic<RootActions, RootActions, RootState> 
 				of(LabourInputObjectsActions.FetchObjectsStart()),
 				from(
 					new RestAPIService(
-						state.CMSLogin.credentials?.access_token,
+						state.CMSLogin.credentials?.token,
 					).WORKERS_LOG.LABOUR_INPUT.GetObjectsFilteredByStatuses({ date, project }) as Promise<
 						WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus[]
 					>,

@@ -3,7 +3,8 @@ import React from 'react';
 import ExcelRaportGenerator from '../../../../../../utils/ExcelRaportGenerator';
 import { connect } from 'react-redux';
 import { GetDelaysType } from '../../../../../../services/graphql.api.service/CONSTANTS/Queries/GetDelays';
-import { RootState } from '../../../../../../store';
+import { RootState } from '../../../../../../state';
+
 
 const mapStateToProps = (state: RootState) => ({
 	all_delays: state.WorkProgress.Monolithic.Delays.delay_causes_all,

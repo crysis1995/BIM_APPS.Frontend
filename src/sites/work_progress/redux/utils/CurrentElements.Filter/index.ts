@@ -1,4 +1,3 @@
-import { RootState } from '../../../../../store';
 import { Constants } from '../../constants';
 import ForgeViewer from '../../../../../components/ForgeViewer/types';
 import WorkProgress from '../../../types';
@@ -9,6 +8,7 @@ import { ActualModeClassifier } from './Classifiers/Actual.Mode.Classifier';
 import { TabClassifier } from './Types/TabClassifier.Interface';
 import { CurrentElementsFilterData } from './Types/CurrentElementsFilterData.Interface';
 import { HistoricModeClassifier } from './Classifiers/Historic.Mode.Classifier';
+import { RootState } from '../../../../../state';
 
 export default class CurrentElementsFilter {
 	// private _state: RootState;
@@ -50,7 +50,9 @@ export default class CurrentElementsFilter {
 		[Constants.MonolithicTabs.HISTORICAL]: HistoricModeClassifier,
 	};
 	private _currentElements = new Set<number>();
-	private _currentElementsCombinedWithStatus: { [key: string]: Constants.WorkProgressElementStatus } = {};
+	private _currentElementsCombinedWithStatus: {
+		[key: string]: Constants.WorkProgressElementStatus;
+	} = {};
 	protected _forgeContainer: Required<ForgeViewer.Payload.CurrentElementsFilterData> = {
 		[ForgeViewer.Payload.ElementOperationTypesEnum.COLORED]: {},
 		[ForgeViewer.Payload.ElementOperationTypesEnum.DISABLED]: [],
@@ -102,16 +104,21 @@ export default class CurrentElementsFilter {
 		if (!rootState.WorkProgress.Monolithic.General.active_level) throw new Error('Empty Level');
 		level = rootState.WorkProgress.Monolithic.General.active_level;
 
-		if (!rootState.WorkProgress.Monolithic.General.active_tab) throw new Error('Empty Active Tab');
+		if (!rootState.WorkProgress.Monolithic.General.active_tab)
+			throw new Error('Empty Active Tab');
 		mode = rootState.WorkProgress.Monolithic.General.active_tab;
 
-		if (rootState.WorkProgress.Monolithic.General.rotation_day === null) throw new Error('Empty Rotation Day');
+		if (rootState.WorkProgress.Monolithic.General.rotation_day === null)
+			throw new Error('Empty Rotation Day');
 		rotationDay = rootState.WorkProgress.Monolithic.General.rotation_day;
 
 		if (!rootState.WorkProgress.Monolithic.General.date) throw new Error('Empty Date');
 		rotationDate = rootState.WorkProgress.Monolithic.General.date;
 
-		if (!rootState.WorkProgress.Monolithic.Upgrading.byRevitId || !rootState.ForgeViewer.model_elements)
+		if (
+			!rootState.WorkProgress.Monolithic.Upgrading.byRevitId ||
+			!rootState.ForgeViewer.model_elements
+		)
 			throw new Error('Empty Objects');
 		objects = rootState.WorkProgress.Monolithic.Upgrading.byRevitId;
 
@@ -190,17 +197,21 @@ export default class CurrentElementsFilter {
 	 *		ForgeID extractor
 	 * */
 	private extractForgeId(revitID: string) {
-		if (this._forgeElements.hasOwnProperty(revitID)) return this._forgeElements[revitID].forgeId;
+		if (this._forgeElements.hasOwnProperty(revitID))
+			return this._forgeElements[revitID].forgeId;
 	}
 
 	/*
 	 *		Classifier based on actual choose tab
 	 * */
-	private handleTabClassifier(element: GetObjectsByLevelType.AcceptanceObject, forgeID: number | undefined) {
+	private handleTabClassifier(
+		element: GetObjectsByLevelType.AcceptanceObject,
+		forgeID: number | undefined,
+	) {
 		const classifier = this._tabClassifier[this._mode];
 		if (classifier) {
-			new classifier(element, forgeID, this.classifierData).Classify((revitID, forgeID1, options) =>
-				this.addElementToOutput(revitID, forgeID1, options),
+			new classifier(element, forgeID, this.classifierData).Classify(
+				(revitID, forgeID1, options) => this.addElementToOutput(revitID, forgeID1, options),
 			);
 		}
 	}

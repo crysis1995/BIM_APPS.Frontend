@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { RootState } from '../../../../../../../store';
+
 import { Table } from 'react-bootstrap';
 import { ObjectsTableHeader } from './Header';
 import ObjectsTableBody from './Body';
 import ObjectsTableFooter from './Footer';
 import LoaderComponent from '../../../../../../../components/Loader/LoaderComponent';
+import { RootState } from '../../../../../../../state';
 
 type ComponentProps = {
 	allowSelection: boolean;

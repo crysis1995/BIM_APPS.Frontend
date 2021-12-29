@@ -3,9 +3,10 @@ import { TabClassifier } from './Types/TabClassifier.Interface';
 import { CurrentElementsFilterData } from './Types/CurrentElementsFilterData.Interface';
 import WorkersLog from '../../../../types';
 import ForgeViewer from '../../../../../../components/ForgeViewer/types';
-import { RootState } from '../../../../../../store';
+
 import { Constants } from '../../../../../work_progress/redux/constants';
 import { LabourInputClassifier } from './Classifiers/LabourInput.Classifier';
+import { RootState } from '../../../../../../state';
 
 export default class CurrentElementsFilter {
 	// private _state: RootState;

@@ -7,8 +7,9 @@ import { Constants } from '../../../redux/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCogs, faHourglassEnd } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
-import { RootState } from '../../../../../store';
+
 import GeneralActions from '../../../redux/monolithic/general/actions';
+import { RootState } from '../../../../../state';
 
 const mapStateToProps = (state: RootState) => ({ active_tab: state.WorkProgress.Monolithic.General.active_tab });
 const mapDispatchToProps = {

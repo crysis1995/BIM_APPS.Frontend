@@ -1,11 +1,12 @@
 import { Epic, ofType } from 'redux-observable';
-import { RootActions } from '../../../../../../reducers/type';
-import { RootState } from '../../../../../../store';
+
 import WorkProgress from '../../../../types';
 import { map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { EMPTY, from, merge, of } from 'rxjs';
 import GraphQLAPIService from '../../../../../../services/graphql.api.service';
 import PrefabricatedObjectsActions from '../../objects/actions';
+import { RootActions } from '../../../../../../state/types/RootActions';
+import { RootState } from '../../../../../../state';
 
 export const HandleSetStatusesEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
@@ -24,7 +25,7 @@ export const HandleSetStatusesEpic: Epic<RootActions, RootActions, RootState> = 
 							of(PrefabricatedObjectsActions.SetStatusesStart(value.revit_id)),
 							from(
 								new GraphQLAPIService(
-									credentials?.access_token,
+									credentials?.token,
 								).WorkProgress.Prefabricated.AcceptanceObjectStatuses.Create({
 									status,
 									date,

@@ -1,14 +1,16 @@
 import { Epic } from 'redux-observable';
-import { RootActions } from '../../../../../reducers/type';
-import { RootState } from '../../../../../store';
 import { filter, mergeMap, withLatestFrom } from 'rxjs/operators';
 import ForgeViewer from '../../../types';
 import { EMPTY, of } from 'rxjs';
-import ModalActions from '../../../../Modal/redux/actions';
-import { ModalType } from '../../../../Modal/type';
+import ModalActions from '../../../../../state/Modal/actions';
+import { ModalType } from '../../../../../state/Modal/type';
 import ForgeViewerActions from '../../actions';
+import { RootActions, RootState } from '../../../../../state';
 
-export const OnChangeCurrentLevelEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
+export const OnChangeCurrentLevelEpic: Epic<RootActions, RootActions, RootState> = (
+	action$,
+	state$,
+) =>
 	action$.pipe(
 		filter(
 			(action): action is ReturnType<ForgeViewer.Redux.IActions['SetCurrentLevel']> =>

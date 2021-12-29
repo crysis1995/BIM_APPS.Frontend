@@ -1,116 +1,60 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Form, NavDropdown } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import React, { useEffect } from 'react';
+import { Button, NavDropdown } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { v4 } from 'uuid';
-import CMSLoginActions from './redux/actions';
-import { CMSLoginType } from './type';
-import PermissionProvider from '../Permissions';
+import { ProjectSelector } from './components/ProjectSelector';
+import { GetUserName } from './Utils/GetUserName';
+import { CMSLoginSelectors } from '../../state/CMSLogin/selectors';
+import CMSLoginActions from '../../state/CMSLogin/actions';
+import _ from 'lodash';
+import AppRoutes from '../../pages/appRoutes';
 
-const mapStateToProps = (state: { CMSLogin: CMSLoginType.Redux.Store }) => ({
-	is_login: state.CMSLogin.is_login,
-	user: state.CMSLogin.user,
-	projects: state.CMSLogin.projects,
-});
-
-const mapDispatchToProps = {
-	UserLogoutStart: CMSLoginActions.UserLogoutStart,
-	SetCurrentProject: CMSLoginActions.SetCurrentProject,
-	StartupComponent: CMSLoginActions.StartupComponent,
-};
-
-type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
-function CMSLoginComponent(props: Props) {
-	const [selectedProjectID, setSelectedProjectID] = useState<undefined | string>(undefined);
+function CMSLoginComponent() {
+	const dispatch = useDispatch();
+	const isLogin = useSelector(CMSLoginSelectors.IsLogin, _.isEqual);
+	const user = useSelector(CMSLoginSelectors.GetMe, _.isEqual);
 
 	useEffect(() => {
-		props.StartupComponent();
+		dispatch(CMSLoginActions.StartupComponent());
 	}, []);
 
-	useEffect(() => {
-		if (selectedProjectID && props.projects && props.projects[selectedProjectID]) {
-			props.SetCurrentProject({
-				id: props.projects[selectedProjectID].id,
-				urn: props.projects[selectedProjectID].bim_models?.[0]?.model_urn,
-				webcon_code: props.projects[selectedProjectID].webcon_code,
-				name: props.projects[selectedProjectID].name,
-				cranes_all: props.projects[selectedProjectID].crane_ranges.reduce<
-					CMSLoginType.Payload.ActualProject['cranes_all']
-				>((prev, acc) => {
-					if (acc.crane) {
-						prev[acc.crane.id] = acc.crane;
-						return prev;
-					}
-					return prev;
-				}, {}),
-				levels_all: props.projects[selectedProjectID].crane_ranges.reduce<
-					CMSLoginType.Payload.ActualProject['levels_all']
-				>((prev, acc) => {
-					if (acc.levels.length > 0) {
-						acc.levels.forEach((level) => {
-							if (!(level.id in prev)) prev[level.id] = level;
-						});
-					}
-					return prev;
-				}, {}),
-				crane_ranges: props.projects[selectedProjectID].crane_ranges.reduce<
-					CMSLoginType.Payload.ActualProject['crane_ranges']
-				>((previousValue, currentValue) => {
-					if (currentValue.crane && currentValue.levels.length > 0) {
-						previousValue[currentValue.crane.id] = currentValue.levels.map((lvl) => lvl.id);
-					}
-					return previousValue;
-				}, {}),
-				params: props.projects[selectedProjectID].params,
-				defaultViewName:props.projects[selectedProjectID].bim_models?.[0]?.defaultViewName
-			});
-		} else props.SetCurrentProject(null);
-	}, [selectedProjectID]);
+	function Logout() {
+		dispatch(CMSLoginActions.UserLogoutStart());
+	}
+	if (!isLogin) {
+		return (
+			<Link to={AppRoutes.Login}>
+				<Button variant="outline-primary" size="sm">
+					Zaloguj się
+				</Button>
+			</Link>
+		);
+	}
 
-	return props.is_login ? (
+	return (
 		<>
-			<Form className="mr-3" inline>
-				<Form.Control
-					value={selectedProjectID}
-					onChange={(e) => setSelectedProjectID(e.target.value)}
-					as="select"
-					size={'sm'}>
-					<option>Wybierz...</option>
-					{props.projects &&
-						Object.values(props.projects).map((proj) => (
-							<option data-testid="options" key={v4()} value={proj.id}>
-								{proj.webcon_code ? proj.webcon_code + ' - ' + proj.name : proj.name}
-							</option>
-						))}
-				</Form.Control>
-			</Form>
+			<ProjectSelector />
 			<NavDropdown
 				alignRight
 				className=""
-				title={<span>Witaj, {props.user?.username || ''}</span>}
+				title={<span>{GetUserName(user)}</span>}
 				id="nav-dropdown">
 				<NavDropdown.Item>
-					<Link to="/settings" className={"text-dark"}>
+					<Link to={AppRoutes.Account} className={'text-dark'}>
 						Ustawienia konta
 					</Link>
 				</NavDropdown.Item>
-				<PermissionProvider.Show when={PermissionProvider.PermissionEnum.UserIsAdmin}>
-					<NavDropdown.Item>
-						<Link to="/projects" className={"text-dark"}>
-							Zarządzanie projektami
-						</Link>
-					</NavDropdown.Item>
-				</PermissionProvider.Show>
-				<NavDropdown.Item onClick={() => props.UserLogoutStart()}>Wyloguj</NavDropdown.Item>
+				{/*<PermissionProvider.Show when={PermissionProvider.PermissionEnum.UserIsAdmin}>*/}
+				{/*	<NavDropdown.Item>*/}
+				{/*		<Link to="/projects" className={'text-dark'}>*/}
+				{/*			Zarządzanie projektami*/}
+				{/*		</Link>*/}
+				{/*	</NavDropdown.Item>*/}
+				{/*</PermissionProvider.Show>*/}
+				<NavDropdown.Item onClick={Logout}>Wyloguj</NavDropdown.Item>
 			</NavDropdown>
 		</>
-	) : (
-		<Link to="/login">
-			<Button variant="outline-primary" size="sm">
-				Zaloguj się
-			</Button>
-		</Link>
 	);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CMSLoginComponent);
+export default CMSLoginComponent;

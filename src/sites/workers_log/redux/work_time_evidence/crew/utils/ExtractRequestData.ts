@@ -1,4 +1,4 @@
-import { RootState } from '../../../../../../store';
+import { RootState } from '../../../../../../state';
 
 export interface CrewSummariesData {
 	crew_id: string;

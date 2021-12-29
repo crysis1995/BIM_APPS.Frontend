@@ -1,33 +1,35 @@
 import WorkProgress from '../../../types';
-import { ModalType } from '../../../../../components/Modal/type';
-import ForgeViewer from '../../../../../components/ForgeViewer/types';
+import { ModalType } from '../../../../../state/Modal/type';
 import { Epic } from 'redux-observable';
-import { RootState } from '../../../../../store';
+
 import { catchError, filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { EMPTY, from, merge, of } from 'rxjs';
 import WorkProgressMonolithicUpgradingActions from '../../monolithic/upgrading/actions';
 import { GetObjectsByLevelType } from '../../../../../services/graphql.api.service/CONSTANTS/Queries/GetObjectsByLevel';
-import ModalActions from '../../../../../components/Modal/redux/actions';
+import ModalActions from '../../../../../state/Modal/actions';
 import GraphQLAPIService from '../../../../../services/graphql.api.service';
-import { RootActions } from '../../../../../reducers/type';
-
+import { RootActions, RootState } from '../../../../../state';
 
 export const OnChangeLevelEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
 		filter(
-			(data): data is ReturnType<WorkProgress.Monolithic.General.Redux.IActions['ChangeLevel']> =>
+			(
+				data,
+			): data is ReturnType<WorkProgress.Monolithic.General.Redux.IActions['ChangeLevel']> =>
 				data.type === WorkProgress.Monolithic.General.Redux.Types.SET_LEVEL,
 		),
 		withLatestFrom(state$),
 		switchMap(([action, state]) => {
-			const token = state.CMSLogin.credentials?.access_token;
+			const token = state.CMSLogin.credentials?.token;
 			const GRAPHQL = new GraphQLAPIService(token);
 			const project = state.CMSLogin.actual_project?.id;
 			const level = action.payload;
 			if (!project || !level) return EMPTY;
 			return merge(
 				of(WorkProgressMonolithicUpgradingActions.FetchStart()),
-				from(GRAPHQL.MONOLITHIC.Objects.Count({ project_id: project, level_id: level })).pipe(
+				from(
+					GRAPHQL.MONOLITHIC.Objects.Count({ project_id: project, level_id: level }),
+				).pipe(
 					switchMap((data) => {
 						const N = 100;
 						const numObjects = data.acceptanceObjectsConnection.aggregate.count;
@@ -44,7 +46,9 @@ export const OnChangeLevelEpic: Epic<RootActions, RootActions, RootState> = (act
 						}
 						return from(Promise.all(arrayOfPRomises)).pipe(
 							map((data) => data.flatMap((x) => x.acceptanceObjects)),
-							map((response) => WorkProgressMonolithicUpgradingActions.FetchEnd(response, level)),
+							map((response) =>
+								WorkProgressMonolithicUpgradingActions.FetchEnd(response, level),
+							),
 							catchError((err: Error) => {
 								console.error(err.message);
 								return of(

@@ -1,5 +1,6 @@
 import groupBy from '../groupBy';
 
+
 describe('TEST groupBy function', () => {
 	const testData = [
 		{

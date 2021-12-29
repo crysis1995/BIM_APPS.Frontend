@@ -1,11 +1,12 @@
 import React from 'react';
-import { RootState } from '../../../../../../../store';
+
 import { connect } from 'react-redux';
 import { Col, Row } from 'react-bootstrap';
 import ComponentSelectedElementPropsSummary from './Component.SelectedElementPropsSummary';
 import StatusFormInput from './Component.StatusFormInput';
 import { DayFormInput } from './Component.DayFormInput';
 import { GetObjectsByLevelType } from '../../../../../../../services/graphql.api.service/CONSTANTS/Queries/GetObjectsByLevel';
+import { RootState } from '../../../../../../../state';
 
 type ComponentProps = {
 	setStatus: (data: GetObjectsByLevelType.StatusEnum | null) => void;

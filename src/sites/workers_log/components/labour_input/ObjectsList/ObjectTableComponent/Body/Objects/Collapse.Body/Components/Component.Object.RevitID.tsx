@@ -1,6 +1,7 @@
 import React from 'react';
-import { RootState } from '../../../../../../../../../../store';
+
 import { connect } from 'react-redux';
+import { RootState } from '../../../../../../../../../../state';
 
 type ComponentProps = {
 	objectID: string;

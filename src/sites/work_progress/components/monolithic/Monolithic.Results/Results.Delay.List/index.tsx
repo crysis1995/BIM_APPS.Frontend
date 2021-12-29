@@ -12,7 +12,8 @@ import GenerateExcelRaportButton from './GenerateExcelRaportButton';
 import { GetDelaysType } from '../../../../../../services/graphql.api.service/CONSTANTS/Queries/GetDelays';
 import GraphQLAPIService from '../../../../../../services/graphql.api.service';
 import Loader from '../../../../../../components/Loader';
-import { RootState } from '../../../../../../store';
+import { RootState } from '../../../../../../state';
+
 
 dayjs.extend(isBetween);
 dayjs.extend(isSameOrBefore);
@@ -22,7 +23,7 @@ const mapStateToProps = (state: RootState) => ({
 	all_delays: state.WorkProgress.Monolithic.Delays.delay_causes_all,
 	user_id: state.CMSLogin.user?.id,
 	project_id: state.CMSLogin.actual_project?.id,
-	token: state.CMSLogin.credentials?.access_token,
+	token: state.CMSLogin.credentials?.token,
 });
 
 const mapDispatchToProps = {};

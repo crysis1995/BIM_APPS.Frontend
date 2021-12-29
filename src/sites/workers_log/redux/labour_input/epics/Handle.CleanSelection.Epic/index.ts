@@ -1,10 +1,10 @@
-import { RootActions } from '../../../../../../reducers/type';
-import { RootState } from '../../../../../../store';
 import { Epic, ofType } from 'redux-observable';
 import WorkersLog from '../../../../types';
 import { combineLatestWith, filter, map, withLatestFrom } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import LabourInputObjectsActions from '../../objects/actions';
+import { RootActions } from '../../../../../../state/types/RootActions';
+import { RootState } from '../../../../../../state';
 
 const changeLevelEpic = (action$: Observable<RootActions>) =>
 	action$.pipe(ofType(WorkersLog.LabourInput.Redux.General.Types.CHOOSE_LEVEL));

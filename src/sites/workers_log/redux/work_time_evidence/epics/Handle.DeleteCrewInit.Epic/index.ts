@@ -1,13 +1,14 @@
 import { Epic } from 'redux-observable';
-import { RootActions } from '../../../../../../reducers/type';
-import { RootState } from '../../../../../../store';
+
 import WorkersLog from '../../../../types';
 import { catchError, filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { concat, EMPTY, from, merge, of } from 'rxjs';
 import GraphQLAPIService from '../../../../../../services/graphql.api.service';
-import ModalActions from '../../../../../../components/Modal/redux/actions';
-import { ModalType } from '../../../../../../components/Modal/type';
+import ModalActions from '../../../../../../state/Modal/actions';
+import { ModalType } from '../../../../../../state/Modal/type';
 import CrewActions from '../../crew/actions';
+import { RootActions } from '../../../../../../state/types/RootActions';
+import { RootState } from '../../../../../../state';
 
 export const HandleDeleteCrewInitEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(
@@ -17,7 +18,7 @@ export const HandleDeleteCrewInitEpic: Epic<RootActions, RootActions, RootState>
 		),
 		withLatestFrom(state$),
 		switchMap(([action, state]) => {
-			const access_token = state.CMSLogin.credentials?.access_token;
+			const access_token = state.CMSLogin.credentials?.token;
 			const { crew, summaries } = action.payload;
 			const api = new GraphQLAPIService(access_token).WorkersLog.WorkTimeEvidence;
 			return concat(

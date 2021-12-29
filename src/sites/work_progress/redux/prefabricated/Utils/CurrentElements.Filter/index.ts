@@ -3,10 +3,11 @@ import { TabClassifier } from './Types/TabClassifier.Interface';
 import { CurrentElementsFilterData } from './Types/CurrentElementsFilterData.Interface';
 import WorkProgress from '../../../../types';
 import ForgeViewer from '../../../../../../components/ForgeViewer/types';
-import { RootState } from '../../../../../../store';
+
 import { Constants } from '../../../../../work_progress/redux/constants';
 import { LabourInputClassifier } from './Classifiers/LabourInput.Classifier';
 import { GetPrefabricatedObjectsType } from '../../../../../../services/graphql.api.service/CONSTANTS/Queries/GetPrefabObjects';
+import { RootState } from '../../../../../../state';
 
 export default class CurrentElementsFilter {
 	private readonly _objects: NonNullable<WorkProgress.Prefabricated.Objects.Redux.IStore['byRevitID']>;

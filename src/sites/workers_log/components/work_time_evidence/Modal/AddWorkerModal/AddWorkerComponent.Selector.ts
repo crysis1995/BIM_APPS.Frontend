@@ -1,7 +1,11 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../../../../../store';
+import { RootState } from '../../../../../../state';
 
-const ParseToValueLabelObject = (value: string, label: string, id: string) => ({ value, label, id });
+const ParseToValueLabelObject = (value: string, label: string, id: string) => ({
+	value,
+	label,
+	id,
+});
 
 export const CombineWorkerIdWithName = createSelector(
 	(state: RootState) => state.WorkersLog.WorkTimeEvidence.Workers.all,

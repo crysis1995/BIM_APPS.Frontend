@@ -1,5 +1,6 @@
 import { config } from '../../config';
 
+
 export default class RestAPIService {
 	constructor(accessToken) {
 		this.accessToken = accessToken;

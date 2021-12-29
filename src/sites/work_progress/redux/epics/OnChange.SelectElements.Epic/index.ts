@@ -1,10 +1,11 @@
 import WorkProgress from '../../../types';
 import { Epic } from 'redux-observable';
-import { RootState } from '../../../../../store';
+
 import { filter, mergeMap, withLatestFrom } from 'rxjs/operators';
 import { of } from 'rxjs';
 import ForgeViewerActions from '../../../../../components/ForgeViewer/redux/actions';
-import { RootActions } from '../../../../../reducers/type';
+import { RootActions, RootState } from '../../../../../state';
+
 
 export const OnChangeSelectElementsEpic: Epic<RootActions, RootActions, RootState> = (action$, state$) =>
 	action$.pipe(

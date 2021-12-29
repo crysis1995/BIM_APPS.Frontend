@@ -1,12 +1,13 @@
 import WorkersLog from '../../../../../../../../types';
 import classNames from 'classnames';
 import React from 'react';
-import { RootState } from '../../../../../../../../../../store';
+
 import { isCheckedSelector } from '../Object.Single/Selector.IsChecked';
 import LabourInputObjectsActions from '../../../../../../../../redux/labour_input/objects/actions';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import ObjectStatusComponent from '../Components/Object.Status.Component';
+import { RootState } from '../../../../../../../../../../state';
 
 type ComponentProps = { show: boolean; object: WorkersLog.LabourInput.Payload.Objects.ObjectWithStatus['id'] };
 

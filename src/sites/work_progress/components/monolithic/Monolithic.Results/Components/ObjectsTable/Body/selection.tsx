@@ -1,9 +1,10 @@
 import React from 'react';
-import { RootState } from '../../../../../../../../store';
+
 import { connect } from 'react-redux';
 import WorkProgressMonolithicUpgradingActions from '../../../../../../redux/monolithic/upgrading/actions';
 import { createSelector } from 'reselect';
 import { Constants } from '../../../../../../redux/constants';
+import { RootState } from '../../../../../../../../state';
 
 const isElementSelectedSelector = createSelector(
 	(state: RootState) => state.WorkProgress.Monolithic.Upgrading.selectedElements,

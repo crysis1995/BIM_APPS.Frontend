@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import RoundHalf from '../../../../../../../../../../../utils/RoundHalf';
 import useDebounce from '../../../../../../../../../../../components/CustomHooks/UseDebounce';
-import { RootState } from '../../../../../../../../../../../store';
+
 import LabourInputObjectsActions from '../../../../../../../../../redux/labour_input/objects/actions';
+import { RootState } from '../../../../../../../../../../../state';
 
 type ComponentProps = {
 	setEditable: (data: boolean) => void;

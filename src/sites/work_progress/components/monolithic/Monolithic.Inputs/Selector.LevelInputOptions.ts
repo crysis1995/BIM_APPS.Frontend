@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../../../../store';
+import { RootState } from '../../../../../state';
 
 export const SelectorLevelInputOptions = createSelector(
 	(state: RootState) => state.WorkProgress.Monolithic.General.levels,
